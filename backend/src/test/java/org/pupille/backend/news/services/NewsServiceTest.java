@@ -17,6 +17,7 @@ class NewsServiceTest {
 
     private NewsRepo mockNewsRepo;
     private IdService mockIdService;
+    private DateNowService mockDateNowService;
     private NewsService newsService;
 
     private News n1, n2;
@@ -25,7 +26,8 @@ class NewsServiceTest {
     void testSetup() {
         mockNewsRepo = mock(NewsRepo.class);
         mockIdService = mock(IdService.class);
-        newsService = new NewsService(mockNewsRepo, mockIdService);
+        mockDateNowService = mock(DateNowService.class);
+        newsService = new NewsService(mockNewsRepo, mockIdService, mockDateNowService);
         n1 = new News("1",
                 "Vorführung X fällt aus",
                 null,
@@ -98,6 +100,7 @@ class NewsServiceTest {
         // GIVEN
         News expected = n2;
         String id = "2";
+        // Simulate ID generation
         when(mockIdService.randomId()).thenReturn(id);
 
         when(mockNewsRepo.save(n2)).thenReturn(expected);
@@ -118,13 +121,16 @@ class NewsServiceTest {
     // 2. Test with Empty or Invalid News Object
     @Test
     void saveNewsInvalidNews_A() {
+        // GIVEN
         // Simulate ID generation if necessary
-        String id = "2";
-        when(mockIdService.randomId()).thenReturn(id);
+//        String id = "2";
+//        when(mockIdService.randomId()).thenReturn(id);
+
+        // WHEN & THEN
         // Create an invalid News object with empty fields
         assertThrows(IllegalArgumentException.class, () -> newsService.saveNews(new News(null, null, "", LocalDate.now(), LocalDate.now())));
 
-        // SonarQUbe complains: Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.
+        // SonarQube complains: Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.
         // When verifying that code raises a runtime exception, a good practice is to avoid having multiple method calls inside the tested code, to be explicit about which method call is expected to raise the exception.
         // It increases the clarity of the test, and avoid incorrect testing when another method is actually raising the exception.
         // Solution: see saveNewsInvalidNews_B
@@ -254,12 +260,16 @@ class NewsServiceTest {
     void getNewsByDateInRange_whenEmpty_returnEmptyList() {
         // GIVEN
         List<News> expected = List.of();
-        LocalDate date = LocalDate.of(2025, 4, 20);
-        when(mockNewsRepo.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(date)).thenReturn(expected);
+
+        // Simulate ID generation
+        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
+
+        LocalDate currentDate = mockDateNowService.localDateNow();
+        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
         // WHEN
-        List<News> actual = newsService.getNewsByDateInRange(date);
+        List<News> actual = newsService.getNewsByDateInRange();
         // THEN
-        verify(mockNewsRepo).findByStartDateLessThanEqualAndEndDateGreaterThanEqual(date);
+        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
         assertEquals(expected, actual);
     }
 
@@ -267,12 +277,15 @@ class NewsServiceTest {
     void getNewsByDateInRange_whenNotEmpty_returnNewsList_1() {
         // GIVEN
         List<News> expected = List.of(n1);
-        LocalDate date = LocalDate.of(2025, 3, 20);
-        when(mockNewsRepo.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(date)).thenReturn(expected);
+        // Simulate ID generation
+        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
+
+        LocalDate currentDate = mockDateNowService.localDateNow();
+        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
         // WHEN
-        List<News> actual = newsService.getNewsByDateInRange(date);
+        List<News> actual = newsService.getNewsByDateInRange();
         // THEN
-        verify(mockNewsRepo).findByStartDateLessThanEqualAndEndDateGreaterThanEqual(date);
+        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
         assertEquals(expected, actual);
     }
 
@@ -280,12 +293,18 @@ class NewsServiceTest {
     void getNewsByDateInRange_whenNotEmpty_returnNewsList_2() {
         // GIVEN
         List<News> expected = List.of(n1, n2);
-        LocalDate date = LocalDate.of(2025, 3, 12);
-        when(mockNewsRepo.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(date)).thenReturn(expected);
+
+        // Simulate ID generation
+        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
+
+        LocalDate currentDate = mockDateNowService.localDateNow();
+        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
         // WHEN
-        List<News> actual = newsService.getNewsByDateInRange(date);
+        List<News> actual = newsService.getNewsByDateInRange();
         // THEN
-        verify(mockNewsRepo).findByStartDateLessThanEqualAndEndDateGreaterThanEqual(date);
+        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
         assertEquals(expected, actual);
     }
+
+
 }

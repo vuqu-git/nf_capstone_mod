@@ -15,7 +15,9 @@ public class NewsService {
     private final NewsRepo newsRepo;
 
     private final IdService idService;
+    private final DateNowService dateNowService;
 
+    private final String errorMessage = "No news found with the id %s";
 
     public List<News> getAllNews() {
         return newsRepo.findAll();
@@ -24,7 +26,7 @@ public class NewsService {
     public News getNewsById(String id) {
         return newsRepo.findById(id)
                        .orElseThrow(
-                            () -> new NewsNotFoundException(String.format("No news found with the id %s", id))
+                            () -> new NewsNotFoundException(String.format(errorMessage, id))
                         );
     }
 
@@ -38,14 +40,14 @@ public class NewsService {
         if (newsRepo.existsById(id)) {
             newsRepo.deleteById(id);
         } else {
-            throw new NewsNotFoundException(String.format("No news found with the id %s", id));
+            throw new NewsNotFoundException(String.format(errorMessage, id));
         }
     }
 
     public News updateNews(String targetId, News updatedMovie) {
 
         if (!newsRepo.existsById(targetId)) {
-            throw new NewsNotFoundException(String.format("No news found with the id %s", targetId));
+            throw new NewsNotFoundException(String.format(errorMessage, targetId));
         }
 
         // Ensure the id in the updatedNews matches the path variable id.
@@ -58,11 +60,8 @@ public class NewsService {
     // ########################################
     // now non standard service queries/methods
 
-    public List<News> getNewsNotExpired(LocalDate date) {
-        return newsRepo.findByEndDateGreaterThanEqual(date);
-    }
-
-    public List<News> getNewsByDateInRange(LocalDate date) {
-        return newsRepo.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(date);
+    public List<News> getNewsByDateInRange() {
+        LocalDate currentDate = dateNowService.localDateNow();
+        return newsRepo.findNewsByDateInRange(currentDate);
     }
 }
