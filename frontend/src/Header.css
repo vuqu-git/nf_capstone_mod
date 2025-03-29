@@ -1,0 +1,13 @@
+/*############################*/
+/*background colors of Navbar*/
+
+/* Change the Navbar background color */
+.custom-navbar {
+    background-color: #ffd036; /* Replace with your desired color */
+}
+
+/* Change the NavDropdown background color */
+.custom-dropdown .dropdown-menu {
+    background-color: #ffd036; /* Replace with your desired color */
+}
+
