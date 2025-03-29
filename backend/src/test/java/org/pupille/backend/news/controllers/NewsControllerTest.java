@@ -83,12 +83,14 @@ class NewsControllerTest {
                         "Theatre closed!",
                             "",
                                 LocalDate.parse("2025-05-01"),
-                                LocalDate.parse("2025-05-10"));
+                                LocalDate.parse("2025-05-10"),
+                                "light");
         News news2 = new News("2",
                     "Action double feature coming soon!",
                         "",
                             LocalDate.of(2025, 4, 20),
-                            LocalDate.of(2025, 5, 15));
+                            LocalDate.of(2025, 5, 15),
+                "light");
 
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
@@ -104,14 +106,17 @@ class NewsControllerTest {
                         "description": "Theatre closed!",
                         "image": "",
                         "startDate": "2025-05-01",
-                        "endDate": "2025-05-10"
+                        "endDate": "2025-05-10",
+                        "newsVariant": "light"
                     },
                     {
                         "id": "2",
                         "description": "Action double feature coming soon!",
                         "image": "",
                         "startDate": "2025-04-20",
-                        "endDate": "2025-05-15"
+                        "endDate": "2025-05-15",
+                        "newsVariant": "light"
+
                     }
                 ]
                 """));
@@ -125,12 +130,14 @@ class NewsControllerTest {
                 "Theatre closed!",
                 "",
                 LocalDate.parse("2025-05-01"),
-                LocalDate.parse("2025-05-15"));
+                LocalDate.parse("2025-05-15"),
+                "light");
         News news2 = new News("2",
                 "Action double feature coming soon!",
                 "",
                 LocalDate.of(2025, 5, 1),
-                LocalDate.of(2025, 5, 31));
+                LocalDate.of(2025, 5, 31),
+                "light");
 
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
@@ -153,7 +160,9 @@ class NewsControllerTest {
                         "description": "Action double feature coming soon!",
                         "image": "",
                         "startDate": "2025-05-01",
-                        "endDate": "2025-05-31"
+                        "endDate": "2025-05-31",
+                        "newsVariant": "light"
+
                     }
                 ]
                 """));
@@ -167,12 +176,14 @@ class NewsControllerTest {
                 "Theatre closed!",
                 "",
                 LocalDate.parse("2025-05-01"),
-                LocalDate.parse("2025-05-15"));
+                LocalDate.parse("2025-05-15"),
+                "light");
         News news2 = new News("2",
                 "Action double feature coming soon!",
                 "",
                 LocalDate.of(2025, 5, 1),
-                LocalDate.of(2025, 5, 31));
+                LocalDate.of(2025, 5, 31),
+                "light");
 
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
@@ -198,12 +209,14 @@ class NewsControllerTest {
                 "Theatre closed!",
                 "",
                 LocalDate.parse("2025-05-01"),
-                LocalDate.parse("2025-05-10"));
+                LocalDate.parse("2025-05-10"),
+                "light");
         News news2 = new News("2",
                 "Action double feature coming soon!",
                 "",
                 LocalDate.of(2025, 4, 20),
-                LocalDate.of(2025, 5, 15));
+                LocalDate.of(2025, 5, 15),
+                "light");
 
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
@@ -219,7 +232,8 @@ class NewsControllerTest {
                         "description": "Theatre closed!",
                         "image": "",
                         "startDate": "2025-05-01",
-                        "endDate": "2025-05-10"
+                        "endDate": "2025-05-10",
+                        "newsVariant": "light"
                     }
                 
                 """));
@@ -247,12 +261,14 @@ class NewsControllerTest {
                 "Theatre closed!",
                 "",
                 LocalDate.parse("2025-05-01"),
-                LocalDate.parse("2025-05-10"));
+                LocalDate.parse("2025-05-10"),
+                "light");
         News news2 = new News("2",
                 "Action double feature coming soon!",
                 "",
                 LocalDate.of(2025, 4, 20),
-                LocalDate.of(2025, 5, 15));
+                LocalDate.of(2025, 5, 15),
+                "light");
 
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
@@ -285,7 +301,8 @@ class NewsControllerTest {
                 "Theatre closed!",
                 "",
                 LocalDate.parse("2025-05-01"),
-                LocalDate.parse("2025-05-10"));
+                LocalDate.parse("2025-05-10"),
+                "light");
 
         newsTestRepo.save(news1);
         // WHEN
@@ -298,7 +315,8 @@ class NewsControllerTest {
                                     "description": "Action double feature coming soon!",
                                     "image": "",
                                     "startDate": "2025-04-20",
-                                    "endDate": "2025-05-15"
+                                    "endDate": "2025-05-15",
+                                    "newsVariant": "light"
                                 }
                                 """
                         )
@@ -311,7 +329,8 @@ class NewsControllerTest {
                         "description": "Action double feature coming soon!",
                         "image": "",
                         "startDate": "2025-04-20",
-                        "endDate": "2025-05-15"
+                        "endDate": "2025-05-15",
+                        "newsVariant": "light"
                     }
                 
                 """))
@@ -326,7 +345,8 @@ class NewsControllerTest {
                 "Theatre closed!",
                 "",
                 LocalDate.parse("2025-05-01"),
-                LocalDate.parse("2025-05-10"));
+                LocalDate.parse("2025-05-10"),
+                "light");
 
         newsTestRepo.save(news1);
         // WHEN
@@ -340,7 +360,8 @@ class NewsControllerTest {
                                     "description": "Action double feature coming soon!",
                                     "image": "",
                                     "startDate": "2025-04-20",
-                                    "endDate": "2025-05-15"
+                                    "endDate": "2025-05-15",
+                                    "newsVariant": "light"
                                 }
                                 """
                         )
@@ -354,7 +375,8 @@ class NewsControllerTest {
                         "description": "Action double feature coming soon!",
                         "image": "",
                         "startDate": "2025-04-20",
-                        "endDate": "2025-05-15"
+                        "endDate": "2025-05-15",
+                        "newsVariant": "light"
                     }
                 
                 """));
@@ -377,7 +399,8 @@ class NewsControllerTest {
                                     "description": "Action double feature coming soon!",
                                     "image": "",
                                     "startDate": "2025-04-20",
-                                    "endDate": "2025-05-15"
+                                    "endDate": "2025-05-15",
+                                    "newsVariant": "light"
                                 }
                                 """
                         )
@@ -394,7 +417,8 @@ class NewsControllerTest {
                 "Theatre closed!",
                 "",
                 LocalDate.parse("2025-05-01"),
-                LocalDate.parse("2025-05-10"));
+                LocalDate.parse("2025-05-10"),
+                "light");
 
         newsTestRepo.save(news1);
 
@@ -409,7 +433,8 @@ class NewsControllerTest {
                                     "description": "Action double feature coming soon!",
                                     "image": "",
                                     "startDate": "2025-04-20",
-                                    "endDate": "2025-05-15"
+                                    "endDate": "2025-05-15",
+                                    "newsVariant": "light"
                                 }
                                 """
                         )

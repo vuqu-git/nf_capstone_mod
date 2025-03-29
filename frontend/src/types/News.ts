@@ -3,5 +3,6 @@ export type News = {
     description: string,
     image: string,
     startDate: string,
-    endDate: string
+    endDate: string,
+    newsVariant: string
 }

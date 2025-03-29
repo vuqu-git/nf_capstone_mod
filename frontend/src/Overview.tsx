@@ -71,7 +71,7 @@ export default function Overview() {
                 <section>
                     <h2>Upcoming Screenings</h2>
                     {   news.map( n => (
-                            <NewsCard variant="warning" description={n.description}/>
+                            <NewsCard variant={n.newsVariant} description={n.description}/>
                             )
                         )
                     }

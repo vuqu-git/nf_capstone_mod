@@ -32,15 +32,16 @@ class NewsServiceTest {
                 "Vorführung X fällt aus",
                 null,
                 LocalDate.of(2025, 3, 10),
-                LocalDate.of(2025, 3, 28));
+                LocalDate.of(2025, 3, 28),
+                "light");
 
         n2 = new News("2",
                 "Geburtstagsfilm",
                 null,
                 LocalDate.of(2025, 2, 20),
-                LocalDate.of(2025, 3, 15));
+                LocalDate.of(2025, 3, 15),
+                "light");
     }
-
 
     @Test
     void getAllNews_whenEmpty_returnEmptyList() {
@@ -128,7 +129,7 @@ class NewsServiceTest {
 
         // WHEN & THEN
         // Create an invalid News object with empty fields
-        assertThrows(IllegalArgumentException.class, () -> newsService.saveNews(new News(null, null, "", LocalDate.now(), LocalDate.now())));
+        assertThrows(IllegalArgumentException.class, () -> newsService.saveNews(new News(null, null, "", LocalDate.now(), LocalDate.now(), "light")));
 
         // SonarQube complains: Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.
         // When verifying that code raises a runtime exception, a good practice is to avoid having multiple method calls inside the tested code, to be explicit about which method call is expected to raise the exception.
@@ -142,7 +143,7 @@ class NewsServiceTest {
         when(mockIdService.randomId()).thenReturn(id);
 
         try {
-            newsService.saveNews(new News("", null, "", LocalDate.now(), LocalDate.now()));
+            newsService.saveNews(new News("", null, "", LocalDate.now(), LocalDate.now(), "light"));
             fail("Expected IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // Expected behavior
@@ -205,7 +206,8 @@ class NewsServiceTest {
                 "X-Mas-Film",
                 null,
                 LocalDate.of(2025, 2, 20),
-                LocalDate.of(2025, 3, 15)
+                LocalDate.of(2025, 3, 15),
+                "light"
         );
         News expected = newN2;
         when(mockNewsRepo.existsById(id)).thenReturn(true);
@@ -228,7 +230,8 @@ class NewsServiceTest {
                 "X-Mas-Film",
                 null,
                 LocalDate.of(2025, 2, 20),
-                LocalDate.of(2025, 3, 15)
+                LocalDate.of(2025, 3, 15),
+                "light"
         );
         when(mockNewsRepo.existsById(id)).thenReturn(true);
 
@@ -246,7 +249,8 @@ class NewsServiceTest {
                 "X-Mas-Film",
                 null,
                 LocalDate.of(2025, 2, 20),
-                LocalDate.of(2025, 3, 15)
+                LocalDate.of(2025, 3, 15),
+                "light"
         );
         when(mockNewsRepo.existsById(id)).thenReturn(false);
 

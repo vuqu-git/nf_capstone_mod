@@ -7,7 +7,8 @@ public record News(
         String description,
         String image,
         LocalDate startDate,
-        LocalDate endDate
+        LocalDate endDate,
+        String newsVariant
 ) {
     public News {
         if ((description == null || description.isEmpty()) && (image == null || image.isEmpty())) {
@@ -26,13 +27,14 @@ public record News(
             String description,
             String image,
             LocalDate startDate,
-            LocalDate endDate
+            LocalDate endDate,
+            String newsVariant
     ) {
-        this(null, description, image, startDate, endDate);
+        this(null, description, image, startDate, endDate, newsVariant);
     }
 
     public News withId(String id) {
-        return new News(id, description, image, startDate, endDate);
+        return new News(id, description, image, startDate, endDate, newsVariant);
     }
 
 }
