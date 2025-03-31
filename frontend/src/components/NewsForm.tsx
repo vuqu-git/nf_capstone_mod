@@ -22,13 +22,13 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
             <h4 className="mb-4">{formType === "edit" ? "Edit News" : "Add News"}</h4>
 
             <Form onSubmit={(e) => handleSubmit(e, newsItem)}>
-                <Form.Group controlId="description">
-                    <Form.Label>Description</Form.Label>
+                <Form.Group controlId="text">
+                    <Form.Label>Text</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={10} // Large textarea
-                        name="description"
-                        value={newsItem.description}
+                        name="text"
+                        value={newsItem.text}
                         onChange={handleChange}
                         required
                     />
@@ -73,14 +73,14 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                         onChange={handleChange}
                         name="newsVariant"
                     >
-                        <option value="primary">primary</option>
-                        <option value="secondary">secondary</option>
-                        <option value="success">success</option>
-                        <option value="danger">danger</option>
-                        <option value="warning">warning</option>
-                        <option value="info">info</option>
-                        <option value="light">light</option>
-                        <option value="dark">dark</option>
+                        <option value="primary">blue</option>
+                        <option value="secondary">grey</option>
+                        <option value="success">green</option>
+                        <option value="danger">red</option>
+                        <option value="warning">yellow</option>
+                        <option value="info">sky blue</option>
+                        <option value="light">white</option>
+                        <option value="dark">dark grey</option>
                         <option value="free">free</option>
                     </Form.Select>
                 </Form.Group>

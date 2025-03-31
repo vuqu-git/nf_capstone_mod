@@ -103,7 +103,7 @@ class NewsControllerTest {
                 [
                     {
                         "id": "1",
-                        "description": "Theatre closed!",
+                        "text": "Theatre closed!",
                         "image": "",
                         "startDate": "2025-05-01",
                         "endDate": "2025-05-10",
@@ -111,7 +111,7 @@ class NewsControllerTest {
                     },
                     {
                         "id": "2",
-                        "description": "Action double feature coming soon!",
+                        "text": "Action double feature coming soon!",
                         "image": "",
                         "startDate": "2025-04-20",
                         "endDate": "2025-05-15",
@@ -157,7 +157,7 @@ class NewsControllerTest {
                 [
                     {
                         "id": "2",
-                        "description": "Action double feature coming soon!",
+                        "text": "Action double feature coming soon!",
                         "image": "",
                         "startDate": "2025-05-01",
                         "endDate": "2025-05-31",
@@ -229,7 +229,7 @@ class NewsControllerTest {
                 
                     {
                         "id": "1",
-                        "description": "Theatre closed!",
+                        "text": "Theatre closed!",
                         "image": "",
                         "startDate": "2025-05-01",
                         "endDate": "2025-05-10",
@@ -312,7 +312,7 @@ class NewsControllerTest {
                                 """
                                 {
                                     "id": null,
-                                    "description": "Action double feature coming soon!",
+                                    "text": "Action double feature coming soon!",
                                     "image": "",
                                     "startDate": "2025-04-20",
                                     "endDate": "2025-05-15",
@@ -326,7 +326,7 @@ class NewsControllerTest {
                 .andExpect(content().json("""
                 
                     {
-                        "description": "Action double feature coming soon!",
+                        "text": "Action double feature coming soon!",
                         "image": "",
                         "startDate": "2025-04-20",
                         "endDate": "2025-05-15",
@@ -357,7 +357,7 @@ class NewsControllerTest {
                                 """
                                 {
                                     "id": "1",
-                                    "description": "Action double feature coming soon!",
+                                    "text": "Action double feature coming soon!",
                                     "image": "",
                                     "startDate": "2025-04-20",
                                     "endDate": "2025-05-15",
@@ -372,7 +372,7 @@ class NewsControllerTest {
                 
                     {
                         "id": "1",
-                        "description": "Action double feature coming soon!",
+                        "text": "Action double feature coming soon!",
                         "image": "",
                         "startDate": "2025-04-20",
                         "endDate": "2025-05-15",
@@ -396,7 +396,7 @@ class NewsControllerTest {
                                 """
                                 {
                                     "id": "1",
-                                    "description": "Action double feature coming soon!",
+                                    "text": "Action double feature coming soon!",
                                     "image": "",
                                     "startDate": "2025-04-20",
                                     "endDate": "2025-05-15",
@@ -430,7 +430,7 @@ class NewsControllerTest {
                                 """
                                 {
                                     "id": "1111111",
-                                    "description": "Action double feature coming soon!",
+                                    "text": "Action double feature coming soon!",
                                     "image": "",
                                     "startDate": "2025-04-20",
                                     "endDate": "2025-05-15",

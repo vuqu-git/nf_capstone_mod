@@ -1,6 +1,6 @@
 export type News = {
     id: string,
-    description: string,
+    text: string,
     image: string,
     startDate: string,
     endDate: string,

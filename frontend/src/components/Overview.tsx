@@ -4,7 +4,6 @@ import {News} from "../types/News.ts";
 import axios from "axios";
 import NewsCard from "./NewsCard.tsx";
 
-
 export default function Overview() {
 
     const baseURL = "/api/news"
@@ -70,7 +69,7 @@ export default function Overview() {
                 <section>
                     <h2>(all) News</h2>
                     {   allNews.map(n => (
-                            <NewsCard key={n.id} variant={n.newsVariant} description={n.description}/>
+                            <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>
                             )
                         )
                     }
@@ -79,7 +78,7 @@ export default function Overview() {
                 <section>
                     <h2>(valid) News</h2>
                     {   validNews.map(n => (
-                            <NewsCard key={n.id} variant={n.newsVariant} description={n.description}/>
+                            <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>
                         )
                     )
                     }

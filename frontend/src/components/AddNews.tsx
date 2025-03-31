@@ -8,7 +8,7 @@ const baseURL = "/api/news";
 export default function AddNews() {
     const emptyNews = {
         id: "",
-        description: "",
+        text: "",
         image: "",
         startDate: "",
         endDate: "",
