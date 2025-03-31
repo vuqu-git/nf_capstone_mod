@@ -6,6 +6,7 @@ interface Props {
     allNews: News[];
     selectedId: string;
     onSelect: (id: string) => void;
+    // formType: "edit" | "add"; // determines whether the selector is for editing or adding
 }
 
 export const NewsSelector = ({ allNews, selectedId, onSelect }: Props) => (

@@ -19,7 +19,8 @@ export default function DeleteNews() {
         setSuccessMessage,
         setError,
         getAllNews,
-    } = useNewsHandling();
+    } = useNewsHandling(false); // pass false to avoid fetching single news details
+
 
     const handleDelete = () => {
         setError("");

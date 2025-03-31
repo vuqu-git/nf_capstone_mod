@@ -5,7 +5,7 @@ import { News } from '../types/News.ts';
 
 const baseURL = "/api/news";
 
-export const useNewsHandling = () => {
+export const useNewsHandling = (shouldFetchDetails: boolean = true) => {
     const [isLoading, setIsLoading] = useState(false);
     const [allNews, setAllNews] = useState<News[]>([]);
     const [selectedId, setSelectedId] = useState<string>("");
@@ -27,7 +27,7 @@ export const useNewsHandling = () => {
     };
 
     const getSingleNews = (id: string) => {
-        if (!id) return;
+        if (!id || !shouldFetchDetails) return; // Avoid fetching if not needed
 
         setIsLoading(true);
         setError("");
@@ -46,6 +46,8 @@ export const useNewsHandling = () => {
     }, []);
 
     useEffect(() => {
+        // here if clause: invoke getAllNews only when changes selectedId comes from NewsSelector
+
         getSingleNews(selectedId);
     }, [selectedId]);
 

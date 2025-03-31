@@ -20,7 +20,7 @@ export default function EditNews() {
         setSuccessMessage,
         setError,
         getAllNews,
-    } = useNewsHandling();
+    } = useNewsHandling(true);
 
     const handleUpdateNews = (event: FormEvent<HTMLFormElement>, newsInForm: News) => {
         event.preventDefault();
