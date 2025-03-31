@@ -66,7 +66,7 @@ function Header() {
     return (
         <Navbar expand="lg" className="custom-navbar">
             <Container>
-                <Navbar.Brand href="#home">Pupillelogo</Navbar.Brand>
+                <Navbar.Brand href="#home">Logo Pupille - Kino an der Uni</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
