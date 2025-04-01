@@ -6,7 +6,6 @@ import {Route, Routes} from "react-router-dom";
 import {Container} from "react-bootstrap";
 
 import AddNews from "./components/AddNews.tsx";
-import EditDeleteNewsOld from "./oldComponents/EditDeleteNewsOld.tsx";
 import EditDeleteNews from "./components/EditDeleteNews.tsx";
 
 function App() {
@@ -26,8 +25,6 @@ function App() {
                       <Route path="/editnews" element={<EditDeleteNews />} />
                       <Route path="/deletenews" element={<EditDeleteNews />} />
 
-                      {/*<Route path="/editnewsalt" element={<EditDeleteNewsOld />} />*/}
-                      {/*<Route path="/deletenewsalt" element={<EditDeleteNewsOld />} />*/}
                   </Routes>
               </Container>
           </main>
