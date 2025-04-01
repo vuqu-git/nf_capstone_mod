@@ -7,6 +7,7 @@ import org.pupille.backend.news.models.News;
 import org.pupille.backend.news.repositories.NewsRepo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,26 +46,53 @@ class NewsServiceTest {
 
     @Test
     void getAllNews_whenEmpty_returnEmptyList() {
+//        // GIVEN
+//        List<News> expected = List.of();
+//        when(mockNewsRepo.findAll()).thenReturn(expected);
+//        // WHEN
+//        // Attention: Because the mock repository is returning an immutable list, the sort operation within getAllNews will throw the UnsupportedOperationException.
+//        List<News> actual = newsService.getAllNews();
+//        // THEN
+//        verify(mockNewsRepo).findAll();
+//        assertEquals(expected, actual);
+
         // GIVEN
-        List<News> expected = List.of();
-        when(mockNewsRepo.findAll()).thenReturn(expected);
+        ArrayList<News> expectedArrayList = new ArrayList<>(List.of());
+        when(mockNewsRepo.findAll()).thenReturn(expectedArrayList);
         // WHEN
-        List<News> actual = newsService.getAllNews();
+        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getAllNews() );
+
         // THEN
         verify(mockNewsRepo).findAll();
-        assertEquals(expected, actual);
+        assertEquals(expectedArrayList, actualArrayList);
     }
 
     @Test
     void getAllNews_whenNotEmpty_returnNewsList() {
+//        // GIVEN
+//        expected is unmodifiable (e.g., created with List.of())
+//        → you cannot sort it directly. You need to create a new modifiable list from it and then sort that new list:
+//        List<News> expected = List.of(n2, n1);
+//        when(mockNewsRepo.findAll()).thenReturn(List.of(n1, n2));
+//        // WHEN
+//        // Attention: Because the mock repository is returning an immutable list, the sort operation within getAllNews will throw the UnsupportedOperationException.
+//        List<News> actual = newsService.getAllNews();
+//        // THEN
+//        verify(mockNewsRepo).findAll();
+//        assertEquals(expected, actual);
+
         // GIVEN
-        List<News> expected = List.of(n1, n2);
-        when(mockNewsRepo.findAll()).thenReturn(expected);
+        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n2, n1));
+        when(mockNewsRepo.findAll()).thenReturn( new ArrayList<>(List.of(n1, n2)) );
+
         // WHEN
+        // Attention: Because the mock repository is returning an immutable list, the sort operation within getAllNews will throw the UnsupportedOperationException.
         List<News> actual = newsService.getAllNews();
+        ArrayList<News> actualArrayList = new ArrayList<>(actual);
+
         // THEN
         verify(mockNewsRepo).findAll();
-        assertEquals(expected, actual);
+        assertEquals(expectedArrayList, actualArrayList);
     }
 
     @Test
@@ -262,52 +290,94 @@ class NewsServiceTest {
 
     @Test
     void getNewsByDateInRange_whenEmpty_returnEmptyList() {
+//        // GIVEN
+//        List<News> expected = List.of();
+//
+//        // Simulate ID generation
+//        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
+//
+//        LocalDate currentDate = mockDateNowService.localDateNow();
+//        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
+//        // WHEN
+//        List<News> actual = newsService.getNewsByDateInRange();
+//        // THEN
+//        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
+//        assertEquals(expected, actual);
+
         // GIVEN
-        List<News> expected = List.of();
+        ArrayList<News> expectedArrayList = new ArrayList<>(List.of());
 
         // Simulate ID generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow();
-        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
+        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expectedArrayList);
         // WHEN
-        List<News> actual = newsService.getNewsByDateInRange();
+        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getNewsByDateInRange() );
+
         // THEN
         verify(mockNewsRepo).findNewsByDateInRange(currentDate);
-        assertEquals(expected, actual);
+        assertEquals(expectedArrayList, actualArrayList);
     }
 
     @Test
     void getNewsByDateInRange_whenNotEmpty_returnNewsList_1() {
+//        // GIVEN
+//        List<News> expected = List.of(n1);
+//        // Simulate ID generation
+//        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
+//
+//        LocalDate currentDate = mockDateNowService.localDateNow();
+//        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
+//        // WHEN
+//        List<News> actual = newsService.getNewsByDateInRange();
+//        // THEN
+//        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
+//        assertEquals(expected, actual);
+
         // GIVEN
-        List<News> expected = List.of(n1);
+        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n1));
         // Simulate ID generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow();
-        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
+        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expectedArrayList);
         // WHEN
-        List<News> actual = newsService.getNewsByDateInRange();
+        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getNewsByDateInRange() );
         // THEN
         verify(mockNewsRepo).findNewsByDateInRange(currentDate);
-        assertEquals(expected, actual);
+        assertEquals(expectedArrayList, actualArrayList);
     }
 
     @Test
     void getNewsByDateInRange_whenNotEmpty_returnNewsList_2() {
+//        // GIVEN
+//        List<News> expected = List.of(n2, n1);
+//
+//        // Simulate ID generation
+//        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
+//
+//        LocalDate currentDate = mockDateNowService.localDateNow();
+//        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(List.of(n1, n2));
+//        // WHEN
+//        List<News> actual = newsService.getNewsByDateInRange();
+//        // THEN
+//        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
+//        assertEquals(expected, actual);
+
         // GIVEN
-        List<News> expected = List.of(n1, n2);
+        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n2, n1));
 
         // Simulate ID generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow();
-        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
+        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn( new ArrayList<>(List.of(n1, n2)) );
         // WHEN
-        List<News> actual = newsService.getNewsByDateInRange();
+        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getNewsByDateInRange() );
         // THEN
         verify(mockNewsRepo).findNewsByDateInRange(currentDate);
-        assertEquals(expected, actual);
+        assertEquals(expectedArrayList, actualArrayList);
     }
 
 
