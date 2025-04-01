@@ -5,7 +5,7 @@ import { News } from '../types/News.ts';
 
 const baseURL = "/api/news";
 
-export const useNewsHandling = (shouldFetchDetails: boolean = true) => {
+export const useAllNews = (shouldFetchDetails: boolean = true) => {
     const [isLoading, setIsLoading] = useState(false);
     const [allNews, setAllNews] = useState<News[]>([]);
     const [selectedId, setSelectedId] = useState<string>("");
@@ -46,14 +46,12 @@ export const useNewsHandling = (shouldFetchDetails: boolean = true) => {
     }, []);
 
     useEffect(() => {
-        // here if clause: invoke getAllNews only when changes selectedId comes from NewsSelector
-
         getSingleNews(selectedId);
     }, [selectedId]);
 
     // this returns an object, here shorthand notation
     return {
-        isLoading,
+        isLoadingAllNews: isLoading,
         allNews,
         selectedId,
         selectedNews,

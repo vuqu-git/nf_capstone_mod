@@ -43,15 +43,17 @@ export default function AddNews() {
 
     return (
         <div>
-            {error && <div className="text-danger mb-3">{error}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-
             <NewsForm
                 newsItem={addingNews}
                 handleSubmit={handleSaveNews}
                 onChange={(addingNews) => setAddingNews(addingNews)}
                 formType="add"
             />
+            {error && <div className="text-danger mb-3">{error}</div>}
+            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
+
+            {/* Display loading message when submitting */}
+            {isLoading && <div className="text-warning mb-3">&#x1f4be; Saving news...</div>}
         </div>
     );
 }

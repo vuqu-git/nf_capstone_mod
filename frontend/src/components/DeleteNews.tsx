@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import { NewsSelector } from "./NewsSelector";
-import { useNewsHandling } from "../hooks/useNewsHandling";
+import { useAllNews } from "../hooks/useAllNews.ts";
 import axios from "axios";
 
 const baseURL = "/api/news";
@@ -19,8 +19,7 @@ export default function DeleteNews() {
         setSuccessMessage,
         setError,
         getAllNews,
-    } = useNewsHandling(false); // pass false to avoid fetching single news details
-
+    } = useAllNews(false); // pass false to avoid fetching single news details
 
     const handleDelete = () => {
         setError("");
@@ -42,9 +41,6 @@ export default function DeleteNews() {
 
     return (
         <div>
-            {error && <div className="text-danger mb-3">{error}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-
             <NewsSelector
                 allNews={allNews}
                 selectedId={deletingId}
@@ -71,6 +67,9 @@ export default function DeleteNews() {
                     </Button>
                 </div>
             )}
+
+            {error && <div className="text-danger mb-3">{error}</div>}
+            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
         </div>
     );
 }

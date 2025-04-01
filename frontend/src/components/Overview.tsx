@@ -3,61 +3,44 @@ import {News} from "../types/News.ts";
 
 import axios from "axios";
 import NewsCard from "./NewsCard.tsx";
+import {useAllNews} from "../hooks/useAllNews.ts";
+
+const baseURL = "/api/news"
 
 export default function Overview() {
 
-    const baseURL = "/api/news"
-
-    const [loading, setLoading] = useState(false);
-
-    const [allNews, setAllNews] = useState<News[]>([]);
-
-    const getAllNews = () => {
-        console.log("Fetching Movies...")
-
-        axios.get(baseURL + "/all")
-            .then((response) => {
-                console.log("Request finished")
-                console.log(response.data)
-                setAllNews(response.data)
-            })
-            .catch((errorResponse) => {
-                console.log(errorResponse)
-            })
-
-        console.log("Movies fetched successfully!")
-    }
+    const {
+        isLoadingAllNews,
+        allNews,
+        error,
+        setError,
+        getAllNews,
+    } = useAllNews(false);
 
     const [validNews, setValidNews] = useState<News[]>([]);
+    const [isLoadingValidNews, setIsLoadingValidNews] = useState(false);
 
     const getValidNews = () => {
-        console.log("Fetching Movies...")
+        setIsLoadingValidNews(true);
 
         axios.get(baseURL)
             .then((response) => {
-                console.log("Request finished")
-                console.log(response.data)
                 setValidNews(response.data)
             })
-            .catch((errorResponse) => {
-                console.log(errorResponse)
+            .catch((error) => {
+                const errorMessage =
+                    error instanceof Error ? error.message : "Fetching valid news failed";
+                setError(errorMessage);
             })
-
-        console.log("Movies fetched successfully!")
+            .finally(() => {
+            setIsLoadingValidNews(false);
+        });
     }
 
     useEffect(() => {
         getAllNews();
         getValidNews();
     }, [])
-
-    if (loading) {
-        return (
-            <div>
-                <p>Loading...</p>
-            </div>
-        );
-    }
 
     return (
             <>
@@ -66,21 +49,29 @@ export default function Overview() {
                     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                 </p>
 
-                <section>
-                    <h2>(all) News</h2>
-                    {   allNews.map(n => (
-                            <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>
-                            )
-                        )
-                    }
-                </section>
+                {/*<section>*/}
+                {/*    <h2>(all) News</h2>*/}
+                {/*    {   isLoadingAllNews ? (*/}
+                {/*        <div className="text-warning mb-3">&#x1f504; Loading all news...</div>*/}
+                {/*    ) : error ? (*/}
+                {/*        <div className="text-danger mb-3">{error}</div>*/}
+                {/*    ) : (*/}
+                {/*        allNews.map(n => (*/}
+                {/*            <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>*/}
+                {/*            )*/}
+                {/*        ))*/}
+                {/*    }*/}
+                {/*</section>*/}
 
                 <section>
                     <h2>(valid) News</h2>
-                    {   validNews.map(n => (
+                    {   isLoadingValidNews ? (
+                            <div className="text-warning mb-3">&#x1f504; Loading valid news...</div>
+                        ) :
+                        validNews.map(n => (
                             <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>
-                        )
-                    )
+                        ))
+
                     }
                 </section>
             </>

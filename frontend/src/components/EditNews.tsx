@@ -2,14 +2,14 @@ import { FormEvent } from "react";
 import axios from "axios";
 import { NewsSelector } from "./NewsSelector";
 import NewsForm from "./NewsForm";
-import { useNewsHandling } from "../hooks/useNewsHandling";
+import { useAllNews } from "../hooks/useAllNews.ts";
 import { News } from "../types/News.ts";
 
 const baseURL = "/api/news";
 
 export default function EditNews() {
     const {
-        isLoading,
+        isLoadingAllNews,
         allNews,
         selectedId: updatingId,
         selectedNews: updatingNews,
@@ -20,7 +20,7 @@ export default function EditNews() {
         setSuccessMessage,
         setError,
         getAllNews,
-    } = useNewsHandling(true);
+    } = useAllNews(true);
 
     const handleUpdateNews = (event: FormEvent<HTMLFormElement>, newsInForm: News) => {
         event.preventDefault();
@@ -43,9 +43,6 @@ export default function EditNews() {
 
     return (
         <div>
-            {error && <div className="text-danger mb-3">{error}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-
             <NewsSelector
                 allNews={allNews} // passes all available news entries to populate the <option> elements in the dropdown menu.
                 selectedId={updatingId} // passes the currently selected news ID
@@ -56,9 +53,9 @@ export default function EditNews() {
                 }}
             />
 
-            {isLoading && <p>Loading news details...</p>}
+            {isLoadingAllNews && <div className="text-warning mb-3">&#x1f504; Loading news details...</div>}
 
-            {!isLoading && updatingNews && (
+            {!isLoadingAllNews && updatingNews && (
                 <NewsForm
                     newsItem={updatingNews}
                     handleSubmit={handleUpdateNews}
@@ -66,6 +63,9 @@ export default function EditNews() {
                     formType="edit"
                 />
             )}
+
+            {error && <div className="text-danger mb-3">{error}</div>}
+            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
         </div>
     );
 }
