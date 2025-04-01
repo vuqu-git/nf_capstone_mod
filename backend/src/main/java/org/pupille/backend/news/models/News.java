@@ -4,15 +4,16 @@ import java.time.LocalDate;
 
 public record News(
         String id,
-        String description,
+        String text,
         String image,
         LocalDate startDate,
-        LocalDate endDate
+        LocalDate endDate,
+        String newsVariant
 ) {
     public News {
-        if ((description == null || description.isEmpty()) && (image == null || image.isEmpty())) {
-            // Throws an exception only if both description and image are empty.
-            throw new IllegalArgumentException("Both description and image cannot be empty");
+        if ((text == null || text.isEmpty()) && (image == null || image.isEmpty())) {
+            // Throws an exception only if both text and image are empty.
+            throw new IllegalArgumentException("Both text and image cannot be empty");
         }
         if (startDate == null || endDate == null) {
             throw new IllegalArgumentException("Start and end dates are required");
@@ -23,16 +24,17 @@ public record News(
     }
 
     public News(
-            String description,
+            String text,
             String image,
             LocalDate startDate,
-            LocalDate endDate
+            LocalDate endDate,
+            String newsVariant
     ) {
-        this(null, description, image, startDate, endDate);
+        this(null, text, image, startDate, endDate, newsVariant);
     }
 
     public News withId(String id) {
-        return new News(id, description, image, startDate, endDate);
+        return new News(id, text, image, startDate, endDate, newsVariant);
     }
 
 }

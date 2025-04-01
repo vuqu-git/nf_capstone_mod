@@ -7,6 +7,7 @@ import org.pupille.backend.news.repositories.NewsRepo;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -17,10 +18,12 @@ public class NewsService {
     private final IdService idService;
     private final DateNowService dateNowService;
 
-    private final String errorMessage = "No news found with the id %s";
+    private static final String errorMessage = "No news found with the id %s";
 
     public List<News> getAllNews() {
-        return newsRepo.findAll();
+        List<News> newsList = newsRepo.findAll();
+        newsList.sort(Comparator.comparing(News::endDate));
+        return newsList;
     }
 
     public News getNewsById(String id) {
@@ -62,6 +65,8 @@ public class NewsService {
 
     public List<News> getNewsByDateInRange() {
         LocalDate currentDate = dateNowService.localDateNow();
-        return newsRepo.findNewsByDateInRange(currentDate);
+        List<News> newsList = newsRepo.findNewsByDateInRange(currentDate);
+        newsList.sort(Comparator.comparing(News::endDate));
+        return newsList;
     }
 }
