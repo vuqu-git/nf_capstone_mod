@@ -24,6 +24,12 @@ public class TerminController {
         return new ResponseEntity<>(terminService.getAllTermine(), HttpStatus.OK);
     }
 
+    @GetMapping("/allsorted")
+    public ResponseEntity<List<TerminProjectionInterface>> getAllTermineByOrderByTitelAsc() {
+        List<TerminProjectionInterface> termine = terminService.getAllTermineByOrderByTerminDesc();
+        return ResponseEntity.ok(termine);
+    }
+
     @GetMapping("/{tnr}")
     public ResponseEntity<Termin> getTerminById(@PathVariable Integer tnr) {
         Optional<Termin> termin = terminService.getTerminById(tnr);

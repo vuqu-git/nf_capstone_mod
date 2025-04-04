@@ -1,6 +1,6 @@
 import { FormEvent } from "react";
 import { Form, Button } from "react-bootstrap";
-import { News } from "../types/News.ts";
+import { News } from "../../types/News.ts";
 import * as React from "react";
 
 interface Props {

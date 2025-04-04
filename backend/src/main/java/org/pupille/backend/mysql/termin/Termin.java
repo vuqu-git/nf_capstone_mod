@@ -19,7 +19,7 @@ public class Termin {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Use auto-increment
 //    GenerationType.IDENTITY tells JPA to rely on the database's identity column (auto-increment) to generate primary key values.
 //    This is specific to databases like MySQL that support auto-increment.
-    private Integer tnr; // Primary key
+    private Long tnr; // Primary key
 
 //    @NotNull
     private LocalDateTime termin; // datetime

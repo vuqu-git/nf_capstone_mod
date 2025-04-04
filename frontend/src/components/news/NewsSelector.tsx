@@ -1,6 +1,6 @@
 // NewsSelector.tsx (shared component)
 import { Form } from "react-bootstrap";
-import { News } from "../types/News.ts";
+import { News } from "../../types/News.ts";
 
 interface Props {
     allNews: News[];

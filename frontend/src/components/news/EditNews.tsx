@@ -1,9 +1,9 @@
 import { FormEvent } from "react";
 import axios from "axios";
-import { NewsSelector } from "./NewsSelector";
-import NewsForm from "./NewsForm";
-import { useAllNews } from "../hooks/useAllNews.ts";
-import { News } from "../types/News.ts";
+import { NewsSelector } from "./NewsSelector.tsx";
+import NewsForm from "./NewsForm.tsx";
+import { useAllNews } from "../../hooks/useAllNews.ts";
+import { News } from "../../types/News.ts";
 
 const baseURL = "/api/news";
 

@@ -5,8 +5,8 @@ import Overview from "./components/Overview.tsx";
 import {Route, Routes} from "react-router-dom";
 import {Container} from "react-bootstrap";
 
-import AddNews from "./components/AddNews.tsx";
-import EditDeleteNews from "./components/EditDeleteNews.tsx";
+import AddNews from "./components/news/AddNews.tsx";
+import EditDeleteNews from "./components/news/EditDeleteNews.tsx";
 
 function App() {
 

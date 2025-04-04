@@ -2,7 +2,7 @@ import {useState, useEffect} from "react";
 import {News} from "../types/News.ts";
 
 import axios from "axios";
-import NewsCard from "./NewsCard.tsx";
+import NewsCard from "./news/NewsCard.tsx";
 import {useAllNews} from "../hooks/useAllNews.ts";
 
 const baseURL = "/api/news"
