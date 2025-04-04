@@ -30,7 +30,7 @@ public class FilmController {
 //        return ResponseEntity.ok(films);
 //    }
 
-    @GetMapping("/reposorted")
+    @GetMapping("/allsorted")
     public ResponseEntity<List<FilmDTO>> getAllFilmsByOrderByTitelAsc() {
         List<FilmDTO> films = filmService.getAllFilmsByOrderByTitelAsc();
         return ResponseEntity.ok(films);

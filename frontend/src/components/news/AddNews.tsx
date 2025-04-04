@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { News } from "../types/News.ts";
+import { News } from "../../types/News.ts";
 import axios from "axios";
 import NewsForm from "./NewsForm.tsx";
 

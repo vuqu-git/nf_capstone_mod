@@ -30,12 +30,6 @@ public class FilmService {
 //        return filmRepository.findAllByOrderByTitelAsc();
 //    }
 
-//    public List<FilmProjectionInterface> getAllFilmsByOrderByTitelAsc() {
-//        List<FilmProjectionInterface> tempList = filmRepository.findAllByOrderByTitelAsc().stream()
-//                                                    .map(f -> f.setStab());
-//        return tempList;
-//    }
-
     public List<FilmDTO> getAllFilmsByOrderByTitelAsc() {
         return filmRepository.findAllByOrderByTitelAsc()
                                 .stream()

@@ -22,6 +22,10 @@ public class TerminService {
         return terminRepository.findAll();
     }
 
+        public List<TerminProjectionInterface> getAllTermineByOrderByTerminDesc() {
+        return terminRepository.findAllByOrderByTerminDesc();
+    }
+
     public Optional<Termin> getTerminById(Integer tnr) {
         return terminRepository.findById(tnr);
     }

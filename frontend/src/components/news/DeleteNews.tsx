@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
-import { NewsSelector } from "./NewsSelector";
-import { useAllNews } from "../hooks/useAllNews.ts";
+import { NewsSelector } from "./NewsSelector.tsx";
+import { useAllNews } from "../../hooks/useAllNews.ts";
 import axios from "axios";
 
 const baseURL = "/api/news";
