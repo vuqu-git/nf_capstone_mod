@@ -5,7 +5,7 @@ import { News } from "../../types/News.ts";
 interface Props {
     allNews: News[];
     selectedId: string;
-    onSelect: (id: string) => void;
+    onSelect: (idInSelectOption: string) => void;
     // formType: "edit" | "add"; // determines whether the selector is for editing or adding
 }
 

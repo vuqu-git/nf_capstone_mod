@@ -7,6 +7,7 @@ import {Container} from "react-bootstrap";
 
 import AddNews from "./components/news/AddNews.tsx";
 import EditDeleteNews from "./components/news/EditDeleteNews.tsx";
+import AddEditFilms from "./components/filme/AddEditFilms.tsx";
 
 function App() {
 
@@ -24,6 +25,8 @@ function App() {
                       <Route path="/addnews" element={<AddNews />} />
                       <Route path="/editnews" element={<EditDeleteNews />} />
                       <Route path="/deletenews" element={<EditDeleteNews />} />
+
+                      <Route path="/addeditfilme" element={<AddEditFilms />} />
 
                   </Routes>
               </Container>
