@@ -19,9 +19,15 @@ public class TerminverknuepfungController {
         this.terminverknuepfungService = terminverknuepfungService;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Terminverknuepfung>> getAllTerminverknuepfung() {
         List<Terminverknuepfung> terminverknuepfung = terminverknuepfungService.getAllTerminverknuepfung();
+        return ResponseEntity.ok(terminverknuepfung);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Terminverknuepfung>> getAllTVByOrderByFnrDesc() {
+        List<Terminverknuepfung> terminverknuepfung = terminverknuepfungService.getAllTVByOrderByFnrDesc();
         return ResponseEntity.ok(terminverknuepfung);
     }
 

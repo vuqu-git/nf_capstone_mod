@@ -1,9 +1,15 @@
 package org.pupille.backend.mysql.terminverknuepfung;
 
+import org.pupille.backend.mysql.termin.TerminProjectionInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface TerminverknuepfungRepository extends JpaRepository<Terminverknuepfung, Terminverknuepfung.TerminverknuepfungId> {
-    // You can add custom query methods here if needed
+
+    @Query("SELECT tv FROM Terminverknuepfung tv ORDER BY tv.fnr DESC")
+    List<Terminverknuepfung> findAllByOrderByFnrDesc();
 }

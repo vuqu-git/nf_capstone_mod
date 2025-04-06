@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import FilmSelection from "./FilmSelection";
 import {Film} from "../../types/Film.ts";
-import {Button, Form, Spinner} from "react-bootstrap";
+import {FilmDTO} from "../../types/FilmDTO.ts";
+import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 
 const baseURL = "/api/filme";
@@ -29,7 +30,7 @@ const emptyFilmForForm = {
 }
 
 export default function FilmForm() {
-    const [allFilms, setAllFilms] = useState<Film[]>([]); // All films fetched from the server
+    const [allFilms, setAllFilms] = useState<FilmDTO[]>([]); // All films fetched from the server
     const [selectedFilmId, setSelectedFilmId] = useState<number | null>(null); // Selected film for editing or deleting
     const [selectedFilm, setSelectedFilm] = useState<Film>(emptyFilmForForm); // Film data for the form
 
@@ -40,7 +41,7 @@ export default function FilmForm() {
     const [isLoading, setIsLoading] = useState(false); // for POST, PUT
     const [isGetLoading, setIsGetLoading] = useState(false); // for GET
 
-    const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made
+    const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made manually by the user
 
     // GET all films
     const getAllFilms = () => {
@@ -76,7 +77,7 @@ export default function FilmForm() {
             // GET single film (details)
             const getSingleFilm = () => {
 
-                setIsGetLoading(true); ///////////////////////
+                setIsGetLoading(true);
                 setErrorMessage("");
 
                 axios.get(`${baseURL}/${selectedFilmId}`)
@@ -85,7 +86,7 @@ export default function FilmForm() {
                         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
                         setErrorMessage(errorMessage);
                     })
-                    .finally(() => setIsGetLoading(false)); //////////////////
+                    .finally(() => setIsGetLoading(false));
             };
 
             getSingleFilm();
@@ -100,7 +101,7 @@ export default function FilmForm() {
     // Handle form field changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setSelectedFilm((prevData) => ({
+        setSelectedFilm((prevData: Film) => ({
             ...prevData,
             [name]: value,
         }));
@@ -137,7 +138,7 @@ export default function FilmForm() {
             const { fnr, ...filmInFormWithoutFnr } = selectedFilm;
             // ###################################################
 
-            // axios.post(`${baseURL}`, filmInForm)
+            // axios.post(`${baseURL}`, selectedFilm)
             axios.post(`${baseURL}`, filmInFormWithoutFnr)
                 .then(() => {
                     setSuccessMessage("Film saved successfully!");
@@ -164,21 +165,22 @@ export default function FilmForm() {
             axios.delete(`${baseURL}/${selectedFilmId}`)
                 .then(() => {
                     setSuccessMessage("Film deleted successfully!");
-                    // setSelectedId("");
+
                     getAllFilms();
                     setConfirmDeleteOpen(false);
 
-                    // !!! DO NOT reset selectedFilmId immediately !!!
+                    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    // !!! DO NOT reset selectedTerminId immediately !!!
+                    // => I need to set it to remove the delete button after deletion!!
                     // setSelectedFilmId(null);
 
                     setSelectedFilm(emptyFilmForForm); // Reset the form
-
-                    // setAllFilms(allFilms.filter(film => film.fnr !== selectedFilmId));
 
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Deletion failed";
                     setErrorMessage(errorMessage);
+                    setConfirmDeleteOpen(false);
                 });
         }
     };

@@ -41,10 +41,10 @@ export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: F
 
     return (
         <div>
-            <Form.Label>Film selection</Form.Label>
+            <Form.Label htmlFor="film-selection">Film selection</Form.Label>
             <Form.Select
-            // Adjust the value prop to handle null by converting it to an empty string (""):
-                value={selectedFilmId ?? ""}
+                id="film-selection" // Add id to connect to the label
+                value={selectedFilmId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
                 style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
             >

@@ -20,6 +20,10 @@ public class TerminverknuepfungService {
         return terminverknuepfungRepository.findAll();
     }
 
+    public List<Terminverknuepfung> getAllTVByOrderByFnrDesc() {
+        return terminverknuepfungRepository.findAllByOrderByFnrDesc();
+    }
+
     public Optional<Terminverknuepfung> getTerminverknuepfungById(Terminverknuepfung.TerminverknuepfungId id) {
         return terminverknuepfungRepository.findById(id);
     }
