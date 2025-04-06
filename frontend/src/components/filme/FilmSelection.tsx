@@ -1,5 +1,6 @@
 import { Form } from "react-bootstrap";
 import {Film} from "../../types/Film.ts";
+import React from "react";
 
 interface FilmSelectionProps {
     films: Film[];
@@ -33,18 +34,23 @@ const formatFilmDetails = (titel: string | undefined, stab: string | null | unde
 };
 
 export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: FilmSelectionProps) {
+
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        onSelectFilm(Number(e.target.value) || null);
+    }
+
     return (
         <div>
-
             <Form.Label>Film selection</Form.Label>
             <Form.Select
             // Adjust the value prop to handle null by converting it to an empty string (""):
-            value={selectedFilmId ?? ""}
-                onChange={(e) => onSelectFilm(Number(e.target.value) || null)}>
+                value={selectedFilmId ?? ""}
+                onChange={handleSelectChange}
+                style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
+            >
                 <option value="">Select a film to edit (or leave empty to add new)</option>
                 {films.map((film) => (
                         <option key={film.fnr} value={film.fnr}>
-                            {/*{film.titel}*/}
                             {formatFilmDetails(film.titel, film.stab, film.jahr)}
                         </option>
                 ))}

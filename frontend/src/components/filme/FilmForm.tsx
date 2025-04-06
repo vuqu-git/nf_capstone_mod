@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FilmSelection from "./FilmSelection";
 import {Film} from "../../types/Film.ts";
-import {Button, Form} from "react-bootstrap";
+import {Button, Form, Spinner} from "react-bootstrap";
 import axios from "axios";
 
 const baseURL = "/api/filme";
@@ -28,7 +28,6 @@ const emptyFilmForForm = {
     sonderfarbe: undefined,
 }
 
-
 export default function FilmForm() {
     const [allFilms, setAllFilms] = useState<Film[]>([]); // All films fetched from the server
     const [selectedFilmId, setSelectedFilmId] = useState<number | null>(null); // Selected film for editing or deleting
@@ -38,8 +37,10 @@ export default function FilmForm() {
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
 
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // for POST, PUT
+    const [isGetLoading, setIsGetLoading] = useState(false); // for GET
 
+    const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made
 
     // GET all films
     const getAllFilms = () => {
@@ -62,17 +63,20 @@ export default function FilmForm() {
     }, []);
 
 
-    // Fetch the selected film details only if we are editing (not for deletion)
+    // Fetch the selected film details only if we are editing or deleting
     useEffect(() => {
 
-        // Reset the success message when the selected film changes
-        setSuccessMessage("");
+        if (selectionChanged) {
+            // Reset the success message when the selected film changes
+            setSuccessMessage("");
+            setSelectionChanged(false); // Reset the flag
+        }
 
         if (selectedFilmId) {
             // GET single film (details)
             const getSingleFilm = () => {
 
-                // setIsLoading(true);
+                setIsGetLoading(true); ///////////////////////
                 setErrorMessage("");
 
                 axios.get(`${baseURL}/${selectedFilmId}`)
@@ -81,7 +85,7 @@ export default function FilmForm() {
                         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
                         setErrorMessage(errorMessage);
                     })
-                    // .finally(() => setIsLoading(false));
+                    .finally(() => setIsGetLoading(false)); //////////////////
             };
 
             getSingleFilm();
@@ -117,9 +121,10 @@ export default function FilmForm() {
             axios.put(`${baseURL}/${selectedFilmId}`, selectedFilm)
                 .then(() => {
                     setSuccessMessage("Film updated successfully!");
-                    // setSelectedId("");
-                    // setSelectedFilm(emptyFilmForAddingForm);
+
                     getAllFilms();
+                    setSelectedFilmId(null); // Reset the selection
+                    setSelectedFilm(emptyFilmForForm); // Reset the form
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Update failed";
@@ -136,10 +141,9 @@ export default function FilmForm() {
             axios.post(`${baseURL}`, filmInFormWithoutFnr)
                 .then(() => {
                     setSuccessMessage("Film saved successfully!");
-                    // setSelectedId("");
-                    // setSelectedFilm(emptyFilmForAddingForm);
+
                     getAllFilms();
-                    setSelectedFilmId(null); // Reset the selection
+                    // setSelectedFilmId(null); // Reset the selection, not required for POST because selection is unchanged
                     setSelectedFilm(emptyFilmForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -164,9 +168,12 @@ export default function FilmForm() {
                     getAllFilms();
                     setConfirmDeleteOpen(false);
 
-                    // setAllFilms(allFilms.filter(film => film.fnr !== selectedFilmId));
-                    setSelectedFilmId(null); // Reset the selection
+                    // !!! DO NOT reset selectedFilmId immediately !!!
+                    // setSelectedFilmId(null);
+
                     setSelectedFilm(emptyFilmForForm); // Reset the form
+
+                    // setAllFilms(allFilms.filter(film => film.fnr !== selectedFilmId));
 
                 })
                 .catch((error) => {
@@ -176,15 +183,28 @@ export default function FilmForm() {
         }
     };
 
+    const handleFilmSelectionChange = (id: number | null) => {
+        setSelectedFilmId(id);
+        setSelectionChanged(true); // Set flag when selection changes
+    };
+
     return (
         <div>
-            <h3>{selectedFilmId ? "Edit or delete " : "Add new "} Film</h3>
+            <h3 className="mt-3">{selectedFilmId ? "Edit or delete " : "Add new "} Film</h3>
 
-            <FilmSelection films={allFilms} selectedFilmId={selectedFilmId} onSelectFilm={setSelectedFilmId} />
+            <FilmSelection
+                films={allFilms}
+                selectedFilmId={selectedFilmId}
+                onSelectFilm={handleFilmSelectionChange}
+            />
+
+            <div style={{ minHeight: '30px' }}>
+                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading film details... Please wait!</div>}
+            </div>
 
             <Form onSubmit={handleSubmit}>
 
-                <h3>Film form</h3>
+                <h3 className="mt-3">Film form</h3>
 
                 <Form.Group controlId="titel" className="mt-3">
                     <Form.Label>Titel</Form.Label>
@@ -216,7 +236,17 @@ export default function FilmForm() {
                     />
                 </Form.Group>
 
-                <Form.Group controlId="text">
+                <Form.Group controlId="bild" className="mt-3">
+                    <Form.Label>Bild URL</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="bild"
+                        value={selectedFilm.bild || ""}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="text" className="mt-3">
                     <Form.Label>Text</Form.Label>
                     <Form.Control
                         as="textarea"
@@ -227,7 +257,7 @@ export default function FilmForm() {
                     />
                 </Form.Group>
 
-                <Form.Group controlId="kurztext">
+                <Form.Group controlId="kurztext" className="mt-3">
                     <Form.Label>Kurztext</Form.Label>
                     <Form.Control
                         as="textarea"
@@ -238,7 +268,7 @@ export default function FilmForm() {
                     />
                 </Form.Group>
 
-                <Form.Group controlId="besonderheit">
+                <Form.Group controlId="besonderheit" className="mt-3">
                     <Form.Label>Besonderheit</Form.Label>
                     <Form.Control
                         as="textarea"
@@ -269,16 +299,6 @@ export default function FilmForm() {
                     />
                 </Form.Group>
 
-                <Form.Group controlId="farbe" className="mt-3">
-                    <Form.Label>Farbe</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="farbe"
-                        value={selectedFilm.farbe || ""}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
-
                 <Form.Group controlId="laufzeit" className="mt-3">
                     <Form.Label>Laufzeit (Minuten)</Form.Label>
                     <Form.Control
@@ -305,6 +325,16 @@ export default function FilmForm() {
                         type="text"
                         name="untertitel"
                         value={selectedFilm.untertitel || ""}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="farbe" className="mt-3">
+                    <Form.Label>Farbe</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="farbe"
+                        value={selectedFilm.farbe || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -343,16 +373,6 @@ export default function FilmForm() {
                         rows={10}
                         name="stab"
                         value={selectedFilm.stab || ""}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
-
-                <Form.Group controlId="bild" className="mt-3">
-                    <Form.Label>Bild URL</Form.Label>
-                    <Form.Control
-                        type="text"
-                        name="bild"
-                        value={selectedFilm.bild || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
