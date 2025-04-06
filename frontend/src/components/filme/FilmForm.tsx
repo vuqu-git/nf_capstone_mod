@@ -1,34 +1,197 @@
-import { FormEvent } from "react";
-import { Form, Button } from "react-bootstrap";
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import FilmSelection from "./FilmSelection";
 import {Film} from "../../types/Film.ts";
+import {Button, Form} from "react-bootstrap";
+import axios from "axios";
 
-interface Props {
-    filmItem: Film; // this is need for prefilled form in case of edit
-    handleSubmit: (event: FormEvent<HTMLFormElement>, filmInForm: Film) => void;
-    onChange: (filmItem: Film) => void; // to have a Film object with field values equaling the prevailing form inputs
-    formType: "edit" | "add"; // determines whether the form is for editing or adding
+const baseURL = "/api/filme";
+
+const emptyFilmForForm = {
+    fnr: 0,
+    titel: '',
+    originaltitel: '',
+    originaltitelAnzeigen: false,
+    text: '',
+    kurztext: '',
+    besonderheit: '',
+    land: '',
+    jahr: undefined,
+    farbe: '',
+    laufzeit: undefined,
+    sprache: '',
+    untertitel: '',
+    format: '',
+    fsk: undefined,
+    stab: '',
+    bild: '',
+    sonderfarbeTitel: undefined,
+    sonderfarbe: undefined,
 }
 
-export default function FilmForm({ filmItem, handleSubmit, onChange, formType }: Props) {
+
+export default function FilmForm() {
+    const [allFilms, setAllFilms] = useState<Film[]>([]); // All films fetched from the server
+    const [selectedFilmId, setSelectedFilmId] = useState<number | null>(null); // Selected film for editing or deleting
+    const [selectedFilm, setSelectedFilm] = useState<Film>(emptyFilmForForm); // Film data for the form
+
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
+
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+
+    // GET all films
+    const getAllFilms = () => {
+        // setIsLoading(true);
+        setErrorMessage("");
+
+        axios.get(`${baseURL}/allsorted`)
+            .then((response) => setAllFilms(response.data))
+            .catch((error) => {
+                const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                setErrorMessage(errorMessage);
+            })
+        // .finally(() => setIsLoading(false));
+    };
+
+
+    // Fetch all films for the dropdown selection
+    useEffect(() => {
+        getAllFilms();
+    }, []);
+
+
+    // Fetch the selected film details only if we are editing (not for deletion)
+    useEffect(() => {
+
+        // Reset the success message when the selected film changes
+        setSuccessMessage("");
+
+        if (selectedFilmId) {
+            // GET single film (details)
+            const getSingleFilm = () => {
+
+                // setIsLoading(true);
+                setErrorMessage("");
+
+                axios.get(`${baseURL}/${selectedFilmId}`)
+                    .then((response) => setSelectedFilm(response.data))
+                    .catch((error) => {
+                        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                        setErrorMessage(errorMessage);
+                    })
+                    // .finally(() => setIsLoading(false));
+            };
+
+            getSingleFilm();
+
+        } else {
+            // Reset the form for adding a new film
+            setSelectedFilm(emptyFilmForForm);
+        }
+    }, [selectedFilmId]);
+
+
+    // Handle form field changes
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        onChange({ ...filmItem, [name]: value });
+        setSelectedFilm((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    // Handle the form submission (PUT or POST)
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        setErrorMessage("");
+        setSuccessMessage("");
+        setIsLoading(true);
+
+        // Check if we're adding or editing a film
+        if (selectedFilmId) {
+            // Editing an existing film (PUT request)
+
+            axios.put(`${baseURL}/${selectedFilmId}`, selectedFilm)
+                .then(() => {
+                    setSuccessMessage("Film updated successfully!");
+                    // setSelectedId("");
+                    // setSelectedFilm(emptyFilmForAddingForm);
+                    getAllFilms();
+                })
+                .catch((error) => {
+                    const errorMessage = error instanceof Error ? error.message : "Update failed";
+                    setErrorMessage(errorMessage);
+                })
+                .finally(() => setIsLoading(false));
+        } else {
+
+            // ###################################################
+            const { fnr, ...filmInFormWithoutFnr } = selectedFilm;
+            // ###################################################
+
+            // axios.post(`${baseURL}`, filmInForm)
+            axios.post(`${baseURL}`, filmInFormWithoutFnr)
+                .then(() => {
+                    setSuccessMessage("Film saved successfully!");
+                    // setSelectedId("");
+                    // setSelectedFilm(emptyFilmForAddingForm);
+                    getAllFilms();
+                    setSelectedFilmId(null); // Reset the selection
+                    setSelectedFilm(emptyFilmForForm); // Reset the form
+                })
+                .catch((error) => {
+                    const errorMessage = error instanceof Error ? error.message : "Saving failed";
+                    setErrorMessage(errorMessage);
+                })
+                .finally(() => setIsLoading(false));
+
+        }
+    };
+
+    // Handle film deletion
+    const handleDelete = () => {
+        setErrorMessage("");
+        setSuccessMessage("");
+        if (selectedFilmId) {
+
+            axios.delete(`${baseURL}/${selectedFilmId}`)
+                .then(() => {
+                    setSuccessMessage("Film deleted successfully!");
+                    // setSelectedId("");
+                    getAllFilms();
+                    setConfirmDeleteOpen(false);
+
+                    // setAllFilms(allFilms.filter(film => film.fnr !== selectedFilmId));
+                    setSelectedFilmId(null); // Reset the selection
+                    setSelectedFilm(emptyFilmForForm); // Reset the form
+
+                })
+                .catch((error) => {
+                    const errorMessage = error instanceof Error ? error.message : "Deletion failed";
+                    setErrorMessage(errorMessage);
+                });
+        }
     };
 
     return (
-        <>
-            {/* heading based on formType */}
-            <h4 className="mb-4">{formType === "edit" ? "Edit Film" : "Add Film"}</h4>
+        <div>
+            <h3>{selectedFilmId ? "Edit or delete " : "Add new "} Film</h3>
 
+            <FilmSelection films={allFilms} selectedFilmId={selectedFilmId} onSelectFilm={setSelectedFilmId} />
 
-            <Form onSubmit={(e) => handleSubmit(e, filmItem)}>
+            <Form onSubmit={handleSubmit}>
+
+                <h3>Film form</h3>
+
                 <Form.Group controlId="titel" className="mt-3">
                     <Form.Label>Titel</Form.Label>
                     <Form.Control
                         type="text"
                         name="titel"
-                        value={filmItem.titel}
+                        value={selectedFilm.titel || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -38,7 +201,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="text"
                         name="originaltitel"
-                        value={filmItem.originaltitel}
+                        value={selectedFilm.originaltitel || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -48,7 +211,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                         type="checkbox"
                         label="Originaltitel anzeigen"
                         name="originaltitelAnzeigen"
-                        checked={filmItem.originaltitelAnzeigen}
+                        checked={selectedFilm.originaltitelAnzeigen || false}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -59,9 +222,8 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                         as="textarea"
                         rows={13}
                         name="text"
-                        value={filmItem.text}
+                        value={selectedFilm.text || ""}
                         onChange={handleChange}
-                        required
                     />
                 </Form.Group>
 
@@ -71,9 +233,8 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                         as="textarea"
                         rows={3}
                         name="kurztext"
-                        value={filmItem.kurztext}
+                        value={selectedFilm.kurztext || ""}
                         onChange={handleChange}
-                        required
                     />
                 </Form.Group>
 
@@ -83,9 +244,8 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                         as="textarea"
                         rows={2}
                         name="besonderheit"
-                        value={filmItem.besonderheit}
+                        value={selectedFilm.besonderheit || ""}
                         onChange={handleChange}
-                        required
                     />
                 </Form.Group>
 
@@ -94,7 +254,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="text"
                         name="land"
-                        value={filmItem.land}
+                        value={selectedFilm.land || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -104,7 +264,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="number"
                         name="jahr"
-                        value={filmItem.jahr}
+                        value={selectedFilm.jahr || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -114,7 +274,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="text"
                         name="farbe"
-                        value={filmItem.farbe}
+                        value={selectedFilm.farbe || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -124,7 +284,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="number"
                         name="laufzeit"
-                        value={filmItem.laufzeit}
+                        value={selectedFilm.laufzeit || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -134,7 +294,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="text"
                         name="sprache"
-                        value={filmItem.sprache}
+                        value={selectedFilm.sprache || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -144,7 +304,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="text"
                         name="untertitel"
-                        value={filmItem.untertitel}
+                        value={selectedFilm.untertitel || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -154,7 +314,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="text"
                         name="format"
-                        value={filmItem.format}
+                        value={selectedFilm.format || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -164,7 +324,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         as="select"
                         name="fsk"
-                        value={filmItem.fsk}
+                        value={selectedFilm.fsk || ""}
                         onChange={handleChange}
                     >
                         <option value="_0">0</option>
@@ -182,7 +342,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                         as="textarea"
                         rows={10}
                         name="stab"
-                        value={filmItem.stab}
+                        value={selectedFilm.stab || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -192,7 +352,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="text"
                         name="bild"
-                        value={filmItem.bild}
+                        value={selectedFilm.bild || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -202,7 +362,7 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="number"
                         name="sonderfarbeTitel"
-                        value={filmItem.sonderfarbeTitel}
+                        value={selectedFilm.sonderfarbeTitel || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
@@ -212,15 +372,43 @@ export default function FilmForm({ filmItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="number"
                         name="sonderfarbe"
-                        value={filmItem.sonderfarbe}
+                        value={selectedFilm.sonderfarbe || ""}
                         onChange={handleChange}
                     />
                 </Form.Group>
 
-                <Button variant="primary" type="submit" className="mt-4">
-                    Save
+                <Button variant={selectedFilmId ? "success" : "primary"} type="submit" className="mt-4">
+                    {selectedFilmId ? "Update " : "Add "} film entry
                 </Button>
             </Form>
-        </>
+
+            {selectedFilmId && !confirmDeleteOpen && (
+                <Button
+                    variant="danger"
+                    type="submit"
+                    className="mt-4"
+                    onClick={() => setConfirmDeleteOpen(true)}
+                >
+                    Delete film entry
+                </Button>
+            )}
+
+            {confirmDeleteOpen && (
+                <div className="mt-3">
+                    <p>Are you sure you want to delete this news item?</p>
+                    <Button variant="secondary" onClick={() => setConfirmDeleteOpen(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="outline-danger" onClick={handleDelete} className="ms-2">
+                        Confirm Delete
+                    </Button>
+                </div>
+            )}
+            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedFilmId ? "updating " : "saving "} film entry... Please wait!</div>}
+            {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
+            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
+        </div>
     );
-}
+};
+
+

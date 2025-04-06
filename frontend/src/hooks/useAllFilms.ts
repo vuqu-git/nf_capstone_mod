@@ -7,11 +7,35 @@ import { FilmDTO } from '../types/FilmDTO.ts';
 
 const baseURL = "/api/filme";
 
+
 export const useAllFilms = (shouldFetchDetails: boolean = true) => {
+
+    const emptyFilmForAddingForm: Film = {
+        fnr: -1,
+        titel: '',
+        originaltitel: '',
+        originaltitelAnzeigen: false,
+        text: '',
+        kurztext: '',
+        besonderheit: '',
+        land: '',
+        jahr: undefined,
+        farbe: '',
+        laufzeit: undefined,
+        sprache: '',
+        untertitel: '',
+        format: '',
+        fsk: undefined,
+        stab: '',
+        bild: '',
+        sonderfarbeTitel: undefined,
+        sonderfarbe: undefined,
+    }
+
     const [isLoading, setIsLoading] = useState(false);
     const [allFilms, setAllFilms] = useState<FilmDTO[]>([]);
     const [selectedId, setSelectedId] = useState<string>("");
-    const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
+    const [selectedFilm, setSelectedFilm] = useState<Film | null>(emptyFilmForAddingForm);
     const [error, setError] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
 
@@ -47,8 +71,16 @@ export const useAllFilms = (shouldFetchDetails: boolean = true) => {
         getAllFilms();
     }, []);
 
+    // useEffect(() => {
+    //     getSingleFilm(selectedId);
+    // }, [selectedId]);
+
     useEffect(() => {
-        getSingleFilm(selectedId);
+        if (selectedId === "") {
+            setSelectedFilm(emptyFilmForAddingForm);
+        } else {
+            getSingleFilm(selectedId);
+        }
     }, [selectedId]);
 
     // this returns an object, here shorthand notation
@@ -57,6 +89,7 @@ export const useAllFilms = (shouldFetchDetails: boolean = true) => {
         allFilms: allFilms,
         selectedId,
         selectedFilm,
+        emptyFilmForAddingForm,
         error,
         successMessage,
         setSelectedId,

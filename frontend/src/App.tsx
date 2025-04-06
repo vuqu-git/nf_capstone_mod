@@ -8,6 +8,7 @@ import {Container} from "react-bootstrap";
 import AddNews from "./components/news/AddNews.tsx";
 import EditDeleteNews from "./components/news/EditDeleteNews.tsx";
 import AddEditFilms from "./components/filme/AddEditFilms.tsx";
+import FilmForm from "./components/filme/FilmForm.tsx";
 
 function App() {
 
@@ -27,6 +28,8 @@ function App() {
                       <Route path="/deletenews" element={<EditDeleteNews />} />
 
                       <Route path="/addeditfilme" element={<AddEditFilms />} />
+
+                      <Route path="/adminfilme" element={<FilmForm />} />
 
                   </Routes>
               </Container>

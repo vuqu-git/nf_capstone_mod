@@ -36,7 +36,7 @@ const formatFilmDetails = (titel: string, stab: string | null | undefined, jahr:
 
 export const FilmsSelector = ({ allFilms, selectedId, onSelect }: Props) => (
     <Form.Group>
-        <Form.Label>Select a Film Entry</Form.Label>
+        <Form.Label>Select a specific film entry for editing, otherwise keep "Select here..." for adding a new film entry</Form.Label>
         <Form.Select
             value={selectedId}
             onChange={(e) => onSelect(e.target.value)}
