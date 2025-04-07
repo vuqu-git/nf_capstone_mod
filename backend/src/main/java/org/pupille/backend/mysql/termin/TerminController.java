@@ -53,6 +53,23 @@ public class TerminController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+//    ###########################################################
+
+    @GetMapping("/futurea")
+    public ResponseEntity<List<Termin>> getFutureTermineAsEntities() {
+        List<Termin> futureTermine = terminService.getFutureTermine();
+        return ResponseEntity.ok(futureTermine);
+    }
+
+    @GetMapping("/futurep")
+    public ResponseEntity<List<TerminProjectionInterface>> getFutureTermineAsProjections() {
+        List<TerminProjectionInterface> futureTermine = terminService.getFutureTermineProjected();
+        return ResponseEntity.ok(futureTermine);
+    }
+
+
+//    ###########################################################
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleNotFoundException(RuntimeException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
