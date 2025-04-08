@@ -38,25 +38,25 @@ public class TerminverknuepfungController {
         return terminverknuepfungDTOSelection.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<Terminverknuepfung> createTerminverknuepfung(@RequestBody Terminverknuepfung terminverknuepfung) {
-        Terminverknuepfung createdTerminverknuepfung = terminverknuepfungService.saveTerminverknuepfung(terminverknuepfung);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTerminverknuepfung);
-    }
-
-//    @PutMapping("/{tnr}/{fnr}")
-//    public ResponseEntity<Terminverknuepfung> updateTerminverknuepfung(@PathVariable Long tnr, @PathVariable Long fnr, @RequestBody Terminverknuepfung updatedTerminverknuepfung) {
-//        Terminverknuepfung.TerminverknuepfungId id = new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
-//        Optional<Terminverknuepfung> existingTerminverknuepfung = terminverknuepfungService.getTerminverknuepfungById(id);
-//        if (existingTerminverknuepfung.isPresent()) {
-//            updatedTerminverknuepfung.setTnr(tnr);
-//            updatedTerminverknuepfung.setFnr(fnr);
-//            Terminverknuepfung savedTerminverknuepfung = terminverknuepfungService.saveTerminverknuepfung(updatedTerminverknuepfung);
-//            return ResponseEntity.ok(savedTerminverknuepfung);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
+//    // this simple adding/creating doesn't work because of the relationships of Terminverknuepfung entity!
+//    @PostMapping
+//    public ResponseEntity<Terminverknuepfung> createTerminverknuepfung(@RequestBody Terminverknuepfung terminverknuepfung) {
+//        Terminverknuepfung createdTerminverknuepfung = terminverknuepfungService.saveTerminverknuepfung(terminverknuepfung);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(createdTerminverknuepfung);
 //    }
+
+
+    @PutMapping("/{tnr}/{fnr}")
+    public ResponseEntity<TerminverknuepfungDTOSelection> updateTerminverknuepfung(
+            @PathVariable Long tnr,
+            @PathVariable Long fnr,
+            @RequestBody TerminverknuepfungDTOSelection updatingTV) {
+
+        TerminverknuepfungDTOSelection updated = terminverknuepfungService
+                .updateTerminverknuepfung(tnr, fnr, updatingTV);
+
+        return ResponseEntity.ok(updated);
+    }
 
     @DeleteMapping("/{tnr}/{fnr}")
     public ResponseEntity<Void> deleteTerminverknuepfung(@PathVariable Long tnr, @PathVariable Long fnr) {
@@ -67,24 +67,13 @@ public class TerminverknuepfungController {
 
     //    ###############################################
 
-    @PostMapping("/{filmId}/filmlinkstotermin/{terminId}")
-    public ResponseEntity<String> linkExistingFilmToExistingTermin(
-            @PathVariable Long filmId,
-            @PathVariable Long terminId) {
-        try {
-            // Assuming you have a service method for this purpose
-            terminverknuepfungService.linkExistingFilmToExistingTermin(filmId, terminId);
-            return new ResponseEntity<>("Film with fnr " + filmId + " linked to Termin with tnr " + terminId + " successfully", HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-    }
-
+    // this is the usual add function for new Terminverknuepfung, but because of the relationships of
+    // Terminverknuepfung entity, there a various versions of this add function, version here: link between existing Film and existing Termin
     @PostMapping("/link-film-termin")
-    public ResponseEntity<String> linkFilmToTermin(@RequestBody TerminverknuepfungDTORequest request) {
+    public ResponseEntity<String> linkExistingFilmToExistingTermin(@RequestBody TerminverknuepfungDTOSelection newTV) {
         try {
-            terminverknuepfungService.linkExistingFilmToExistingTerminReq(request);
-            return new ResponseEntity<>("Film with fnr " + request.getFnr() + " linked to Termin with tnr " + request.getTnr() + " successfully", HttpStatus.CREATED);
+            terminverknuepfungService.linkExistingFilmToExistingTermin(newTV);
+            return new ResponseEntity<>("Film with fnr " + newTV.fnr() + " linked to Termin with tnr " + newTV.tnr() + " successfully", HttpStatus.CREATED);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

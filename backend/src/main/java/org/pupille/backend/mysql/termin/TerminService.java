@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,8 +23,11 @@ public class TerminService {
         this.terminRepository = terminRepository;
     }
 
-    public List<Termin> getAllTermine() {
-        return terminRepository.findAll();
+    public List<TerminDTOForm> getAllTermine() {
+        List<Termin> termine = terminRepository.findAll();
+        return termine.stream()
+                .map(TerminDTOForm::new)
+                .collect(Collectors.toList());
     }
 
         public List<TerminProjectionSelection> getAllTermineByOrderByTerminDesc() {
@@ -34,19 +38,19 @@ public class TerminService {
         return Optional.of( new TerminDTOForm(terminRepository.findById(tnr).get()) );
     }
 
-    public Termin createTermin(Termin termin) {
+    public TerminDTOForm createTermin(Termin termin) {
         // Do NOT set termin.setTnr(someValue) because we use auto-increment in the db
-        return terminRepository.save(termin);
+        return new TerminDTOForm(terminRepository.save(termin));
     }
 
-    public Termin updateTermin(Long tnr, Termin terminDetails) {
+    public TerminDTOForm updateTermin(Long tnr, Termin terminDetails) {
         return terminRepository.findById(tnr)
                 .map(termin -> {
                     termin.setTermin(terminDetails.getTermin());
                     termin.setTitel(terminDetails.getTitel());
                     termin.setText(terminDetails.getText());
                     // Update all other fields similarly
-                    return terminRepository.save(termin);
+                    return new TerminDTOForm(terminRepository.save(termin));
                 })
                 .orElseThrow(() -> new RuntimeException("Termin not found"));
     }
@@ -57,12 +61,16 @@ public class TerminService {
 
     // ##################################################
 
-    public List<Termin> getFutureTermine() {
+    public List<TerminDTOForm> getFutureTermine() {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
         // Combine the current date and the fixed time
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
-        return terminRepository.findFutureTermine(now);
+
+        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+        return futureTermine.stream()
+                .map(TerminDTOForm::new)
+                .collect(Collectors.toList());
     }
 
     // If you need the projected results:

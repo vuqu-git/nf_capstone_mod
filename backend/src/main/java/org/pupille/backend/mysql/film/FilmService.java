@@ -64,8 +64,8 @@ public class FilmService {
     }
 
     // Create or save a new film
-    public Film saveFilm(Film film) {
-        return filmRepository.save(film);
+    public FilmDTOForm saveFilm(Film film) {
+        return new FilmDTOForm(filmRepository.save(film));
     }
 
 //    // Update an existing film

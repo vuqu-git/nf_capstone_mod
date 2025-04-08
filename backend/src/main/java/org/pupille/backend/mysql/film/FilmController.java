@@ -24,12 +24,7 @@ public class FilmController {
         return ResponseEntity.ok(films);
     }
 
-//    @GetMapping("/reposorted")
-//    public ResponseEntity<List<FilmProjectionInterface>> getAllFilmsByOrderByTitelAsc() {
-//        List<FilmProjectionInterface> films = filmService.getAllFilmsByOrderByTitelAsc();
-//        return ResponseEntity.ok(films);
-//    }
-
+    // this one is repo sorted
     @GetMapping("/allsorted")
     public ResponseEntity<List<FilmDTOSelection>> getAllFilmsByOrderByTitelAsc() {
         List<FilmDTOSelection> films = filmService.getAllFilmsByOrderByTitelAsc();
@@ -44,12 +39,13 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film createFilm(@RequestBody Film film) {
+    public FilmDTOForm createFilm(@RequestBody Film film) {
         return filmService.saveFilm(film);
     }
 
+    // this one has now corresponding update method in service, all done is here using the save service method
     @PutMapping("/{id}")
-    public ResponseEntity<Film> updateFilm(@PathVariable Long id, @RequestBody Film updatedFilm) {
+    public ResponseEntity<FilmDTOForm> updateFilm(@PathVariable Long id, @RequestBody Film updatedFilm) {
         return filmService.getFilmById(id)
                 .map(existingFilm -> {
                     updatedFilm.setFnr(existingFilm.getFnr());

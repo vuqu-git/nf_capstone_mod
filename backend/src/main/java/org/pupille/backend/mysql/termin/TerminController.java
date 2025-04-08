@@ -20,7 +20,7 @@ public class TerminController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Termin>> getAllTermine() {
+    public ResponseEntity<List<TerminDTOForm>> getAllTermine() {
         return new ResponseEntity<>(terminService.getAllTermine(), HttpStatus.OK);
     }
 
@@ -38,12 +38,12 @@ public class TerminController {
     }
 
     @PostMapping
-    public ResponseEntity<Termin> createTermin(@RequestBody Termin termin) {
+    public ResponseEntity<TerminDTOForm> createTermin(@RequestBody Termin termin) {
         return new ResponseEntity<>(terminService.createTermin(termin), HttpStatus.CREATED);
     }
 
     @PutMapping("/{tnr}")
-    public ResponseEntity<Termin> updateTermin(@PathVariable Long tnr, @RequestBody Termin termin) {
+    public ResponseEntity<TerminDTOForm> updateTermin(@PathVariable Long tnr, @RequestBody Termin termin) {
         return new ResponseEntity<>(terminService.updateTermin(tnr, termin), HttpStatus.OK);
     }
 
@@ -56,8 +56,8 @@ public class TerminController {
 //    ###########################################################
 
     @GetMapping("/futurea")
-    public ResponseEntity<List<Termin>> getFutureTermineAsEntities() {
-        List<Termin> futureTermine = terminService.getFutureTermine();
+    public ResponseEntity<List<TerminDTOForm>> getFutureTermineAsEntities() {
+        List<TerminDTOForm> futureTermine = terminService.getFutureTermine();
         return ResponseEntity.ok(futureTermine);
     }
 

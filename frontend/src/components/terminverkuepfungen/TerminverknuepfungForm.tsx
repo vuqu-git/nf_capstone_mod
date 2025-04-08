@@ -12,16 +12,16 @@ const baseURL = "/api/terminverknuepfung";
 const emptyTVForForm = {
     tnr: 0,
     fnr: 0,
-    vorfilm: false,
-    rang: 0,
+    vorfilm: undefined,
+    rang: undefined,
 }
 
 export default function TerminverknuepfungForm() {
     const [allTVs, setAllTVs] = useState<Terminverknuepfung[]>([]); // All Termine fetched from the server
 
     const [selectedTVId, setSelectedTVId] = useState<string | null>(null); // Selected TVId (as concatenated string) for editing or deleting
-    const [selectedTVTNR, setSelectedTVTNR] = useState<number | null>(null); // Selected TVTNR for editing or deleting
-    const [selectedTVFNR, setSelectedTVFNR] = useState<number | null>(null); // Selected TVFNR for editing or deleting
+    // const [selectedTVTNR, setSelectedTVTNR] = useState<number | null>(null); // Selected TVTNR for editing or deleting
+    // const [selectedTVFNR, setSelectedTVFNR] = useState<number | null>(null); // Selected TVFNR for editing or deleting
 
     const [selectedTV, setSelectedTV] = useState<Terminverknuepfung>(emptyTVForForm); // Termin data for the form
 
@@ -127,7 +127,7 @@ export default function TerminverknuepfungForm() {
         } else {
 
 
-            axios.post(`${baseURL}`, preprocessFormData(selectedTV))
+            axios.post(`${baseURL}/link-film-termin`, preprocessFormData(selectedTV))
                 .then(() => {
                     setSuccessMessage("Termin saved successfully!");
 

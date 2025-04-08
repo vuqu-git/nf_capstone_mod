@@ -1,5 +1,6 @@
 package org.pupille.backend.mysql.terminverknuepfung;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.pupille.backend.mysql.film.Film;
 import org.pupille.backend.mysql.film.FilmRepository;
 import org.pupille.backend.mysql.termin.Termin;
@@ -46,12 +47,28 @@ public class TerminverknuepfungService {
         return Optional.of( new TerminverknuepfungDTOSelection(terminverknuepfungRepository.findById(id).get()) );
     }
 
-    public Terminverknuepfung saveTerminverknuepfung(Terminverknuepfung terminverknuepfung) {
-        return terminverknuepfungRepository.save(terminverknuepfung);
+//    // this simple saving doesn't work because of the relationships of Terminverknuepfung entity!
+//    public Terminverknuepfung saveTerminverknuepfung(Terminverknuepfung terminverknuepfung) {
+//        return terminverknuepfungRepository.save(terminverknuepfung);
+//    }
+
+    public TerminverknuepfungDTOSelection updateTerminverknuepfung(Long tnr, Long fnr, TerminverknuepfungDTOSelection updatingTV) {
+        Terminverknuepfung.TerminverknuepfungId id =
+                new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
+
+        return terminverknuepfungRepository.findById(id)
+                .map(existing -> {
+                    existing.setVorfilm(updatingTV.vorfilm());
+                    existing.setRang(updatingTV.rang());
+                    Terminverknuepfung updated = terminverknuepfungRepository.save(existing);
+                    return new TerminverknuepfungDTOSelection(updated);
+                })
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Terminverknuepfung not found with tnr: " + tnr + " and fnr: " + fnr));
     }
 
-    public void deleteTerminverknuepfung(Terminverknuepfung.TerminverknuepfungId id) {
-        terminverknuepfungRepository.deleteById(id);
+    public void deleteTerminverknuepfung(Terminverknuepfung.TerminverknuepfungId deletingTVId) {
+        terminverknuepfungRepository.deleteById(deletingTVId);
     }
 
     //    #############################################################
@@ -83,51 +100,53 @@ public class TerminverknuepfungService {
 //        terminverknuepfungRepository.save(connection);
 //    }
 
+    // this is the usual add or save function for new Terminverknuepfung
+    // since Terminverknuepfung has relationships a simple save is not enough
+    // and more relationship management needs to be done to keep the (relationship) data consistent
     @Transactional
-    public void linkExistingFilmToExistingTermin(Long filmId, Long terminId) {
-        Film existingFilm = filmRepository.findById(filmId)
-                .orElseThrow(() -> new RuntimeException("Film not found with ID: " + filmId));
+    public void linkExistingFilmToExistingTermin(TerminverknuepfungDTOSelection newTV) {
+        Film existingFilm = filmRepository.findById(newTV.fnr())
+                .orElseThrow(() -> new RuntimeException("Film not found with ID: " + newTV.fnr()));
 
-        Termin existingTermin = terminRepository.findById(terminId)
-                .orElseThrow(() -> new RuntimeException("Termin not found with ID: " + terminId));
+        Termin existingTermin = terminRepository.findById(newTV.tnr())
+                .orElseThrow(() -> new RuntimeException("Termin not found with ID: " + newTV.tnr()));
 
         // ID check remains critical
-        if (terminverknuepfungRepository.existsById(new Terminverknuepfung.TerminverknuepfungId(terminId, filmId))) {
+        if (terminverknuepfungRepository.existsById(new Terminverknuepfung.TerminverknuepfungId(newTV.tnr(), newTV.fnr()))) {
             throw new RuntimeException("Link already exists");
         }
 
         Terminverknuepfung connection = new Terminverknuepfung();
         connection.setFilm(existingFilm);
         connection.setTermin(existingTermin);
-        connection.setFnr(existingFilm.getFnr());
-        connection.setTnr(existingTermin.getTnr());
-        connection.setVorfilm(false); // Set default or request-based value
-        connection.setRang((short) 1);   // Set default or request-based value
+        connection.setVorfilm(newTV.vorfilm());
+        connection.setRang(newTV.rang());
 
         // Remove bidirectional relationship management
         terminverknuepfungRepository.save(connection);
     }
 
-    @Transactional
-    public void linkExistingFilmToExistingTerminReq(TerminverknuepfungDTORequest request) {
-        Film existingFilm = filmRepository.findById(request.getFnr())
-                .orElseThrow(() -> new RuntimeException("Film not found with ID: " + request.getFnr()));
-
-        Termin existingTermin = terminRepository.findById(request.getTnr())
-                .orElseThrow(() -> new RuntimeException("Termin not found with ID: " + request.getTnr()));
-
-        if (terminverknuepfungRepository.existsById(new Terminverknuepfung.TerminverknuepfungId(request.getTnr(), request.getFnr()))) {
-            throw new RuntimeException("Link already exists");
-        }
-
-        Terminverknuepfung connection = new Terminverknuepfung();
-        connection.setFilm(existingFilm);
-        connection.setTermin(existingTermin);
-        connection.setVorfilm(request.getVorfilm());
-        connection.setRang(request.getRang());
-
-        terminverknuepfungRepository.save(connection);
-    }
-
+//    @Transactional
+//    public void linkExistingFilmToExistingTermin(TerminverknuepfungDTORequest newTV) {
+//        Film existingFilm = filmRepository.findById(newTV.getFnr())
+//                .orElseThrow(() -> new RuntimeException("Film not found with ID: " + newTV.getFnr()));
+//
+//        Termin existingTermin = terminRepository.findById(newTV.getTnr())
+//                .orElseThrow(() -> new RuntimeException("Termin not found with ID: " + newTV.getTnr()));
+//
+//        // ID check remains critical
+//        if (terminverknuepfungRepository.existsById(new Terminverknuepfung.TerminverknuepfungId(newTV.getTnr(), newTV.getFnr()))) {
+//            throw new RuntimeException("Link already exists");
+//        }
+//
+//        Terminverknuepfung connection = new Terminverknuepfung();
+//        connection.setFilm(existingFilm);
+//        connection.setTermin(existingTermin);
+//        connection.setVorfilm(newTV.getVorfilm());
+//        connection.setRang(newTV.getRang());
+//
+//        // Remove bidirectional relationship management
+//        terminverknuepfungRepository.save(connection);
+//    }
 
 }
