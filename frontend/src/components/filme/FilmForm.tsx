@@ -12,7 +12,7 @@ const emptyFilmForForm = {
     fnr: 0,
     titel: '',
     originaltitel: '',
-    originaltitelAnzeigen: false,
+    originaltitelAnzeigen: undefined,
     text: '',
     kurztext: '',
     besonderheit: '',
@@ -240,7 +240,7 @@ export default function FilmForm() {
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">
-                    <Form.Label>Bild URL</Form.Label>
+                    <Form.Label>vollständiger Bilddateiname (müssen unter https://pupille.org/bilder/filmbilder/ abgelegt sein)</Form.Label>
                     <Form.Control
                         type="text"
                         name="bild"

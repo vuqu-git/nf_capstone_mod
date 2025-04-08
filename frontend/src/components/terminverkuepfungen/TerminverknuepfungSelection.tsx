@@ -27,7 +27,7 @@ export default function TerminverknuepfungSelection({ tven, selectedTVId, onSele
                 <option value="">Select a Terminverknuepfung to edit (or leave empty to add new)</option>
                 {tven.map((tv: Terminverknuepfung) => (
                     <option key={`${tv.tnr},${tv.fnr}`} value={`${tv.tnr},${tv.fnr}`}>
-                        {tv.tnr} {tv.fnr}
+                        tnr : fnr | #{tv.tnr} : #{tv.fnr}
                     </option>
                 ))}
             </Form.Select>

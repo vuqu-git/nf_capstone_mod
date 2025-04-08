@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface TerminRepository extends JpaRepository<Termin, Integer> {
+public interface TerminRepository extends JpaRepository<Termin, Long> {
 
         @Query("SELECT t FROM Termin t ORDER BY t.termin DESC")
         List<TerminProjectionSelection> findAllByOrderByTerminDesc();

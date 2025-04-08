@@ -30,7 +30,7 @@ public class TerminService {
         return terminRepository.findAllByOrderByTerminDesc();
     }
 
-    public Optional<TerminDTOForm> getTerminById(Integer tnr) {
+    public Optional<TerminDTOForm> getTerminById(Long tnr) {
         return Optional.of( new TerminDTOForm(terminRepository.findById(tnr).get()) );
     }
 
@@ -39,7 +39,7 @@ public class TerminService {
         return terminRepository.save(termin);
     }
 
-    public Termin updateTermin(Integer tnr, Termin terminDetails) {
+    public Termin updateTermin(Long tnr, Termin terminDetails) {
         return terminRepository.findById(tnr)
                 .map(termin -> {
                     termin.setTermin(terminDetails.getTermin());
@@ -51,7 +51,7 @@ public class TerminService {
                 .orElseThrow(() -> new RuntimeException("Termin not found"));
     }
 
-    public void deleteTermin(Integer tnr) {
+    public void deleteTermin(Long tnr) {
         terminRepository.deleteById(tnr);
     }
 

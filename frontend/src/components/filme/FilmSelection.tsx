@@ -1,9 +1,9 @@
 import { Form } from "react-bootstrap";
-import {Film} from "../../types/Film.ts";
 import React from "react";
+import {FilmDTO} from "../../types/FilmDTO.ts";
 
 interface FilmSelectionProps {
-    films: Film[];
+    films: FilmDTO[];
     selectedFilmId: number | null;
     onSelectFilm: (id: number | null) => void;
 }
@@ -51,7 +51,7 @@ export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: F
                 <option value="">Select a film to edit (or leave empty to add new)</option>
                 {films.map((film) => (
                         <option key={film.fnr} value={film.fnr}>
-                            {formatFilmDetails(film.titel, film.stab, film.jahr)}
+                            {`${formatFilmDetails(film.titel, film.stab, film.jahr)} | #${film.fnr}`}
                         </option>
                 ))}
             </Form.Select>

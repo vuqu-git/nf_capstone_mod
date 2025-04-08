@@ -31,7 +31,7 @@ public class TerminController {
     }
 
     @GetMapping("/{tnr}")
-    public ResponseEntity<TerminDTOForm> getTerminById(@PathVariable Integer tnr) {
+    public ResponseEntity<TerminDTOForm> getTerminById(@PathVariable Long tnr) {
         Optional<TerminDTOForm> terminDTOForm = terminService.getTerminById(tnr);
         return terminDTOForm.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -43,12 +43,12 @@ public class TerminController {
     }
 
     @PutMapping("/{tnr}")
-    public ResponseEntity<Termin> updateTermin(@PathVariable Integer tnr, @RequestBody Termin termin) {
+    public ResponseEntity<Termin> updateTermin(@PathVariable Long tnr, @RequestBody Termin termin) {
         return new ResponseEntity<>(terminService.updateTermin(tnr, termin), HttpStatus.OK);
     }
 
     @DeleteMapping("/{tnr}")
-    public ResponseEntity<Void> deleteTermin(@PathVariable Integer tnr) {
+    public ResponseEntity<Void> deleteTermin(@PathVariable Long tnr) {
         terminService.deleteTermin(tnr);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

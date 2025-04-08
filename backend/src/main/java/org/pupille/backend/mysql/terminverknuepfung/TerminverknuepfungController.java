@@ -64,4 +64,30 @@ public class TerminverknuepfungController {
         terminverknuepfungService.deleteTerminverknuepfung(id);
         return ResponseEntity.noContent().build();
     }
+
+    //    ###############################################
+
+    @PostMapping("/{filmId}/filmlinkstotermin/{terminId}")
+    public ResponseEntity<String> linkExistingFilmToExistingTermin(
+            @PathVariable Long filmId,
+            @PathVariable Long terminId) {
+        try {
+            // Assuming you have a service method for this purpose
+            terminverknuepfungService.linkExistingFilmToExistingTermin(filmId, terminId);
+            return new ResponseEntity<>("Film with fnr " + filmId + " linked to Termin with tnr " + terminId + " successfully", HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/link-film-termin")
+    public ResponseEntity<String> linkFilmToTermin(@RequestBody TerminverknuepfungDTORequest request) {
+        try {
+            terminverknuepfungService.linkExistingFilmToExistingTerminReq(request);
+            return new ResponseEntity<>("Film with fnr " + request.getFnr() + " linked to Termin with tnr " + request.getTnr() + " successfully", HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }
