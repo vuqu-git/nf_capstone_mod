@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.pupille.backend.mysql.film.Film;
+import org.pupille.backend.mysql.termin.Termin;
 
 import java.io.Serializable;
 
@@ -28,6 +30,14 @@ public class Terminverknuepfung implements Serializable {
     @Column(name = "rang")
     private Short rang;
 
+    public Terminverknuepfung(Long tnr, Long fnr, Boolean vorfilm, Short rang) {
+        this.tnr = tnr;
+        this.fnr = fnr;
+        this.vorfilm = vorfilm;
+        this.rang = rang;
+    }
+
+
     @Data
     @NoArgsConstructor
     @EqualsAndHashCode
@@ -41,10 +51,14 @@ public class Terminverknuepfung implements Serializable {
         }
     }
 
-    public Terminverknuepfung(Long tnr, Long fnr, Boolean vorfilm, Short rang) {
-        this.tnr = tnr;
-        this.fnr = fnr;
-        this.vorfilm = vorfilm;
-        this.rang = rang;
-    }
+
+    //    ###########################################
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fnr", insertable = false, updatable = false)
+    private Film film;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tnr", insertable = false, updatable = false)
+    private Termin termin;
+    //    ###########################################
 }

@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,12 +26,12 @@ public class TerminService {
         return terminRepository.findAll();
     }
 
-        public List<TerminProjectionInterface> getAllTermineByOrderByTerminDesc() {
+        public List<TerminProjectionSelection> getAllTermineByOrderByTerminDesc() {
         return terminRepository.findAllByOrderByTerminDesc();
     }
 
-    public Optional<Termin> getTerminById(Integer tnr) {
-        return terminRepository.findById(tnr);
+    public Optional<TerminDTOForm> getTerminById(Integer tnr) {
+        return Optional.of( new TerminDTOForm(terminRepository.findById(tnr).get()) );
     }
 
     public Termin createTermin(Termin termin) {
@@ -49,6 +53,25 @@ public class TerminService {
 
     public void deleteTermin(Integer tnr) {
         terminRepository.deleteById(tnr);
+    }
+
+    // ##################################################
+
+    public List<Termin> getFutureTermine() {
+        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+        LocalTime fixedTime = LocalTime.of(0, 1);
+        // Combine the current date and the fixed time
+        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+        return terminRepository.findFutureTermine(now);
+    }
+
+    // If you need the projected results:
+    public List<TerminProjectionSelection> getFutureTermineProjected() {
+        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+        LocalTime fixedTime = LocalTime.of(0, 1);
+        // Combine the current date and the fixed time
+        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+        return terminRepository.findFutureTermineProjected(now);
     }
 }
 

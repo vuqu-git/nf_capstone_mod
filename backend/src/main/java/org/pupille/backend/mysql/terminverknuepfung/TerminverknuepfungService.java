@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TerminverknuepfungService {
@@ -16,12 +17,22 @@ public class TerminverknuepfungService {
         this.terminverknuepfungRepository = terminverknuepfungRepository;
     }
 
-    public List<Terminverknuepfung> getAllTerminverknuepfung() {
-        return terminverknuepfungRepository.findAll();
+    public List<TerminverknuepfungDTOSelection> getAllTerminverknuepfung() {
+        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAll();
+        return terminverknuepfungen.stream()
+                .map(TerminverknuepfungDTOSelection::new)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Terminverknuepfung> getTerminverknuepfungById(Terminverknuepfung.TerminverknuepfungId id) {
-        return terminverknuepfungRepository.findById(id);
+    public List<TerminverknuepfungDTOSelection> getAllTVByOrderByFnrDesc() {
+        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllByOrderByFnrDesc();
+        return terminverknuepfungen.stream()
+                .map(TerminverknuepfungDTOSelection::new)
+                .collect(Collectors.toList());
+    }
+
+    public Optional<TerminverknuepfungDTOSelection> getTerminverknuepfungById(Terminverknuepfung.TerminverknuepfungId id) {
+        return Optional.of( new TerminverknuepfungDTOSelection(terminverknuepfungRepository.findById(id).get()) );
     }
 
     public Terminverknuepfung saveTerminverknuepfung(Terminverknuepfung terminverknuepfung) {

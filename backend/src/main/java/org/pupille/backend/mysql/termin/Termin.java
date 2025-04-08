@@ -4,9 +4,12 @@ import jakarta.persistence.*;
 //import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.pupille.backend.mysql.terminverknuepfung.Terminverknuepfung;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "termin") // Explicitly map to the database table "film"
@@ -44,4 +47,10 @@ public class Termin {
     private Integer sonderfarbe;
 
     private Short veroeffentlichen;
+
+    //    ###########################################
+    @OneToMany(mappedBy = "termin", cascade = CascadeType.ALL)
+    private List<Terminverknuepfung> filmConnections = new ArrayList<>();
+    //    ###########################################
+
 }

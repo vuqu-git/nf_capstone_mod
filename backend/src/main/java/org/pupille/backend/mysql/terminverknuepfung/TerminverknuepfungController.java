@@ -19,17 +19,23 @@ public class TerminverknuepfungController {
         this.terminverknuepfungService = terminverknuepfungService;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<TerminverknuepfungDTOSelection>> getAllTerminverknuepfung() {
+        List<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getAllTerminverknuepfung();
+        return ResponseEntity.ok(terminverknuepfungDTOSelection);
+    }
+
     @GetMapping
-    public ResponseEntity<List<Terminverknuepfung>> getAllTerminverknuepfung() {
-        List<Terminverknuepfung> terminverknuepfung = terminverknuepfungService.getAllTerminverknuepfung();
-        return ResponseEntity.ok(terminverknuepfung);
+    public ResponseEntity<List<TerminverknuepfungDTOSelection>> getAllTVByOrderByFnrDesc() {
+        List<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getAllTVByOrderByFnrDesc();
+        return ResponseEntity.ok(terminverknuepfungDTOSelection);
     }
 
     @GetMapping("/{tnr}/{fnr}")
-    public ResponseEntity<Terminverknuepfung> getTerminverknuepfungById(@PathVariable Long tnr, @PathVariable Long fnr) {
+    public ResponseEntity<TerminverknuepfungDTOSelection> getTerminverknuepfungById(@PathVariable Long tnr, @PathVariable Long fnr) {
         Terminverknuepfung.TerminverknuepfungId id = new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
-        Optional<Terminverknuepfung> terminverknuepfung = terminverknuepfungService.getTerminverknuepfungById(id);
-        return terminverknuepfung.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getTerminverknuepfungById(id);
+        return terminverknuepfungDTOSelection.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -38,19 +44,19 @@ public class TerminverknuepfungController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTerminverknuepfung);
     }
 
-    @PutMapping("/{tnr}/{fnr}")
-    public ResponseEntity<Terminverknuepfung> updateTerminverknuepfung(@PathVariable Long tnr, @PathVariable Long fnr, @RequestBody Terminverknuepfung updatedTerminverknuepfung) {
-        Terminverknuepfung.TerminverknuepfungId id = new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
-        Optional<Terminverknuepfung> existingTerminverknuepfung = terminverknuepfungService.getTerminverknuepfungById(id);
-        if (existingTerminverknuepfung.isPresent()) {
-            updatedTerminverknuepfung.setTnr(tnr);
-            updatedTerminverknuepfung.setFnr(fnr);
-            Terminverknuepfung savedTerminverknuepfung = terminverknuepfungService.saveTerminverknuepfung(updatedTerminverknuepfung);
-            return ResponseEntity.ok(savedTerminverknuepfung);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @PutMapping("/{tnr}/{fnr}")
+//    public ResponseEntity<Terminverknuepfung> updateTerminverknuepfung(@PathVariable Long tnr, @PathVariable Long fnr, @RequestBody Terminverknuepfung updatedTerminverknuepfung) {
+//        Terminverknuepfung.TerminverknuepfungId id = new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
+//        Optional<Terminverknuepfung> existingTerminverknuepfung = terminverknuepfungService.getTerminverknuepfungById(id);
+//        if (existingTerminverknuepfung.isPresent()) {
+//            updatedTerminverknuepfung.setTnr(tnr);
+//            updatedTerminverknuepfung.setFnr(fnr);
+//            Terminverknuepfung savedTerminverknuepfung = terminverknuepfungService.saveTerminverknuepfung(updatedTerminverknuepfung);
+//            return ResponseEntity.ok(savedTerminverknuepfung);
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @DeleteMapping("/{tnr}/{fnr}")
     public ResponseEntity<Void> deleteTerminverknuepfung(@PathVariable Long tnr, @PathVariable Long fnr) {

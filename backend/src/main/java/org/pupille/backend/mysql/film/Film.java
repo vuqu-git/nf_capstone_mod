@@ -2,6 +2,10 @@ package org.pupille.backend.mysql.film;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.pupille.backend.mysql.terminverknuepfung.Terminverknuepfung;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -48,4 +52,10 @@ public class Film {
     public enum Fsk {
         _0, _6, _12, _16, _18, UNGEPRUEFT
     }
+
+    //    ###########################################
+    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
+    private List<Terminverknuepfung> terminConnections = new ArrayList<>();
+    //    ###########################################
 }
+
