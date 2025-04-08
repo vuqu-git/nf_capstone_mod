@@ -4,6 +4,7 @@ import {Film} from "../../types/Film.ts";
 import {FilmDTO} from "../../types/FilmDTO.ts";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
+import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
 
 const baseURL = "/api/filme";
 
@@ -119,7 +120,7 @@ export default function FilmForm() {
         if (selectedFilmId) {
             // Editing an existing film (PUT request)
 
-            axios.put(`${baseURL}/${selectedFilmId}`, selectedFilm)
+            axios.put(`${baseURL}/${selectedFilmId}`, preprocessFormData(selectedFilm))
                 .then(() => {
                     setSuccessMessage("Film updated successfully!");
 
@@ -139,7 +140,7 @@ export default function FilmForm() {
             // ###################################################
 
             // axios.post(`${baseURL}`, selectedFilm)
-            axios.post(`${baseURL}`, filmInFormWithoutFnr)
+            axios.post(`${baseURL}`, preprocessFormData(filmInFormWithoutFnr))
                 .then(() => {
                     setSuccessMessage("Film saved successfully!");
 

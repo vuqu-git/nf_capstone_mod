@@ -26,12 +26,12 @@ public class TerminService {
         return terminRepository.findAll();
     }
 
-        public List<TerminProjectionInterface> getAllTermineByOrderByTerminDesc() {
+        public List<TerminProjectionSelection> getAllTermineByOrderByTerminDesc() {
         return terminRepository.findAllByOrderByTerminDesc();
     }
 
-    public Optional<Termin> getTerminById(Integer tnr) {
-        return terminRepository.findById(tnr);
+    public Optional<TerminDTOForm> getTerminById(Integer tnr) {
+        return Optional.of( new TerminDTOForm(terminRepository.findById(tnr).get()) );
     }
 
     public Termin createTermin(Termin termin) {
@@ -66,7 +66,7 @@ public class TerminService {
     }
 
     // If you need the projected results:
-    public List<TerminProjectionInterface> getFutureTermineProjected() {
+    public List<TerminProjectionSelection> getFutureTermineProjected() {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
         // Combine the current date and the fixed time

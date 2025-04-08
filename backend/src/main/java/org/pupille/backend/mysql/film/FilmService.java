@@ -30,10 +30,10 @@ public class FilmService {
 //        return filmRepository.findAllByOrderByTitelAsc();
 //    }
 
-    public List<FilmDTO> getAllFilmsByOrderByTitelAsc() {
+    public List<FilmDTOSelection> getAllFilmsByOrderByTitelAsc() {
         return filmRepository.findAllByOrderByTitelAsc()
                                 .stream()
-                                .map(FilmDTO::new)
+                                .map(FilmDTOSelection::new)
                                 .map(fdto -> {
                                         fdto.setStab( extractDirectors(fdto.getStab()) );
                                         return fdto;
@@ -59,8 +59,8 @@ public class FilmService {
     }
 
     // Retrieve a specific film by ID
-    public Optional<Film> getFilmById(Long id) {
-        return filmRepository.findById(id);
+    public Optional<FilmDTOForm> getFilmById(Long id) {
+        return Optional.of( new FilmDTOForm(filmRepository.findById(id).get()) );
     }
 
     // Create or save a new film

@@ -3,6 +3,8 @@ import { News } from "../../types/News.ts";
 import axios from "axios";
 import NewsForm from "./NewsForm.tsx";
 
+import { preprocessFormData } from '../../utils/PreprocessingFormData.ts';
+
 const baseURL = "/api/news";
 
 export default function AddNews() {
@@ -26,7 +28,7 @@ export default function AddNews() {
         setError("");
         setSuccessMessage("");
 
-        axios.post(`${baseURL}/all`, newsInForm)
+        axios.post(`${baseURL}/all`, preprocessFormData(newsInForm))
             .then(() => {
                 setSuccessMessage("News added successfully!");
                 setAddingNews(emptyNews);

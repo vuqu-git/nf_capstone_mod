@@ -7,13 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class FilmDTO {
+public class FilmDTOSelection {
     private Long fnr;
     private String titel;
     private Integer jahr;
     private String stab;
 
-    public FilmDTO(Film film) {
+    public FilmDTOSelection(Film film) {
         this.fnr = film.getFnr();
         this.titel = film.getTitel();
         this.jahr = film.getJahr();

@@ -25,15 +25,15 @@ public class TerminController {
     }
 
     @GetMapping("/allsorted")
-    public ResponseEntity<List<TerminProjectionInterface>> getAllTermineByOrderByTitelAsc() {
-        List<TerminProjectionInterface> termine = terminService.getAllTermineByOrderByTerminDesc();
+    public ResponseEntity<List<TerminProjectionSelection>> getAllTermineByOrderByTitelAsc() {
+        List<TerminProjectionSelection> termine = terminService.getAllTermineByOrderByTerminDesc();
         return ResponseEntity.ok(termine);
     }
 
     @GetMapping("/{tnr}")
-    public ResponseEntity<Termin> getTerminById(@PathVariable Integer tnr) {
-        Optional<Termin> termin = terminService.getTerminById(tnr);
-        return termin.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+    public ResponseEntity<TerminDTOForm> getTerminById(@PathVariable Integer tnr) {
+        Optional<TerminDTOForm> terminDTOForm = terminService.getTerminById(tnr);
+        return terminDTOForm.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
@@ -62,8 +62,8 @@ public class TerminController {
     }
 
     @GetMapping("/futurep")
-    public ResponseEntity<List<TerminProjectionInterface>> getFutureTermineAsProjections() {
-        List<TerminProjectionInterface> futureTermine = terminService.getFutureTermineProjected();
+    public ResponseEntity<List<TerminProjectionSelection>> getFutureTermineAsProjections() {
+        List<TerminProjectionSelection> futureTermine = terminService.getFutureTermineProjected();
         return ResponseEntity.ok(futureTermine);
     }
 

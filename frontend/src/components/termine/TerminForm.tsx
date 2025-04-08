@@ -5,6 +5,8 @@ import TerminDTO from "../../types/TerminDTO.ts";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 
+import { preprocessFormData } from '../../utils/PreprocessingFormData.ts';
+
 const baseURL = "/api/termine";
 
 const emptyTerminForForm = {
@@ -108,7 +110,7 @@ export default function TerminForm() {
         if (selectedTerminId) {
             // Editing an existing termin (PUT request)
 
-            axios.put(`${baseURL}/${selectedTerminId}`, selectedTermin)
+            axios.put(`${baseURL}/${selectedTerminId}`, preprocessFormData(selectedTermin))
                 .then(() => {
                     setSuccessMessage("Termin updated successfully!");
 
@@ -128,7 +130,7 @@ export default function TerminForm() {
             // ###################################################
 
             // axios.post(`${baseURL}`, selectedTermin)
-            axios.post(`${baseURL}`, terminInFormWithoutFnr)
+            axios.post(`${baseURL}`, preprocessFormData(terminInFormWithoutFnr))
                 .then(() => {
                     setSuccessMessage("Termin saved successfully!");
 

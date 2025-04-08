@@ -31,13 +31,13 @@ public class FilmController {
 //    }
 
     @GetMapping("/allsorted")
-    public ResponseEntity<List<FilmDTO>> getAllFilmsByOrderByTitelAsc() {
-        List<FilmDTO> films = filmService.getAllFilmsByOrderByTitelAsc();
+    public ResponseEntity<List<FilmDTOSelection>> getAllFilmsByOrderByTitelAsc() {
+        List<FilmDTOSelection> films = filmService.getAllFilmsByOrderByTitelAsc();
         return ResponseEntity.ok(films);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Film> getFilmById(@PathVariable Long id) {
+    public ResponseEntity<FilmDTOForm> getFilmById(@PathVariable Long id) {
         return filmService.getFilmById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

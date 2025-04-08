@@ -4,6 +4,7 @@ import TerminverknuepfungSelection from "./TerminverknuepfungSelection";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {Terminverknuepfung} from "../../types/Terminverknuepfung.ts";
+import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
 
 
 const baseURL = "/api/terminverknuepfung";
@@ -110,7 +111,7 @@ export default function TerminverknuepfungForm() {
 
             const [tnr, fnr] = selectedTVId.split(',');
 
-            axios.put(`${baseURL}/${tnr}/${fnr}`, selectedTV)
+            axios.put(`${baseURL}/${tnr}/${fnr}`, preprocessFormData(selectedTV))
                 .then(() => {
                     setSuccessMessage("Termin updated successfully!");
 
@@ -126,7 +127,7 @@ export default function TerminverknuepfungForm() {
         } else {
 
 
-            axios.post(`${baseURL}`, selectedTV)
+            axios.post(`${baseURL}`, preprocessFormData(selectedTV))
                 .then(() => {
                     setSuccessMessage("Termin saved successfully!");
 

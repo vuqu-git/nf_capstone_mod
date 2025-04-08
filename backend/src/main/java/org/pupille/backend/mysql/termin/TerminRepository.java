@@ -11,13 +11,13 @@ import java.util.List;
 public interface TerminRepository extends JpaRepository<Termin, Integer> {
 
         @Query("SELECT t FROM Termin t ORDER BY t.termin DESC")
-        List<TerminProjectionInterface> findAllByOrderByTerminDesc();
+        List<TerminProjectionSelection> findAllByOrderByTerminDesc();
 
         @Query("SELECT t FROM Termin t WHERE t.termin >= :now ORDER BY t.termin ASC")
         List<Termin> findFutureTermine(LocalDateTime now);
 
         // If you need the projection for future termine as well:
         @Query("SELECT t FROM Termin t WHERE t.termin >= :now ORDER BY t.termin ASC")
-        List<TerminProjectionInterface> findFutureTermineProjected(LocalDateTime now);
+        List<TerminProjectionSelection> findFutureTermineProjected(LocalDateTime now);
 
 }

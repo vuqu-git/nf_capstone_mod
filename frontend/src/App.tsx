@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from "./components/Header.tsx";
 import Overview from "./components/Overview.tsx";
 import {Route, Routes} from "react-router-dom";
-import {Container} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 
 import AddNews from "./components/news/AddNews.tsx";
 import EditDeleteNews from "./components/news/EditDeleteNews.tsx";
@@ -24,6 +24,9 @@ function App() {
           <Header />
           <main className="main-content">
               <Container>
+                  <Row className="justify-content-center"> {/* Center the content */}
+                      <Col md={8} lg={8}> {/* Adjust the column widths for different screen sizes */}
+
                   <Routes>
                       <Route path="/" element={<Overview />} />
 
@@ -40,6 +43,10 @@ function App() {
                       <Route path="/dtpicker" element={<DTpicker />} />
 
                   </Routes>
+
+                      </Col>
+                  </Row>
+
               </Container>
           </main>
       </div>
