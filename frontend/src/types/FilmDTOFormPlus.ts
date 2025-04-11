@@ -4,6 +4,6 @@ import {Film} from "./Film.ts";
 
 export default interface FilmDTOFormPlus {
     film: Film;
-    vorfilm: boolean | null;
-    rang: number | null;
+    vorfilm?: boolean | null;
+    rang?: number | null;
 }

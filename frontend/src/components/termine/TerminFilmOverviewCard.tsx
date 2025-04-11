@@ -56,13 +56,16 @@ export default function TerminFilmOverviewCard({
                 // backgroundColor: '#FFD036',
                 backgroundColor: '#0D0D0C',
                 borderRadius: '15px',
-                overflow: 'hidden', // Add this line
+                overflow: 'hidden',
             }}
             // bg="dark"
             text="light"
         >
             {/*<Card.Img variant="top" src={`https://www.pupille.org/bilder/filmbilder/${bild}`} />*/}
-            <div style={cardImageStyle}>
+            <div
+                className="image-aspect-ratio-container"
+                style={cardImageStyle}
+            >
                 <Card.Img variant="top" src={`https://www.pupille.org/bilder/filmbilder/${bild}`} />
                 <div style={gradientOverlayStyle}></div>
             </div>

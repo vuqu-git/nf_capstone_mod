@@ -3,7 +3,7 @@
 
 export type FilmDTOSelection = {
     fnr: number,
-    titel: string,
-    jahr: number,
-    stab: string
+    titel?: string | null,
+    jahr?: number | null,
+    stab?: string | null
 }

@@ -126,3 +126,27 @@
 
     font-size: 12px;
 }
+
+
+
+
+
+.image-aspect-ratio-container {
+    position: relative; /* Needed for absolute positioning of the image */
+    overflow: hidden; /* Hide parts of the image that go outside the container */
+    width: 100%; /* Adjust as needed, e.g., a fixed width or percentage */
+    /* Set your desired aspect ratio here. For a 16:9 ratio: */
+    padding-top: 56.25%; /* (height/width * 100) = (9/16 * 100) */
+    /* For a 4:3 ratio: padding-top: 75%; */
+    /* For a 1:1 ratio (square): padding-top: 100%; */
+}
+
+.image-aspect-ratio-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the container while maintaining aspect ratio */
+    object-position: center; /* Center the image within the container */
+}
