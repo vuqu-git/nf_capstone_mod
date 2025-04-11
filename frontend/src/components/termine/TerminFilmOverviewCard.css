@@ -150,3 +150,11 @@
     object-fit: cover; /* Cover the container while maintaining aspect ratio */
     object-position: center; /* Center the image within the container */
 }
+
+
+
+
+.year-and-director {
+    color: #9ac7fa;
+    font-weight: 400;
+}

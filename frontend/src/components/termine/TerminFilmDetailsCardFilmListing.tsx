@@ -32,11 +32,10 @@ export default function TerminFilmDetailsListing({
 
                 {(() => {
                     if (numberOfF === 1) {
-                        return <>{fType}: {render(f.titel)}</>;
+                        return <>{fType}{render(f.titel)}</>;
                     } else {
-                        return <>{index + 1}. {fType}: {render(f.titel)}</>;
+                        return <>{index + 1}. {fType}{render(f.titel)}</>;
                     }
-                    return `${fType}: Titelinformation fehlt`; // Default case
                 })()}
 
                 {/*###############################*/}

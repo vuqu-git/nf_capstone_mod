@@ -51,7 +51,7 @@ public class FilmService {
                                 .collect(Collectors.toList());
     }
 
-    // ##############################################################
+    //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
     // utils function
     public static String extractDirectors(String input) {
         if (input == null || input.isEmpty()) {
@@ -67,7 +67,7 @@ public class FilmService {
             return "";
         }
     }
-    // ##############################################################
+    //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
     // Retrieve a specific film by ID
     public Optional<FilmDTOForm> getFilmById(Long id) {

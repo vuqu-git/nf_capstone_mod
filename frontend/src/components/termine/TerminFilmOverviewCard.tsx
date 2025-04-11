@@ -2,6 +2,7 @@ import Card from 'react-bootstrap/Card';
 import {render} from "../../utils/render.tsx";
 import {CSSProperties} from "react";
 import './TerminFilmOverviewCard.css';
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     screeningWeekday: string | undefined;
@@ -12,9 +13,12 @@ interface Props {
 
     titel: string | undefined;
     kurztext: string | undefined;
+    jahr: number | undefined;
     besonderheit: string | undefined;
 
-    filmFormat: string | undefined
+    filmFormat: string | undefined;
+
+    tnr: number
 }
 
 export default function TerminFilmOverviewCard({
@@ -26,8 +30,10 @@ export default function TerminFilmOverviewCard({
 
                                          titel,
                                          kurztext,
+                                         jahr,
                                          besonderheit,
                                          filmFormat,
+                                         tnr
                                      }: Props) {
 
     const cardImageStyle: CSSProperties  = {
@@ -47,6 +53,13 @@ export default function TerminFilmOverviewCard({
             'rgba(13, 13, 12, 1) 100%)',
     };
 
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate(`/details/${tnr}`); // Navigate with tnr parameter
+    };
+
     return (
         <Card
             // border="none"
@@ -60,6 +73,9 @@ export default function TerminFilmOverviewCard({
             }}
             // bg="dark"
             text="light"
+
+            onClick={handleClick} // Add click handler
+            role="button"
         >
             {/*<Card.Img variant="top" src={`https://www.pupille.org/bilder/filmbilder/${bild}`} />*/}
             <div
@@ -99,10 +115,20 @@ export default function TerminFilmOverviewCard({
 
                 <Card.Title
                     as="h2"
-                    style={{ color: '#fff' }}
+                    // style={{ color: '#fff' }}
+                    style={{ color: '#fff', marginBottom: '0.0rem' }}
                 >
                     {render(titel)}
                 </Card.Title>
+
+                { jahr &&
+                    <Card.Text
+                        className="year-and-director"
+                        style={{ color: '#9ac7fa', marginTop: '0.0rem'}}
+                    >
+                        {jahr}
+                    </Card.Text>
+                }
 
                 <Card.Text
                     style={{ color: '#cfd6e1' }}

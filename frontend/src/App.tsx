@@ -12,7 +12,7 @@ import TerminForm from "./components/termine/TerminForm.tsx";
 
 import DTpicker from "./components/termine/DTpicker.tsx";
 import TerminverknuepfungForm from "./components/terminverkuepfungen/TerminverknuepfungForm.tsx";
-import Details from "./components/Details.tsx";
+import ScreeningDetails from "./components/ScreeningDetails.tsx";
 
 function App() {
 
@@ -42,7 +42,8 @@ function App() {
 
                       <Route path="/dtpicker" element={<DTpicker />} />
 
-                      <Route path="/details" element={<Details />} />
+                      <Route path="/details/:tnr" element={<ScreeningDetails />} />
+                      <Route path="/details" element={<ScreeningDetails />} />
 
                   </Routes>
 

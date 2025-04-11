@@ -20,10 +20,12 @@ export default function Overview() {
     } = useAllNews(false);
 
     const [validNews, setValidNews] = useState<News[]>([]);
-    const [isLoadingValidNews, setIsLoadingValidNews] = useState(false);
+    const [isLoadingNews, setIsLoadingNews] = useState(false);
+    const [isLoadingScreenings, setIsLoadingScreenings] = useState(false);
+
 
     const getValidNews = () => {
-        setIsLoadingValidNews(true);
+        setIsLoadingNews(true);
 
         axios.get("/api/news")
             .then((response) => {
@@ -35,14 +37,14 @@ export default function Overview() {
                 setError(errorMessage);
             })
             .finally(() => {
-            setIsLoadingValidNews(false);
+                setIsLoadingNews(false);
         });
     }
 
     const [screeningOverviewEntries, setScreeningOverviewEntries] = useState<TerminDTOWithFilmDTOOverviews[]>([]);
 
     const getScreeningOverviewEntries = () => {
-        setIsLoadingValidNews(true);
+        setIsLoadingScreenings(true);
 
         axios.get("api/screenings")
             .then((response) => {
@@ -54,7 +56,7 @@ export default function Overview() {
                 setError(errorMessage);
             })
             .finally(() => {
-                setIsLoadingValidNews(false);
+                setIsLoadingScreenings(false);
             });
     }
 
@@ -86,8 +88,8 @@ export default function Overview() {
                 {/*</section>*/}
 
                 <section>
-                    {   isLoadingValidNews ? (
-                            <div className="text-warning mb-3">&#x1f504; Loading valid news...</div>
+                    {   isLoadingNews ? (
+                            <div className="text-warning mb-3">&#x1f4f0; Loading news...</div>
                         ) :
                         validNews && (
                             <>
@@ -103,8 +105,8 @@ export default function Overview() {
 
 
                 <section>
-                    {isLoadingValidNews ? (
-                        <div className="text-warning mb-3">&#x1f504; Loading valid news...</div>
+                    {isLoadingScreenings ? (
+                        <div className="text-warning mb-3">&#127902; Loading screenings...</div>
                     ) : (
                         screeningOverviewEntries && (
                             <>
@@ -134,6 +136,8 @@ export default function Overview() {
                                                     kurztext={termin.kurztext}
                                                     besonderheit={termin.besonderheit}
                                                     filmFormat={undefined}
+
+                                                    tnr={termin.terminId} // for navigation to certain route
                                                 />
                                             </div>
                                         );
@@ -155,8 +159,11 @@ export default function Overview() {
                                                     bild={termin.films[0]?.bild}
                                                     titel={termin.films[0]?.titel}
                                                     kurztext={termin.films[0]?.kurztext}
+                                                    jahr={termin.films[0]?.jahr}
                                                     besonderheit={termin.films[0]?.besonderheit}
                                                     filmFormat={termin.films[0]?.format}
+
+                                                    tnr={termin.terminId} // for navigation to certain route
                                                 />
                                             </div>
                                         );

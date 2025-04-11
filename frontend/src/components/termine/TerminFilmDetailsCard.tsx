@@ -96,81 +96,8 @@ export default function TerminFilmDetailsCard({
                             index={index}
                             f={film}
                             numberOfF={mainfilms.length}
-                            fType={"Film"}
-
+                            fType={(mainfilms.length == 1) ? "" : "Film: "}
                         />
-                        // <div key={index}>
-                        //     <Card.Title
-                        //         as="h4"
-                        //         style={{
-                        //             color: '#fff',
-                        //             borderTop: '1px solid #cfd6e1',
-                        //             paddingTop: '1rem',
-                        //             paddingBottom: '1rem',
-                        //         }}
-                        //     >
-                        //         {/*{index + 1}. Film: {render(film.titel) || "k.A."}*/}
-                        //         {/*###############################*/}
-                        //
-                        //         {(() => {
-                        //             if (vorfilms.length === 0 && mainfilms.length === 1) {
-                        //                 return <>{render(film.titel)}</>;
-                        //             } else if (vorfilms.length === 0 && mainfilms.length > 1) {
-                        //                 return <>{index + 1}. Film: {render(film.titel)}</>;
-                        //             } else if (vorfilms.length >= 1 && mainfilms.length === 1) {
-                        //                 return <>Hauptfilm: {render(film.titel)}</>;
-                        //             } else if (vorfilms.length >= 1 && mainfilms.length > 1) {
-                        //                 return <>{index + 1}. Hauptfilm: {render(film.titel)}</>;
-                        //             }
-                        //             return "Film: Titelinformation fehlt"; // Default case
-                        //         })()}
-                        //
-                        //         {/*###############################*/}
-                        //     </Card.Title>
-                        //
-                        //     {/* Check if image URL exists */}
-                        //     {film.bild && (
-                        //         // <img
-                        //         //     src={`https://www.pupille.org/bilder/filmbilder/${film.bild}`}
-                        //         //     alt={`Film Image: ${film.titel}`}
-                        //         // />
-                        //         <Card.Img variant="top" src={`https://www.pupille.org/bilder/filmbilder/${film.bild}`} />
-                        //
-                        //     )}
-                        //
-                        //     <Card.Body>
-                        //         <Card.Text style={{color: '#cfd6e1'}}>
-                        //             {render(film.text || "k.A.")}
-                        //         </Card.Text>
-                        //
-                        //         <div className="d-flex">
-                        //             <div style={{flex: 1, marginRight: '1rem'}}>
-                        //                 <Card.Title as="h6" style={{color: '#fff'}}>
-                        //                     Filminformationen:
-                        //                 </Card.Title>
-                        //                 <Card.Text style={{color: '#cfd6e1'}}>
-                        //                     Land: {film.land || "k.A."} <br/>
-                        //                     Jahr: {film.jahr || "k.A."} <br/>
-                        //                     Länge: {film.laufzeit || "k.A."} <br/>
-                        //                     Sprachfassung: {film.sprache || "k.A."} <br/>
-                        //                     Untertitel: {film.untertitel || "k.A."} <br/>
-                        //                     Farbigkeit: {render(film.farbe) || "k.A."} <br/>
-                        //                     Format: {film.format || "k.A."} <br/>
-                        //                     FSK: {film.fsk || "k.A."} <br/>
-                        //                 </Card.Text>
-                        //             </div>
-                        //             <div style={{flex: 1}}>
-                        //                 <Card.Title as="h6" style={{color: '#fff'}}>
-                        //                     Stab und Besetzung:
-                        //                 </Card.Title>
-                        //                 <Card.Text style={{color: '#cfd6e1'}}>
-                        //                     {render(film.stab || "k.A.")}
-                        //                 </Card.Text>
-                        //             </div>
-                        //         </div>
-                        //     </Card.Body>
-                        // </div>
-
                     );
                 })}
 
@@ -185,8 +112,8 @@ export default function TerminFilmDetailsCard({
                             key={index}
                             index={index}
                             f={film}
-                            numberOfF={mainfilms.length}
-                            fType={"Vorfilm"}
+                            numberOfF={vorfilms.length}
+                            fType={"Vorfilm: "}
                         />
                     );
                 })}
