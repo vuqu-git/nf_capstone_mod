@@ -8,8 +8,9 @@ public record FilmDTOOverview(
         String kurztext,
         String besonderheit,
         String bild,
-        Integer jahr,
-        String fskRating
+//        Integer jahr,
+        String format
+//        String fskRating
 ) {
     public FilmDTOOverview(Film film) {
         this(
@@ -18,8 +19,9 @@ public record FilmDTOOverview(
                 film != null ? film.getKurztext() : null,
                 film != null ? film.getBesonderheit() : null,
                 film != null ? film.getBild() : null,
-                film != null ? film.getJahr() : null,
-                (film != null && film.getFsk() != null) ? film.getFsk().name().substring(1) : null
+//                film != null ? film.getJahr() : null,
+                film != null ? film.getFormat() : null
+//                (film != null && film.getFsk() != null) ? film.getFsk().name().substring(1) : null
         );
     }
 }

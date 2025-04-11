@@ -27,4 +27,10 @@ public class ScreeningController {
         List<FilmDTOForm> films = screeningService.getFilmsByTerminId(tnr);
         return ResponseEntity.ok(films);
     }
+
+    @GetMapping("/screeningsnewer/{tnr}")
+    public ResponseEntity<TerminDTOFormWithFilmsDTOFormPlus> getTerminWithFilmsPlusForTermin(@PathVariable Long tnr) {
+        TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTerminId(tnr);
+        return ResponseEntity.ok(terminWithFilmsPlus);
+    }
 }

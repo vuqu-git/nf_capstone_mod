@@ -16,7 +16,7 @@ export default function NewsCard({variant, text, imageUrl}: props) {
             return <div dangerouslySetInnerHTML={{__html: text}}/>
         } else {
             return (
-                <Alert variant={variant} onClose={() => setShow(false)} dismissible>
+                <Alert variant={variant} data-bs-theme="dark" onClose={() => setShow(false)} dismissible>
                     {/*<Alert.Heading>Oh snap! You got an error!</Alert.Heading>*/}
 
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", width: "100%" }}>

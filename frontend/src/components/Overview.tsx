@@ -7,6 +7,10 @@ import {useAllNews} from "../hooks/useAllNews.ts";
 import Screening from "../types/Screening.ts";
 
 import { formatDateTime } from '../utils/DateTimeFormatForOverview.ts';
+import {render} from "../utils/render.tsx";
+import GradientCard from "./termine/GradientCard.tsx";
+
+import TerminFilmDetailsCardTest from "./termine/TerminFilmDetailsCard.tsx";
 
 export default function Overview() {
 
@@ -95,6 +99,81 @@ export default function Overview() {
                     }
                 </section>
 
+                {/*<section>*/}
+                {/*    {isLoadingValidNews ? (*/}
+                {/*        <div className="text-warning mb-3">&#x1f504; Loading valid news...</div>*/}
+                {/*    ) : (*/}
+                {/*        screeningOverviewEntries.map(termin => {*/}
+                {/*            // Add logic here if needed*/}
+
+                {/*            const screeningDateObj = formatDateTime(termin.screeningTime);*/}
+
+                {/*            // screening of entire programm spanning over several films*/}
+                {/*            if (termin.titel !== null && termin.titel !== undefined && termin.titel !== "") {*/}
+                {/*                return  (*/}
+                {/*                    // <div*/}
+                {/*                    //     key={termin.terminId}*/}
+                {/*                    //     style={{padding: "30px"}}*/}
+                {/*                    // >*/}
+                {/*                    //*/}
+                {/*                    //     <h3>Programmtitel: {render(termin.titel)}</h3>*/}
+                {/*                    //     <p>*/}
+                {/*                    //         {screeningDateObj?.weekday}, {screeningDateObj?.date} {screeningDateObj?.time}*/}
+                {/*                    //     </p>*/}
+                {/*                    //     <img src={`https://www.pupille.org/bilder/filmbilder/${termin.films[0]?.bild}`} height="300"/>*/}
+                {/*                    //     {termin.kurztext && <p>Programmkurztext: {render(termin.kurztext)}</p>}*/}
+                {/*                    //     {termin.besonderheit && <p>Programmbesonderheit: {render(termin.besonderheit)}</p>}*/}
+                {/*                    //     {termin.sonderfarbe && <p>Sonderfarbe: {termin.sonderfarbe}</p>}*/}
+                {/*                    // </div>*/}
+                {/*                    <TerminCard*/}
+                {/*                        screeningWeekday={screeningDateObj?.weekday}*/}
+                {/*                        screeningDate={screeningDateObj?.date}*/}
+                {/*                        screeningTime={screeningDateObj?.time}*/}
+                {/*                        screeningSonderfarbe=""*/}
+                {/*                        bild={termin.films[0]?.bild}*/}
+                {/*                        titel={termin.titel}*/}
+                {/*                        kurztext={termin.kurztext}*/}
+                {/*                        besonderheit={termin.besonderheit}*/}
+                {/*                        filmFormat="35mm"*/}
+                {/*                    />*/}
+                {/*                );*/}
+                {/*            // screening consists of 1 main film + shorts possibly*/}
+                {/*            } else if (termin.films.length > 0) {*/}
+                {/*                return  (*/}
+                {/*                    // <div*/}
+                {/*                    //     key={termin.terminId}*/}
+                {/*                    //     style={{padding: "30px"}}*/}
+                {/*                    // >*/}
+                {/*                    //     <h3>Hauptfilmtitel: {render(termin.films[0].titel)}</h3>*/}
+                {/*                    //     <p>*/}
+                {/*                    //         {screeningDateObj?.weekday}, {screeningDateObj?.date} {screeningDateObj?.time}*/}
+                {/*                    //     </p>*/}
+                {/*                    //     <img src={`https://www.pupille.org/bilder/filmbilder/${termin.films[0].bild}`} height="300"/>*/}
+                {/*                    //     {termin.films[0].kurztext && <p>Hauptfilmkurztext: {render(termin.films[0].kurztext)}</p>}*/}
+                {/*                    //     {termin.films[0].besonderheit && <p>Hauptfilmbesonderheit: {render(termin.films[0].besonderheit)}</p>}*/}
+                {/*                    //     {termin.films[0].format && <p>Format: {termin.films[0].format}</p>}*/}
+                {/*                    //     {termin.sonderfarbe && <p>Sonderfarbe: {termin.sonderfarbe}</p>}*/}
+                {/*                    // </div>*/}
+
+                {/*                    <Alert>*/}
+                {/*                    <TerminCard*/}
+                {/*                        screeningWeekday={screeningDateObj?.weekday}*/}
+                {/*                        screeningDate={screeningDateObj?.date}*/}
+                {/*                        screeningTime={screeningDateObj?.time}*/}
+                {/*                        screeningSonderfarbe=""*/}
+                {/*                        bild={termin.films[0]?.bild}*/}
+                {/*                        titel={termin.films[0]?.titel}*/}
+                {/*                        kurztext={termin.films[0]?.kurztext}*/}
+                {/*                        besonderheit={termin.films[0]?.besonderheit}*/}
+                {/*                        filmFormat="35mm"*/}
+                {/*                    />*/}
+                {/*                    </Alert>*/}
+                {/*                );*/}
+                {/*            }*/}
+                {/*        })*/}
+                {/*    )}*/}
+                {/*</section>*/}
+
                 <section>
                     {isLoadingValidNews ? (
                         <div className="text-warning mb-3">&#x1f504; Loading valid news...</div>
@@ -102,43 +181,87 @@ export default function Overview() {
                         screeningOverviewEntries.map(termin => {
                             // Add logic here if needed
 
-                            const screeningDate = formatDateTime(termin.screeningTime);
+                            const screeningDateObj = formatDateTime(termin.screeningTime);
 
-
-                            if (termin.titel !== null && termin.titel !== "") {
+                            // screening of entire programm spanning over several films
+                            if (termin.titel !== null && termin.titel !== undefined && termin.titel !== "") {
                                 return  (
-                                    <div
+                                    // <div
+                                    //     key={termin.terminId}
+                                    //     style={{padding: "30px"}}
+                                    // >
+                                    //
+                                    //     <h3>Programmtitel: {render(termin.titel)}</h3>
+                                    //     <p>
+                                    //         {screeningDateObj?.weekday}, {screeningDateObj?.date} {screeningDateObj?.time}
+                                    //     </p>
+                                    //     <img src={`https://www.pupille.org/bilder/filmbilder/${termin.films[0]?.bild}`} height="300"/>
+                                    //     {termin.kurztext && <p>Programmkurztext: {render(termin.kurztext)}</p>}
+                                    //     {termin.besonderheit && <p>Programmbesonderheit: {render(termin.besonderheit)}</p>}
+                                    //     {termin.sonderfarbe && <p>Sonderfarbe: {termin.sonderfarbe}</p>}
+                                    // </div>
+                                    <div style={{
+                                        paddingTop: "3rem",
+                                        paddingBottom: "3rem"
+                                    }}>
+                                    <GradientCard
                                         key={termin.terminId}
-                                        style={{padding: "30px"}}
-                                    >
-                                        <h3>{termin.titel}</h3>
-                                        <p>
-                                            {screeningDate?.weekday}, {screeningDate?.date} {screeningDate?.time}
-                                        </p>
-                                        <img src={`https://www.pupille.org/bilder/filmbilder/${termin.films[0]?.bild}`} height="300"/>
-                                        {termin.kurztext && <p>{termin.kurztext}</p>}
-                                        {termin.besonderheit && <p>{termin.besonderheit}</p>}
+                                        screeningWeekday={screeningDateObj?.weekday}
+                                        screeningDate={screeningDateObj?.date}
+                                        screeningTime={screeningDateObj?.time}
+                                        screeningSonderfarbe=""
+                                        bild={termin.films[0]?.bild}
+                                        titel={termin.titel}
+                                        kurztext={termin.kurztext}
+                                        besonderheit={termin.besonderheit}
+                                        filmFormat="35mm"
+                                    />
                                     </div>
                                 );
+                            // screening consists of 1 main film + shorts possibly
                             } else if (termin.films.length > 0) {
                                 return  (
-                                    <div
+                                    // <div
+                                    //     key={termin.terminId}
+                                    //     style={{padding: "30px"}}
+                                    // >
+                                    //     <h3>Hauptfilmtitel: {render(termin.films[0].titel)}</h3>
+                                    //     <p>
+                                    //         {screeningDateObj?.weekday}, {screeningDateObj?.date} {screeningDateObj?.time}
+                                    //     </p>
+                                    //     <img src={`https://www.pupille.org/bilder/filmbilder/${termin.films[0].bild}`} height="300"/>
+                                    //     {termin.films[0].kurztext && <p>Hauptfilmkurztext: {render(termin.films[0].kurztext)}</p>}
+                                    //     {termin.films[0].besonderheit && <p>Hauptfilmbesonderheit: {render(termin.films[0].besonderheit)}</p>}
+                                    //     {termin.films[0].format && <p>Format: {termin.films[0].format}</p>}
+                                    //     {termin.sonderfarbe && <p>Sonderfarbe: {termin.sonderfarbe}</p>}
+                                    // </div>
+                                    <div style={{
+                                        paddingTop: "3rem",
+                                        paddingBottom: "3rem"
+                                    }}>
+                                    <GradientCard
                                         key={termin.terminId}
-                                        style={{padding: "30px"}}
-                                    >
-                                        <h3>{termin.films[0].titel}</h3>
-                                        <p>
-                                            {screeningDate?.weekday}, {screeningDate?.date} {screeningDate?.time}
-                                        </p>
-                                        <img src={`https://www.pupille.org/bilder/filmbilder/${termin.films[0].bild}`} height="300"/>
-                                        {termin.kurztext && <p>{termin.kurztext}</p>}
-                                        {termin.besonderheit && <p>{termin.besonderheit}</p>}
+                                        screeningWeekday={screeningDateObj?.weekday}
+                                        screeningDate={screeningDateObj?.date}
+                                        screeningTime={screeningDateObj?.time}
+                                        screeningSonderfarbe=""
+                                        bild={termin.films[0]?.bild}
+                                        titel={termin.films[0]?.titel}
+                                        kurztext={termin.films[0]?.kurztext}
+                                        besonderheit={termin.films[0]?.besonderheit}
+                                        filmFormat="35mm"
+                                    />
                                     </div>
                                 );
                             }
                         })
                     )}
                 </section>
+
+                {/*<section>*/}
+                {/*    <TerminFilmDetailsCardTest />*/}
+                {/*</section>*/}
+
             </>
 
     );

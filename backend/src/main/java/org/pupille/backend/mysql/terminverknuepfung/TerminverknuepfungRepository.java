@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface TerminverknuepfungRepository extends JpaRepository<Terminverknuepfung, Terminverknuepfung.TerminverknuepfungId> {
 
-    @Query("SELECT tv FROM Terminverknuepfung tv ORDER BY tv.fnr DESC")
-    List<Terminverknuepfung> findAllByOrderByFnrDesc();
+    @Query("SELECT tv FROM Terminverknuepfung tv ORDER BY tv.tnr DESC")
+    List<Terminverknuepfung> findAllByOrderByTnrDesc();
 
     //##########################################
 

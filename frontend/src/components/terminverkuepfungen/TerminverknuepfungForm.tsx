@@ -89,13 +89,21 @@ export default function TerminverknuepfungForm() {
     }, [selectedTVId]);
 
     // Handle form field changes
+    // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    //     const { name, value } = e.target;
+    //     setSelectedTV((prevData: Terminverknuepfung) => ({
+    //         ...prevData,
+    //         [name]: value,
+    //     }));
+    // };
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const { name, type } = e.target;
         setSelectedTV((prevData: Terminverknuepfung) => ({
             ...prevData,
-            [name]: value,
+            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
         }));
     };
+
 
     // Handle the form submission (PUT or POST)
     const handleSubmit = async (e: React.FormEvent) => {

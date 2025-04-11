@@ -36,8 +36,8 @@ public class TerminverknuepfungService {
                 .collect(Collectors.toList());
     }
 
-    public List<TerminverknuepfungDTOSelection> getAllTVByOrderByFnrDesc() {
-        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllByOrderByFnrDesc();
+    public List<TerminverknuepfungDTOSelection> getAllTVByOrderByTnrDesc() {
+        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllByOrderByTnrDesc();
         return terminverknuepfungen.stream()
                 .map(TerminverknuepfungDTOSelection::new)
                 .collect(Collectors.toList());

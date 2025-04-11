@@ -13,6 +13,7 @@ import TerminForm from "./components/termine/TerminForm.tsx";
 
 import DTpicker from "./components/termine/DTpicker.tsx";
 import TerminverknuepfungForm from "./components/terminverkuepfungen/TerminverknuepfungForm.tsx";
+import Details from "./components/Details.tsx";
 
 function App() {
 
@@ -25,7 +26,8 @@ function App() {
           <main className="main-content">
               <Container>
                   <Row className="justify-content-center"> {/* Center the content */}
-                      <Col md={8} lg={8}> {/* Adjust the column widths for different screen sizes */}
+                      {/*<Col md={8} lg={8}> /!* Adjust the column widths for different screen sizes *!/*/}
+                      <Col md={7} > {/* Adjust the column widths for different screen sizes */}
 
                   <Routes>
                       <Route path="/" element={<Overview />} />
@@ -41,6 +43,8 @@ function App() {
                       <Route path="/admintven" element={<TerminverknuepfungForm />} />
 
                       <Route path="/dtpicker" element={<DTpicker />} />
+
+                      <Route path="/details" element={<Details />} />
 
                   </Routes>
 

@@ -26,8 +26,8 @@ public class TerminverknuepfungController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TerminverknuepfungDTOSelection>> getAllTVByOrderByFnrDesc() {
-        List<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getAllTVByOrderByFnrDesc();
+    public ResponseEntity<List<TerminverknuepfungDTOSelection>> getAllTVByOrderByTnrDesc() {
+        List<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getAllTVByOrderByTnrDesc();
         return ResponseEntity.ok(terminverknuepfungDTOSelection);
     }
 

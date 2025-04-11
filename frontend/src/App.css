@@ -1,6 +1,7 @@
 .app-container {
   color: whitesmoke;
-  background-color: #1e2328;
+  /*background-color: #1e2328;*/
+  background-color: black;
   min-height: 100vh; /* Ensure it covers the entire viewport height */
   /* You can also add other styles here, like padding, etc. */
 }
