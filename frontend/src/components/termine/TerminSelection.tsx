@@ -1,10 +1,10 @@
 import { Form } from "react-bootstrap";
 
 import React from "react";
-import TerminDTO from "../../types/TerminDTO.ts";
+import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 
 interface TerminSelectionProps {
-    termine: TerminDTO[];
+    termine: TerminDTOSelection[];
     selectedTerminId: number | null;
     onSelectTermin: (id: number | null) => void;
 }
@@ -43,7 +43,7 @@ export default function TerminSelection({ termine, selectedTerminId, onSelectTer
                 style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
             >
                 <option value="">Select a Termin to edit (or leave empty to add new)</option>
-                {termine.map((t: TerminDTO) => (
+                {termine.map((t: TerminDTOSelection) => (
                     <option key={t.tnr} value={t.tnr}>
                         {`${formatDate(t.termin)}: ${t.titel} | #${t.tnr}`}
                     </option>

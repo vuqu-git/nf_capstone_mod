@@ -1,9 +1,9 @@
-import TerminWithFilms from "../types/TerminWithFilms.ts";
+import TerminDTOFormWithFilmsDTOFormPlus from "../types/TerminDTOFormWithFilmsDTOFormPlus.ts";
 import TerminFilmDetailsCard from "./termine/TerminFilmDetailsCard.tsx";
 import {formatDateTime} from "../utils/DateTimeFormatForOverview.ts";
 
 
-const screeningDetails: TerminWithFilms = {
+const screeningDetails: TerminDTOFormWithFilmsDTOFormPlus = {
     "termin": {
         "tnr": 819,
         "termin": "2024-12-16T20:15:00",
@@ -124,7 +124,7 @@ const screeningDetails: TerminWithFilms = {
 
 
 
-// const screeningDetails: TerminWithFilms = {
+// const screeningDetails: TerminDTOFormWithFilmsDTOFormPlus = {
 //     "termin": {
 //         "tnr": 854,
 //         "termin": "2027-01-01T20:15:00",

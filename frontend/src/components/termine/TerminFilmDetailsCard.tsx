@@ -5,7 +5,7 @@ import './TerminFilmDetailsCard.css';
 
 
 
-import FilmPlus from "../../types/FilmPlus.ts";
+import FilmDTOFormPlus from "../../types/FilmDTOFormPlus.ts";
 import TerminFilmDetailsListing from "./TerminFilmDetailsCardFilmListing.tsx";
 
 
@@ -20,8 +20,8 @@ interface Props {
     text: string | undefined | null;
     besonderheit: string | undefined | null;
 
-    mainfilms: FilmPlus[];
-    vorfilms: FilmPlus[];
+    mainfilms: FilmDTOFormPlus[];
+    vorfilms: FilmDTOFormPlus[];
 }
 
 export default function TerminFilmDetailsCard({
@@ -56,7 +56,7 @@ export default function TerminFilmDetailsCard({
         >
             <Card.Body>
                 <Card.Header as="h4" className="text-end">
-                    {screeningWeekday}, {screeningDate} {screeningTime}
+                    {screeningWeekday}, {screeningDate}, {screeningTime}
                 </Card.Header>
 
                 <Card.Title

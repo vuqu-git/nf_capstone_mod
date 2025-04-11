@@ -59,8 +59,8 @@ public class TerminService {
         terminRepository.deleteById(tnr);
     }
 
-    // ##################################################
-
+    // ########################################################################
+    // both methods here are just only used for controller for testing purposes
     public List<TerminDTOForm> getFutureTermine() {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
@@ -80,6 +80,7 @@ public class TerminService {
         // Combine the current date and the fixed time
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
         return terminRepository.findFutureTermineProjected(now);
+    // ########################################################################
     }
 }
 

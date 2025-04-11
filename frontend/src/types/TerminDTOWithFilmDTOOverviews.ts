@@ -1,16 +1,16 @@
 // this one mirrors TerminDTOWithFilmDTOOverviews
 
-interface Screening {
+interface TerminDTOWithFilmDTOOverviews {
     terminId: number;
     screeningTime?: string;
     titel?: string | null;
     kurztext?: string;
     besonderheit?: string;
     sonderfarbe?: number;
-    films: FilmsInScreening[];
+    films: FilmDTOOverview[];
 }
 
-interface FilmsInScreening {
+interface FilmDTOOverview {
     filmId: number;
     titel?: string;
     kurztext?: string;
@@ -21,4 +21,4 @@ interface FilmsInScreening {
     // fskRating?: string;
 }
 
-export default Screening;
+export default TerminDTOWithFilmDTOOverviews;

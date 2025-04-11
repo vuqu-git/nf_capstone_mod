@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FilmSelection from "./FilmSelection";
 import {Film} from "../../types/Film.ts";
-import {FilmDTO} from "../../types/FilmDTO.ts";
+import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
@@ -31,7 +31,7 @@ const emptyFilmForForm = {
 }
 
 export default function FilmForm() {
-    const [allFilms, setAllFilms] = useState<FilmDTO[]>([]); // All films fetched from the server
+    const [allFilms, setAllFilms] = useState<FilmDTOSelection[]>([]); // All films fetched from the server
     const [selectedFilmId, setSelectedFilmId] = useState<number | null>(null); // Selected film for editing or deleting
     const [selectedFilm, setSelectedFilm] = useState<Film>(emptyFilmForForm); // Film data for the form
 
@@ -360,12 +360,13 @@ export default function FilmForm() {
                         value={selectedFilm.fsk || ""}
                         onChange={handleChange}
                     >
-                        <option value="_0">0</option>
-                        <option value="_6">6</option>
-                        <option value="_12">12</option>
-                        <option value="_16">16</option>
-                        <option value="_18">18</option>
-                        <option value="UNGEPRUEFT">Ungeprüft</option>
+                        <option value="">Select FSK (or leave this to have it empty)</option> {/* Option to display if value is null */}
+                        <option value="0">0</option>
+                        <option value="6">6</option>
+                        <option value="12">12</option>
+                        <option value="16">16</option>
+                        <option value="18">18</option>
+                        <option value="ungeprüft">ungeprüft</option>
                     </Form.Control>
                 </Form.Group>
 

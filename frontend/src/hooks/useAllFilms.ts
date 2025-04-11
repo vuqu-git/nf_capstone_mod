@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Film } from '../types/Film.ts';
-import { FilmDTO } from '../types/FilmDTO.ts';
+import { FilmDTOSelection } from '../types/FilmDTOSelection.ts';
 
 
 const baseURL = "/api/filme";
@@ -33,7 +33,7 @@ export const useAllFilms = (shouldFetchDetails: boolean = true) => {
     }
 
     const [isLoading, setIsLoading] = useState(false);
-    const [allFilms, setAllFilms] = useState<FilmDTO[]>([]);
+    const [allFilms, setAllFilms] = useState<FilmDTOSelection[]>([]);
     const [selectedId, setSelectedId] = useState<string>("");
     const [selectedFilm, setSelectedFilm] = useState<Film | null>(emptyFilmForAddingForm);
     const [error, setError] = useState<string>("");

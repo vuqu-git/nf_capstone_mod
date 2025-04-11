@@ -1,6 +1,5 @@
 import Card from 'react-bootstrap/Card';
 import {render} from "../../utils/render.tsx";
-// import './GradientCard.css';
 
 import {Film} from "../../types/Film.ts";
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TerminSelection from "./TerminSelection";
 import Termin from "../../types/Termin.ts";
-import TerminDTO from "../../types/TerminDTO.ts";
+import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 
@@ -24,7 +24,7 @@ const emptyTerminForForm = {
 }
 
 export default function TerminForm() {
-    const [allTermine, setAllTermine] = useState<TerminDTO[]>([]); // All Termine fetched from the server
+    const [allTermine, setAllTermine] = useState<TerminDTOSelection[]>([]); // All Termine fetched from the server
     const [selectedTerminId, setSelectedTerminId] = useState<number | null>(null); // Selected Termin for editing or deleting
     const [selectedTermin, setSelectedTermin] = useState<Termin>(emptyTerminForForm); // Termin data for the form
 

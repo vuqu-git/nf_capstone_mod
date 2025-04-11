@@ -1,15 +1,33 @@
 import Card from 'react-bootstrap/Card';
 import {render} from "../../utils/render.tsx";
 import {CSSProperties} from "react";
-import './GradientCard.css';
-import ListFilmDetails from "../../types/ListFilmDetails.ts";
+import './TerminFilmOverviewCard.css';
 
 interface Props {
-    films: ListFilmDetails
+    screeningWeekday: string | undefined;
+    screeningDate: string | undefined;
+    screeningTime: string | undefined;
+    screeningSonderfarbe: string;
+    bild: string | undefined;
+
+    titel: string | undefined;
+    kurztext: string | undefined;
+    besonderheit: string | undefined;
+
+    filmFormat: string | undefined
 }
 
-export default function TerminFilmDetailsCard({
-                                                  films,
+export default function TerminFilmOverviewCard({
+                                         screeningWeekday,
+                                         screeningDate,
+                                         screeningTime,
+                                         screeningSonderfarbe,
+                                         bild,
+
+                                         titel,
+                                         kurztext,
+                                         besonderheit,
+                                         filmFormat,
                                      }: Props) {
 
     const cardImageStyle: CSSProperties  = {
@@ -29,11 +47,11 @@ export default function TerminFilmDetailsCard({
             'rgba(13, 13, 12, 1) 100%)',
     };
 
-
     return (
         <Card
             // border="none"
-            className="pupille-glow zoom-effect"
+            // className="pupille-glow zoom-effect"
+            className={`${screeningSonderfarbe} zoom-effect`}
             style={{
                 // backgroundColor: '#FFD036',
                 backgroundColor: '#0D0D0C',
@@ -62,13 +80,16 @@ export default function TerminFilmDetailsCard({
                 {/*    {screeningWeekday}, {screeningDate} {screeningTime}*/}
                 {/*</Card.Title>*/}
 
-                <Card.Text style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#cfd6e1' }}>
-                    <span className="duration-box">
-                        35mm-Projektion
-                    </span>
-                    {/*<span></span>*/}
-                    <span style={{  fontSize: '1.3rem', color: '#fff' }}>
-                        {screeningWeekday}, {screeningDate} {screeningTime}
+                {/*<Card.Text style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#cfd6e1' }}>*/}
+                <Card.Text style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', color: '#cfd6e1' }}>
+                    { filmFormat?.includes("mm") &&
+                        <span className="duration-box">
+                            {filmFormat}
+                        </span>
+
+                    }
+                    <span style={{ fontSize: '1.3rem', color: '#fff', marginLeft: 'auto' }}>
+                        {screeningWeekday}, {screeningDate}, {screeningTime}
                     </span>
                 </Card.Text>
 
@@ -85,20 +106,31 @@ export default function TerminFilmDetailsCard({
                 >
                     {render(kurztext)}
                 </Card.Text>
-                {/*<Card.Text*/}
-                {/*    style={{ color: '#cfd6e1' }}*/}
-                {/*>*/}
-                {/*    <span className="duration-box">Projektion: 35mm</span>*/}
-                {/*</Card.Text>*/}
+
+                {
+                    besonderheit &&
+                    <Card.Text
+                        style={{
+                            borderTop: '1px solid #cfd6e1',
+                            padding: '1rem 1.5em',
+                            color: '#FFD036',
+                            textAlign: 'center',
+                        }}
+                    >{render(besonderheit)}
+                    </Card.Text>
+                }
+
             </Card.Body>
 
-            {besonderheit &&
-                <Card.Footer
-                    style={{
-                        backgroundColor: '#0D0D0C',
-                        color: '#cfd6e1'
-                    }}
-                >{render(besonderheit)}</Card.Footer>}
+            {/*{besonderheit &&*/}
+            {/*    <Card.Footer*/}
+            {/*        style={{*/}
+            {/*            borderTop: '1px solid #cfd6e1',*/}
+            {/*            backgroundColor: '#0D0D0C',*/}
+            {/*            color: '#cfd6e1'*/}
+            {/*        }}*/}
+            {/*    >{render(besonderheit)}</Card.Footer>}*/}
+
         </Card>
     );
 }

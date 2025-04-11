@@ -22,13 +22,13 @@ public class ScreeningController {
         return screeningService.getFutureTermineWithFilms();
     }
 
-    @GetMapping("/screenings/{tnr}")
+    @GetMapping("/screeningsold/{tnr}")
     public ResponseEntity<List<FilmDTOForm>> getFilmsForTermin(@PathVariable Long tnr) {
         List<FilmDTOForm> films = screeningService.getFilmsByTerminId(tnr);
         return ResponseEntity.ok(films);
     }
 
-    @GetMapping("/screeningsnewer/{tnr}")
+    @GetMapping("/screenings/{tnr}")
     public ResponseEntity<TerminDTOFormWithFilmsDTOFormPlus> getTerminWithFilmsPlusForTermin(@PathVariable Long tnr) {
         TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTerminId(tnr);
         return ResponseEntity.ok(terminWithFilmsPlus);

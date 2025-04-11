@@ -1,7 +1,7 @@
 
 // for selection form
 
-export type FilmDTO = {
+export type FilmDTOSelection = {
     fnr: number,
     titel: string,
     jahr: number,

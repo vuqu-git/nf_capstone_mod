@@ -16,7 +16,7 @@ export function formatDateTime(isoString?: string): { date: string; time: string
     const germanWeekdays = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
     const weekday = germanWeekdays[date.getDay()];
     const formattedDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
-    const formattedTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')} Uhr`;
+    const formattedTime = `${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')} Uhr`;
 
     return { date: formattedDate, time: formattedTime, weekday };
 }

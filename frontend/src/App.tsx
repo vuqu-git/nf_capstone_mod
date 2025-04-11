@@ -7,7 +7,6 @@ import {Col, Container, Row} from "react-bootstrap";
 
 import AddNews from "./components/news/AddNews.tsx";
 import EditDeleteNews from "./components/news/EditDeleteNews.tsx";
-import AddEditFilms from "./components/filme/AddEditFilms.tsx";
 import FilmForm from "./components/filme/FilmForm.tsx";
 import TerminForm from "./components/termine/TerminForm.tsx";
 
@@ -36,7 +35,6 @@ function App() {
                       <Route path="/editnews" element={<EditDeleteNews />} />
                       <Route path="/deletenews" element={<EditDeleteNews />} />
 
-                      <Route path="/addeditfilme" element={<AddEditFilms />} />
 
                       <Route path="/adminfilme" element={<FilmForm />} />
                       <Route path="/admintermine" element={<TerminForm />} />

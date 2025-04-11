@@ -33,13 +33,42 @@ public class ScreeningService {
     }
 
 
-    public List<TerminDTOWithFilmDTOOverviews> getFutureTermineWithFilms() {
-        // this time is too precise and hence Termine will disappear immediately when their screening DateTime is passed
-        // LocalDateTime now = LocalDateTime.now();
+//    public List<TerminDTOWithFilmDTOOverviews> getFutureTermineWithFilms() {
+//        // this time is too precise and hence Termine will disappear immediately when their screening DateTime is passed
+//        // LocalDateTime now = LocalDateTime.now();
+//
+//        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+//        LocalTime fixedTime = LocalTime.of(0, 1);
+//        // Combine the current date and the fixed time
+//        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+//
+//        // 1. Get future Termine
+//        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+//
+//        // 2. Get related films in batch
+//        List<Long> terminIds = futureTermine.stream()
+//                .map(Termin::getTnr)
+//                .toList();
+//
+//        List<Terminverknuepfung> connections = terminverknuepfungRepository
+//                .findWithFilmsByTerminIds(terminIds);
+//
+//        // 3. Map to DTO
+//        return futureTermine.stream()
+//                .map(termin -> new TerminDTOWithFilmDTOOverviews(
+//                        termin,
+//                        connections.stream()
+//                                .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+//                                .map(Terminverknuepfung::getFilm)
+//                                .toList()
+//                ))
+//                .toList();
+//    }
 
+    public List<TerminDTOWithFilmDTOOverviews> getFutureTermineWithFilms() {
+        // Use a fixed time to avoid Termine disappearing immediately after their screening DateTime
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
-        // Combine the current date and the fixed time
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
 
         // 1. Get future Termine
@@ -50,15 +79,17 @@ public class ScreeningService {
                 .map(Termin::getTnr)
                 .toList();
 
+        // Fetch connections with films for the relevant Termine
         List<Terminverknuepfung> connections = terminverknuepfungRepository
                 .findWithFilmsByTerminIds(terminIds);
 
-        // 3. Map to DTO
+        // 3. Map to DTO, filtering out films where vorfilm is true
         return futureTermine.stream()
                 .map(termin -> new TerminDTOWithFilmDTOOverviews(
                         termin,
                         connections.stream()
                                 .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+                                .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm()) // Include only if vorfilm is null or false
                                 .map(Terminverknuepfung::getFilm)
                                 .toList()
                 ))
@@ -89,15 +120,6 @@ public class ScreeningService {
 //        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
 //
 //        // Map to DTOs with connection info
-////        List<FilmDTOFormPlus> filmDTOs = connections.stream()
-////                .filter(tv -> tv.getFilm() != null)
-////                .sorted(Comparator.comparing(tv -> tv.getRang(), Comparator.nullsFirst(Short::compare)))
-////                .map(tv -> new FilmDTOFormPlus(
-////                        new FilmDTOForm(tv.getFilm()),
-////                        tv.getVorfilm(),
-////                        tv.getRang()
-////                ))
-////                .toList();
 //        List<FilmDTOFormPlus> filmDTOs = connections.stream()
 //                .filter(tv -> tv.getFilm() != null)
 //                .sorted(
@@ -170,6 +192,5 @@ public class ScreeningService {
                 tv.getRang()
         );
     }
-
 
 }

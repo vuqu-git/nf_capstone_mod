@@ -1,17 +1,16 @@
 import Termin from "./Termin.ts";
-import {Film} from "./Film.ts";
-import FilmPlus from "./FilmPlus.ts";
+import FilmDTOFormPlus from "./FilmDTOFormPlus.ts";
 
 // this one mirrors the Java class TerminDTOFormWithFilmsDTOFormPlus
 
-export default interface TerminWithFilms {
+export default interface TerminDTOFormWithFilmsDTOFormPlus {
     termin: Termin;
-    mainfilms: FilmPlus[];
-    vorfilms: FilmPlus[];
+    mainfilms: FilmDTOFormPlus[];
+    vorfilms: FilmDTOFormPlus[];
 }
 
 
-// interface FilmPlus {
+// interface FilmDTOFormPlus {
 //     film: Film;
 //     vorfilm: boolean | null;
 //     rang: number | null;

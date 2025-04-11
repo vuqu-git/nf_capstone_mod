@@ -1,9 +1,9 @@
 import { Form } from "react-bootstrap";
 import React from "react";
-import {FilmDTO} from "../../types/FilmDTO.ts";
+import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 
 interface FilmSelectionProps {
-    films: FilmDTO[];
+    films: FilmDTOSelection[];
     selectedFilmId: number | null;
     onSelectFilm: (id: number | null) => void;
 }

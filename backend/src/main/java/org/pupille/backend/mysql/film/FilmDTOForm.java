@@ -1,8 +1,11 @@
 package org.pupille.backend.mysql.film;
 
+import jakarta.persistence.Convert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+// DTO for form fields
 
 @Getter
 @Setter
@@ -25,6 +28,8 @@ public class FilmDTOForm {
 
     private String untertitel;
     private String format;
+
+    @Convert(converter = FskConverter.class) // Explicitly specify the converter
     private Film.Fsk fsk; // Import and use the enum from the Film class
     private String stab;
 

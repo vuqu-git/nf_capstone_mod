@@ -1,6 +1,8 @@
 package org.pupille.backend.mysql.film;
 
 import lombok.RequiredArgsConstructor;
+import org.pupille.backend.mysql.termin.Termin;
+import org.pupille.backend.mysql.termin.TerminDTOForm;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +19,27 @@ public class FilmService {
     private final FilmRepository filmRepository;
 
     // Retrieve all films
-    public List<Film> getAllFilms() {
-        return filmRepository.findAll();
+    public List<FilmDTOForm> getAllFilms() {
+        List<Film> filme = filmRepository.findAll();
+        return filme.stream()
+                .map(FilmDTOForm::new)
+                .collect(Collectors.toList());
     }
 
     // Retrieve all films sorted by title ascending
-    public List<Film> getAllFilmsSortedByTitleAsc() {
-        return filmRepository.findAll(Sort.by(Sort.Direction.ASC, "titel"));
+    public List<FilmDTOForm> getAllFilmsServiceSortedByTitleAsc() {
+        List<Film> filme = filmRepository.findAll(Sort.by(Sort.Direction.ASC, "titel"));
+        return filme.stream()
+                .map(FilmDTOForm::new)
+                .collect(Collectors.toList());
     }
 
 //    public List<FilmProjectionInterface> getAllFilmsByOrderByTitelAsc() {
 //        return filmRepository.findAllByOrderByTitelAsc();
 //    }
 
-    public List<FilmDTOSelection> getAllFilmsByOrderByTitelAsc() {
+    // here DTO for Selection is used and the director gets extracted
+    public List<FilmDTOSelection> getAllFilmsRepoSortedByTitleAsc() {
         return filmRepository.findAllByOrderByTitelAsc()
                                 .stream()
                                 .map(FilmDTOSelection::new)
@@ -42,7 +51,8 @@ public class FilmService {
                                 .collect(Collectors.toList());
     }
 
-
+    // ##############################################################
+    // utils function
     public static String extractDirectors(String input) {
         if (input == null || input.isEmpty()) {
             return ""; // Handle null or empty input
@@ -57,6 +67,7 @@ public class FilmService {
             return "";
         }
     }
+    // ##############################################################
 
     // Retrieve a specific film by ID
     public Optional<FilmDTOForm> getFilmById(Long id) {
@@ -68,7 +79,7 @@ public class FilmService {
         return new FilmDTOForm(filmRepository.save(film));
     }
 
-//    // Update an existing film
+//    // optional Update an existing film, but nor required because Put method in controller achieves everything
 //    public Optional<Film> updateFilm(Long id, Film updatedFilm) {
 //        return filmRepository.findById(id).map(existingFilm -> {
 //            // Update fields of the existing film with values from updatedFilm

@@ -52,7 +52,8 @@ public class Terminverknuepfung implements Serializable {
     }
 
 
-    //    ###########################################
+    // ############################################
+    // relationship (extension of the entity model)
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("fnr") // Maps composite key component
     @JoinColumn(name = "fnr", insertable = false, updatable = false)
@@ -62,5 +63,5 @@ public class Terminverknuepfung implements Serializable {
     @MapsId("tnr")  // Maps composite key component
     @JoinColumn(name = "tnr", insertable = false, updatable = false)
     private Termin termin;
-    //    ###########################################
+    // ############################################
 }
