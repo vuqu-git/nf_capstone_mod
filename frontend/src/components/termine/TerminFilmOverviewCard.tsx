@@ -5,16 +5,16 @@ import './TerminFilmOverviewCard.css';
 import { useNavigate } from "react-router-dom";
 
 interface Props {
-    screeningWeekday: string | undefined;
-    screeningDate: string | undefined;
-    screeningTime: string | undefined;
+    screeningWeekday: string | null;
+    screeningDate: string | null;
+    screeningTime: string | null;
     screeningSonderfarbe: string;
-    bild: string | undefined;
+    bild: string | null; // somehow how the value for bild is build it could be undefined
 
-    titel: string | undefined;
-    kurztext: string | undefined;
+    titel: string | null; // null is in the case, where titel refers to that of the main film
+    kurztext: string | null;
     jahr: number | undefined;
-    besonderheit: string | undefined;
+    besonderheit: string | null;
 
     filmFormat: string | undefined;
 
@@ -45,7 +45,8 @@ export default function TerminFilmOverviewCard({
         bottom: 0,
         left: 0,
         width: '100%',
-        height: '50%', // Adjust the height of the fade as needed
+        height: '100%', // Adjust the height of the fade as needed
+        // height: '50%', // Adjust the height of the fade as needed
         // background: 'linear-gradient(to bottom, rgba(255, 208, 54, 0) 0%, rgba(255, 208, 54, 1) 100%)', // Fade to the card's background color
         background: 'linear-gradient(to bottom, ' +
             'rgba(13, 13, 12, 0) 0%, ' +
@@ -78,13 +79,16 @@ export default function TerminFilmOverviewCard({
             role="button"
         >
             {/*<Card.Img variant="top" src={`https://www.pupille.org/bilder/filmbilder/${bild}`} />*/}
-            <div
-                className="image-aspect-ratio-container"
-                style={cardImageStyle}
-            >
-                <Card.Img variant="top" src={`https://www.pupille.org/bilder/filmbilder/${bild}`} />
-                <div style={gradientOverlayStyle}></div>
-            </div>
+            { bild && (
+                <div
+                    className="image-aspect-ratio-container"
+                    style={cardImageStyle}
+                >
+                    <Card.Img variant="top" src={`https://www.pupille.org/bilder/filmbilder/${bild}`} />
+                    <div style={gradientOverlayStyle}></div>
+                </div>
+            )}
+
             {/*<Card.Header*/}
             {/*    as="h5"*/}
             {/*    className="text-end"*/}
@@ -100,7 +104,7 @@ export default function TerminFilmOverviewCard({
                 {/*</Card.Title>*/}
 
                 {/*<Card.Text style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: '#cfd6e1' }}>*/}
-                <Card.Text style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', color: '#cfd6e1' }}>
+                <Card.Text style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', color: '#cfd6e1',  }}>
                     { filmFormat?.includes("mm") &&
                         <span className="duration-box">
                             {filmFormat}
@@ -108,18 +112,28 @@ export default function TerminFilmOverviewCard({
 
                     }
                     <span style={{ fontSize: '1.3rem', color: '#fff', marginLeft: 'auto' }}>
-                        {screeningWeekday}, {screeningDate}, {screeningTime}
+                        {screeningWeekday || screeningDate || screeningTime ? (
+                            <>
+                                {screeningWeekday}, {screeningDate}, {screeningTime}
+                            </>
+                        ) : (
+                            'keine Terminangaben'
+                        )}
                     </span>
                 </Card.Text>
 
-
-                <Card.Title
-                    as="h2"
-                    // style={{ color: '#fff' }}
-                    style={{ color: '#fff', marginBottom: '0.0rem' }}
-                >
-                    {render(titel)}
-                </Card.Title>
+                { titel && (
+                    <Card.Title
+                        as="h2"
+                        // style={{ color: '#fff' }}
+                        style={{
+                            color: '#fff',
+                            marginBottom: '0.0rem',
+                        }}
+                    >
+                        {render(titel)}
+                    </Card.Title>
+                )}
 
                 { jahr &&
                     <Card.Text
@@ -130,11 +144,13 @@ export default function TerminFilmOverviewCard({
                     </Card.Text>
                 }
 
-                <Card.Text
-                    style={{ color: '#cfd6e1' }}
-                >
-                    {render(kurztext)}
-                </Card.Text>
+                { kurztext && (
+                    <Card.Text
+                        style={{ color: '#cfd6e1' }}
+                    >
+                        {render(kurztext)}
+                    </Card.Text>
+                )}
 
                 {
                     besonderheit &&

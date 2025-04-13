@@ -3,8 +3,8 @@ import Alert from 'react-bootstrap/Alert';
 
 type props = {
     variant: string,
-    text: string,
-    imageUrl: string
+    text?: string,
+    imageUrl?: string
 }
 
 export default function NewsCard({variant, text, imageUrl}: props) {
@@ -12,7 +12,7 @@ export default function NewsCard({variant, text, imageUrl}: props) {
 
     if (show) {
 
-        if (variant === "free") {
+        if (variant === "free" && text) {
             return <div dangerouslySetInnerHTML={{__html: text}}/>
         } else {
             return (
@@ -21,7 +21,9 @@ export default function NewsCard({variant, text, imageUrl}: props) {
 
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", width: "100%" }}>
                         {/* Text */}
-                        <div dangerouslySetInnerHTML={{ __html: text }} style={{ textAlign: "left", width: "100%" }} />
+                        { text && (
+                            <div dangerouslySetInnerHTML={{ __html: text }} style={{ textAlign: "left", width: "100%" }} />
+                        )}
 
                         {/* Image */}
                         { imageUrl && (

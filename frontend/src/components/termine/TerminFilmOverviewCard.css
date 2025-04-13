@@ -128,8 +128,8 @@
 }
 
 
-
-
+/*View of the image in the overview gallery*/
+/*#########################################*/
 
 .image-aspect-ratio-container {
     position: relative; /* Needed for absolute positioning of the image */
@@ -148,11 +148,22 @@
     width: 100%;
     height: 100%;
     object-fit: cover; /* Cover the container while maintaining aspect ratio */
-    object-position: center; /* Center the image within the container */
+    object-position: center center; /* Center the image within the container */
 }
 
+    /*To control vertical positioning, you can modify the object-position property.*/
+    /*It accepts two values: the horizontal position and the vertical position.*/
+
+    /*object-position: center top;: Aligns the top of the image with the center of the container's width.*/
+    /*object-position: center bottom;: Aligns the bottom of the image with the center of the container's width.*/
+    /*object-position: center 10%;: Positions the image 10% from the top (vertically) and centered horizontally.*/
+    /*object-position: center -10%;: Positions the image 10% from the bottom (vertically) and centered horizontally.*/
+    /*object-position: center 20px;: Positions the image 20 pixels from the top (vertically) and centered horizontally.*/
+    /*object-position: center -30px;: Positions the image 30 pixels from the bottom (vertically) and centered horizontally.*/
 
 
+/*Styling for display of year and director below the film title*/
+/*#############################################################*/
 
 .year-and-director {
     color: #9ac7fa;

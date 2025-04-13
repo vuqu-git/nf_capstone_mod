@@ -113,7 +113,7 @@ export default function Overview() {
                                 {/*<h3>Programm</h3>*/}
                                 {screeningOverviewEntries.map(termin => {
                                     // Add logic here if needed
-
+                                    
                                     const screeningDateObj = formatDateTime(termin.screeningTime);
 
                                     // screening of entire programm spanning over several films
@@ -122,20 +122,22 @@ export default function Overview() {
                                             <div
                                                 key={termin.terminId}
                                                 style={{
-                                                    paddingTop: "3rem",
-                                                    paddingBottom: "3rem"
+                                                    paddingTop: "1.5rem",
+                                                    paddingBottom: "1.5rem"
                                                 }}
                                             >
                                                 <TerminFilmOverviewCard
-                                                    screeningWeekday={screeningDateObj?.weekday}
-                                                    screeningDate={screeningDateObj?.date}
-                                                    screeningTime={screeningDateObj?.time}
+                                                    screeningWeekday={screeningDateObj ? screeningDateObj.weekday : null}
+                                                    screeningDate={screeningDateObj ? screeningDateObj.date : null}
+                                                    screeningTime={screeningDateObj ? screeningDateObj.time : null}
                                                     screeningSonderfarbe={"red-glow"}
-                                                    bild={termin.films[0]?.bild}
+                                                    // bild={termin.films[0]?.bild}
+                                                    bild={termin.films[0].bild ? termin.films[0].bild : null}
                                                     titel={termin.titel}
-                                                    kurztext={termin.kurztext}
-                                                    besonderheit={termin.besonderheit}
-                                                    filmFormat={undefined}
+                                                    kurztext={termin.kurztext ? termin.kurztext : null}
+                                                    jahr={undefined}
+                                                    besonderheit={termin.besonderheit ? termin.besonderheit : null}
+                                                    filmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
 
                                                     tnr={termin.terminId} // for navigation to certain route
                                                 />
@@ -147,21 +149,21 @@ export default function Overview() {
                                             <div
                                                 key={termin.terminId}
                                                 style={{
-                                                    paddingTop: "3rem",
-                                                    paddingBottom: "3rem"
+                                                    paddingTop: "1.5rem",
+                                                    paddingBottom: "1.5rem"
                                                 }}
                                             >
                                                 <TerminFilmOverviewCard
-                                                    screeningWeekday={screeningDateObj?.weekday}
-                                                    screeningDate={screeningDateObj?.date}
-                                                    screeningTime={screeningDateObj?.time}
+                                                    screeningWeekday={screeningDateObj ? screeningDateObj.weekday : ""}
+                                                    screeningDate={screeningDateObj ? screeningDateObj.date : ""}
+                                                    screeningTime={screeningDateObj ? screeningDateObj.time : ""}
                                                     screeningSonderfarbe={"pupille-glow"}
-                                                    bild={termin.films[0]?.bild}
-                                                    titel={termin.films[0]?.titel}
-                                                    kurztext={termin.films[0]?.kurztext}
+                                                    bild={termin.films[0].bild ? termin.films[0].bild : null}
+                                                    titel={termin.films[0]?.titel ? termin.films[0]?.titel : null}
+                                                    kurztext={termin.films[0]?.kurztext ? termin.films[0]?.kurztext : null}
                                                     jahr={termin.films[0]?.jahr}
-                                                    besonderheit={termin.films[0]?.besonderheit}
-                                                    filmFormat={termin.films[0]?.format}
+                                                    besonderheit={termin.films[0]?.besonderheit ? termin.films[0]?.besonderheit : null}
+                                                    filmFormat={termin.films[0]?.format ? termin.films[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
 
                                                     tnr={termin.terminId} // for navigation to certain route
                                                 />
