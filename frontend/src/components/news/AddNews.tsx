@@ -8,16 +8,16 @@ import { preprocessFormData } from '../../utils/PreprocessingFormData.ts';
 const baseURL = "/api/news";
 
 export default function AddNews() {
-    const emptyNews = {
+    const emptyNewsForForm = {
         id: "",
         text: "",
         image: "",
         startDate: "",
         endDate: "",
-        newsVariant: "secondary" // Default to "primary"
+        newsVariant: "light" // value of the option needs to be written here
     };
 
-    const [addingNews, setAddingNews] = useState<News>(emptyNews);
+    const [addingNews, setAddingNews] = useState<News>(emptyNewsForForm);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
@@ -31,7 +31,7 @@ export default function AddNews() {
         axios.post(`${baseURL}/all`, preprocessFormData(newsInForm))
             .then(() => {
                 setSuccessMessage("News added successfully!");
-                setAddingNews(emptyNews);
+                setAddingNews(emptyNewsForForm);
             })
             .catch((error) => {
                 const errorMessage =

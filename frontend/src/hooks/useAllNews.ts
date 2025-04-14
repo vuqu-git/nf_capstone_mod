@@ -27,7 +27,18 @@ export const useAllNews = (shouldFetchDetails: boolean = true) => {
     };
 
     const getSingleNews = (id: string) => {
-        if (!id || !shouldFetchDetails) return; // Avoid fetching if not needed
+        if (!id || !shouldFetchDetails) {
+            const emptyNewsForForm = {
+                id: "",
+                text: "",
+                image: "",
+                startDate: "",
+                endDate: "",
+                newsVariant: "light"
+            };
+            setSelectedNews(emptyNewsForForm);
+            return;
+        } // Avoid fetching if not needed
 
         setIsLoading(true);
         setError("");
