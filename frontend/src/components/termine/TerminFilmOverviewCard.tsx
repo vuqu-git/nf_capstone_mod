@@ -111,7 +111,10 @@ export default function TerminFilmOverviewCard({
                         </span>
 
                     }
-                    <span style={{ fontSize: '1.3rem', color: '#fff', marginLeft: 'auto' }}>
+                    <span style={{  fontSize: '1.3rem',
+                                    color: '#FFD036',
+                                    marginLeft: 'auto' }}
+                    >
                         {screeningWeekday || screeningDate || screeningTime ? (
                             <>
                                 {screeningWeekday}, {screeningDate}, {screeningTime}
@@ -127,7 +130,7 @@ export default function TerminFilmOverviewCard({
                         as="h2"
                         // style={{ color: '#fff' }}
                         style={{
-                            color: '#fff',
+                            color: '#FFD036',
                             marginBottom: '0.0rem',
                         }}
                     >
@@ -137,8 +140,8 @@ export default function TerminFilmOverviewCard({
 
                 { jahr &&
                     <Card.Text
-                        className="year-and-director"
-                        style={{ color: '#9ac7fa', marginTop: '0.0rem'}}
+                        className="filminfo-and-stab"
+                        style={{ marginTop: '0.0rem' }}
                     >
                         {jahr}
                     </Card.Text>
@@ -146,7 +149,10 @@ export default function TerminFilmOverviewCard({
 
                 { kurztext && (
                     <Card.Text
-                        style={{ color: '#cfd6e1' }}
+                        style={{
+                            color: '#cfd6e1' ,
+                            marginTop: jahr ? '' : '1rem',
+                    }}
                     >
                         {render(kurztext)}
                     </Card.Text>
@@ -155,13 +161,19 @@ export default function TerminFilmOverviewCard({
                 {
                     besonderheit &&
                     <Card.Text
-                        style={{
-                            borderTop: '1px solid #cfd6e1',
-                            padding: '1rem 1.5em',
-                            color: '#FFD036',
-                            textAlign: 'center',
-                        }}
-                    >{render(besonderheit)}
+                            style={{
+                                // borderTop: kurztext ? '1px solid #cfd6e1' : '',
+                                borderTop: kurztext ? '1px solid #FFD036' : '',
+                                // padding: '1rem 1.5em',
+                                padding: '1rem 0em',
+                                // color: '#FFD036',
+                                // color: '#FFA300',
+                                // color: '#7FA35C',
+                                color: '#cfd6e1',
+                                textAlign: 'right',
+                            }}
+                    >
+                        {render(besonderheit)}
                     </Card.Text>
                 }
 

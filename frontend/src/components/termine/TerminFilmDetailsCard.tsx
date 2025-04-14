@@ -16,9 +16,9 @@ interface Props {
     screeningSonderfarbe: number | undefined;
 
     // these 3 items refer to the displayed entries above (wrt to programm titel or main feature titel)
-    titel: string | undefined | null;
-    text: string | undefined | null;
-    besonderheit: string | undefined | null;
+    programmtitel: string | undefined | null;
+    programmtext: string | undefined | null;
+    programmbesonderheit: string | undefined | null;
 
     mainfilms: FilmDTOFormPlus[];
     vorfilms: FilmDTOFormPlus[];
@@ -30,9 +30,9 @@ export default function TerminFilmDetailsCard({
                                                   screeningTime,
                                                   screeningSonderfarbe,
 
-                                                  titel,
-                                                  text,
-                                                  besonderheit,
+                                                  programmtitel,
+                                                  programmtext,
+                                                  programmbesonderheit,
 
                                                   mainfilms,
                                                   vorfilms,
@@ -55,7 +55,14 @@ export default function TerminFilmDetailsCard({
             text="light"
         >
             <Card.Body>
-                <Card.Header as="h4" className="text-end">
+                <Card.Header
+                    as="h4"
+                    className="text-end"
+                    style={{
+                        color: '#FFD036',
+                        marginBottom: '0.0rem',
+                    }}
+                >
                     {screeningWeekday}, {screeningDate}, {screeningTime}
                 </Card.Header>
 
@@ -67,18 +74,18 @@ export default function TerminFilmDetailsCard({
                         marginBottom: '2rem'
                     }}
                 >
-                    {render(titel)}
+                    {render(programmtitel)}
                 </Card.Title>
 
-                {text && (
+                {programmtext && (
                     <Card.Text style={{color: '#cfd6e1'}}>
-                        {render(text)}
+                        {render(programmtext)}
                     </Card.Text>
                 )}
 
-                {besonderheit && (
+                {programmbesonderheit && (
                     <Card.Text style={{color: '#cfd6e1'}}>
-                        {render(besonderheit)}
+                        {render(programmbesonderheit)}
                     </Card.Text>
                 )}
 

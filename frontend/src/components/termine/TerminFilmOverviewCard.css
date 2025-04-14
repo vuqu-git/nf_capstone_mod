@@ -139,6 +139,8 @@
     padding-top: 56.25%; /* (height/width * 100) = (9/16 * 100) */
     /* For a 4:3 ratio: padding-top: 75%; */
     /* For a 1:1 ratio (square): padding-top: 100%; */
+
+    /*padding-top: 42.55%; !* (height/width * 100) = (1/2,35 * 100) Cinema Scope*!*/
 }
 
 .image-aspect-ratio-container img {
@@ -165,7 +167,7 @@
 /*Styling for display of year and director below the film title*/
 /*#############################################################*/
 
-.year-and-director {
+.filminfo-and-stab {
     color: #9ac7fa;
     font-weight: 400;
 }

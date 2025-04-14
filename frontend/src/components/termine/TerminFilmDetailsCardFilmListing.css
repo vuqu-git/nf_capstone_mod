@@ -1,0 +1,20 @@
+table {
+    /*border-collapse: collapse;*/
+    /*width: 100%; !* Make the table take full width *!*/
+}
+
+td {
+    padding-right: 7px;
+    /*margin: 0;*/
+    vertical-align: top;
+}
+
+.term {
+    /*width: 200px; !* Adjust to your desired width *!*/
+    white-space: nowrap; /* Prevent text from wrapping */
+    /*font-weight: bold;*/
+}
+
+.term::after {
+    content: ":";
+}

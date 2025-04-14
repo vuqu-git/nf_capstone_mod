@@ -232,9 +232,9 @@ export default function ScreeningDetails() {
                 screeningTime={screeningDateObj?.time}
                 screeningSonderfarbe={1}
 
-                titel={screeningDetails.termin.titel}
-                text={screeningDetails.termin.text}
-                besonderheit={screeningDetails.termin.besonderheit}
+                programmtitel={screeningDetails.termin.titel} // d.g. der titel in der Tabelle Termin
+                programmtext={screeningDetails.termin.text} // d.g. der text in der Tabelle Termin
+                programmbesonderheit={screeningDetails.termin.besonderheit} // d.g. die besonderheit in der Tabelle Termin
 
                 mainfilms={screeningDetails.mainfilms}
                 vorfilms={screeningDetails.vorfilms}
