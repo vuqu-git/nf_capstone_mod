@@ -9,7 +9,9 @@ interface Props {
     screeningDate: string | null;
     screeningTime: string | null;
     screeningSonderfarbe: string;
+
     bild: string | null; // somehow how the value for bild is build it could be undefined
+    offsetBildInOverview: number | undefined;
 
     titel: string | null; // null is in the case, where titel refers to that of the main film
     kurztext: string | null;
@@ -27,6 +29,7 @@ export default function TerminFilmOverviewCard({
                                          screeningTime,
                                          screeningSonderfarbe,
                                          bild,
+                                         offsetBildInOverview,
 
                                          titel,
                                          kurztext,
@@ -84,7 +87,11 @@ export default function TerminFilmOverviewCard({
                     className="image-aspect-ratio-container"
                     style={cardImageStyle}
                 >
-                    <Card.Img variant="top" src={`https://www.pupille.org/bilder/filmbilder/${bild}`} />
+                    <Card.Img
+                        variant="top"
+                        src={`https://www.pupille.org/bilder/filmbilder/${bild}`}
+                        {...(offsetBildInOverview && { style: { objectPosition: `center ${offsetBildInOverview}px` } })}
+                    />
                     <div style={gradientOverlayStyle}></div>
                 </div>
             )}

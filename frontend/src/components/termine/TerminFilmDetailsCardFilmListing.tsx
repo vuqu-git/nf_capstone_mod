@@ -20,7 +20,6 @@ export default function TerminFilmDetailsListing({
                                               }: Props) {
 
     const structuredStab = f.stab ? structureStabString(f.stab) : null;
-    console.log(structuredStab)
 
     return (
         <div>
@@ -49,7 +48,9 @@ export default function TerminFilmDetailsListing({
 
             {/* Check if image URL exists */}
             {f.bild && (
-                <Card.Img variant="top" src={`https://www.pupille.org/bilder/filmbilder/${f.bild}`} />
+                <Card.Img
+                    src={`https://www.pupille.org/bilder/filmbilder/${f.bild}`}
+                />
 
             )}
 
@@ -145,11 +146,11 @@ export default function TerminFilmDetailsListing({
 
                                 <table>
                                     <tbody>
-                                    {structuredStab.map( row => (
-                                        <tr key={row.abbrev}>
-                                            <td className="term">{render(row.abbrev)}</td>
-                                            <td>{render(row.entry)}</td>
-                                        </tr>
+                                    {/* CHANGED: Each <tr> is now on a single line, no whitespace between <tr> and <td> */}
+                                    {/*    The hydration error is caused by whitespace (including newlines) between <tr>, <td>, and other table elements in your JSX.*/}
+                                    {/*    In React, every space or newline between these tags becomes a text node, which is not allowed as a child of <tr>, <tbody>, etc.*/}
+                                    {structuredStab.map(row => (
+                                        <tr key={row.abbrev}><td className="term">{render(row.abbrev)}</td><td>{render(row.entry)}</td></tr> // CHANGED
                                     ))}
                                     </tbody>
                                 </table>
@@ -194,14 +195,14 @@ export default function TerminFilmDetailsListing({
 
                                     <table>
                                         <tbody>
-                                        {f.land && <tr><td className="term" style={{ margin: '0', padding: '0' }}>Land</td> <td style={{ margin: '0', padding: '0' }}>{f.land}</td></tr>}
-                                        {f.jahr && <tr><td className="term">Jahr</td> <td>{f.jahr}</td></tr>}
-                                        {f.laufzeit && <tr><td className="term">Länge</td> <td>{f.laufzeit} min</td></tr>}
-                                        {f.sprache && <tr><td className="term">Sprache</td> <td>{f.sprache}</td></tr>}
-                                        {f.untertitel && <tr><td className="term">Untertitel</td> <td>{f.untertitel}</td></tr>}
-                                        {f.farbe && <tr><td className="term">Farbigkeit</td> <td>{f.farbe}</td></tr>}
-                                        {f.format && <tr><td className="term">Format</td> <td>{f.format}</td></tr>}
-                                        {f.fsk && <tr><td className="term">FSK</td> <td>{f.fsk}</td></tr>}
+                                        {f.land && <tr><td className="term" style={{ margin: '0', padding: '0' }}>Land</td><td style={{ margin: '0', padding: '0' }}>{f.land}</td></tr>}
+                                        {f.jahr && <tr><td className="term">Jahr</td><td>{f.jahr}</td></tr>}
+                                        {f.laufzeit && <tr><td className="term">Länge</td><td>{f.laufzeit} min</td></tr>}
+                                        {f.sprache && <tr><td className="term">Sprache</td><td>{f.sprache}</td></tr>}
+                                        {f.untertitel && <tr><td className="term">Untertitel</td><td>{f.untertitel}</td></tr>}
+                                        {f.farbe && <tr><td className="term">Farbigkeit</td><td>{render(f.farbe)}</td></tr>}
+                                        {f.format && <tr><td className="term">Format</td><td>{f.format}</td></tr>}
+                                        {f.fsk && <tr><td className="term">FSK</td><td>{f.fsk}</td></tr>}
                                         </tbody>
                                     </table>
                                 </div>

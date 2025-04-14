@@ -69,7 +69,7 @@ export default function TerminFilmDetailsCard({
                 <Card.Title
                     as="h2"
                     style={{
-                        color: '#fff',
+                        color: '#FFD036',
                         marginTop: '1.5rem',
                         marginBottom: '2rem'
                     }}

@@ -52,9 +52,9 @@ export const useAllNews = (shouldFetchDetails: boolean = true) => {
             .finally(() => setIsLoading(false));
     };
 
-    useEffect(() => {
-        getAllNews();
-    }, []);
+    // useEffect(() => {
+    //     getAllNews();
+    // }, []);
 
     useEffect(() => {
         getSingleNews(selectedId);

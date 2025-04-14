@@ -16,44 +16,43 @@ import ScreeningDetails from "./components/ScreeningDetails.tsx";
 
 function App() {
 
+    return (
 
-  return (
+        <div className="app-container">
+            {/* outside Routes and hence Header is always displayed */}
+            <Header />
+            <main className="main-content">
+                <Container>
+                    <Row className="justify-content-center"> {/* Center the content */}
+                        {/*<Col md={8} lg={8}> /!* Adjust the column widths for different screen sizes *!/*/}
+                        <Col md={7} > {/* Adjust the column widths for different screen sizes */}
 
-      <div className="app-container">
-          {/* outside Routes and hence Header is always displayed */}
-          <Header />
-          <main className="main-content">
-              <Container>
-                  <Row className="justify-content-center"> {/* Center the content */}
-                      {/*<Col md={8} lg={8}> /!* Adjust the column widths for different screen sizes *!/*/}
-                      <Col md={7} > {/* Adjust the column widths for different screen sizes */}
+                            <Routes>
+                                <Route path="/" element={<Overview />} />
 
-                  <Routes>
-                      <Route path="/" element={<Overview />} />
-
-                      <Route path="/addnews" element={<AddNews />} />
-                      <Route path="/editnews" element={<EditDeleteNews />} />
-                      <Route path="/deletenews" element={<EditDeleteNews />} />
+                                <Route path="/addnews" element={<AddNews />} />
+                                <Route path="/editnews" element={<EditDeleteNews />} />
+                                <Route path="/deletenews" element={<EditDeleteNews />} />
 
 
-                      <Route path="/adminfilme" element={<FilmForm />} />
-                      <Route path="/admintermine" element={<TerminForm />} />
-                      <Route path="/admintven" element={<TerminverknuepfungForm />} />
+                                <Route path="/adminfilme" element={<FilmForm />} />
+                                <Route path="/admintermine" element={<TerminForm />} />
+                                <Route path="/admintven" element={<TerminverknuepfungForm />} />
 
-                      <Route path="/dtpicker" element={<DTpicker />} />
+                                <Route path="/dtpicker" element={<DTpicker />} />
 
-                      <Route path="/details/:tnr" element={<ScreeningDetails />} />
-                      <Route path="/details" element={<ScreeningDetails />} />
+                                <Route path="/details/:tnr" element={<ScreeningDetails />} />
+                                <Route path="/details" element={<ScreeningDetails />} />
 
-                  </Routes>
+                            </Routes>
 
-                      </Col>
-                  </Row>
+                        </Col>
+                    </Row>
 
-              </Container>
-          </main>
-      </div>
-  )
+                </Container>
+            </main>
+        </div>
+    )
 }
 
 export default App

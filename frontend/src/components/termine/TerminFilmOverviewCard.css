@@ -119,10 +119,16 @@
 .duration-box {
     display: inline-block;
     /*margin-top: 10px;*/
-    color: #FFD036;
+    /*color: #FFD036;*/
+    /*color: #dc2f02;*/
+    /*color: #197278;*/
+    color: #40E0D0;
     padding: 5px;
     border-radius: 5px;
-    border: 1px solid #FFD036;
+    /*border: 1px solid #FFD036;*/
+    /*border: 1px solid #dc2f02;*/
+    /*border: 1px solid #197278;*/
+    border: 1px solid #40E0D0;
 
     font-size: 12px;
 }
@@ -136,10 +142,12 @@
     overflow: hidden; /* Hide parts of the image that go outside the container */
     width: 100%; /* Adjust as needed, e.g., a fixed width or percentage */
     /* Set your desired aspect ratio here. For a 16:9 ratio: */
-    padding-top: 56.25%; /* (height/width * 100) = (9/16 * 100) */
+
+    padding-top: 52.25%;
     /* For a 4:3 ratio: padding-top: 75%; */
     /* For a 1:1 ratio (square): padding-top: 100%; */
 
+    /*padding-top: 56.25%; !* (height/width * 100) = (9/16 * 100) *!*/
     /*padding-top: 42.55%; !* (height/width * 100) = (1/2,35 * 100) Cinema Scope*!*/
 }
 
