@@ -88,14 +88,7 @@ export default function TerminverknuepfungForm() {
         }
     }, [selectedTVId]);
 
-    // Handle form field changes
-    // const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    //     const { name, value } = e.target;
-    //     setSelectedTV((prevData: Terminverknuepfung) => ({
-    //         ...prevData,
-    //         [name]: value,
-    //     }));
-    // };
+    // Handle form field changes, with distinguishing between checked and value
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, type } = e.target;
         setSelectedTV((prevData: Terminverknuepfung) => ({

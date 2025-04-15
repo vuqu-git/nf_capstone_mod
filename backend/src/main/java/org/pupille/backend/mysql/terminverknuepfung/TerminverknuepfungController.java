@@ -65,7 +65,7 @@ public class TerminverknuepfungController {
         return ResponseEntity.noContent().build();
     }
 
-    //    ###############################################
+    // ###############################################
 
     // this is the usual add function for new Terminverknuepfung, but because of the relationships of
     // Terminverknuepfung entity, there a various versions of this add function, version here: link between existing Film and existing Termin
@@ -77,6 +77,14 @@ public class TerminverknuepfungController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    @GetMapping("/new")
+    public ResponseEntity<List<TVwithFilmAndTerminDTOSelection>> getTVwithFilmAndTermin() {
+        List<TVwithFilmAndTerminDTOSelection> result = terminverknuepfungService.getAllTVwithFilmAndTermin();
+        return ResponseEntity.ok(result);
     }
 
 }

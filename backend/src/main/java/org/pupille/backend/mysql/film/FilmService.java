@@ -51,23 +51,23 @@ public class FilmService {
                                 .collect(Collectors.toList());
     }
 
-    //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-    // utils function
-    public static String extractDirectors(String input) {
-        if (input == null || input.isEmpty()) {
-            return ""; // Handle null or empty input
-        }
+            //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+            // utils function
+            public static String extractDirectors(String input) {
+                if (input == null || input.isEmpty()) {
+                    return ""; // Handle null or empty input
+                }
 
-        Pattern pattern = Pattern.compile(": (.*?)(?=\\r|$)");
-        Matcher matcher = pattern.matcher(input);
+                Pattern pattern = Pattern.compile(": (.*?)(?=\\r|$)");
+                Matcher matcher = pattern.matcher(input);
 
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        } else {
-            return "";
-        }
-    }
-    //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+                if (matcher.find()) {
+                    return matcher.group(1).trim();
+                } else {
+                    return "";
+                }
+            }
+            //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
     // Retrieve a specific film by ID
     public Optional<FilmDTOForm> getFilmById(Long id) {
