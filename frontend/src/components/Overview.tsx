@@ -9,8 +9,18 @@ import TerminDTOWithFilmDTOOverviews from "../types/TerminDTOWithFilmDTOOverview
 import { formatDateTime } from '../utils/DateTimeFormatForOverview.ts';
 import TerminFilmOverviewCard from "./termine/TerminFilmOverviewCard.tsx";
 
+import './Overview.css';
+
+
 
 export default function Overview() {
+
+
+
+    const [readyToRender, setReadyToRender] = useState(false);
+    // ~~~~~~~~~~~~~~
+
+
 
     const {
         isLoadingAllNews,
@@ -62,11 +72,91 @@ export default function Overview() {
 
     useEffect(() => {
         getValidNews();
-
         getScreeningOverviewEntries();
     }, [])
 
+
+    // scroll tracking logic
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    useEffect(() => {
+        const saveScrollPosition = () => {
+            // Only store if user has scrolled down s, not on every scroll event (including those at 0)
+            if (window.scrollY > 0) { // this is really important!!!
+                sessionStorage.setItem('overviewScroll', window.scrollY.toString());
+                console.log("Saved Y-position:", window.scrollY);
+            }
+        };
+
+        window.addEventListener('scroll', saveScrollPosition);
+
+        return () => {
+            window.removeEventListener('scroll', saveScrollPosition);
+        };
+    }, []);
+
+
+    // scroll restoration logic
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // useEffect(() => {
+    //     const storedY = sessionStorage.getItem('overviewScroll');
+    //
+    //     if (!isLoadingNews && !isLoadingScreenings) {
+    //         const scrollY = storedY ? parseInt(storedY) : 0;
+    //
+    //         // Delay until DOM height is long enough to scroll
+    //         const checkAndScroll = () => {
+    //             if (document.body.scrollHeight < scrollY + window.innerHeight) {
+    //                 // Wait a bit and try again
+    //                 setTimeout(checkAndScroll, 50);
+    //                 return;
+    //             }
+    //
+    //             // Now it's safe to scroll
+    //             window.scrollTo(0, scrollY);
+    //
+    //             // Now reveal the page
+    //             setReadyToRender(true);
+    //         };
+    //
+    //         checkAndScroll();
+    //     }
+    // }, [isLoadingNews, isLoadingScreenings]);
+
+    useEffect(() => {
+        const storedY = sessionStorage.getItem('overviewScroll');
+
+        if (!isLoadingNews && !isLoadingScreenings) {
+            const scrollY = storedY ? parseInt(storedY) : 0;
+
+            const checkAndScroll = () => {
+                if (document.body.scrollHeight < scrollY + window.innerHeight) {
+                    setTimeout(checkAndScroll, 50);
+                    return;
+                }
+
+                // ✅ Smooth scroll here
+                window.scrollTo({
+                    top: scrollY,
+                    behavior: 'smooth',
+                });
+
+                // ✅ Optional: delay reveal just a bit to match scroll speed
+                setTimeout(() => setReadyToRender(true), 350); // Adjust if needed
+            };
+
+            checkAndScroll();
+        }
+    }, [isLoadingNews, isLoadingScreenings]);
+
+
     return (
+        // <div style={{ visibility: readyToRender ? 'visible' : 'hidden' }}>
+
+        // adjust the time duration here if needed
+        <div style={{
+            opacity: readyToRender ? 1 : 0,
+            transition: 'opacity 0.4s ease-in-out'
+        }}>
             <>
                 {/*<h1>Welcome to Pupille</h1>*/}
                 {/*<p>*/}
@@ -88,10 +178,11 @@ export default function Overview() {
                 {/*</section>*/}
 
                 <section>
-                    {   isLoadingNews ? (
-                            <div className="text-warning mb-3">&#x1f4f0; Loading news...</div>
-                        ) :
-                        validNews && (
+                    {
+                        // isLoadingNews ? (
+                        //     <div className="text-warning mb-3">&#x1f4f0; Loading news...</div>
+                        // ) :
+                        validNews && screeningOverviewEntries && (
                             <>
                                 {/*<h3 style={{paddingTop: '2rem', paddingBottom: '2rem'}}>Neuigkeiten</h3>*/}
                                 {validNews.map(n => (
@@ -105,10 +196,11 @@ export default function Overview() {
 
 
                 <section>
-                    {isLoadingScreenings ? (
-                        <div className="text-warning mb-3">&#127902; Loading screenings...</div>
-                    ) : (
-                        screeningOverviewEntries && (
+                    {
+                    //     isLoadingScreenings ? (
+                    //     <div className="text-warning mb-3">&#127902; Loading screenings...</div>
+                    // ) : (
+                        validNews && screeningOverviewEntries && (
                             <>
                                 {/*<h3>Programm</h3>*/}
                                 {screeningOverviewEntries.map(termin => {
@@ -176,10 +268,15 @@ export default function Overview() {
                                 })}
                             </>
                         )
-                    )}
+                    // )
+                    }
                 </section>
 
             </>
 
+        </div>
+
     );
+
+
 }
