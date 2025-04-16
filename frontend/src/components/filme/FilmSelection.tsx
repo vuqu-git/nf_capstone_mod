@@ -4,11 +4,11 @@ import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 
 interface FilmSelectionProps {
     films: FilmDTOSelection[];
-    selectedFilmId: number | null;
-    onSelectFilm: (id: number | null) => void;
+    selectedFilmId: number | undefined;
+    onSelectFilm: (id: number  | undefined) => void;
 }
 
-const formatFilmDetails = (titel: string | undefined, stab: string | null | undefined, jahr: number | null | undefined): string => {
+const formatFilmDetails = (titel: string | null | undefined, stab: string | null | undefined, jahr: number | null | undefined): string => {
     let details = "";
     let titleWithSpace = titel;
 
@@ -36,7 +36,7 @@ const formatFilmDetails = (titel: string | undefined, stab: string | null | unde
 export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: FilmSelectionProps) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onSelectFilm(Number(e.target.value) || null);
+        onSelectFilm(Number(e.target.value) || undefined);
     }
 
     return (
@@ -46,7 +46,7 @@ export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: F
                 id="film-selection" // Add id to connect to the label
                 value={selectedFilmId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
-                style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
+                // style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
             >
                 <option value="">Select a film to edit (or leave empty to add new)</option>
                 {films.map((film) => (

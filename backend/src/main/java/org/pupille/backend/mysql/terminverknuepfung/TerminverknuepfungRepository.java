@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TerminverknuepfungRepository extends JpaRepository<Terminverknuepfung, Terminverknuepfung.TerminverknuepfungId> {
@@ -25,5 +26,23 @@ public interface TerminverknuepfungRepository extends JpaRepository<Terminverknu
 
     @Query("SELECT tv FROM Terminverknuepfung tv JOIN FETCH tv.film JOIN FETCH tv.termin ORDER BY tv.tnr DESC")
     List<Terminverknuepfung> findAllWithFilmAndTermin();
+
+    @Query("SELECT tv FROM Terminverknuepfung tv " +
+            "JOIN FETCH tv.film " +
+            "JOIN FETCH tv.termin " +
+            "WHERE tv.tnr = :tnr AND tv.fnr = :fnr")
+    Optional<Terminverknuepfung> findWithFilmAndTerminByTnrAndFnr(
+            @Param("tnr") Long tnr,
+            @Param("fnr") Long fnr
+    );
+
+
+    @Query("SELECT tv FROM Terminverknuepfung tv " +
+            "JOIN FETCH tv.film " +
+            "JOIN FETCH tv.termin " +
+            "ORDER BY tv.termin.termin DESC")
+    List<Terminverknuepfung> findAllWithFilmAndTerminOrderByTerminDesc();
+
+
 
 }

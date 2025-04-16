@@ -25,7 +25,7 @@ const emptyTerminForForm = {
 
 export default function TerminForm() {
     const [allTermine, setAllTermine] = useState<TerminDTOSelection[]>([]); // All Termine fetched from the server
-    const [selectedTerminId, setSelectedTerminId] = useState<number | null>(null); // Selected Termin for editing or deleting
+    const [selectedTerminId, setSelectedTerminId] = useState<number | undefined>(undefined); // Selected Termin for editing or deleting
     const [selectedTermin, setSelectedTermin] = useState<Termin>(emptyTerminForForm); // Termin data for the form
 
     const [errorMessage, setErrorMessage] = useState<string>("");

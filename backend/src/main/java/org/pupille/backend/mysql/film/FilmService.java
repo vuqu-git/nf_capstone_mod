@@ -53,19 +53,60 @@ public class FilmService {
 
             //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
             // utils function
-            public static String extractDirectors(String input) {
-                if (input == null || input.isEmpty()) {
-                    return ""; // Handle null or empty input
+//            public static String extractDirectors(String input) {
+//                if (input == null || input.isEmpty()) {
+//                    return ""; // Handle null or empty input
+//                }
+//
+//                Pattern pattern = Pattern.compile(": (.*?)(?=\\r|$)");
+//                Matcher matcher = pattern.matcher(input);
+//
+//                if (matcher.find()) {
+//                    return matcher.group(1).trim();
+//                } else {
+//                    return "";
+//                }
+//            }
+            public static String extractDirectors(String stab) {
+                if (stab == null || stab.isEmpty()) return "";
+
+                // Normalize line endings
+                String[] lines = stab.replace("\r\n", "\n").replace('\r', '\n').split("\n");
+
+                // List of possible director field prefixes (add more as needed)
+                String[] directorPrefixes = {
+                        "Regie:", "R:", "R, B&S:", "B,R&amp;S:", "R&S:", "R&amp;S:", "B&R:", "B&amp;R:", "B,R&S:","B,R&amp;S:", "B,R&K:", "B,R&amp;K:", "B,R:", "Buch & Regie:", "Buch &amp; Regie:", "Buch und Regie:",
+                        "Buch, Regie & Produktion:", "Buch, Regie &amp; Produktion:", "B&R&S:" , "B&amp;R&amp;S:", "B&R&K:" , "B&amp;R&amp;K:", "B&R&K&S:" , "B&amp;R&amp;K&amp;S:", "B,R&K&S:", "B,R&amp;K&amp;S:", "B,R&K:" , "B,R&amp;K:", "B,R:", "B&R:", "B&amp;R:", "Buch, Regie:"
+                };
+
+                for (String line : lines) {
+                    String trimmed = line.trim();
+                    for (String prefix : directorPrefixes) {
+                        if (trimmed.startsWith(prefix)) {
+                            // Extract after prefix and trim
+                            return trimmed.substring(prefix.length()).trim();
+                        }
+                    }
                 }
 
-                Pattern pattern = Pattern.compile(": (.*?)(?=\\r|$)");
-                Matcher matcher = pattern.matcher(input);
-
-                if (matcher.find()) {
-                    return matcher.group(1).trim();
-                } else {
-                    return "";
+                // Fallback: try to match "R:" at the start of any line
+                for (String line : lines) {
+                    String trimmed = line.trim();
+                    if (trimmed.startsWith("R:")) {
+                        return trimmed.substring(2).trim();
+                    }
                 }
+
+                // Fallback: try to match "Regie:" at the start of any line
+                for (String line : lines) {
+                    String trimmed = line.trim();
+                    if (trimmed.startsWith("Regie:")) {
+                        return trimmed.substring(6).trim();
+                    }
+                }
+
+                // If nothing found, return null
+                return null;
             }
             //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 

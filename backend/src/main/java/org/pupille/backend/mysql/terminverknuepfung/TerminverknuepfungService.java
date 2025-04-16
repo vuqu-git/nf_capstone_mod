@@ -2,20 +2,17 @@ package org.pupille.backend.mysql.terminverknuepfung;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.pupille.backend.mysql.film.Film;
-import org.pupille.backend.mysql.film.FilmDTOSelection;
 import org.pupille.backend.mysql.film.FilmRepository;
 import org.pupille.backend.mysql.termin.Termin;
-import org.pupille.backend.mysql.termin.TerminProjectionSelection;
 import org.pupille.backend.mysql.termin.TerminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -156,51 +153,6 @@ public class TerminverknuepfungService {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-            // utils function
-            public static String extractDirectors(String stab) {
-                if (stab == null || stab.isEmpty()) return "";
-
-                // Normalize line endings
-                String[] lines = stab.replace("\r\n", "\n").replace('\r', '\n').split("\n");
-
-                // List of possible director field prefixes (add more as needed)
-                String[] directorPrefixes = {
-                        "Regie:", "R:", "R, B&S:", "B,R&amp;S:", "B&R:", "B&amp;R:", "B,R&S:","B,R&amp;S:", "B,R&K:", "B,R&amp;K:", "B,R:", "Buch & Regie:", "Buch &amp; Regie:", "Buch und Regie:",
-                        "Buch, Regie & Produktion:", "Buch, Regie &amp; Produktion:", "B&R&S:" , "B&amp;R&amp;S:", "B&R&K:" , "B&amp;R&amp;K:", "B&R&K&S:" , "B&amp;R&amp;K&amp;S:", "B,R&K&S:", "B,R&amp;K&amp;S:", "B,R&K:" , "B,R&amp;K:", "B,R:", "B&R:", "B&amp;R:", "Buch, Regie:"
-                };
-
-                for (String line : lines) {
-                    String trimmed = line.trim();
-                    for (String prefix : directorPrefixes) {
-                        if (trimmed.startsWith(prefix)) {
-                            // Extract after prefix and trim
-                            return trimmed.substring(prefix.length()).trim();
-                        }
-                    }
-                }
-
-                // Fallback: try to match "R:" at the start of any line
-                for (String line : lines) {
-                    String trimmed = line.trim();
-                    if (trimmed.startsWith("R:")) {
-                        return trimmed.substring(2).trim();
-                    }
-                }
-
-                // Fallback: try to match "Regie:" at the start of any line
-                for (String line : lines) {
-                    String trimmed = line.trim();
-                    if (trimmed.startsWith("Regie:")) {
-                        return trimmed.substring(6).trim();
-                    }
-                }
-
-                // If nothing found, return null
-                return null;
-            }
-            //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-
 //    public List<TVwithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
 //        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllWithFilmAndTermin();
 //        return terminverknuepfungen.stream()
@@ -208,39 +160,63 @@ public class TerminverknuepfungService {
 //                .collect(Collectors.toList());
 //    }
 
-    public List<TVwithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
-        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllWithFilmAndTermin();
-
-        return terminverknuepfungen.stream()
-                .map(tv -> {
-                    Film film = tv.getFilm();
-                    Termin termin = tv.getTermin();
-
-                    // Create processed FilmDTOSelection
-                    FilmDTOSelection filmDTO = new FilmDTOSelection(
-                            film.getFnr(),
-                            film.getTitel(),
-                            film.getJahr(),
-                            extractDirectors(film.getStab())  // Apply processing
-                    );
-
-                    // Create Termin projection
-                    TerminProjectionSelection terminProjection = new TerminProjectionSelection() {
-                        @Override public Long getTnr() { return termin.getTnr(); }
-                        @Override public LocalDateTime getTermin() { return termin.getTermin(); }
-                        @Override public String getTitel() { return termin.getTitel(); }
-                    };
-
-                    return new TVwithFilmAndTerminDTOSelection(
-                            tv.getTnr(),
-                            tv.getFnr(),
-                            tv.getVorfilm(),
-                            tv.getRang(),
-                            filmDTO,
-                            terminProjection
-                    );
-                })
+//    public List<TVwithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
+//        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllWithFilmAndTermin();
+//
+//        return terminverknuepfungen.stream()
+//                .map(tv -> {
+//                    Film film = tv.getFilm();
+//                    Termin termin = tv.getTermin();
+//
+//                    // Create processed FilmDTOSelection
+//                    FilmDTOSelection filmDTO = new FilmDTOSelection(
+//                            film.getFnr(),
+//                            film.getTitel(),
+//                            film.getJahr(),
+//                            extractDirectors(film.getStab())  // Apply processing
+//                    );
+//
+//                    // Create Termin projection
+//                    TerminProjectionSelection terminProjection = new TerminProjectionSelection() {
+//                        @Override public Long getTnr() { return termin.getTnr(); }
+//                        @Override public LocalDateTime getTermin() { return termin.getTermin(); }
+//                        @Override public String getTitel() { return termin.getTitel(); }
+//                    };
+//
+//                    return new TVwithFilmAndTerminDTOSelection(
+//                            tv.getTnr(),
+//                            tv.getFnr(),
+//                            tv.getVorfilm(),
+//                            tv.getRang(),
+//                            filmDTO,
+//                            terminProjection
+//                    );
+//                })
+//                .collect(Collectors.toList());
+//    }
+    public List<TVWithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
+        return terminverknuepfungRepository.findAllWithFilmAndTermin()
+                .stream()
+                .map(TVWithFilmAndTerminDTOSelection::new)
                 .collect(Collectors.toList());
     }
+
+    public TVWithFilmAndTerminDTOSelection getTVwithFilmAndTerminbyTnrAndFnr(Long tnr, Long fnr) {
+        return terminverknuepfungRepository.findWithFilmAndTerminByTnrAndFnr(tnr, fnr)
+                .map(TVWithFilmAndTerminDTOSelection::new)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Terminverknüpfung not found with tnr: " + tnr + " and fnr: " + fnr
+                ));
+    }
+
+    public List<TVWithFilmAndTerminDTOSelection> getAllTVwithFilmAndTerminSortedByTermin() {
+        return terminverknuepfungRepository.findAllWithFilmAndTerminOrderByTerminDesc()
+                .stream()
+                .map(TVWithFilmAndTerminDTOSelection::new)
+                .collect(Collectors.toList());
+    }
+
+
 
 }

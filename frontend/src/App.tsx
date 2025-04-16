@@ -13,6 +13,7 @@ import TerminForm from "./components/termine/TerminForm.tsx";
 import DTpicker from "./components/termine/DTpicker.tsx";
 import TerminverknuepfungForm from "./components/terminverkuepfungen/TerminverknuepfungForm.tsx";
 import ScreeningDetails from "./components/ScreeningDetails.tsx";
+import TerminverknuepfungFormNew from "./components/terminverkuepfungen/TerminverknuepfungFormNew.tsx";
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
                                 <Route path="/adminfilme" element={<FilmForm />} />
                                 <Route path="/admintermine" element={<TerminForm />} />
                                 <Route path="/admintven" element={<TerminverknuepfungForm />} />
+                                <Route path="/admintvennew" element={<TerminverknuepfungFormNew />} />
 
                                 <Route path="/dtpicker" element={<DTpicker />} />
 

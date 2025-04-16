@@ -224,7 +224,7 @@ export default function Overview() {
                                                     screeningTime={screeningDateObj ? screeningDateObj.time : null}
                                                     screeningSonderfarbe={"red-glow"}
                                                     // bild={termin.films[0]?.bild}
-                                                    bild={termin.films[0].bild ? termin.films[0].bild : null}
+                                                    bild={termin.films[0]?.bild ? termin.films[0]?.bild : null}
                                                     offsetBildInOverview={undefined} // instead of undefine, insert a negative number x for pushing the image x pixels up
                                                     titel={termin.titel}
                                                     kurztext={termin.kurztext ? termin.kurztext : null}
@@ -251,7 +251,7 @@ export default function Overview() {
                                                     screeningDate={screeningDateObj ? screeningDateObj.date : ""}
                                                     screeningTime={screeningDateObj ? screeningDateObj.time : ""}
                                                     screeningSonderfarbe={"pupille-glow"}
-                                                    bild={termin.films[0].bild ? termin.films[0].bild : null}
+                                                    bild={termin.films[0]?.bild ? termin.films[0]?.bild : null}
                                                     offsetBildInOverview={undefined} // instead of undefine, insert a negative number x for pushing the image x pixels up
                                                     titel={termin.films[0]?.titel ? termin.films[0]?.titel : null}
                                                     kurztext={termin.films[0]?.kurztext ? termin.films[0]?.kurztext : null}

@@ -1,5 +1,6 @@
 package org.pupille.backend.mysql.screening;
 
+import org.pupille.backend.mysql.film.Film;
 import org.pupille.backend.mysql.film.FilmDTOForm;
 import org.pupille.backend.mysql.termin.Termin;
 import org.pupille.backend.mysql.termin.TerminDTOForm;
@@ -65,34 +66,73 @@ public class ScreeningService {
 //                .toList();
 //    }
 
+//    public List<TerminDTOWithFilmDTOOverviews> getFutureTermineWithFilms() {
+//        // Use a fixed time to avoid Termine disappearing immediately after their screening DateTime
+//        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+//        LocalTime fixedTime = LocalTime.of(0, 1);
+//        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+//
+//        // 1. Get future Termine
+//        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+//
+//        // 2. Get related films in batch
+//        List<Long> terminIds = futureTermine.stream()
+//                .map(Termin::getTnr)
+//                .toList();
+//
+//        // Fetch connections with films for the relevant Termine
+//        List<Terminverknuepfung> connections = terminverknuepfungRepository
+//                .findWithFilmsByTerminIds(terminIds);
+//
+//        // 3. Map to DTO, filtering out films where vorfilm is true
+//        return futureTermine.stream()
+//                .map(termin -> new TerminDTOWithFilmDTOOverviews(
+//                        termin,
+//                        connections.stream()
+//                                .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+//                                .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm()) // Include only if vorfilm is null or false
+//                                .map(Terminverknuepfung::getFilm)
+//                                .toList()
+//                ))
+//                .toList();
+//    }
+
+    //leere Filmliste, wenn termin.titel present ist
     public List<TerminDTOWithFilmDTOOverviews> getFutureTermineWithFilms() {
-        // Use a fixed time to avoid Termine disappearing immediately after their screening DateTime
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
 
-        // 1. Get future Termine
         List<Termin> futureTermine = terminRepository.findFutureTermine(now);
 
-        // 2. Get related films in batch
         List<Long> terminIds = futureTermine.stream()
                 .map(Termin::getTnr)
                 .toList();
 
-        // Fetch connections with films for the relevant Termine
         List<Terminverknuepfung> connections = terminverknuepfungRepository
                 .findWithFilmsByTerminIds(terminIds);
 
-        // 3. Map to DTO, filtering out films where vorfilm is true
         return futureTermine.stream()
-                .map(termin -> new TerminDTOWithFilmDTOOverviews(
-                        termin,
-                        connections.stream()
+                .map(termin -> {
+                    // Check if titel exists (not null/empty)
+                    if (termin.getTitel() != null && !termin.getTitel().isBlank()) {
+                        return new TerminDTOWithFilmDTOOverviews(
+                                termin,
+                                List.of() // Empty films list when titel is present
+                        );
+                    } else {
+                        // Include films only when titel is absent
+                        List<Film> films = connections.stream()
                                 .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
-                                .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm()) // Include only if vorfilm is null or false
+                                .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
                                 .map(Terminverknuepfung::getFilm)
-                                .toList()
-                ))
+                                .toList();
+                        return new TerminDTOWithFilmDTOOverviews(
+                                termin,
+                                films
+                        );
+                    }
+                })
                 .toList();
     }
 

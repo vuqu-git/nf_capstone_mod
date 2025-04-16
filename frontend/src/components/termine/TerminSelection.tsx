@@ -5,11 +5,11 @@ import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 
 interface TerminSelectionProps {
     termine: TerminDTOSelection[];
-    selectedTerminId: number | null;
-    onSelectTermin: (id: number | null) => void;
+    selectedTerminId: number | undefined;
+    onSelectTermin: (id: number | undefined) => void;
 }
 
-function formatDate(dateString: string | undefined): string {
+function formatDate(dateString: string | null | undefined): string {
     if (!dateString) {
         return "Invalid date"; // Handle undefined or null dates gracefully
     }
@@ -30,7 +30,7 @@ function formatDate(dateString: string | undefined): string {
 export default function TerminSelection({ termine, selectedTerminId, onSelectTermin }: TerminSelectionProps) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onSelectTermin(Number(e.target.value) || null);
+        onSelectTermin(Number(e.target.value) || undefined);
     }
 
     return (
@@ -40,7 +40,7 @@ export default function TerminSelection({ termine, selectedTerminId, onSelectTer
                 id="termin-selection" // Add id to connect to the label
                 value={selectedTerminId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
-                style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
+                // style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
             >
                 <option value="">Select a Termin to edit (or leave empty to add new)</option>
                 {termine.map((t: TerminDTOSelection) => (

@@ -32,7 +32,7 @@ const emptyFilmForForm = {
 
 export default function FilmForm() {
     const [allFilms, setAllFilms] = useState<FilmDTOSelection[]>([]); // All films fetched from the server
-    const [selectedFilmId, setSelectedFilmId] = useState<number | null>(null); // Selected film for editing or deleting
+    const [selectedFilmId, setSelectedFilmId] = useState<number | undefined>(undefined); // Selected film for editing or deleting
     const [selectedFilm, setSelectedFilm] = useState<Film>(emptyFilmForForm); // Film data for the form
 
     const [errorMessage, setErrorMessage] = useState<string>("");

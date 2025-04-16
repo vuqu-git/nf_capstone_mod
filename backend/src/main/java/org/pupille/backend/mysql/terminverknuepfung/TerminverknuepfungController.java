@@ -19,19 +19,19 @@ public class TerminverknuepfungController {
         this.terminverknuepfungService = terminverknuepfungService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/plain/all")
     public ResponseEntity<List<TerminverknuepfungDTOSelection>> getAllTerminverknuepfung() {
         List<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getAllTerminverknuepfung();
         return ResponseEntity.ok(terminverknuepfungDTOSelection);
     }
 
-    @GetMapping
+    @GetMapping("/plain")
     public ResponseEntity<List<TerminverknuepfungDTOSelection>> getAllTVByOrderByTnrDesc() {
         List<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getAllTVByOrderByTnrDesc();
         return ResponseEntity.ok(terminverknuepfungDTOSelection);
     }
 
-    @GetMapping("/{tnr}/{fnr}")
+    @GetMapping("/plain/{tnr}/{fnr}")
     public ResponseEntity<TerminverknuepfungDTOSelection> getTerminverknuepfungById(@PathVariable Long tnr, @PathVariable Long fnr) {
         Terminverknuepfung.TerminverknuepfungId id = new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
         Optional<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getTerminverknuepfungById(id);
@@ -81,10 +81,26 @@ public class TerminverknuepfungController {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    @GetMapping("/new")
-    public ResponseEntity<List<TVwithFilmAndTerminDTOSelection>> getTVwithFilmAndTermin() {
-        List<TVwithFilmAndTerminDTOSelection> result = terminverknuepfungService.getAllTVwithFilmAndTermin();
+    @GetMapping()
+    public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getTVwithFilmAndTermin() {
+        List<TVWithFilmAndTerminDTOSelection> result = terminverknuepfungService.getAllTVwithFilmAndTermin();
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/{tnr}/{fnr}")
+    public ResponseEntity<TVWithFilmAndTerminDTOSelection> getTVbyIds(
+            @PathVariable Long tnr,
+            @PathVariable Long fnr
+    ) {
+        return ResponseEntity.ok(terminverknuepfungService.getTVwithFilmAndTerminbyTnrAndFnr(tnr, fnr));
+    }
+
+    @GetMapping("/terminsorted")
+    public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getAllTVSortedByTermin() {
+        return ResponseEntity.ok(
+                terminverknuepfungService.getAllTVwithFilmAndTerminSortedByTermin()
+        );
+    }
+
 
 }

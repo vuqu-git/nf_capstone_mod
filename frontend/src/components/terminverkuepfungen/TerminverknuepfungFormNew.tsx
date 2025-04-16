@@ -5,6 +5,13 @@ import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {Terminverknuepfung} from "../../types/Terminverknuepfung.ts";
 import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
+import {TVWithFilmAndTerminDTOSelection} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
+import TerminverknuepfungSelectionNew from "./TerminverknuepfungSelectionNew.tsx";
+import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
+import FilmSelection from "../filme/FilmSelection.tsx";
+import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
+import TerminSelection from "../termine/TerminSelection.tsx";
+import {formatDate} from "react-datetime-picker/dist/cjs/shared/dateFormatter";
 
 
 const baseURL = "/api/terminverknuepfung";
@@ -14,16 +21,19 @@ const emptyTVForForm = {
     fnr: 0,
     vorfilm: undefined,
     rang: undefined,
+
+    film: {titel: '', jahr: undefined, directors: ""},
+    termin: {termin: "", titel: ""},
 }
 
-export default function TerminverknuepfungForm() {
-    const [allTVs, setAllTVs] = useState<Terminverknuepfung[]>([]); // All Termine fetched from the server
+export default function TerminverknuepfungFormNew() {
+    const [allTVs, setAllTVs] = useState<TVWithFilmAndTerminDTOSelection[]>([]); // All Termine fetched from the server
 
     const [selectedTVId, setSelectedTVId] = useState<string | null>(null); // Selected TVId (as concatenated string) for editing or deleting
     // const [selectedTVTNR, setSelectedTVTNR] = useState<number | null>(null); // Selected TVTNR for editing or deleting
     // const [selectedTVFNR, setSelectedTVFNR] = useState<number | null>(null); // Selected TVFNR for editing or deleting
 
-    const [selectedTV, setSelectedTV] = useState<Terminverknuepfung>(emptyTVForForm); // Termin data for the form
+    const [selectedTV, setSelectedTV] = useState<TVWithFilmAndTerminDTOSelection>(emptyTVForForm); // Termin data for the form
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
@@ -39,7 +49,7 @@ export default function TerminverknuepfungForm() {
         // setIsLoading(true);
         setErrorMessage("");
 
-        axios.get(`${baseURL}/plain`)
+        axios.get(`${baseURL}/terminsorted`)
             .then((response) => setAllTVs(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -71,7 +81,7 @@ export default function TerminverknuepfungForm() {
 
                 const [tnr, fnr] = selectedTVId.split(',');
 
-                axios.get(`${baseURL}/plain/${tnr}/${fnr}`)
+                axios.get(`${baseURL}/${tnr}/${fnr}`)
                     .then((response) => setSelectedTV(response.data))
                     .catch((error) => {
                         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -91,10 +101,15 @@ export default function TerminverknuepfungForm() {
     // Handle form field changes, with distinguishing between checked and value
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, type } = e.target;
-        setSelectedTV((prevData: Terminverknuepfung) => ({
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
             ...prevData,
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
         }));
+
+
+
+
+
     };
 
 
@@ -175,28 +190,137 @@ export default function TerminverknuepfungForm() {
         }
     };
 
-    const handleTerminSelectionChange = (id: string | null) => {
+    const handleTVSelectionChange = (id: string | null) => {
         setSelectedTVId(id);
         setSelectionChanged(true); // Set flag when selection changes
     };
 
+    // lllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+    // GET all movies
+    const [allFilms, setAllFilms] = useState<FilmDTOSelection[]>([]);
+    const [selectedFilmId, setSelectedFilmId] = useState<number | undefined>(undefined);
+
+    const getAllFilms = () => {
+        setErrorMessage("");
+
+        axios.get(`api/filme/allsorted`)
+            .then((response) => setAllFilms(response.data))
+            .catch((error) => {
+                const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                setErrorMessage(errorMessage);
+            })
+    };
+
+    // Fetch all films for the dropdown selection
+    useEffect(() => {
+        getAllFilms();
+    }, []);
+
+    const handleFilmSelectionChange = (id: number | undefined) => {
+        setSelectedFilmId(id);
+
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
+            ...prevData,
+            fnr: id,
+        }));
+    };
+
+    // -----------------------------------------------------------
+    // GET all movies
+
+    const [allTermine, setAllTermine] = useState<TerminDTOSelection[]>([]);
+    const [selectedTerminId, setSelectedTerminId] = useState<number | undefined>(undefined);
+
+    // GET all termine
+    const getAllTermine = () => {
+        // setIsLoading(true);
+        setErrorMessage("");
+
+        axios.get(`api/termine/allsorted`)
+            .then((response) => setAllTermine(response.data))
+            .catch((error) => {
+                const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                setErrorMessage(errorMessage);
+            })
+        // .finally(() => setIsLoading(false));
+    };
+
+    // Fetch all termine for the dropdown selection
+    useEffect(() => {
+        getAllTermine();
+    }, []);
+
+    const handleTerminSelectionChange = (id: number | undefined) => {
+        setSelectedTerminId(id);
+
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
+            ...prevData,
+            tnr: id,
+        }));
+    };
+    // lllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+
     return (
         <div>
-            <h3 className="mt-3">{selectedTVId ? "Edit or delete " : "Add new "} Terminverknuepfung</h3>
+            <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and Termin"}</h3>
 
-            <TerminverknuepfungSelection
-                tven={allTVs}
+            <TerminverknuepfungSelectionNew
+                tvenFT={allTVs}
                 selectedTVId={selectedTVId}
-                onSelectTV={handleTerminSelectionChange}
+                onSelectTV={handleTVSelectionChange}
             />
 
             <div style={{ minHeight: '30px' }}>
                 {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading Termin details... Please wait!</div>}
             </div>
 
+
             <Form onSubmit={handleSubmit}>
 
                 <h3 className="mt-3">Terminverknuepfung form</h3>
+
+                {/*<FilmSelection*/}
+                {/*    films={allFilms}*/}
+                {/*    selectedFilmId={selectedFilmId}*/}
+                {/*    onSelectFilm={handleFilmSelectionChange}*/}
+                {/*/>*/}
+
+                <Form.Label htmlFor="film-selection">Film (fnr) selection</Form.Label>
+                <Form.Select
+                    id="film-selection" // Add id to connect to the label
+                    name="fnr" // // <-- Add name attribute here, so that the generic handleChange can access it
+                    value={selectedTV.fnr ?? ""}
+                    onChange={handleChange}
+                >
+                    <option value="">Select a film</option>
+                    {allFilms.map((film) => (
+                        <option key={film.fnr} value={film.fnr}>
+                            {`${film.titel} | #${film.fnr}`}
+                        </option>
+                    ))}
+                </Form.Select>
+
+                {/*<TerminSelection*/}
+                {/*    termine={allTermine}*/}
+                {/*    selectedTerminId={selectedTerminId}*/}
+                {/*    onSelectTermin={handleTerminSelectionChange}*/}
+                {/*/>*/}
+
+                <Form.Label htmlFor="termin-selection">Termin selection</Form.Label>
+                <Form.Select
+                    id="termin-selection" // Add id to connect to the label
+                    name="tnr" // <-- Add name attribute here, so that the generic handleChange can access it
+                    value={selectedTV.tnr ?? ""}
+                    onChange={handleChange}
+                >
+                    <option value="">Select a Termin</option>
+                    {allTermine.map((t: TerminDTOSelection) => (
+                        <option key={t.tnr} value={t.tnr}>
+                            {/*{`${formatDate(t.termin)}: ${t.titel} | #${t.tnr}`}*/}
+                            {`${t.termin} | #${t.tnr}`}
+                        </option>
+                    ))}
+                </Form.Select>
 
                 <Form.Group controlId="tnr" className="mt-3">
                     <Form.Label>tnr</Form.Label>
@@ -239,7 +363,7 @@ export default function TerminverknuepfungForm() {
                 </Form.Group>
 
                 <Button variant={selectedTVId ? "success" : "primary"} type="submit" className="mt-4">
-                    {selectedTVId ? "Update " : "Add "} termin entry
+                    {selectedTVId ? "Update " : "Add "} terminverknuepfung entry
                 </Button>
             </Form>
 
