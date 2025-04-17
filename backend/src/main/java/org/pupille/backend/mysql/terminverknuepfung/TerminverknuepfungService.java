@@ -31,12 +31,14 @@ public class TerminverknuepfungService {
         this.terminverknuepfungRepository = terminverknuepfungRepository;
     }
 
+
     public List<TerminverknuepfungDTOSelection> getAllTerminverknuepfung() {
         List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAll();
         return terminverknuepfungen.stream()
                 .map(TerminverknuepfungDTOSelection::new)
                 .collect(Collectors.toList());
     }
+
 
     public List<TerminverknuepfungDTOSelection> getAllTVByOrderByTnrDesc() {
         List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllByOrderByTnrDesc();
@@ -45,29 +47,69 @@ public class TerminverknuepfungService {
                 .collect(Collectors.toList());
     }
 
+
     public Optional<TerminverknuepfungDTOSelection> getTerminverknuepfungById(Terminverknuepfung.TerminverknuepfungId id) {
         return Optional.of( new TerminverknuepfungDTOSelection(terminverknuepfungRepository.findById(id).get()) );
     }
 
-//    // this simple saving doesn't work because of the relationships of Terminverknuepfung entity!
-//    public Terminverknuepfung saveTerminverknuepfung(Terminverknuepfung terminverknuepfung) {
-//        return terminverknuepfungRepository.save(terminverknuepfung);
+
+    // this simple saving doesn't work because of the relationships of Terminverknuepfung entity!
+    public Terminverknuepfung saveTerminverknuepfung(Terminverknuepfung terminverknuepfung) {
+        return terminverknuepfungRepository.save(terminverknuepfung);
+    }
+
+//    // this "traditional" update does not work, because in the update we want to change the composite key of tnr and fnr
+//    // when I pass the new tnr-fnr-pair the method terminverknuepfungRepository.findById(id) won't find it
+//    // beside, JPA (in the standard/default setting) doesn't allow changes in the primary key
+//    public TerminverknuepfungDTOSelection updateTerminverknuepfung(
+//                  Long tnr, Long fnr,
+//                  TerminverknuepfungDTOSelection updatingTV
+//    ) {
+//        Terminverknuepfung.TerminverknuepfungId id =
+//                new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
+//
+//        return terminverknuepfungRepository.findById(id)
+//                .map(existing -> {
+//                    existing.setVorfilm(updatingTV.vorfilm());
+//                    existing.setRang(updatingTV.rang());
+//                    Terminverknuepfung updated = terminverknuepfungRepository.save(existing);
+//                    return new TerminverknuepfungDTOSelection(updated);
+//                })
+//                .orElseThrow(() -> new EntityNotFoundException(
+//                        "Terminverknuepfung not found with tnr: " + tnr + " and fnr: " + fnr));
 //    }
 
-    public TerminverknuepfungDTOSelection updateTerminverknuepfung(Long tnr, Long fnr, TerminverknuepfungDTOSelection updatingTV) {
-        Terminverknuepfung.TerminverknuepfungId id =
-                new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
+    @Transactional
+    public TerminverknuepfungDTOSelection updateTerminverknuepfung(
+            Long oldTnr, Long oldFnr,
+            TerminverknuepfungDTOSelection newTV
+    ) {
+        // 1. Delete the old entity
+        Terminverknuepfung.TerminverknuepfungId oldId =
+                new Terminverknuepfung.TerminverknuepfungId(oldTnr, oldFnr);
+        if (!terminverknuepfungRepository.existsById(oldId)) {
+            throw new EntityNotFoundException("No Terminverknuepfung found for old key");
+        }
+        terminverknuepfungRepository.deleteById(oldId);
 
-        return terminverknuepfungRepository.findById(id)
-                .map(existing -> {
-                    existing.setVorfilm(updatingTV.vorfilm());
-                    existing.setRang(updatingTV.rang());
-                    Terminverknuepfung updated = terminverknuepfungRepository.save(existing);
-                    return new TerminverknuepfungDTOSelection(updated);
-                })
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Terminverknuepfung not found with tnr: " + tnr + " and fnr: " + fnr));
+        // 2. Create and save the new entity
+        Film film = filmRepository.findById(newTV.fnr())
+                .orElseThrow(() -> new RuntimeException("Film not found"));
+        Termin termin = terminRepository.findById(newTV.tnr())
+                .orElseThrow(() -> new RuntimeException("Termin not found"));
+
+        Terminverknuepfung newEntity = new Terminverknuepfung();
+        newEntity.setTnr(newTV.tnr());
+        newEntity.setFnr(newTV.fnr());
+        newEntity.setVorfilm(newTV.vorfilm());
+        newEntity.setRang(newTV.rang());
+        newEntity.setFilm(film);
+        newEntity.setTermin(termin);
+
+        Terminverknuepfung saved = terminverknuepfungRepository.save(newEntity);
+        return new TerminverknuepfungDTOSelection(saved);
     }
+
 
     public void deleteTerminverknuepfung(Terminverknuepfung.TerminverknuepfungId deletingTVId) {
         terminverknuepfungRepository.deleteById(deletingTVId);
@@ -75,34 +117,7 @@ public class TerminverknuepfungService {
 
     //    #############################################################
 
-//    @Transactional
-//    public void linkExistingFilmToExistingTermin(Long filmId, Long terminId) {
-//        Film existingFilm = filmRepository.findById(filmId)
-//                .orElseThrow(() -> new RuntimeException("Film not found with ID: " + filmId));
-//
-//        Termin existingTermin = terminRepository.findById(terminId)
-//                .orElseThrow(() -> new RuntimeException("Termin not found with ID: " + terminId));
-//
-//        // Check if the link already exists (optional, but good practice)
-//        if (terminverknuepfungRepository.existsById(new Terminverknuepfung.TerminverknuepfungId(terminId, filmId))) {
-//            throw new RuntimeException("Link between Film ID " + filmId + " and Termin ID " + terminId + " already exists.");
-//        }
-//
-//        Terminverknuepfung connection = new Terminverknuepfung();
-//        connection.setFilm(existingFilm);
-//        connection.setFnr(existingFilm.getFnr());
-//        connection.setTermin(existingTermin);
-//        connection.setTnr(existingTermin.getTnr());
-//        connection.setVorfilm(false); // Set default or request-based value
-//        connection.setRang((short) 1);   // Set default or request-based value
-//
-//        existingFilm.getTerminConnections().add(connection);
-//        existingTermin.getFilmConnections().add(connection);
-//
-//        terminverknuepfungRepository.save(connection);
-//    }
-
-    // this is the usual add or save function for new Terminverknuepfung
+    // this represents the usual add or save function for new Terminverknuepfung
     // since Terminverknuepfung has relationships a simple save is not enough
     // and more relationship management needs to be done to keep the (relationship) data consistent
     @Transactional
@@ -128,38 +143,16 @@ public class TerminverknuepfungService {
         terminverknuepfungRepository.save(connection);
     }
 
-//    @Transactional
-//    public void linkExistingFilmToExistingTermin(TerminverknuepfungDTORequest newTV) {
-//        Film existingFilm = filmRepository.findById(newTV.getFnr())
-//                .orElseThrow(() -> new RuntimeException("Film not found with ID: " + newTV.getFnr()));
-//
-//        Termin existingTermin = terminRepository.findById(newTV.getTnr())
-//                .orElseThrow(() -> new RuntimeException("Termin not found with ID: " + newTV.getTnr()));
-//
-//        // ID check remains critical
-//        if (terminverknuepfungRepository.existsById(new Terminverknuepfung.TerminverknuepfungId(newTV.getTnr(), newTV.getFnr()))) {
-//            throw new RuntimeException("Link already exists");
-//        }
-//
-//        Terminverknuepfung connection = new Terminverknuepfung();
-//        connection.setFilm(existingFilm);
-//        connection.setTermin(existingTermin);
-//        connection.setVorfilm(newTV.getVorfilm());
-//        connection.setRang(newTV.getRang());
-//
-//        // Remove bidirectional relationship management
-//        terminverknuepfungRepository.save(connection);
-//    }
+    //    #############################################################
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public List<TVWithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
+        return terminverknuepfungRepository.findAllWithFilmAndTermin()
+                .stream()
+                .map(TVWithFilmAndTerminDTOSelection::new)
+                .collect(Collectors.toList());
+    }
 
-//    public List<TVwithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
-//        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllWithFilmAndTermin();
-//        return terminverknuepfungen.stream()
-//                .map(TVwithFilmAndTerminDTOSelection::new)
-//                .collect(Collectors.toList());
-//    }
-
+//    // some processing on the Film data using the extractDirectors(film.getStab()) method i.e. the FilmDTOSelection contains a specifically processed version of the film's directors.
 //    public List<TVwithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
 //        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllWithFilmAndTermin();
 //
@@ -194,12 +187,7 @@ public class TerminverknuepfungService {
 //                })
 //                .collect(Collectors.toList());
 //    }
-    public List<TVWithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
-        return terminverknuepfungRepository.findAllWithFilmAndTermin()
-                .stream()
-                .map(TVWithFilmAndTerminDTOSelection::new)
-                .collect(Collectors.toList());
-    }
+
 
     public TVWithFilmAndTerminDTOSelection getTVwithFilmAndTerminbyTnrAndFnr(Long tnr, Long fnr) {
         return terminverknuepfungRepository.findWithFilmAndTerminByTnrAndFnr(tnr, fnr)
@@ -210,13 +198,11 @@ public class TerminverknuepfungService {
                 ));
     }
 
+
     public List<TVWithFilmAndTerminDTOSelection> getAllTVwithFilmAndTerminSortedByTermin() {
         return terminverknuepfungRepository.findAllWithFilmAndTerminOrderByTerminDesc()
                 .stream()
                 .map(TVWithFilmAndTerminDTOSelection::new)
                 .collect(Collectors.toList());
     }
-
-
-
 }

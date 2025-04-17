@@ -16,12 +16,6 @@ import './Overview.css';
 export default function Overview() {
 
 
-
-    const [readyToRender, setReadyToRender] = useState(false);
-    // ~~~~~~~~~~~~~~
-
-
-
     const {
         isLoadingAllNews,
         allNews,
@@ -76,6 +70,8 @@ export default function Overview() {
     }, [])
 
 
+    const [readyToRender, setReadyToRender] = useState(false);
+
     // scroll tracking logic
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     useEffect(() => {
@@ -93,7 +89,6 @@ export default function Overview() {
             window.removeEventListener('scroll', saveScrollPosition);
         };
     }, []);
-
 
     // scroll restoration logic
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,13 +129,13 @@ export default function Overview() {
                     return;
                 }
 
-                // ✅ Smooth scroll here
+                // Smooth scroll here
                 window.scrollTo({
                     top: scrollY,
                     behavior: 'smooth',
                 });
 
-                // ✅ Optional: delay reveal just a bit to match scroll speed
+                // Optional: delay reveal just a bit to match scroll speed
                 setTimeout(() => setReadyToRender(true), 350); // Adjust if needed
             };
 
@@ -160,7 +155,7 @@ export default function Overview() {
             <>
                 {/*<h1>Welcome to Pupille</h1>*/}
                 {/*<p>*/}
-                {/*    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.*/}
+                {/* Lorem ipsum dolor sit */}
                 {/*</p>*/}
 
                 {/*<section>*/}
@@ -203,12 +198,13 @@ export default function Overview() {
                         validNews && screeningOverviewEntries && (
                             <>
                                 {/*<h3>Programm</h3>*/}
-                                {screeningOverviewEntries.map(termin => {
-                                    // Add logic here if needed
+                                {screeningOverviewEntries
+                                    .filter(termin => termin.veroeffentlichen !== null && termin.veroeffentlichen !== 0)
+                                    .map(termin => {
+                                    // Add logic here
                                     
                                     const screeningDateObj = formatDateTime(termin.screeningTime);
 
-                                    // screening of entire programm spanning over several films
                                     if (termin.titel) {
                                         return (
                                             <div
@@ -218,14 +214,16 @@ export default function Overview() {
                                                     paddingBottom: "1.5rem"
                                                 }}
                                             >
+                                                {/*for programms of (multiple) films*/}
+                                                {/***********************************/}
                                                 <TerminFilmOverviewCard
                                                     screeningWeekday={screeningDateObj ? screeningDateObj.weekday : null}
                                                     screeningDate={screeningDateObj ? screeningDateObj.date : null}
                                                     screeningTime={screeningDateObj ? screeningDateObj.time : null}
                                                     screeningSonderfarbe={"red-glow"}
-                                                    // bild={termin.films[0]?.bild}
-                                                    bild={termin.films[0]?.bild ? termin.films[0]?.bild : null}
-                                                    offsetBildInOverview={undefined} // instead of undefine, insert a negative number x for pushing the image x pixels up
+                                                    // bild={termin.films[0]?.bild ? termin.films[0]?.bild : null}
+                                                    bild={termin.bild ? termin.bild : null}
+                                                    offsetBildInOverview={undefined} // // instead of undefined, insert a number from 0 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
                                                     titel={termin.titel}
                                                     kurztext={termin.kurztext ? termin.kurztext : null}
                                                     jahr={undefined}
@@ -236,7 +234,6 @@ export default function Overview() {
                                                 />
                                             </div>
                                         );
-                                        // screening consists of 1 main film + shorts possibly
                                     } else if (termin.films?.length > 0) {
                                         return (
                                             <div
@@ -246,13 +243,15 @@ export default function Overview() {
                                                     paddingBottom: "1.5rem"
                                                 }}
                                             >
+                                                {/*screening consists of 1 main film + shorts possibly*/}
+                                                {/*****************************************************/}
                                                 <TerminFilmOverviewCard
                                                     screeningWeekday={screeningDateObj ? screeningDateObj.weekday : ""}
                                                     screeningDate={screeningDateObj ? screeningDateObj.date : ""}
                                                     screeningTime={screeningDateObj ? screeningDateObj.time : ""}
                                                     screeningSonderfarbe={"pupille-glow"}
                                                     bild={termin.films[0]?.bild ? termin.films[0]?.bild : null}
-                                                    offsetBildInOverview={undefined} // instead of undefine, insert a negative number x for pushing the image x pixels up
+                                                    offsetBildInOverview={undefined} // instead of undefined, insert a number from 1 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
                                                     titel={termin.films[0]?.titel ? termin.films[0]?.titel : null}
                                                     kurztext={termin.films[0]?.kurztext ? termin.films[0]?.kurztext : null}
                                                     jahr={termin.films[0]?.jahr}

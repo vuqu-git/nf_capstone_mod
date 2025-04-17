@@ -137,16 +137,16 @@ public class ScreeningService {
     }
 
 
-
-    public List<FilmDTOForm> getFilmsByTerminId(Long tnr) {
-        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
-
-        return connections.stream()
-                .map(Terminverknuepfung::getFilm)
-                .filter(Objects::nonNull)
-                .map(FilmDTOForm::new)
-                .toList();
-    }
+//    // not required because the list doesn't contain any termin data
+//    public List<FilmDTOForm> getFilmsByTerminId(Long tnr) {
+//        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
+//
+//        return connections.stream()
+//                .map(Terminverknuepfung::getFilm)
+//                .filter(Objects::nonNull)
+//                .map(FilmDTOForm::new)
+//                .toList();
+//    }
 
 //    ########################################################
 

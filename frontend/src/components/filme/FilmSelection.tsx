@@ -1,37 +1,13 @@
 import { Form } from "react-bootstrap";
 import React from "react";
 import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
+import {formatFilmDetailsInFilmSelectOption} from "../../utils/formatFilmDetailsInFilmSelectOption.ts";
 
 interface FilmSelectionProps {
     films: FilmDTOSelection[];
     selectedFilmId: number | undefined;
     onSelectFilm: (id: number  | undefined) => void;
 }
-
-const formatFilmDetails = (titel: string | null | undefined, stab: string | null | undefined, jahr: number | null | undefined): string => {
-    let details = "";
-    let titleWithSpace = titel;
-
-    const hasStab = stab && stab.trim() !== "";
-    const hasJahr = jahr !== null && jahr !== undefined && String(jahr).trim() !== "";
-
-    if (hasStab || hasJahr) {
-        titleWithSpace += " "; // Add a space after the title
-        details += "(";
-        if (hasStab) {
-            details += stab.trim();
-            if (hasJahr) {
-                details += ", ";
-            }
-        }
-        if (hasJahr) {
-            details += String(jahr).trim();
-        }
-        details += ")";
-    }
-
-    return `${titleWithSpace}${details}`;
-};
 
 export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: FilmSelectionProps) {
 
@@ -51,7 +27,7 @@ export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: F
                 <option value="">Select a film to edit (or leave empty to add new)</option>
                 {films.map((film) => (
                         <option key={film.fnr} value={film.fnr}>
-                            {`${formatFilmDetails(film.titel, film.stab, film.jahr)} | #${film.fnr}`}
+                            {`${formatFilmDetailsInFilmSelectOption(film.titel, film.stab, film.jahr)} | #${film.fnr}`}
                         </option>
                 ))}
             </Form.Select>

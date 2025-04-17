@@ -16,6 +16,7 @@ const emptyTerminForForm = {
     text: '',
     kurztext: '',
     besonderheit: '',
+    bild: '',
     startReservierung: '',
     linkReservierung: '',
     sonderfarbeTitel: undefined,
@@ -115,7 +116,7 @@ export default function TerminForm() {
                     setSuccessMessage("Termin updated successfully!");
 
                     getAllTermine();
-                    setSelectedTerminId(null); // Reset the selection
+                    setSelectedTerminId(undefined); // Reset the selection
                     setSelectedTermin(emptyTerminForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -163,7 +164,7 @@ export default function TerminForm() {
                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     // !!! DO NOT reset selectedTerminId immediately !!!
                     // => I need to set it to remove the delete button after deletion!!
-                    setSelectedTerminId(null);
+                    setSelectedTerminId(undefined);
 
                     setSelectedTermin(emptyTerminForForm); // Reset the form
                 })
@@ -175,7 +176,7 @@ export default function TerminForm() {
         }
     };
 
-    const handleTerminSelectionChange = (id: number | null) => {
+    const handleTerminSelectionChange = (id: number | undefined) => {
         setSelectedTerminId(id);
         setSelectionChanged(true); // Set flag when selection changes
     };
@@ -196,7 +197,7 @@ export default function TerminForm() {
 
             <Form onSubmit={handleSubmit}>
 
-                <h3 className="mt-3">Termin form</h3>
+                <h3 className="mt-3">Termin details</h3>
 
                 <Form.Group controlId="termin" className="mt-3">
                     <Form.Label>Termin</Form.Label>
@@ -251,6 +252,16 @@ export default function TerminForm() {
                     />
                 </Form.Group>
 
+                <Form.Group controlId="bild" className="mt-3">
+                    <Form.Label>vollständiger Bilddateiname (müssen unter https://pupille.org/bilder/filmbilder/ abgelegt sein)</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="bild"
+                        value={selectedTermin.bild || ""}
+                        onChange={handleChange}
+                    />
+                </Form.Group>
+
                 <Form.Group controlId="startReservierung" className="mt-3">
                     <Form.Label>Start Reservierungsdatum</Form.Label>
                     <Form.Control
@@ -292,7 +303,7 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="veroeffentlichen" className="mt-3">
-                    <Form.Label>Veroeffentlichen?</Form.Label>
+                    <Form.Label>Veroeffentlichen</Form.Label>
                     <Form.Control
                         type="number"
                         name="veroeffentlichen"
@@ -319,7 +330,7 @@ export default function TerminForm() {
 
             {confirmDeleteOpen && (
                 <div className="mt-3">
-                    <p>Are you sure you want to delete this news item?</p>
+                    <p>Are you sure you want to delete this termin item?</p>
                     <Button variant="secondary" onClick={() => setConfirmDeleteOpen(false)}>
                         Cancel
                     </Button>

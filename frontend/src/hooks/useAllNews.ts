@@ -52,6 +52,7 @@ export const useAllNews = (shouldFetchDetails: boolean = true) => {
             .finally(() => setIsLoading(false));
     };
 
+    // for editing and deleting you need all news to get fetched here!
     // useEffect(() => {
     //     getAllNews();
     // }, []);

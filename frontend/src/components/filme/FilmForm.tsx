@@ -125,7 +125,7 @@ export default function FilmForm() {
                     setSuccessMessage("Film updated successfully!");
 
                     getAllFilms();
-                    setSelectedFilmId(null); // Reset the selection
+                    setSelectedFilmId(undefined); // Reset the selection
                     setSelectedFilm(emptyFilmForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -186,7 +186,7 @@ export default function FilmForm() {
         }
     };
 
-    const handleFilmSelectionChange = (id: number | null) => {
+    const handleFilmSelectionChange = (id: number | undefined) => {
         setSelectedFilmId(id);
         setSelectionChanged(true); // Set flag when selection changes
     };
@@ -207,7 +207,7 @@ export default function FilmForm() {
 
             <Form onSubmit={handleSubmit}>
 
-                <h3 className="mt-3">Film form</h3>
+                <h3 className="mt-3">Film details</h3>
 
                 <Form.Group controlId="titel" className="mt-3">
                     <Form.Label>Titel</Form.Label>
@@ -419,7 +419,7 @@ export default function FilmForm() {
 
             {confirmDeleteOpen && (
                 <div className="mt-3">
-                    <p>Are you sure you want to delete this news item?</p>
+                    <p>Are you sure you want to delete this film item?</p>
                     <Button variant="secondary" onClick={() => setConfirmDeleteOpen(false)}>
                         Cancel
                     </Button>

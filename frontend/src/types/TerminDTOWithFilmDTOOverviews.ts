@@ -7,7 +7,9 @@ interface TerminDTOWithFilmDTOOverviews {
     titel?: string | null;
     kurztext?: string | null;
     besonderheit?: string| null;
+    bild?: string| null;
     sonderfarbe?: number | null;
+    veroeffentlichen?: number | null;
     films: FilmDTOOverview[];
 }
 

@@ -90,7 +90,7 @@ export default function TerminFilmOverviewCard({
                     <Card.Img
                         variant="top"
                         src={`https://www.pupille.org/bilder/filmbilder/${bild}`}
-                        {...(offsetBildInOverview && { style: { objectPosition: `center ${offsetBildInOverview}px` } })}
+                        {...(offsetBildInOverview && { style: { objectPosition: `center ${offsetBildInOverview}%` } })}
                     />
                     <div style={gradientOverlayStyle}></div>
                 </div>
@@ -171,12 +171,12 @@ export default function TerminFilmOverviewCard({
                             style={{
                                 // borderTop: kurztext ? '1px solid #cfd6e1' : '',
                                 borderTop: kurztext ? '1px solid #FFD036' : '',
+                                // borderTop: '1px solid #FFD036',
                                 // padding: '1rem 1.5em',
                                 padding: '1rem 0em',
-                                // color: '#FFD036',
+                                // color: '#FFD036', // pupille yellow
                                 // color: '#FFA300',
-                                // color: '#7FA35C',
-                                color: '#cfd6e1',
+                                color: '#cfd6e1', // like kurztext
                                 textAlign: 'right',
                             }}
                     >

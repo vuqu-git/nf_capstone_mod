@@ -49,7 +49,14 @@ public class TerminService {
                     termin.setTermin(terminDetails.getTermin());
                     termin.setTitel(terminDetails.getTitel());
                     termin.setText(terminDetails.getText());
-                    // Update all other fields similarly
+                    termin.setKurztext(terminDetails.getKurztext());
+                    termin.setBesonderheit(terminDetails.getBesonderheit());
+                    termin.setBild(terminDetails.getBild());
+                    termin.setStartReservierung(terminDetails.getStartReservierung());
+                    termin.setLinkReservierung(terminDetails.getLinkReservierung());
+                    termin.setSonderfarbeTitel(terminDetails.getSonderfarbeTitel());
+                    termin.setSonderfarbe(terminDetails.getSonderfarbe());
+                    termin.setVeroeffentlichen(terminDetails.getVeroeffentlichen());
                     return new TerminDTOForm(terminRepository.save(termin));
                 })
                 .orElseThrow(() -> new RuntimeException("Termin not found"));

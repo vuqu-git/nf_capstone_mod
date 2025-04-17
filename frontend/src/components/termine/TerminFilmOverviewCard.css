@@ -122,13 +122,17 @@
     /*color: #FFD036;*/
     /*color: #dc2f02;*/
     /*color: #197278;*/
+
     color: #40E0D0;
+    /*color: #C77DBB;*/
     padding: 5px;
     border-radius: 5px;
     /*border: 1px solid #FFD036;*/
     /*border: 1px solid #dc2f02;*/
     /*border: 1px solid #197278;*/
+
     border: 1px solid #40E0D0;
+    /*border: 1px solid #C77DBB;*/
 
     font-size: 12px;
 }

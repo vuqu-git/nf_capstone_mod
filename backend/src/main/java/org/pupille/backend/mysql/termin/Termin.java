@@ -37,6 +37,8 @@ public class Termin {
 
     private String besonderheit;
 
+    private String bild;
+
     @Column(name = "start_reservierung")
     private LocalDate startReservierung; // date
 

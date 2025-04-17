@@ -2,6 +2,7 @@ import { Form } from "react-bootstrap";
 
 import React from "react";
 import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
+import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 
 interface TerminSelectionProps {
     termine: TerminDTOSelection[];
@@ -9,23 +10,6 @@ interface TerminSelectionProps {
     onSelectTermin: (id: number | undefined) => void;
 }
 
-function formatDate(dateString: string | null | undefined): string {
-    if (!dateString) {
-        return "Invalid date"; // Handle undefined or null dates gracefully
-    }
-
-    const date = new Date(dateString);
-
-    // Extract components of the date
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-
-    // Format as YYYY-MM-DD HH:mm
-    return `${year}-${month}-${day} ${hours}:${minutes}`;
-}
 
 export default function TerminSelection({ termine, selectedTerminId, onSelectTermin }: TerminSelectionProps) {
 
@@ -45,7 +29,7 @@ export default function TerminSelection({ termine, selectedTerminId, onSelectTer
                 <option value="">Select a Termin to edit (or leave empty to add new)</option>
                 {termine.map((t: TerminDTOSelection) => (
                     <option key={t.tnr} value={t.tnr}>
-                        {`${formatDate(t.termin)}: ${t.titel} | #${t.tnr}`}
+                        {`${formatDateInTerminSelectOption(t.termin)} | ${t.titel} | #${t.tnr}`}
                     </option>
                 ))}
             </Form.Select>

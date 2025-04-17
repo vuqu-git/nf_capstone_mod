@@ -52,8 +52,7 @@ public class TerminverknuepfungController {
             @PathVariable Long fnr,
             @RequestBody TerminverknuepfungDTOSelection updatingTV) {
 
-        TerminverknuepfungDTOSelection updated = terminverknuepfungService
-                .updateTerminverknuepfung(tnr, fnr, updatingTV);
+        TerminverknuepfungDTOSelection updated = terminverknuepfungService.updateTerminverknuepfung(tnr, fnr, updatingTV);
 
         return ResponseEntity.ok(updated);
     }
@@ -101,6 +100,5 @@ public class TerminverknuepfungController {
                 terminverknuepfungService.getAllTVwithFilmAndTerminSortedByTermin()
         );
     }
-
 
 }

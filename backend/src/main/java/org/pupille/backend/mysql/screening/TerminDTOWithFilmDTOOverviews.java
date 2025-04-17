@@ -12,7 +12,9 @@ public record TerminDTOWithFilmDTOOverviews(
         String titel,
         String kurztext,
         String besonderheit,
+        String bild,
         Integer sonderfarbe,
+        Short veroeffentlichen,
         List<FilmDTOOverview> films
 ) {
     public TerminDTOWithFilmDTOOverviews(Termin termin, List<Film> films) {
@@ -22,7 +24,9 @@ public record TerminDTOWithFilmDTOOverviews(
                 termin.getTitel(),
                 termin.getKurztext(),
                 termin.getBesonderheit(),
+                termin.getBild(),
                 termin.getSonderfarbe(),
+                termin.getVeroeffentlichen(),
                 films.stream()
                         .map(FilmDTOOverview::new)
                         .toList()
