@@ -5,19 +5,19 @@ import {TVWithFilmAndTerminDTOSelection} from "../../types/TVWithFilmAndTerminDT
 
 interface TVSelectionProps {
     tvenFT: TVWithFilmAndTerminDTOSelection[];
-    selectedTVId: string | null;
-    onSelectTV: (id: string | null) => void;
+    selectedTVId: string | undefined;
+    onSelectTV: (id: string | undefined) => void;
 }
 
 export default function TerminverknuepfungSelectionNew({ tvenFT, selectedTVId, onSelectTV }: TVSelectionProps) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onSelectTV(e.target.value || null);
+        onSelectTV(e.target.value || undefined);
     }
 
     return (
         <div>
-            <Form.Label htmlFor="tv-selection">Terminverknuepfung selection (ordered by screening date)</Form.Label>
+            <Form.Label htmlFor="tv-selection">Terminverknuepfung selection</Form.Label>
             <Form.Select
                 id="tv-selection" // Add id to connect to the label
                 value={selectedTVId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):

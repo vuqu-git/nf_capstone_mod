@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import TerminverknuepfungSelection from "./TerminverknuepfungSelection";
 
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
@@ -11,7 +10,7 @@ import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import FilmSelection from "../filme/FilmSelection.tsx";
 import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import TerminSelection from "../termine/TerminSelection.tsx";
-import {formatDate} from "react-datetime-picker/dist/cjs/shared/dateFormatter";
+import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 
 
 const baseURL = "/api/terminverknuepfung";
@@ -29,10 +28,7 @@ const emptyTVForForm = {
 export default function TerminverknuepfungFormNew() {
     const [allTVs, setAllTVs] = useState<TVWithFilmAndTerminDTOSelection[]>([]); // All Termine fetched from the server
 
-    const [selectedTVId, setSelectedTVId] = useState<string | null>(null); // Selected TVId (as concatenated string) for editing or deleting
-    // const [selectedTVTNR, setSelectedTVTNR] = useState<number | null>(null); // Selected TVTNR for editing or deleting
-    // const [selectedTVFNR, setSelectedTVFNR] = useState<number | null>(null); // Selected TVFNR for editing or deleting
-
+    const [selectedTVId, setSelectedTVId] = useState<string | undefined>(undefined); // Selected TVId (as concatenated string) for editing or deleting
     const [selectedTV, setSelectedTV] = useState<TVWithFilmAndTerminDTOSelection>(emptyTVForForm); // Termin data for the form
 
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -98,17 +94,6 @@ export default function TerminverknuepfungFormNew() {
         }
     }, [selectedTVId]);
 
-    // Handle form field changes, with distinguishing between checked and value
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, type } = e.target;
-        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
-            ...prevData,
-            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
-        }));
-
-
-    };
-
 
     // Handle the form submission (PUT or POST)
     const handleSubmit = async (e: React.FormEvent) => {
@@ -130,7 +115,7 @@ export default function TerminverknuepfungFormNew() {
                     setSuccessMessage("terminverknuepfung updated successfully!");
 
                     getAllTVs();
-                    setSelectedTVId(null); // Reset the selection
+                    setSelectedTVId(undefined); // Reset the selection
                     setSelectedTV(emptyTVForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -146,7 +131,7 @@ export default function TerminverknuepfungFormNew() {
                     setSuccessMessage("terminverknuepfung saved successfully!");
 
                     getAllTVs();
-                    // setSelectedTerminId(null); // Reset the selection, not required for POST because selection is unchanged
+                    // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
                     setSelectedTV(emptyTVForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -174,9 +159,8 @@ export default function TerminverknuepfungFormNew() {
                     setConfirmDeleteOpen(false);
 
                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    // !!! DO NOT reset selectedTerminId immediately !!!
-                    // => I need to set it to remove the delete button after deletion!!
-                    setSelectedTVId(null);
+                    // => I need to set it to remove the delete button from display after deletion!!
+                    setSelectedTVId(undefined);
 
                     setSelectedTV(emptyTVForForm); // Reset the form
                 })
@@ -188,7 +172,17 @@ export default function TerminverknuepfungFormNew() {
         }
     };
 
-    const handleTVSelectionChange = (id: string | null) => {
+    // Handle form field changes, with extra distinguishing between checked and value
+    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, type } = e.target;
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
+        }));
+    };
+
+    // Handle TV selection changes
+    const handleTVSelectionChange = (id: string | undefined) => {
         setSelectedTVId(id);
         setSelectionChanged(true); // Set flag when selection changes
     };
@@ -245,8 +239,6 @@ export default function TerminverknuepfungFormNew() {
     }, []);
 
     const handleTerminSelectionChange = (id: number | undefined) => {
-        // setSelectedTerminId(id);
-
         setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
             ...prevData,
             tnr: id,
@@ -284,19 +276,20 @@ export default function TerminverknuepfungFormNew() {
                     id="termin-selection" // Add id to connect to the label
                     name="tnr" // <-- Add name attribute here, so that the generic handleChange can access it
                     value={selectedTV.tnr ?? ""}
-                    onChange={handleChange}
+                    onChange={handleFormChange}
                     style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
                 >
                     <option value="">Select a Termin</option>
                     {allTermine.map((t: TerminDTOSelection) => (
                         <option key={t.tnr} value={t.tnr}>
                             {/*{`${formatDate(t.termin)}: ${t.titel} | #${t.tnr}`}*/}
-                            {`${t.termin?.slice(0,-3)} | #${t.tnr}`}
+                            {`${formatDateInTerminSelectOption(t.termin)} | #${t.tnr}`}
+                            {/*{`${t.termin?.slice(0,-3)} | #${t.tnr}`}*/}
                         </option>
                     ))}
                 </Form.Select>
 
-                {/*note necessary because tnr is already displayed in the select option above*/}
+                {/*not necessary because tnr is already displayed in the select option above*/}
                 {/*<Form.Group controlId="tnr" className="mt-3">*/}
                 {/*    <Form.Label>tnr</Form.Label>*/}
                 {/*    <Form.Control*/}
@@ -321,7 +314,7 @@ export default function TerminverknuepfungFormNew() {
                     id="film-selection" // Add id to connect to the label
                     name="fnr" // // <-- Add name attribute here, so that the generic handleChange can access it
                     value={selectedTV.fnr ?? ""}
-                    onChange={handleChange}
+                    onChange={handleFormChange}
                     style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
                 >
                     <option value="">Select a Film</option>
@@ -332,7 +325,7 @@ export default function TerminverknuepfungFormNew() {
                     ))}
                 </Form.Select>
 
-                {/*note necessary because fnr is already displayed in the select option above*/}
+                {/*not necessary because fnr is already displayed in the select option above*/}
                 {/*<Form.Group controlId="fnr" className="mt-3">*/}
                 {/*    <Form.Label>fnr</Form.Label>*/}
                 {/*    <Form.Control*/}
@@ -350,7 +343,7 @@ export default function TerminverknuepfungFormNew() {
                         label="Vorfilm"
                         name="vorfilm"
                         checked={selectedTV.vorfilm || false}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -360,7 +353,7 @@ export default function TerminverknuepfungFormNew() {
                         type="number"
                         name="rang"
                         value={selectedTV.rang || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -382,7 +375,7 @@ export default function TerminverknuepfungFormNew() {
 
             {confirmDeleteOpen && (
                 <div className="mt-3">
-                    <p>Are you sure you want to delete this terminverknuepfung item?</p>
+                    <p>Are you sure you want to delete this terminverknuepfung entry?</p>
                     <Button variant="secondary" onClick={() => setConfirmDeleteOpen(false)}>
                         Cancel
                     </Button>

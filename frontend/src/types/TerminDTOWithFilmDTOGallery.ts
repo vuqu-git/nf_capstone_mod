@@ -1,7 +1,7 @@
-import FilmDTOOverview from "./FilmDTOOverview.ts";
+import FilmDTOGallery from "./FilmDTOGallery.ts";
 
-// this one mirrors TerminDTOWithFilmDTOOverviews
-interface TerminDTOWithFilmDTOOverviews {
+// this one mirrors TerminDTOWithFilmDTOGallery
+interface TerminDTOWithFilmDTOGallery {
     terminId: number;
     screeningTime?: string;
     titel?: string | null;
@@ -10,7 +10,7 @@ interface TerminDTOWithFilmDTOOverviews {
     bild?: string| null;
     sonderfarbe?: number | null;
     veroeffentlichen?: number | null;
-    films: FilmDTOOverview[];
+    films: FilmDTOGallery[];
 }
 
-export default TerminDTOWithFilmDTOOverviews;
+export default TerminDTOWithFilmDTOGallery;

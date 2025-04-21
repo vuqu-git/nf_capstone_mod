@@ -1,6 +1,5 @@
 package org.pupille.backend.mysql.screening;
 
-import org.pupille.backend.mysql.film.FilmDTOForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,7 @@ public class ScreeningController {
     private ScreeningService screeningService;
 
     @GetMapping("/screenings")
-    public List<TerminDTOWithFilmDTOOverviews> getFutureTermineWithFilms() {
+    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
         return screeningService.getFutureTermineWithFilms();
     }
 
@@ -33,5 +32,15 @@ public class ScreeningController {
     public ResponseEntity<TerminDTOFormWithFilmsDTOFormPlus> getTerminWithFilmsPlusForTermin(@PathVariable Long tnr) {
         TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTerminId(tnr);
         return ResponseEntity.ok(terminWithFilmsPlus);
+    }
+
+    @GetMapping("/screenings-archive")
+    public List<TerminDTOWithFilmDTOOverviewArchive> getArchiveScreenings() {
+        return screeningService.getPastTermineWithFilms();
+    }
+
+    @GetMapping("/screenings-semester")
+    public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreeningsForTest() {
+        return screeningService.getTermineByCurrentSemester();
     }
 }

@@ -90,14 +90,6 @@ export default function TerminForm() {
         }
     }, [selectedTerminId]);
 
-    // Handle form field changes
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setSelectedTermin((prevData: Termin) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
 
     // Handle the form submission (PUT or POST)
     const handleSubmit = async (e: React.FormEvent) => {
@@ -136,7 +128,7 @@ export default function TerminForm() {
                     setSuccessMessage("Termin saved successfully!");
 
                     getAllTermine();
-                    // setSelectedTerminId(null); // Reset the selection, not required for POST because selection is unchanged
+                    // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
                     setSelectedTermin(emptyTerminForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -148,7 +140,7 @@ export default function TerminForm() {
         }
     };
 
-    // Handle termin deletion
+    // Handle DELETE
     const handleDelete = () => {
         setErrorMessage("");
         setSuccessMessage("");
@@ -162,8 +154,7 @@ export default function TerminForm() {
                     setConfirmDeleteOpen(false);
 
                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    // !!! DO NOT reset selectedTerminId immediately !!!
-                    // => I need to set it to remove the delete button after deletion!!
+                    // => I need to set it to remove the delete button from display after deletion!!
                     setSelectedTerminId(undefined);
 
                     setSelectedTermin(emptyTerminForForm); // Reset the form
@@ -176,7 +167,17 @@ export default function TerminForm() {
         }
     };
 
-    const handleTerminSelectionChange = (id: number | undefined) => {
+    // Handle termin form field changes
+    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setSelectedTermin((prevData: Termin) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    // Handle selection changes
+    const handleSelectionChange = (id: number | undefined) => {
         setSelectedTerminId(id);
         setSelectionChanged(true); // Set flag when selection changes
     };
@@ -188,7 +189,7 @@ export default function TerminForm() {
             <TerminSelection
                 termine={allTermine}
                 selectedTerminId={selectedTerminId}
-                onSelectTermin={handleTerminSelectionChange}
+                onSelectTermin={handleSelectionChange}
             />
 
             <div style={{ minHeight: '30px' }}>
@@ -205,7 +206,7 @@ export default function TerminForm() {
                         type="datetime-local"
                         name="termin"
                         value={selectedTermin.termin || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -215,7 +216,7 @@ export default function TerminForm() {
                         type="text"
                         name="titel"
                         value={selectedTermin.titel || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -226,7 +227,7 @@ export default function TerminForm() {
                         rows={13}
                         name="text"
                         value={selectedTermin.text || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -237,7 +238,7 @@ export default function TerminForm() {
                         rows={3}
                         name="kurztext"
                         value={selectedTermin.kurztext || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -248,7 +249,7 @@ export default function TerminForm() {
                         rows={2}
                         name="besonderheit"
                         value={selectedTermin.besonderheit || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -258,7 +259,7 @@ export default function TerminForm() {
                         type="text"
                         name="bild"
                         value={selectedTermin.bild || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -268,7 +269,7 @@ export default function TerminForm() {
                         type="date"
                         name="startReservierung"
                         value={selectedTermin.startReservierung || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -278,7 +279,7 @@ export default function TerminForm() {
                         type="text"
                         name="linkReservierung"
                         value={selectedTermin.linkReservierung || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -288,7 +289,7 @@ export default function TerminForm() {
                         type="number"
                         name="sonderfarbeTitel"
                         value={selectedTermin.sonderfarbeTitel || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -298,7 +299,7 @@ export default function TerminForm() {
                         type="number"
                         name="sonderfarbe"
                         value={selectedTermin.sonderfarbe || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -308,7 +309,7 @@ export default function TerminForm() {
                         type="number"
                         name="veroeffentlichen"
                         value={selectedTermin.veroeffentlichen || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -330,7 +331,7 @@ export default function TerminForm() {
 
             {confirmDeleteOpen && (
                 <div className="mt-3">
-                    <p>Are you sure you want to delete this termin item?</p>
+                    <p>Are you sure you want to delete this termin entry?</p>
                     <Button variant="secondary" onClick={() => setConfirmDeleteOpen(false)}>
                         Cancel
                     </Button>
@@ -344,5 +345,4 @@ export default function TerminForm() {
             {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
         </div>
     );
-
 }

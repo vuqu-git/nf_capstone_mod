@@ -1,8 +1,10 @@
 .app-container {
-  color: whitesmoke;
+  color: #cfd6e1; /* color of kurztext in TerminFilmGalleryCard */
   /*background-color: #1e2328;*/
   background-color: black;
   min-height: 100vh; /* Ensure it covers the entire viewport height */
   /* You can also add other styles here, like padding, etc. */
+
+  padding-bottom: 2rem;
 }
 

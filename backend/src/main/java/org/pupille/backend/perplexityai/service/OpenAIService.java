@@ -14,6 +14,11 @@ public class OpenAIService {
     private final RestClient restClient;
 
     public OpenAIService(@Value("${PERPLEXITY_API_KEY}") String key, RestClient.Builder restClient) {
+
+        if (key == null || key.isBlank()) {
+            throw new IllegalArgumentException("PERPLEXITY_API_KEY must be configured");
+        }
+
         this.restClient = restClient
                 .baseUrl("https://api.perplexity.ai/chat/completions")
                 .defaultHeader("Authorization", "Bearer " + key)
@@ -25,7 +30,7 @@ public class OpenAIService {
                 .body(new OpenAIRequest(
                         "sonar",
                         input,
-                        0.9))
+                        0.5))
                 .retrieve()
                 .body(OpenAIResponse.class);
 

@@ -63,7 +63,7 @@ export default function TerminFilmDetailsCard({
                         marginBottom: '0.0rem',
                     }}
                 >
-                    {screeningWeekday}, {screeningDate}, {screeningTime}
+                    {screeningWeekday} | {screeningDate} | {screeningTime}
                 </Card.Header>
 
                 <Card.Title
@@ -71,7 +71,7 @@ export default function TerminFilmDetailsCard({
                     style={{
                         color: '#FFD036',
                         marginTop: '1.5rem',
-                        marginBottom: '2rem'
+                        marginBottom: '1.5rem'
                     }}
                 >
                     {render(programmtitel)}

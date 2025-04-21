@@ -6,7 +6,7 @@ import org.pupille.backend.mysql.termin.Termin;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record TerminDTOWithFilmDTOOverviews(
+public record TerminDTOWithFilmDTOGallery(
         Long terminId,
         LocalDateTime screeningTime,
         String titel,
@@ -15,9 +15,9 @@ public record TerminDTOWithFilmDTOOverviews(
         String bild,
         Integer sonderfarbe,
         Short veroeffentlichen,
-        List<FilmDTOOverview> films
+        List<FilmDTOGallery> films
 ) {
-    public TerminDTOWithFilmDTOOverviews(Termin termin, List<Film> films) {
+    public TerminDTOWithFilmDTOGallery(Termin termin, List<Film> films) {
         this(
                 termin.getTnr(),
                 termin.getTermin(),
@@ -28,7 +28,7 @@ public record TerminDTOWithFilmDTOOverviews(
                 termin.getSonderfarbe(),
                 termin.getVeroeffentlichen(),
                 films.stream()
-                        .map(FilmDTOOverview::new)
+                        .map(FilmDTOGallery::new)
                         .toList()
         );
     }

@@ -1,10 +1,105 @@
-.fade-in {
-    opacity: 0;
-    animation: fadeIn 10.9s ease forwards;
+
+/*for semester overview*/
+/***********************/
+
+/*.custom-link {*/
+/*    text-decoration: none;*/
+/*    color: inherit;*/
+/*    !*transition: color 0.3s;*!*/
+
+/*    border-bottom: 2px solid transparent; !* Set thickness, but invisible by default *!*/
+/*    display: inline-block; !* Important for the border to span the content *!*/
+
+/*    font-weight: 600;*/
+/*}*/
+
+/*.custom-link:hover {*/
+/*    !*color: whitesmoke;*!*/
+/*    border-bottom: 2px solid #FFD036;  !* Thick underline with your color *!*/
+/*}*/
+
+/*##########################################################*/
+
+
+/*.custom-link a {*/
+.custom-link {
+    background: linear-gradient(90deg, #FFD036, #FFD036) no-repeat right bottom / 0 var(--bg-h);
+    transition: background-size 350ms;
+    --bg-h: 100%;
+
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+}
+.custom-link:where(:hover, :focus-visible) {
+    background-size: 100% var(--bg-h);
+    background-position-x: left;
 }
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
+.custom-link {
+    padding-bottom: 2px;
+    --bg-h: 2px;
 }
+
+
+
+
+
+
+
+
+
+/*.custom-link {*/
+/*    !*color: #427FC1;*!*/
+/*    color: inherit;*/
+/*    position: relative;*/
+/*    text-decoration: none;*/
+/*    font-weight: 600;*/
+/*}*/
+
+/*.custom-link::before {*/
+/*    content: '';*/
+/*    position: absolute;*/
+/*    width: 100%;*/
+/*    height: 2px;*/
+/*    background-color: #FFD036;*/
+/*    bottom: 0;*/
+/*    left: 0;*/
+/*    transform-origin: right;*/
+/*    transform: scaleX(0);*/
+/*    transition: transform .2s ease-in-out;*/
+/*}*/
+
+/*.custom-link:hover::before {*/
+/*    transform-origin: left;*/
+/*    transform: scaleX(1);*/
+/*}*/
+
+
+/*##########################################################*/
+/*.custom-link {*/
+/*    text-decoration: none;*/
+/*    color: inherit;*/
+
+/*    background:*/
+/*            linear-gradient(*/
+/*                    to right,*/
+/*                    #cfd6e1,*/
+/*                    #FFD036*/
+/*            ),*/
+/*            linear-gradient(*/
+/*                    to right,*/
+/*                    rgba(255, 0, 0, 1),*/
+/*                    rgba(255, 0, 180, 1),*/
+/*                    rgba(0, 100, 200, 1)*/
+/*            );*/
+/*    background-size: 100% 1px, 0 1px;*/
+/*    background-position: 100% 100%, 0 100%;*/
+/*    background-repeat: no-repeat;*/
+/*    transition: background-size 400ms;*/
+
+/*}*/
+
+/*.custom-link:hover {*/
+/*    background-size: 0 1px, 100% 1px;*/
+/*}*/

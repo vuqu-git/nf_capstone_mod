@@ -41,8 +41,8 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
     //     }
     // };
 
-    const sendEmojifyRequest = () => {
-        const url = '/api/perplexityai';
+    const sendEmojifyRequestWithAI = () => {
+        const url = '/api/perplexityai/emojify';
         const inputText = newsItem.text;
 
         // Sending the POST request
@@ -54,9 +54,6 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
             .then((response) => {
                 // Copy the original text to clipboard
                 copyToClipboard(newsItem.text);
-
-                // Log the response from the backend
-                console.log('Response from backend:', response.data);
 
                 // Update the news item with the response data
                 onChange({ ...newsItem, text: response.data });
@@ -94,9 +91,9 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 <Button
                     variant="outline-info"
                     className="mt-4"
-                    onClick={() => sendEmojifyRequest()}
+                    onClick={() => sendEmojifyRequestWithAI()}
                 >
-                    🖍️🔠📲 Emojify the news text! 😆🎨🦄
+                    🤖🧠💬 Emojify the news text! 😆🎨🦄
                 </Button>
 
                 <Form.Group controlId="image" className="mt-3">

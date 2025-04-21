@@ -1,4 +1,4 @@
-interface FilmDTOOverview {
+interface FilmDTOGallery {
     filmId: number;
     titel?: string | null;
     kurztext?: string | null;
@@ -9,4 +9,4 @@ interface FilmDTOOverview {
         // fskRating?: string;
 }
 
-export default FilmDTOOverview;
+export default FilmDTOGallery;

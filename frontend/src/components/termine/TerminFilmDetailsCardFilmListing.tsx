@@ -29,7 +29,7 @@ export default function TerminFilmDetailsListing({
                     color: '#FFD036',
                     borderTop: '1px solid #cfd6e1',
                     paddingTop: '1rem',
-                    paddingBottom: '1rem',
+                    paddingBottom: f.bild ? '1rem' : undefined, // Only adds padding if f.bild exists
                 }}
             >
                 {/*{index + 1}. Film: {render(film.titel) || "k.A."}*/}

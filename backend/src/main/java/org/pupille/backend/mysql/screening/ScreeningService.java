@@ -17,7 +17,6 @@ import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +33,7 @@ public class ScreeningService {
     }
 
 
-//    public List<TerminDTOWithFilmDTOOverviews> getFutureTermineWithFilms() {
+//    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
 //        // this time is too precise and hence Termine will disappear immediately when their screening DateTime is passed
 //        // LocalDateTime now = LocalDateTime.now();
 //
@@ -56,7 +55,7 @@ public class ScreeningService {
 //
 //        // 3. Map to DTO
 //        return futureTermine.stream()
-//                .map(termin -> new TerminDTOWithFilmDTOOverviews(
+//                .map(termin -> new TerminDTOWithFilmDTOGallery(
 //                        termin,
 //                        connections.stream()
 //                                .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
@@ -66,7 +65,7 @@ public class ScreeningService {
 //                .toList();
 //    }
 
-//    public List<TerminDTOWithFilmDTOOverviews> getFutureTermineWithFilms() {
+//    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
 //        // Use a fixed time to avoid Termine disappearing immediately after their screening DateTime
 //        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
 //        LocalTime fixedTime = LocalTime.of(0, 1);
@@ -86,7 +85,7 @@ public class ScreeningService {
 //
 //        // 3. Map to DTO, filtering out films where vorfilm is true
 //        return futureTermine.stream()
-//                .map(termin -> new TerminDTOWithFilmDTOOverviews(
+//                .map(termin -> new TerminDTOWithFilmDTOGallery(
 //                        termin,
 //                        connections.stream()
 //                                .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
@@ -98,7 +97,7 @@ public class ScreeningService {
 //    }
 
     //leere Filmliste, wenn termin.titel present ist
-    public List<TerminDTOWithFilmDTOOverviews> getFutureTermineWithFilms() {
+    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
@@ -116,7 +115,7 @@ public class ScreeningService {
                 .map(termin -> {
                     // Check if titel exists (not null/empty)
                     if (termin.getTitel() != null && !termin.getTitel().isBlank()) {
-                        return new TerminDTOWithFilmDTOOverviews(
+                        return new TerminDTOWithFilmDTOGallery(
                                 termin,
                                 List.of() // Empty films list when titel is present
                         );
@@ -127,7 +126,7 @@ public class ScreeningService {
                                 .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
                                 .map(Terminverknuepfung::getFilm)
                                 .toList();
-                        return new TerminDTOWithFilmDTOOverviews(
+                        return new TerminDTOWithFilmDTOGallery(
                                 termin,
                                 films
                         );
@@ -225,12 +224,76 @@ public class ScreeningService {
         );
     }
 
-    private FilmDTOFormPlus convertToFilmDTO(Terminverknuepfung tv) {
-        return new FilmDTOFormPlus(
-                new FilmDTOForm(tv.getFilm()),
-                tv.getVorfilm(),
-                tv.getRang()
+        // ***** utils method *****
+        private FilmDTOFormPlus convertToFilmDTO(Terminverknuepfung tv) {
+            return new FilmDTOFormPlus(
+                    new FilmDTOForm(tv.getFilm()),
+                    tv.getVorfilm(),
+                    tv.getRang()
+            );
+        }
+
+    public List<TerminDTOWithFilmDTOOverviewArchive> getPastTermineWithFilms() {
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Berlin"));
+        List<Termin> pastTermine = terminRepository.findPastTermine(now);
+
+        List<Long> terminIds = pastTermine.stream()
+                .map(Termin::getTnr)
+                .collect(Collectors.toList()); // Explicit collection
+
+        List<Terminverknuepfung> connections = terminverknuepfungRepository
+                .findWithFilmsByTerminIds(terminIds);
+
+        return pastTermine.stream()
+                .map(termin -> {
+                    List<Film> films = connections.stream()
+                            .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+                            .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
+                            .map(Terminverknuepfung::getFilm)
+                            .collect(Collectors.toList()); // Explicit collection
+                    return new TerminDTOWithFilmDTOOverviewArchive(termin, films);
+                })
+                .collect(Collectors.toList()); // Convert stream to List
+    }
+
+
+    public List<TerminDTOWithFilmDTOOverviewSemester> getTermineByCurrentSemester() {
+
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Berlin"));
+        LocalDateTime startDateSummer = LocalDateTime.of(now.getYear(), 4, 1, 0, 0);
+        LocalDateTime endDateSummer = LocalDateTime.of(now.getYear(), 9, 30, 23, 59, 59);
+        LocalDateTime startDateWinter = LocalDateTime.of(now.getYear(), 10, 1, 0, 0);
+        LocalDateTime endDateWinter = LocalDateTime.of(now.getYear() + 1, 3, 31, 23, 59, 59);
+
+        // Adjust year for winter end date if current date is in Jan-Mar
+        if (now.getMonthValue() >= 1 && now.getMonthValue() <= 3) {
+            startDateWinter = LocalDateTime.of(now.getYear() - 1, 10, 1, 0, 0);
+            endDateWinter = LocalDateTime.of(now.getYear(), 3, 31, 23, 59, 59);
+        } else if (now.getMonthValue() >= 10) {
+            endDateWinter = LocalDateTime.of(now.getYear() + 1, 3, 31, 23, 59, 59);
+        }
+
+        List<Termin> termineInSemester = terminRepository.findTermineByCurrentSemester(
+                now, startDateSummer, endDateSummer, startDateWinter, endDateWinter
         );
+
+        List<Long> terminIds = termineInSemester.stream()
+                .map(Termin::getTnr)
+                .collect(Collectors.toList());
+
+        List<Terminverknuepfung> connections = terminverknuepfungRepository
+                .findWithFilmsByTerminIds(terminIds);
+
+        return termineInSemester.stream()
+                .map(termin -> {
+                    List<Film> films = connections.stream()
+                            .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+                            .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
+                            .map(Terminverknuepfung::getFilm)
+                            .collect(Collectors.toList());
+                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films);
+                })
+                .collect(Collectors.toList());
     }
 
 }

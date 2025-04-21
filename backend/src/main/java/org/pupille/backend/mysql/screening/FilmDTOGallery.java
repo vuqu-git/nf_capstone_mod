@@ -2,7 +2,7 @@ package org.pupille.backend.mysql.screening;
 
 import org.pupille.backend.mysql.film.Film;
 
-public record FilmDTOOverview(
+public record FilmDTOGallery(
         Long filmId,
         String titel,
         String kurztext,
@@ -12,7 +12,7 @@ public record FilmDTOOverview(
         String format
 //        String fskRating
 ) {
-    public FilmDTOOverview(Film film) {
+    public FilmDTOGallery(Film film) {
         this(
                 film != null ? film.getFnr() : null,
                 film != null ? film.getTitel() : null,

@@ -5,6 +5,7 @@ import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
+import {copyToClipboard} from "../../utils/copyToClipboard.ts";
 
 const baseURL = "/api/filme";
 
@@ -58,12 +59,10 @@ export default function FilmForm() {
         // .finally(() => setIsLoading(false));
     };
 
-
     // Fetch all films for the dropdown selection
     useEffect(() => {
         getAllFilms();
     }, []);
-
 
     // Fetch the selected film details only if we are editing or deleting
     useEffect(() => {
@@ -98,15 +97,6 @@ export default function FilmForm() {
         }
     }, [selectedFilmId]);
 
-
-    // Handle form field changes
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setSelectedFilm((prevData: Film) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
 
     // Handle the form submission (PUT or POST)
     const handleSubmit = async (e: React.FormEvent) => {
@@ -157,7 +147,7 @@ export default function FilmForm() {
         }
     };
 
-    // Handle film deletion
+    // Handle DELETE
     const handleDelete = () => {
         setErrorMessage("");
         setSuccessMessage("");
@@ -171,12 +161,10 @@ export default function FilmForm() {
                     setConfirmDeleteOpen(false);
 
                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    // !!! DO NOT reset selectedTerminId immediately !!!
-                    // => I need to set it to remove the delete button after deletion!!
-                    // setSelectedFilmId(null);
+                    // => I need to set it to remove the delete button from display after deletion!!
+                    setSelectedFilmId(undefined);
 
                     setSelectedFilm(emptyFilmForForm); // Reset the form
-
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Deletion failed";
@@ -186,10 +174,56 @@ export default function FilmForm() {
         }
     };
 
-    const handleFilmSelectionChange = (id: number | undefined) => {
+    // Handle film form field changes
+    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+
+        setSelectedFilm((prevData: Film) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    // Handle selection changes
+    const handleSelectionChange = (id: number | undefined) => {
         setSelectedFilmId(id);
         setSelectionChanged(true); // Set flag when selection changes
     };
+
+    // ################## AI ##################
+    const generateFilmTextwithAI = () => {
+        const url = '/api/perplexityai/film-text';
+
+        // Construct query parameters
+        const params = new URLSearchParams({
+            // ?? operator is called the nullish coalescing operator
+            titel: selectedFilm.titel ?? '', // i.e. titel: selectedFilm.titel !== null && selectedFilm.titel !== undefined ? selectedFilm.titel : '',
+            originalTitel: selectedFilm.originaltitel ?? '',
+            jahr: String(selectedFilm.jahr ?? '')
+        });
+
+        // Sending the POST request
+        axios.post(`${url}?${params.toString()}`)
+            .then((response) => {
+                // Copy the original text to clipboard
+                copyToClipboard(selectedFilm.text ? selectedFilm.text : '');
+
+                // Update the news item with the response data
+                setSelectedFilm((prevData: Film) => ({
+                    ...prevData,
+                    text: response.data,
+                }));
+            })
+            .catch((error) => {
+                // Log any error that occurs during the request
+                console.error('Error occurred while sending the request:', error.message);
+            })
+            .finally(() => {
+                // Optional: Perform any cleanup or final actions here
+                console.log('Request completed.');
+            });
+    };
+    // ########################################
 
     return (
         <div>
@@ -198,7 +232,7 @@ export default function FilmForm() {
             <FilmSelection
                 films={allFilms}
                 selectedFilmId={selectedFilmId}
-                onSelectFilm={handleFilmSelectionChange}
+                onSelectFilm={handleSelectionChange}
             />
 
             <div style={{ minHeight: '30px' }}>
@@ -215,7 +249,7 @@ export default function FilmForm() {
                         type="text"
                         name="titel"
                         value={selectedFilm.titel || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -225,7 +259,7 @@ export default function FilmForm() {
                         type="text"
                         name="originaltitel"
                         value={selectedFilm.originaltitel || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -235,7 +269,7 @@ export default function FilmForm() {
                         label="Originaltitel anzeigen"
                         name="originaltitelAnzeigen"
                         checked={selectedFilm.originaltitelAnzeigen || false}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -245,7 +279,7 @@ export default function FilmForm() {
                         type="text"
                         name="bild"
                         value={selectedFilm.bild || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -256,9 +290,18 @@ export default function FilmForm() {
                         rows={13}
                         name="text"
                         value={selectedFilm.text || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
+
+                <Button
+                    variant="outline-info"
+                    className="mt-4"
+                    onClick={() => generateFilmTextwithAI()}
+                    disabled={!selectedFilm.titel}  // Disable if title is falsy (null, undefined, or empty string)
+                >
+                    🤖🧠💬 Generate film text! 💡📄✍️
+                </Button>
 
                 <Form.Group controlId="kurztext" className="mt-3">
                     <Form.Label>Kurztext</Form.Label>
@@ -267,7 +310,7 @@ export default function FilmForm() {
                         rows={3}
                         name="kurztext"
                         value={selectedFilm.kurztext || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -278,7 +321,7 @@ export default function FilmForm() {
                         rows={2}
                         name="besonderheit"
                         value={selectedFilm.besonderheit || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -288,7 +331,7 @@ export default function FilmForm() {
                         type="text"
                         name="land"
                         value={selectedFilm.land || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -298,7 +341,7 @@ export default function FilmForm() {
                         type="number"
                         name="jahr"
                         value={selectedFilm.jahr || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -308,7 +351,7 @@ export default function FilmForm() {
                         type="number"
                         name="laufzeit"
                         value={selectedFilm.laufzeit || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -318,7 +361,7 @@ export default function FilmForm() {
                         type="text"
                         name="sprache"
                         value={selectedFilm.sprache || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -328,7 +371,7 @@ export default function FilmForm() {
                         type="text"
                         name="untertitel"
                         value={selectedFilm.untertitel || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -338,7 +381,7 @@ export default function FilmForm() {
                         type="text"
                         name="farbe"
                         value={selectedFilm.farbe || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -348,7 +391,7 @@ export default function FilmForm() {
                         type="text"
                         name="format"
                         value={selectedFilm.format || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -358,7 +401,7 @@ export default function FilmForm() {
                         as="select"
                         name="fsk"
                         value={selectedFilm.fsk || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     >
                         <option value="">Select FSK (or leave this to have it empty)</option> {/* Option to display if value is null */}
                         <option value="0">0</option>
@@ -371,13 +414,13 @@ export default function FilmForm() {
                 </Form.Group>
 
                 <Form.Group controlId="stab" className="mt-3">
-                    <Form.Label>Stab</Form.Label>
+                    <Form.Label>Stab & Besetzung</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={10}
                         name="stab"
                         value={selectedFilm.stab || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -387,17 +430,19 @@ export default function FilmForm() {
                         type="number"
                         name="sonderfarbeTitel"
                         value={selectedFilm.sonderfarbeTitel || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
                 <Form.Group controlId="sonderfarbe" className="mt-3">
-                    <Form.Label>Sonderfarbe</Form.Label>
+                    <Form.Label>
+                        Sonderfarbe (pupille-glow, turquoise-glow, red-glow, orange-glow, yellow-glow, green-glow, blue-glow, indigo-glow, pink-glow)
+                    </Form.Label>
                     <Form.Control
                         type="number"
                         name="sonderfarbe"
                         value={selectedFilm.sonderfarbe || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -419,7 +464,7 @@ export default function FilmForm() {
 
             {confirmDeleteOpen && (
                 <div className="mt-3">
-                    <p>Are you sure you want to delete this film item?</p>
+                    <p>Are you sure you want to delete this film entry?</p>
                     <Button variant="secondary" onClick={() => setConfirmDeleteOpen(false)}>
                         Cancel
                     </Button>
@@ -434,5 +479,3 @@ export default function FilmForm() {
         </div>
     );
 };
-
-

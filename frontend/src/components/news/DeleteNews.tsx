@@ -58,7 +58,7 @@ export default function DeleteNews() {
 
             {confirmOpen && (
                 <div className="mt-3">
-                    <p>Are you sure you want to delete this news item?</p>
+                    <p>Are you sure you want to delete this news entry?</p>
                     <Button variant="secondary" onClick={() => setConfirmOpen(false)}>
                         Cancel
                     </Button>

@@ -4,16 +4,17 @@ import {News} from "../types/News.ts";
 import axios from "axios";
 import NewsCard from "./news/NewsCard.tsx";
 import {useAllNews} from "../hooks/useAllNews.ts";
-import TerminDTOWithFilmDTOOverviews from "../types/TerminDTOWithFilmDTOOverviews.ts";
+import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
 
-import { formatDateTime } from '../utils/DateTimeFormatForOverview.ts';
-import TerminFilmOverviewCard from "./termine/TerminFilmOverviewCard.tsx";
+import { formatDateTime } from '../utils/DateTimeFormatForGallery.ts';
+import TerminFilmGalleryCard from "./termine/TerminFilmGalleryCard.tsx";
 
-import './Overview.css';
+import './Gallery.css';
+import BackToTopButton from "./BackToTopButton.tsx";
 
 
 
-export default function Overview() {
+export default function Gallery() {
 
 
     const {
@@ -45,18 +46,18 @@ export default function Overview() {
         });
     }
 
-    const [screeningOverviewEntries, setScreeningOverviewEntries] = useState<TerminDTOWithFilmDTOOverviews[]>([]);
+    const [screeningGalleryEntries, setScreeningGalleryEntries] = useState<TerminDTOWithFilmDTOGallery[]>([]);
 
-    const getScreeningOverviewEntries = () => {
+    const getScreeningGalleryEntries = () => {
         setIsLoadingScreenings(true);
 
         axios.get("api/screenings")
             .then((response) => {
-                setScreeningOverviewEntries(response.data)
+                setScreeningGalleryEntries(response.data)
             })
             .catch((error) => {
                 const errorMessage =
-                    error instanceof Error ? error.message : "Fetching TerminDTOWithFilmDTOOverviews Overview Entries failed";
+                    error instanceof Error ? error.message : "Fetching TerminDTOWithFilmDTOGallery Gallery Entries failed";
                 setError(errorMessage);
             })
             .finally(() => {
@@ -66,7 +67,7 @@ export default function Overview() {
 
     useEffect(() => {
         getValidNews();
-        getScreeningOverviewEntries();
+        getScreeningGalleryEntries();
     }, [])
 
 
@@ -75,9 +76,22 @@ export default function Overview() {
     // scroll tracking logic
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     useEffect(() => {
+        // const saveScrollPosition = () => {
+        //     // Only store if user has scrolled down s, not on every scroll event (including those at 0)
+        //     if (window.scrollY > 0) { // this is really important!!!
+        //         sessionStorage.setItem('overviewScroll', window.scrollY.toString());
+        //         console.log("Saved Y-position:", window.scrollY);
+        //     }
+        // };
+
         const saveScrollPosition = () => {
-            // Only store if user has scrolled down s, not on every scroll event (including those at 0)
-            if (window.scrollY > 0) { // this is really important!!!
+            if (window.scrollY === 0) {
+                // User scrolled to top, save 0
+                sessionStorage.setItem('overviewScroll', '0');
+                console.log("Saved Y-position: 0");
+                    // Only store if user(!) has scrolled down, not on every scroll event (including those at 0)
+            } else if (window.scrollY > 0) { // this is really important!!!
+                // User(!) scrolled down, save current position
                 sessionStorage.setItem('overviewScroll', window.scrollY.toString());
                 console.log("Saved Y-position:", window.scrollY);
             }
@@ -152,57 +166,57 @@ export default function Overview() {
             opacity: readyToRender ? 1 : 0,
             transition: 'opacity 0.4s ease-in-out'
         }}>
-            <>
-                {/*<h1>Welcome to Pupille</h1>*/}
-                {/*<p>*/}
-                {/* Lorem ipsum dolor sit */}
-                {/*</p>*/}
 
-                {/*<section>*/}
-                {/*    <h2>(all) News</h2>*/}
-                {/*    {   isLoadingAllNews ? (*/}
-                {/*        <div className="text-warning mb-3">&#x1f504; Loading all news...</div>*/}
-                {/*    ) : error ? (*/}
-                {/*        <div className="text-danger mb-3">{error}</div>*/}
-                {/*    ) : (*/}
-                {/*        allNews.map(n => (*/}
-                {/*            <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>*/}
-                {/*            )*/}
-                {/*        ))*/}
-                {/*    }*/}
-                {/*</section>*/}
+            {/*<h1>Welcome to Pupille</h1>*/}
+            {/*<p>*/}
+            {/* Lorem ipsum dolor sit */}
+            {/*</p>*/}
 
-                <section>
-                    {
-                        // isLoadingNews ? (
-                        //     <div className="text-warning mb-3">&#x1f4f0; Loading news...</div>
-                        // ) :
-                        validNews && screeningOverviewEntries && (
-                            <>
-                                {/*<h3 style={{paddingTop: '2rem', paddingBottom: '2rem'}}>Neuigkeiten</h3>*/}
-                                {validNews.map(n => (
-                                    <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>
-                                    ))
-                                }
-                            </>
-                        )
-                    }
-                </section>
+            {/*<section>*/}
+            {/*    <h2>(all) News</h2>*/}
+            {/*    {   isLoadingAllNews ? (*/}
+            {/*        <div className="text-warning mb-3">&#x1f504; Loading all news...</div>*/}
+            {/*    ) : error ? (*/}
+            {/*        <div className="text-danger mb-3">{error}</div>*/}
+            {/*    ) : (*/}
+            {/*        allNews.map(n => (*/}
+            {/*            <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>*/}
+            {/*            )*/}
+            {/*        ))*/}
+            {/*    }*/}
+            {/*</section>*/}
+
+            <section>
+                {
+                    // isLoadingNews ? (
+                    //     <div className="text-warning mb-3">&#x1f4f0; Loading news...</div>
+                    // ) :
+                    validNews && screeningGalleryEntries && (
+                        <>
+                            {/*<h3 style={{paddingTop: '2rem', paddingBottom: '2rem'}}>Neuigkeiten</h3>*/}
+                            {validNews.map(n => (
+                                <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>
+                            ))
+                            }
+                        </>
+                    )
+                }
+            </section>
 
 
-                <section>
-                    {
+            <section>
+                {
                     //     isLoadingScreenings ? (
                     //     <div className="text-warning mb-3">&#127902; Loading screenings...</div>
                     // ) : (
-                        validNews && screeningOverviewEntries && (
-                            <>
-                                {/*<h3>Programm</h3>*/}
-                                {screeningOverviewEntries
-                                    .filter(termin => termin.veroeffentlichen !== null && termin.veroeffentlichen !== 0)
-                                    .map(termin => {
+                    validNews && screeningGalleryEntries && (
+                        <>
+                            {/*<h3>Programm</h3>*/}
+                            {screeningGalleryEntries
+                                .filter(termin => termin.veroeffentlichen !== null && termin.veroeffentlichen !== 0)
+                                .map(termin => {
                                     // Add logic here
-                                    
+
                                     const screeningDateObj = formatDateTime(termin.screeningTime);
 
                                     if (termin.titel) {
@@ -216,14 +230,14 @@ export default function Overview() {
                                             >
                                                 {/*for programms of (multiple) films*/}
                                                 {/***********************************/}
-                                                <TerminFilmOverviewCard
+                                                <TerminFilmGalleryCard
                                                     screeningWeekday={screeningDateObj ? screeningDateObj.weekday : null}
                                                     screeningDate={screeningDateObj ? screeningDateObj.date : null}
                                                     screeningTime={screeningDateObj ? screeningDateObj.time : null}
                                                     screeningSonderfarbe={"red-glow"}
                                                     // bild={termin.films[0]?.bild ? termin.films[0]?.bild : null}
                                                     bild={termin.bild ? termin.bild : null}
-                                                    offsetBildInOverview={undefined} // // instead of undefined, insert a number from 0 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
+                                                    offsetImageInGallery={undefined} // // instead of undefined, insert a number from 0 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
                                                     titel={termin.titel}
                                                     kurztext={termin.kurztext ? termin.kurztext : null}
                                                     jahr={undefined}
@@ -245,13 +259,13 @@ export default function Overview() {
                                             >
                                                 {/*screening consists of 1 main film + shorts possibly*/}
                                                 {/*****************************************************/}
-                                                <TerminFilmOverviewCard
+                                                <TerminFilmGalleryCard
                                                     screeningWeekday={screeningDateObj ? screeningDateObj.weekday : ""}
                                                     screeningDate={screeningDateObj ? screeningDateObj.date : ""}
                                                     screeningTime={screeningDateObj ? screeningDateObj.time : ""}
                                                     screeningSonderfarbe={"pupille-glow"}
                                                     bild={termin.films[0]?.bild ? termin.films[0]?.bild : null}
-                                                    offsetBildInOverview={undefined} // instead of undefined, insert a number from 1 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
+                                                    offsetImageInGallery={undefined} // instead of undefined, insert a number from 1 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
                                                     titel={termin.films[0]?.titel ? termin.films[0]?.titel : null}
                                                     kurztext={termin.films[0]?.kurztext ? termin.films[0]?.kurztext : null}
                                                     jahr={termin.films[0]?.jahr}
@@ -265,13 +279,13 @@ export default function Overview() {
                                     }
                                     return null; // Add a default return to handle cases where neither condition is met
                                 })}
-                            </>
-                        )
+                        </>
+                    )
                     // )
-                    }
-                </section>
+                }
+            </section>
 
-            </>
+            {/*<BackToTopButton />*/}
 
         </div>
 
