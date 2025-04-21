@@ -6,23 +6,20 @@ import org.pupille.backend.mysql.termin.Termin;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record TerminDTOWithFilmDTOOverviews(
+public record TerminDTOWithFilmDTOOverviewArchive(
         Long terminId,
         LocalDateTime screeningTime,
         String titel,
-        String kurztext,
-        String besonderheit,
-        List<FilmDTOOverview> films
+        List<FilmDTOOverviewArchive> films
 ) {
-    public TerminDTOWithFilmDTOOverviews(Termin termin, List<Film> films) {
+    public TerminDTOWithFilmDTOOverviewArchive(Termin termin, List<Film> films) {
         this(
                 termin.getTnr(),
                 termin.getTermin(),
                 termin.getTitel(),
-                termin.getKurztext(),
-                termin.getBesonderheit(),
+
                 films.stream()
-                        .map(FilmDTOOverview::new)
+                        .map(FilmDTOOverviewArchive::new)
                         .toList()
         );
     }

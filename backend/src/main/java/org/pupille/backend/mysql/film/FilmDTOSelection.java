@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+// DTO for selection field
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -19,4 +21,5 @@ public class FilmDTOSelection {
         this.jahr = film.getJahr();
         this.stab = film.getStab();
     }
+
 }

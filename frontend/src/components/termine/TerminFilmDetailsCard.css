@@ -1,0 +1,127 @@
+
+/*Glow effects around TerminCard component*/
+/*########################################*/
+
+/* Pupille Glow */
+.pupille-glow {
+    box-shadow: 0px 0px 150px -45px rgba(255, 208, 54, 0.6); /* RGBA of #FFD036 with 0.6 opacity */
+}
+.pupille-glow:hover {
+    box-shadow: 0px 0px 120px -55px rgba(255, 208, 54, 0.6); /* RGBA of #FFD036 with 0.6 opacity */
+}
+
+/* turquoise Glow */
+.turquoise-glow {
+    box-shadow: 0px 0px 150px -45px rgba(19, 160, 134, 0.6);
+}
+.turquoise-glow:hover {
+    box-shadow: 0px 0px 120px -55px rgba(19, 160, 134, 0.6);
+}
+
+/* Red Glow */
+.red-glow {
+    box-shadow: 0px 0px 150px -45px rgba(255, 0, 0, 0.6);
+}
+.red-glow:hover {
+    box-shadow: 0px 0px 120px -55px rgba(255, 0, 0, 0.6);
+}
+
+/* Orange Glow */
+.orange-glow {
+    box-shadow: 0px 0px 150px -45px rgba(255, 106, 0, 0.65); /* Fruit-orange: #FF6A00 */
+    transition: box-shadow 0.3s ease;
+}
+
+.orange-glow:hover {
+    box-shadow: 0px 0px 120px -55px rgba(255, 106, 0, 0.65);
+}
+
+/* Yellow Glow */
+.yellow-glow {
+    box-shadow: 0px 0px 150px -45px rgba(255, 255, 0, 0.6);
+}
+.yellow-glow:hover {
+    box-shadow: 0px 0px 120px -55px rgba(255, 255, 0, 0.6);
+}
+
+/* Green Glow */
+.green-glow {
+    box-shadow: 0px 0px 150px -45px rgba(0, 128, 0, 0.6);
+}
+.green-glow:hover {
+    box-shadow: 0px 0px 120px -55px rgba(0, 128, 0, 0.6);
+}
+
+/* Blue Glow */
+.blue-glow {
+    box-shadow: 0px 0px 150px -45px rgba(0, 0, 255, 0.6);
+}
+.blue-glow:hover {
+    box-shadow: 0px 0px 120px -55px rgba(0, 0, 255, 0.6);
+}
+
+/* Indigo Glow */
+.indigo-glow {
+    box-shadow: 0px 0px 150px -45px rgba(75, 0, 130, 0.6);
+}
+.indigo-glow:hover {
+    box-shadow: 0px 0px 120px -55px rgba(75, 0, 130, 0.6);
+}
+
+/* Pink Glow */
+.pink-glow {
+    box-shadow: 0px 0px 150px -45px rgba(255, 105, 180, 0.65); /* Barbie Pink: #FF69B4 */
+}
+.pink-glow:hover {
+    box-shadow: 0px 0px 120px -55px rgba(255, 105, 180, 0.65);
+}
+
+/*Zoom effect on TerminCard Component*/
+/*###################################*/
+
+/* Zoom effect on hover */
+.zoom-effect {
+    transition: all 0.4s; /* Smooth transition */
+}
+
+.zoom-effect:hover {
+    transform: scale(1.02); /* Slight zoom */
+    transition: all 0.4s; /* Ensure smooth transition during hover */
+}
+
+
+/*Tiny box for display of film duration or format*/
+/*###############################################*/
+
+/*.duration-box {*/
+/*    display: inline-block;*/
+/*    margin-top: 10px;*/
+/*    color: #fff;*/
+/*    padding: 5px;*/
+/*    border-radius: 5px;*/
+/*    border: 1px solid rgba(255, 255, 255, 0.13);*/
+/*}*/
+
+
+
+/* For embedded youtube video within <Card.Text> */
+/*###############################################*/
+
+
+.style-video-in-card iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 8px;
+    display: block;
+}
+
+
+/*Styling for display of year and director below the film title*/
+/*#############################################################*/
+
+.filminfo-and-stab {
+    color: #9ac7fa;
+    font-weight: 400;
+}

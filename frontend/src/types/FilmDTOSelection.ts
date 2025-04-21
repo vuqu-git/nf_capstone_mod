@@ -1,0 +1,9 @@
+
+// for selection form
+
+export type FilmDTOSelection = {
+    fnr: number,
+    titel?: string | null,
+    jahr?: number | null,
+    stab?: string | null
+}

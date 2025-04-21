@@ -12,16 +12,16 @@ const baseURL = "/api/terminverknuepfung";
 const emptyTVForForm = {
     tnr: 0,
     fnr: 0,
-    vorfilm: false,
-    rang: 0,
+    vorfilm: undefined,
+    rang: undefined,
 }
 
 export default function TerminverknuepfungForm() {
     const [allTVs, setAllTVs] = useState<Terminverknuepfung[]>([]); // All Termine fetched from the server
 
     const [selectedTVId, setSelectedTVId] = useState<string | null>(null); // Selected TVId (as concatenated string) for editing or deleting
-    const [selectedTVTNR, setSelectedTVTNR] = useState<number | null>(null); // Selected TVTNR for editing or deleting
-    const [selectedTVFNR, setSelectedTVFNR] = useState<number | null>(null); // Selected TVFNR for editing or deleting
+    // const [selectedTVTNR, setSelectedTVTNR] = useState<number | null>(null); // Selected TVTNR for editing or deleting
+    // const [selectedTVFNR, setSelectedTVFNR] = useState<number | null>(null); // Selected TVFNR for editing or deleting
 
     const [selectedTV, setSelectedTV] = useState<Terminverknuepfung>(emptyTVForForm); // Termin data for the form
 
@@ -39,7 +39,7 @@ export default function TerminverknuepfungForm() {
         // setIsLoading(true);
         setErrorMessage("");
 
-        axios.get(`${baseURL}`)
+        axios.get(`${baseURL}/plain`)
             .then((response) => setAllTVs(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -71,7 +71,7 @@ export default function TerminverknuepfungForm() {
 
                 const [tnr, fnr] = selectedTVId.split(',');
 
-                axios.get(`${baseURL}/${tnr}/${fnr}`)
+                axios.get(`${baseURL}/plain/${tnr}/${fnr}`)
                     .then((response) => setSelectedTV(response.data))
                     .catch((error) => {
                         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -88,14 +88,15 @@ export default function TerminverknuepfungForm() {
         }
     }, [selectedTVId]);
 
-    // Handle form field changes
+    // Handle form field changes, with distinguishing between checked and value
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const { name, type } = e.target;
         setSelectedTV((prevData: Terminverknuepfung) => ({
             ...prevData,
-            [name]: value,
+            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
         }));
     };
+
 
     // Handle the form submission (PUT or POST)
     const handleSubmit = async (e: React.FormEvent) => {
@@ -127,7 +128,7 @@ export default function TerminverknuepfungForm() {
         } else {
 
 
-            axios.post(`${baseURL}`, preprocessFormData(selectedTV))
+            axios.post(`${baseURL}/link-film-termin`, preprocessFormData(selectedTV))
                 .then(() => {
                     setSuccessMessage("Termin saved successfully!");
 

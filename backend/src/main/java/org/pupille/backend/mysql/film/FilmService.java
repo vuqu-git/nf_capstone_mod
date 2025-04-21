@@ -1,6 +1,8 @@
 package org.pupille.backend.mysql.film;
 
 import lombok.RequiredArgsConstructor;
+import org.pupille.backend.mysql.termin.Termin;
+import org.pupille.backend.mysql.termin.TerminDTOForm;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +19,27 @@ public class FilmService {
     private final FilmRepository filmRepository;
 
     // Retrieve all films
-    public List<Film> getAllFilms() {
-        return filmRepository.findAll();
+    public List<FilmDTOForm> getAllFilms() {
+        List<Film> filme = filmRepository.findAll();
+        return filme.stream()
+                .map(FilmDTOForm::new)
+                .collect(Collectors.toList());
     }
 
     // Retrieve all films sorted by title ascending
-    public List<Film> getAllFilmsSortedByTitleAsc() {
-        return filmRepository.findAll(Sort.by(Sort.Direction.ASC, "titel"));
+    public List<FilmDTOForm> getAllFilmsServiceSortedByTitleAsc() {
+        List<Film> filme = filmRepository.findAll(Sort.by(Sort.Direction.ASC, "titel"));
+        return filme.stream()
+                .map(FilmDTOForm::new)
+                .collect(Collectors.toList());
     }
 
 //    public List<FilmProjectionInterface> getAllFilmsByOrderByTitelAsc() {
 //        return filmRepository.findAllByOrderByTitelAsc();
 //    }
 
-    public List<FilmDTOSelection> getAllFilmsByOrderByTitelAsc() {
+    // here DTO for Selection is used and the director gets extracted
+    public List<FilmDTOSelection> getAllFilmsRepoSortedByTitleAsc() {
         return filmRepository.findAllByOrderByTitelAsc()
                                 .stream()
                                 .map(FilmDTOSelection::new)
@@ -42,21 +51,64 @@ public class FilmService {
                                 .collect(Collectors.toList());
     }
 
+            //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+            // utils function
+//            public static String extractDirectors(String input) {
+//                if (input == null || input.isEmpty()) {
+//                    return ""; // Handle null or empty input
+//                }
+//
+//                Pattern pattern = Pattern.compile(": (.*?)(?=\\r|$)");
+//                Matcher matcher = pattern.matcher(input);
+//
+//                if (matcher.find()) {
+//                    return matcher.group(1).trim();
+//                } else {
+//                    return "";
+//                }
+//            }
+            public static String extractDirectors(String stab) {
+                if (stab == null || stab.isEmpty()) return "";
 
-    public static String extractDirectors(String input) {
-        if (input == null || input.isEmpty()) {
-            return ""; // Handle null or empty input
-        }
+                // Normalize line endings
+                String[] lines = stab.replace("\r\n", "\n").replace('\r', '\n').split("\n");
 
-        Pattern pattern = Pattern.compile(": (.*?)(?=\\r|$)");
-        Matcher matcher = pattern.matcher(input);
+                // List of possible director field prefixes (add more as needed)
+                String[] directorPrefixes = {
+                        "Regie:", "R:", "R, B&S:", "B,R&amp;S:", "R&S:", "R&amp;S:", "B&R:", "B&amp;R:", "B,R&S:","B,R&amp;S:", "B,R&K:", "B,R&amp;K:", "B,R:", "Buch & Regie:", "Buch &amp; Regie:", "Buch und Regie:",
+                        "Buch, Regie & Produktion:", "Buch, Regie &amp; Produktion:", "B&R&S:" , "B&amp;R&amp;S:", "B&R&K:" , "B&amp;R&amp;K:", "B&R&K&S:" , "B&amp;R&amp;K&amp;S:", "B,R&K&S:", "B,R&amp;K&amp;S:", "B,R&K:" , "B,R&amp;K:", "B,R:", "B&R:", "B&amp;R:", "Buch, Regie:"
+                };
 
-        if (matcher.find()) {
-            return matcher.group(1).trim();
-        } else {
-            return "";
-        }
-    }
+                for (String line : lines) {
+                    String trimmed = line.trim();
+                    for (String prefix : directorPrefixes) {
+                        if (trimmed.startsWith(prefix)) {
+                            // Extract after prefix and trim
+                            return trimmed.substring(prefix.length()).trim();
+                        }
+                    }
+                }
+
+                // Fallback: try to match "R:" at the start of any line
+                for (String line : lines) {
+                    String trimmed = line.trim();
+                    if (trimmed.startsWith("R:")) {
+                        return trimmed.substring(2).trim();
+                    }
+                }
+
+                // Fallback: try to match "Regie:" at the start of any line
+                for (String line : lines) {
+                    String trimmed = line.trim();
+                    if (trimmed.startsWith("Regie:")) {
+                        return trimmed.substring(6).trim();
+                    }
+                }
+
+                // If nothing found, return null
+                return null;
+            }
+            //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
     // Retrieve a specific film by ID
     public Optional<FilmDTOForm> getFilmById(Long id) {
@@ -64,11 +116,11 @@ public class FilmService {
     }
 
     // Create or save a new film
-    public Film saveFilm(Film film) {
-        return filmRepository.save(film);
+    public FilmDTOForm saveFilm(Film film) {
+        return new FilmDTOForm(filmRepository.save(film));
     }
 
-//    // Update an existing film
+//    // optional Update an existing film, but nor required because Put method in controller achieves everything
 //    public Optional<Film> updateFilm(Long id, Film updatedFilm) {
 //        return filmRepository.findById(id).map(existingFilm -> {
 //            // Update fields of the existing film with values from updatedFilm

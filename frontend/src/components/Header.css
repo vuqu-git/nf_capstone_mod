@@ -1,13 +1,44 @@
 /*############################*/
 /*background colors of Navbar*/
-
-/* Change the Navbar background color */
 .custom-navbar {
-    background-color: #ffd036; /* Replace with your desired color */
+    background-color: #ffd036;
+    margin-bottom: 2rem;
+    box-shadow: 0px 0px 10px 3px rgba(255, 208, 54, 0.4);
 }
+
+.custom-navbar .nav-link:hover,
+.custom-navbar .nav-link:focus {
+    /*background-color: goldenrod;  !* or 'goldenrod' if you prefer *!*/
+    /*background-color: #f5b301;*/
+    /*background-color: #F5A302;*/
+    text-decoration: underline;
+    text-decoration-thickness: 2px; /* Make the underline thicker */
+    color: #000;                /* Optional: set text color for contrast */
+    border-radius: 0.25rem;     /* Optional: for a nicer look */
+    transition: background 0.2s;
+}
+
 
 /* Change the NavDropdown background color */
 .custom-dropdown .dropdown-menu {
     background-color: #ffd036; /* Replace with your desired color */
 }
+
+.custom-navbar .custom-dropdown .dropdown-item:hover,
+.custom-navbar .custom-dropdown .dropdown-item:focus {
+    /*background-color: goldenrod;*/
+    /*background-color: #f5b301;*/
+    /*background-color: #F5A302;*/
+
+    background-color: #ffd036;
+    text-decoration: underline;
+    text-decoration-thickness: 2px; /* Make the underline thicker */
+    color: #000;
+
+}
+
+
+
+
+
 

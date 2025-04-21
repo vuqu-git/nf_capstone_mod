@@ -1,5 +1,6 @@
 package org.pupille.backend.mysql.film;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.pupille.backend.mysql.terminverknuepfung.Terminverknuepfung;
@@ -37,7 +38,15 @@ public class Film {
     private String untertitel;
     private String format;
 
-    @Convert(converter = FskConverter.class) // Explicitly specify the converter
+    // @Convert annotation + FskConverter works only for database persistence, not for JSON serialization.
+    //            This is a JPA/Hibernate feature — it controls how Java values are converted to/from database values, not JSON.
+    //            So in your case:
+    //            You have an enum Film.Fsk, like _0, _6, UNGEPRUEFT, etc.
+    //            In the database, you don’t want to store _0 as a string — you want "0", "6", "ungeprüft", etc.
+    //                    That’s why you created FskConverter, which tells JPA:
+    //            When saving: Fsk._0 ➝ "0"
+    //            When loading: "0" ➝ Fsk._0
+    @Convert(converter = FskConverter.class)
     private Fsk fsk;
 
     @Column(columnDefinition = "TEXT")
@@ -50,12 +59,33 @@ public class Film {
     private Integer sonderfarbe;
 
     public enum Fsk {
-        _0, _6, _12, _16, _18, UNGEPRUEFT
+        _0("0"),
+        _6("6"),
+        _12("12"),
+        _16("16"),
+        _18("18"),
+        UNGEPRUEFT("ungeprüft");
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // this tells Jackson to serialize the enum using the return value of getValue(), not the enum name (_0, _6, etc).
+        private final String databaseValue;
+
+        Fsk(String databaseValue) {
+            this.databaseValue = databaseValue;
+        }
+
+        @JsonValue
+        public String getDatabaseValue() {
+            return databaseValue;
+        }
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     }
 
-    //    ###########################################
+    // ############################################
+    // relationship (extension of the entity model)
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
     private List<Terminverknuepfung> terminConnections = new ArrayList<>();
-    //    ###########################################
+    // ############################################
 }
 

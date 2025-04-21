@@ -6,7 +6,6 @@ interface Props {
     allNews: News[];
     selectedId: string;
     onSelect: (idInSelectOption: string) => void;
-    // formType: "edit" | "add"; // determines whether the selector is for editing or adding
 }
 
 export const NewsSelector = ({ allNews, selectedId, onSelect }: Props) => (
@@ -20,7 +19,7 @@ export const NewsSelector = ({ allNews, selectedId, onSelect }: Props) => (
             <option value="">Select here...</option>
             {allNews.map((news) => (
                 <option key={news.id} value={news.id}>
-                    "{news.text}" - End date: {news.endDate}
+                    End: {news.endDate} - {news.text}
                 </option>
             ))}
         </Form.Select>

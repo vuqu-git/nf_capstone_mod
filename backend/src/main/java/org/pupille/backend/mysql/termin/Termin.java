@@ -1,7 +1,6 @@
 package org.pupille.backend.mysql.termin;
 
 import jakarta.persistence.*;
-//import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.pupille.backend.mysql.terminverknuepfung.Terminverknuepfung;
@@ -30,11 +29,15 @@ public class Termin {
 //    @NotBlank // Ensure non-null and non-empty
     private String titel;
 
+    @Column(columnDefinition = "TEXT")
     private String text;
 
+    @Column(columnDefinition = "TEXT")
     private String kurztext;
 
     private String besonderheit;
+
+    private String bild;
 
     @Column(name = "start_reservierung")
     private LocalDate startReservierung; // date
@@ -48,9 +51,9 @@ public class Termin {
 
     private Short veroeffentlichen;
 
-    //    ###########################################
+    // ############################################
+    // relationship (extension of the entity model)
     @OneToMany(mappedBy = "termin", cascade = CascadeType.ALL)
     private List<Terminverknuepfung> filmConnections = new ArrayList<>();
-    //    ###########################################
-
+    // ############################################
 }

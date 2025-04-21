@@ -14,25 +14,20 @@ public class FilmController {
     private final FilmService filmService;
 
     @GetMapping
-    public List<Film> getAllFilms() {
+    public List<FilmDTOForm> getAllFilms() {
         return filmService.getAllFilms();
     }
 
     @GetMapping("/servicesort")
-    public ResponseEntity<List<Film>> getAllFilmsSortedByTitleAsc() {
-        List<Film> films = filmService.getAllFilmsSortedByTitleAsc();
+    public ResponseEntity<List<FilmDTOForm>> getAllFilmsServiceSortedByTitleAsc() {
+        List<FilmDTOForm> films = filmService.getAllFilmsServiceSortedByTitleAsc();
         return ResponseEntity.ok(films);
     }
 
-//    @GetMapping("/reposorted")
-//    public ResponseEntity<List<FilmProjectionInterface>> getAllFilmsByOrderByTitelAsc() {
-//        List<FilmProjectionInterface> films = filmService.getAllFilmsByOrderByTitelAsc();
-//        return ResponseEntity.ok(films);
-//    }
-
+    // this one is repo sorted
     @GetMapping("/allsorted")
-    public ResponseEntity<List<FilmDTOSelection>> getAllFilmsByOrderByTitelAsc() {
-        List<FilmDTOSelection> films = filmService.getAllFilmsByOrderByTitelAsc();
+    public ResponseEntity<List<FilmDTOSelection>> getAllFilmsRepoSortedByTitleAsc() {
+        List<FilmDTOSelection> films = filmService.getAllFilmsRepoSortedByTitleAsc();
         return ResponseEntity.ok(films);
     }
 
@@ -44,12 +39,13 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film createFilm(@RequestBody Film film) {
+    public FilmDTOForm createFilm(@RequestBody Film film) {
         return filmService.saveFilm(film);
     }
 
+    // this put has no corresponding update method in service, all done is here using the save service method
     @PutMapping("/{id}")
-    public ResponseEntity<Film> updateFilm(@PathVariable Long id, @RequestBody Film updatedFilm) {
+    public ResponseEntity<FilmDTOForm> updateFilm(@PathVariable Long id, @RequestBody Film updatedFilm) {
         return filmService.getFilmById(id)
                 .map(existingFilm -> {
                     updatedFilm.setFnr(existingFilm.getFnr());
@@ -67,4 +63,3 @@ public class FilmController {
         return ResponseEntity.notFound().build();
     }
 }
-
