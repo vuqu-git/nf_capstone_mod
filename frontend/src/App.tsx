@@ -29,7 +29,10 @@ function App() {
             <Header />
             <div className="navbar-gradient"></div>
             <main className="main-content">
-                <Container>
+                <Container
+                    style={{ width: '80%', margin: '0 auto' }}
+                    id="container"
+                >
                     <Row className="justify-content-center"> {/* Center the content */}
                         {/*<Col md={8} lg={8}> /!* Adjust the column widths for different screen sizes *!/*/}
                         {/*<Col md={7} > /!* Adjust the column widths for different screen sizes *!/*/}
@@ -58,9 +61,13 @@ function App() {
 
                                 <Route path="/admin" element={<Admin />} />
                             </Routes>
-                            <BackToTopButton />
+
                         </Col>
                     </Row>
+                    <BackToTopButton
+                        parentId="container"
+                        rightPercent={0.05} // !!!!! 5% inside from parent's right edge !!!!!
+                    />
                 </Container>
             </main>
         </div>

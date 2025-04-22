@@ -217,7 +217,7 @@ export default function Gallery() {
                                 .map(termin => {
                                     // Add logic here
 
-                                    const screeningDateObj = formatDateTime(termin.screeningTime);
+                                    const screeningDateObj = formatDateTime(termin.screeningTime, false, true);
 
                                     if (termin.titel) {
                                         return (

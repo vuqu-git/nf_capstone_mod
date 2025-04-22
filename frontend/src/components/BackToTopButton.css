@@ -1,20 +1,40 @@
 /* BackToTopButton.css */
+/*#backToTopBtn {*/
+/*    position: fixed;*/
+/*    bottom: 2rem;*/
+/*    right: 17%; !* Adjust as needed *!*/
+/*    transform: translateX(50%); !* To horizontally center *!*/
+/*    width: 3rem;*/
+/*    height: 3rem;*/
+/*    border-radius: 50%;*/
+/*    background-color: rgba(51, 51, 51, 0.85); !* Slightly transparent dark background *!*/
+/*    color: #FFD036;*/
+/*    font-size: 1.5rem;*/
+/*    border: 1px solid #FFD036; !* Added border *!*/
+/*    cursor: pointer;*/
+/*    z-index: 1000;*/
+/*    opacity: 0;*/
+/*    pointer-events: none; !* Initially prevent interaction *!*/
+/*    transition: opacity 0.3s ease-in-out;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+/*    */
+/*}*/
+
 #backToTopBtn {
-    position: fixed;
-    bottom: 2rem;
-    right: 17%; /* Adjust as needed */
-    transform: translateX(50%); /* To horizontally center */
-    width: 3rem;
-    height: 3rem;
+    width: 2.8rem;
+    height: 2.8rem;
     border-radius: 50%;
-    background-color: rgba(51, 51, 51, 0.85); /* Slightly transparent dark background */
+    background-color: rgba(51, 51, 51, 0.85);
     color: #FFD036;
     font-size: 1.5rem;
-    border: 1px solid #FFD036; /* Added border */
+    border: 1px solid #FFD036;
     cursor: pointer;
     z-index: 1000;
     opacity: 0;
-    pointer-events: none; /* Initially prevent interaction */
+    pointer-events: none;
     transition: opacity 0.3s ease-in-out;
     display: flex;
     align-items: center;
