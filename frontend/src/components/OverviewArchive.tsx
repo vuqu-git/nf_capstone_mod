@@ -7,8 +7,6 @@ import TerminDTOWithFilmDTOOverviewArchive from "../types/TerminDTOWithFilmDTOOv
 import {formatDateInOverviewArchive} from "../utils/formatDateInOverviewArchive.ts";
 import {render} from "../utils/render.tsx";
 import {Link} from "react-router-dom";
-import BackToTopButton from "./BackToTopButton.tsx";
-
 
 // interface Props {
 //
@@ -86,8 +84,6 @@ export default function OverviewArchive() {
                     </table>
                 ) : null} {/* 'else' part with null */}
             </section>
-
-            <BackToTopButton />
         </div>
 
     );

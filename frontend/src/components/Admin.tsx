@@ -1,14 +1,4 @@
-import {useEffect, useState} from "react";
-
-import './Overview.css';
-
-import axios from "axios";
-import TerminDTOWithFilmDTOOverviewArchive from "../types/TerminDTOWithFilmDTOOverviewArchive.ts";
-import {formatDateInOverviewArchive} from "../utils/formatDateInOverviewArchive.ts";
-import {render} from "../utils/render.tsx";
 import {Link} from "react-router-dom";
-import BackToTopButton from "./BackToTopButton.tsx";
-
 
 // interface Props {
 //

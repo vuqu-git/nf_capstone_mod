@@ -6,7 +6,6 @@ import axios from "axios";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
 import {render} from "../utils/render.tsx";
 import {Link} from "react-router-dom";
-import BackToTopButton from "./BackToTopButton.tsx";
 import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
 
 
@@ -200,7 +199,6 @@ export default function OverviewSemester() {
     //             }
     //         </section>
     //
-    //         <BackToTopButton />
     //     </div>
     // );
 
@@ -269,7 +267,6 @@ export default function OverviewSemester() {
                     </table>
                 ) : null} {/* else' part with null */}
             </section>
-            <BackToTopButton />
         </div>
     );
 };

@@ -10,9 +10,6 @@ import { formatDateTime } from '../utils/DateTimeFormatForGallery.ts';
 import TerminFilmGalleryCard from "./termine/TerminFilmGalleryCard.tsx";
 
 import './Gallery.css';
-import BackToTopButton from "./BackToTopButton.tsx";
-
-
 
 export default function Gallery() {
 
@@ -73,29 +70,30 @@ export default function Gallery() {
 
     const [readyToRender, setReadyToRender] = useState(false);
 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // scroll tracking logic
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     useEffect(() => {
-        // const saveScrollPosition = () => {
-        //     // Only store if user has scrolled down s, not on every scroll event (including those at 0)
-        //     if (window.scrollY > 0) { // this is really important!!!
-        //         sessionStorage.setItem('overviewScroll', window.scrollY.toString());
-        //         console.log("Saved Y-position:", window.scrollY);
-        //     }
-        // };
-
         const saveScrollPosition = () => {
-            if (window.scrollY === 0) {
-                // User scrolled to top, save 0
-                sessionStorage.setItem('overviewScroll', '0');
-                console.log("Saved Y-position: 0");
-                    // Only store if user(!) has scrolled down, not on every scroll event (including those at 0)
-            } else if (window.scrollY > 0) { // this is really important!!!
-                // User(!) scrolled down, save current position
+            // Only store if user has scrolled down s, not on every scroll event (including those at 0)
+            if (window.scrollY > 0) { // this is really important!!!
                 sessionStorage.setItem('overviewScroll', window.scrollY.toString());
                 console.log("Saved Y-position:", window.scrollY);
             }
         };
+
+        // const saveScrollPosition = () => {
+        //     if (window.scrollY === 0) {
+        //         // User scrolled to top, save 0
+        //         sessionStorage.setItem('overviewScroll', '0');
+        //         console.log("Saved Y-position: 0");
+        //             // Only store if user(!) has scrolled down, not on every scroll event (including those at 0)
+        //     } else if (window.scrollY > 0) { // this is really important!!!
+        //         // User(!) scrolled down, save current position
+        //         sessionStorage.setItem('overviewScroll', window.scrollY.toString());
+        //         console.log("Saved Y-position:", window.scrollY);
+        //     }
+        // };
 
         window.addEventListener('scroll', saveScrollPosition);
 
@@ -104,6 +102,8 @@ export default function Gallery() {
         };
     }, []);
 
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // scroll restoration logic
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // useEffect(() => {
@@ -284,8 +284,6 @@ export default function Gallery() {
                     // )
                 }
             </section>
-
-            {/*<BackToTopButton />*/}
 
         </div>
 
