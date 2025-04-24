@@ -90,7 +90,7 @@ export default function TerminFilmGalleryCard({
         color: '#FFD036',
         // fontSize: '2.0rem',
         // fontWeight: 'bold',
-        marginBottom: '0',
+        marginBottom: '0.1rem',
     };
 
 
@@ -155,7 +155,7 @@ export default function TerminFilmGalleryCard({
                         {/* Title now at the bottom within the overlay */}
                         {titel && (
                             <Card.Title
-                                as="h2"
+                                as="h3"
                                 style={overlayTitleStyle}
                             >
                                 {render(titel)}
@@ -256,7 +256,8 @@ export default function TerminFilmGalleryCard({
                     <Card.Text
                             style={{
                                 // borderTop: kurztext ? '1px solid #cfd6e1' : '',
-                                borderTop: kurztext ? '1px solid #FFD036' : '',
+                                // borderTop: kurztext ? '1px solid #FFD036' : '',
+                                borderTop: kurztext ? '2px dotted #FFD036' : '',
                                 // borderTop: '1px solid #FFD036',
 
                                 // padding: '1rem 0em', // Abstand oben und unten

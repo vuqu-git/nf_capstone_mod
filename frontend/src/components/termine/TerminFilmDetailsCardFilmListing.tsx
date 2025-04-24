@@ -24,10 +24,10 @@ export default function TerminFilmDetailsListing({
     return (
         <div>
             <Card.Title
-                as="h4"
+                as="h3"
                 style={{
                     color: '#FFD036',
-                    borderTop: '1px solid #cfd6e1',
+                    borderTop: '3px solid #FFD036',
                     paddingTop: '1rem',
                     paddingBottom: f.bild ? '1rem' : undefined, // Only adds padding if f.bild exists
                 }}
@@ -35,11 +35,32 @@ export default function TerminFilmDetailsListing({
                 {/*{index + 1}. Film: {render(film.titel) || "k.A."}*/}
                 {/*###############################*/}
 
+                {/*{(() => {*/}
+                {/*    if (numberOfF === 1) {*/}
+                {/*        return <>{fType}{render(f.titel)}</>;*/}
+                {/*    } else {*/}
+                {/*        return <>{index + 1}. {fType}{render(f.titel)}</>;*/}
+                {/*    }*/}
+                {/*})()}*/}
                 {(() => {
+                    const titleContentA = f.originaltitel ? (
+                        <>
+                            {render(f.originaltitel)}
+                            <br />
+                            ({render(f.titel)})
+                        </>
+                    ) : render(f.titel);
+
+                    const titleContentB = f.originaltitel ? (
+                        <>
+                            {render(f.originaltitel)} ({render(f.titel)})
+                        </>
+                    ) : render(f.titel);
+
                     if (numberOfF === 1) {
-                        return <>{fType}{render(f.titel)}</>;
+                        return <>{fType}{titleContentA}</>;
                     } else {
-                        return <>{index + 1}. {fType}{render(f.titel)}</>;
+                        return <>{index + 1}. {fType}{titleContentB}</>;
                     }
                 })()}
 
@@ -56,28 +77,6 @@ export default function TerminFilmDetailsListing({
 
             <Card.Body>
 
-                {/*<table*/}
-                {/*    style={{*/}
-                {/*    all: 'unset',*/}
-                {/*    color: 'inherit',*/}
-                {/*    font: 'inherit',*/}
-                {/*    // borderCollapse: 'collapse',*/}
-                {/*    // width: '100%',*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    <tbody>*/}
-                {/*    {f.land && <tr><td className="term">Land</td> <td>{f.land}</td></tr>}*/}
-                {/*    {f.jahr && <tr><td className="term">Jahr</td> <td>{f.jahr}</td></tr>}*/}
-                {/*    {f.laufzeit && <tr><td className="term">Länge</td> <td>{f.laufzeit}</td></tr>}*/}
-                {/*    {f.sprache && <tr><td className="term">Sprache</td> <td>{f.sprache}</td></tr>}*/}
-                {/*    {f.untertitel && <tr><td className="term">Untertitel</td> <td>{f.untertitel}</td></tr>}*/}
-                {/*    {f.farbe && <tr><td className="term">Farbigkeit</td> <td>{f.farbe}</td></tr>}*/}
-                {/*    {f.format && <tr><td className="term">Format</td> <td>{f.format}</td></tr>}*/}
-                {/*    {f.fsk && <tr><td className="term">FSK</td> <td>{f.fsk}</td></tr>}*/}
-                {/*    </tbody>*/}
-                {/*</table>*/}
-
-
                 <Card.Text
                     className="style-video-in-card"
                     style={{color: '#cfd6e1'}}
@@ -89,8 +88,10 @@ export default function TerminFilmDetailsListing({
                     f.besonderheit &&
                     <Card.Text
                         style={{
-                            borderTop: '1px solid #FFD036',
-                            borderBottom: '1px solid #FFD036',
+                            // borderTop: '1px solid #FFD036',
+                            // borderBottom: '1px solid #FFD036',
+                            borderTop: '2px dotted #FFD036',
+                            borderBottom: '2px dotted #FFD036',
                             padding: '1rem 0em',
                             color: '#cfd6e1',
                             textAlign: 'right',

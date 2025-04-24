@@ -1,11 +1,9 @@
-import {useEffect, useState} from "react";
 
 import './Overview.css';
 
-import axios from "axios";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
 import {render} from "../utils/render.tsx";
-import {Link} from "react-router-dom";
+import {Link, useLoaderData} from "react-router-dom";
 import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
 
 
@@ -16,39 +14,17 @@ import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
 // export default function OverviewSemester({ }: Props) {
 export default function OverviewSemester() {
 
-    const [semesterTermine, setSemesterTermine] = useState<TerminDTOWithFilmDTOOverviewSemester[]>([]);
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string>("");
+    const semesterTermine = useLoaderData<TerminDTOWithFilmDTOOverviewSemester[]>();
 
-    const getSemesterTermineWithFilmTitles = () => {
-        axios.get<TerminDTOWithFilmDTOOverviewSemester[]>("/api/screenings-semester")
-            .then((response) => {
-                setSemesterTermine(response.data)
-            })
-            .catch((error) => {
-                    const errorMessage = error instanceof Error ? error.message : "Fetching semester films failed";
-                    setErrorMessage(errorMessage);
-            })
-            .finally(() => {
-                setIsLoaded(true);
-            });
-    }
-
-    useEffect(() => {
-        getSemesterTermineWithFilmTitles();
-    }, [])
 
     return (
         <div>
             <section>
                 <h1>Semesterübersicht</h1>
 
-                {errorMessage && (
-                    <div className="text-danger mb-3">{errorMessage}</div>
-                )}
-                {!errorMessage && isLoaded && semesterTermine.length === 0 && (
-                    <p>Die Termine für das Semester werden demnächst veröffentlicht.</p>
-                )}
+                {/*{!errorMessage && isLoaded && semesterTermine.length === 0 && (*/}
+                {/*    <p>Die Termine für das Semester werden demnächst veröffentlicht.</p>*/}
+                {/*)}*/}
 
                 {semesterTermine && semesterTermine.length > 0 ? (
                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>

@@ -38,10 +38,6 @@ export default function TerminFilmDetailsCard({
                                                   vorfilms,
                                               }: Props) {
 
-    // here get Film list for that specific Termin
-
-
-
     return (
         <Card
             className="pupille-glow"
@@ -67,7 +63,7 @@ export default function TerminFilmDetailsCard({
                 </Card.Header>
 
                 <Card.Title
-                    as="h2"
+                    as="h3"
                     style={{
                         color: '#FFD036',
                         marginTop: '1.5rem',
