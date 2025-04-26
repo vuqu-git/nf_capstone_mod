@@ -1,5 +1,3 @@
-import * as React from "react";
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 
@@ -26,6 +24,8 @@ import TerminDTOWithFilmDTOGallery from "./types/TerminDTOWithFilmDTOGallery.ts"
 import {News} from "./types/News.ts";
 import TerminDTOWithFilmDTOOverviewSemester from "./types/TerminDTOWithFilmDTOOverviewSemester.ts";
 import TerminDTOWithFilmDTOOverviewArchive from "./types/TerminDTOWithFilmDTOOverviewArchive.ts";
+import ContentNotes from "./components/ContentNotes.tsx";
+import ProjektionAufLeinwand from "./components/ProjektionAufLeinwand.tsx";
 
 const router = createBrowserRouter([
     {
@@ -53,10 +53,21 @@ const router = createBrowserRouter([
             {
                 path: "details/:tnr",
                 element: <ScreeningDetails />,
-                // no usage of laoder here, beacuse the data is fetched with ScreeningDetails
+                // no usage of loader here, beacuse the data is fetched with ScreeningDetails
                 // loader: ({ params }) => getScreeningDetails(params.tnr),
                 handle: { scrollMode: "pathname" } // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
             },
+            {
+                path: "contentnotes",
+                element: <ContentNotes />,
+                handle: { scrollMode: "pathname" },
+            },
+            {
+                path: "kinoprojektion",
+                element: <ProjektionAufLeinwand />,
+                handle: { scrollMode: "pathname" },
+            },
+
             {
                 path: "admin",
                 element: <Admin />,

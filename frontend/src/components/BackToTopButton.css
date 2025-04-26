@@ -51,15 +51,11 @@
 #backToTopBtn:hover {
     background-color: #FFD036; /* Change background color on hover */
     color: rgba(51, 51, 51, 0.85); /* Change text color on hover */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow on hover */
-    outline: 1px solid rgba(51, 51, 51, 0.85); /* Use outline for the hover effect */
+    /* Enhanced glow effect with box-shadow */
+    box-shadow:
+            0 0 8px 1px #FFD036,                    /* Main glow */
+            0 0 13px 2px rgba(255, 208, 54, 0.5);   /* Softer, larger glow */
+    outline: 2px solid rgba(51, 51, 51, 0.85); /* Outline for hover effect */
+    transition: box-shadow 0.2s, background-color 0.2s, color 0.2s;
 }
-
-
-/*#backToTopBtn:hover {*/
-/*    background-color: #FFD036;*/
-/*    color: rgba(51, 51, 51, 0.85);*/
-/*    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);*/
-/*    border-color: rgba(255, 208, 54, 0.7); !* Semi-transparent version of the hover background *!*/
-/*}*/
 

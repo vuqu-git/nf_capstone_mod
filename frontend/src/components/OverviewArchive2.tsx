@@ -119,7 +119,7 @@ export default function OverviewArchive2() {
                         <td
                             style={{
                                 padding: '0.3rem',
-                                fontWeight: 'bold',
+                                fontWeight: '600',
                                 color: 'black',
                             }}
                             colSpan={2}
@@ -176,7 +176,7 @@ export default function OverviewArchive2() {
     return (
         <div>
             <section>
-                <h1>Programmarchiv</h1>
+                <h1 className="mb-4">Programmarchiv</h1>
                 {renderArchiveWithSemesterHeaders()}
             </section>
         </div>

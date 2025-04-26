@@ -26,15 +26,12 @@ export default function Header2() {
                             <NavDropdown.Item as={Link} to="/semester">Semesterübersicht</NavDropdown.Item>
                             <NavDropdown.Item href="#action/1.1">Heft als pdf</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/archive">Archiv</NavDropdown.Item>
-
                         </NavDropdown>
 
                         <NavDropdown title="Infos & Service" id="basic-nav-dropdown" className="custom-dropdown">
-                            <NavDropdown.Item href="#action/2.1">Kinobesuch</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/2.2">
-                                Triggerwarnungen & Content Notes
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/2.3">Filme zeigen</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/kinobesuch">Kinobesuch</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/contentnotes">Triggerwarnungen & Content Notes</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/kinoprojektion">Filme etc. zeigen</NavDropdown.Item>
                             <NavDropdown.Item href="#action/2.4">Unsere Kinogeschichte</NavDropdown.Item>
 
                             <NavDropdown.Divider />

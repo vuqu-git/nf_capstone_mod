@@ -48,7 +48,7 @@ export default function TerminFilmGalleryCard({
         bottom: 0,
         left: 0,
         width: '100%',
-        height: '100%', // Adjust the height of the fade as needed
+
         // height: '50%', // Adjust the height of the fade as needed
         // background: 'linear-gradient(to bottom, rgba(255, 208, 54, 0) 0%, rgba(255, 208, 54, 1) 100%)', // Fade to the card's background color
 
@@ -57,11 +57,20 @@ export default function TerminFilmGalleryCard({
         //     'rgba(13, 13, 12, 0.7) 70%, ' + // Faster transition to near opaque
         //     'rgba(13, 13, 12, 1) 100%)',
 
+        height: '150%', // Adjust the height of the fade as needed
         background: 'linear-gradient(to bottom, ' +
             'rgba(13, 13, 12, 0) 0%, ' +
             'rgba(13, 13, 12, 0.2) 55%, ' +
             'rgba(13, 13, 12, 0.5) 70%, ' +
             'rgba(13, 13, 12, 1) 100%)',
+
+
+        // height: '100%',
+        // background: 'linear-gradient(to bottom, ' +
+        //     'rgba(13, 13, 12, 0) 0%, ' +
+        //     'rgba(13, 13, 12, 0.2) 35%, ' +
+        //     'rgba(13, 13, 12, 0.3) 55%, ' +
+        //     'rgba(13, 13, 12, 1) 100%)',
 
         display: 'flex',
         flexDirection: 'column',
@@ -107,7 +116,7 @@ export default function TerminFilmGalleryCard({
         <Card
             // border="none"
             // className="pupille-glow zoom-effect"
-            className={`${screeningSonderfarbe} zoom-effect`}
+            className={`border-0 ${screeningSonderfarbe} zoom-effect`}
             style={{
                 // backgroundColor: '#FFD036',
                 backgroundColor: '#0D0D0C',
@@ -255,15 +264,12 @@ export default function TerminFilmGalleryCard({
                     besonderheit &&
                     <Card.Text
                             style={{
-                                // borderTop: kurztext ? '1px solid #cfd6e1' : '',
-                                // borderTop: kurztext ? '1px solid #FFD036' : '',
                                 borderTop: kurztext ? '2px dotted #FFD036' : '',
                                 // borderTop: '1px solid #FFD036',
 
                                 // padding: '1rem 0em', // Abstand oben und unten
                                 padding: '0.3rem 0em', // Abstand oben und unten
 
-                                // color: '#FFD036', // pupille yellow
                                 color: '#cfd6e1', // like kurztext
                                 textAlign: 'right',
                             }}
