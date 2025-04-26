@@ -1,20 +1,124 @@
-table {
-    /*border-collapse: collapse;*/
-    /*width: 100%; !* Make the table take full width *!*/
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/* Styling for trigger warning */
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+.accordion {
+    --bs-accordion-btn-bg: #222;           /* Header background */
+    --bs-accordion-btn-color: #C58AF9;         /* Header text */
+    --bs-accordion-active-bg: #222;         /* Active header background */
+    --bs-accordion-active-color: #C58AF9;   /* Active header text */
+    --bs-accordion-bg: #333;                /* Accordion body background */
+    --bs-accordion-color: #cfd6e1;             /* Accordion body text */
+    --bs-accordion-border-radius: 1rem;
+
+    --bs-accordion-btn-focus-box-shadow: none;
+
+    border-radius: 5px;
+    overflow: hidden; /* Ensures content stays within rounded corners */
 }
 
-td {
-    padding-right: 7px;
-    /*margin: 0;*/
-    vertical-align: top;
+.accordion-button::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23C58AF9'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+.accordion-button:not(.collapsed)::after {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23C58AF9'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
 
-.term {
-    /*width: 200px; !* Adjust to your desired width *!*/
-    white-space: nowrap; /* Prevent text from wrapping */
-    /*font-weight: bold;*/
+/*#########################################*/
+
+.accordion-header {
+    padding: 0.0rem 0.0rem !important; /* Adjust as needed */
 }
 
-.term::after {
-    content: ":";
+.accordion-body {
+    padding: 1rem 1.5rem;
+}
+
+.accordion-button {
+    padding: 0.5rem 0.5rem !important;
+    font-size: 1rem; /* Optional: reduce font size */
+    min-height: unset; /* Remove min-height if you want it even tighter */
+    /*font-weight: 600;*/
+}
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/* Styling for Filminformationen and Stab & Besetzung */
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+/* Styles for the section blocks */
+.section-block {
+    margin-bottom: 1rem; /* Space between sections */
+}
+
+/* Styles for the table-like block */
+.table-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem; /* Space between each row */
+
+    color: #cfd6e1;
+}
+
+/* Styles for each row */
+.row {
+    display: flex;
+    justify-content: flex-start; /* Ensure they align horizontally */
+    gap: 0.0rem; /* Space between label and value */
+    align-items: flex-start; /* Aligns the items to the top */
+}
+
+/* Styles for the label */
+.label {
+    min-width: 70px;
+    max-width: 100px;
+    white-space: normal; /* Allow wrapping */
+}
+
+.label::after {
+    content: ":"; /* Add colon after each label */
+    margin-left: 0.0rem; /* Space after the colon */
+}
+
+/* Styles for the value */
+.value {
+    flex: 1; /* The value will take the remaining space */
+}
+
+/*##############################################*/
+
+/* Only affect rows in the last section-block (Stab und Besetzung) */
+.section-block:last-child .row {
+    /*gap: 2.5rem; /* Space between label and value */
+}
+
+.section-block:last-child .label {
+    min-width: 60px;   /* Remove the min-width for labels in this section */
+    /*max-width: none; !* Remove the max-width for labels in this section *!*/
+    width: auto;     /* Let label size to content */
+}
+
+
+
+/*##############################################*/
+
+
+/* Media query for small screens - Apply stacking only to the "Stab und Besetzung" section: specifically target .row, .label, and .value within the LAST .section-block */
+@media (max-width: 500px) {
+    .section-block:last-child .row { /* Target rows within the last section-block (Stab und Besetzung) */
+        flex-direction: column; /* Stack label above value on small screens */
+        gap: 0.0rem; /* Space between stacked label and value */
+    }
+
+    .section-block:last-child .label { /* Target labels within the last section-block */
+        width: auto; /* Let the label width adjust on small screens */
+    }
+
+    .section-block:last-child .value { /* Target values within the last section-block */
+        width: auto; /* Let value take available space */
+    }
+
+    /* Add a small margin between each row in the stacked layout within the last section */
+    .section-block:last-child .row + .row {
+        margin-top: 0.3rem; /* Adds space between each stacked pair of label and value */
+    }
 }
