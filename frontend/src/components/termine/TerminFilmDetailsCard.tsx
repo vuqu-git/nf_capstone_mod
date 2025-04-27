@@ -8,11 +8,22 @@ import './TerminFilmDetailsCard.css';
 import FilmDTOFormPlus from "../../types/FilmDTOFormPlus.ts";
 import TerminFilmDetailsListing from "./TerminFilmDetailsCardFilmListing.tsx";
 
+import {createCalenderEvent} from "../../utils/createCalenderEvent.ts";
+import {createICSFileName} from "../../utils/createICSFileName.ts";
+import ICalendarLink from "react-icalendar-link";
+import {AddToCalendarButton} from "add-to-calendar-button-react";
+import {createDateAndTimeForAddToCalendarButton} from "../../utils/createDateAndTimeForAddToCalendarButton.ts";
+
 
 interface Props {
+    tnr: string;
+
     screeningWeekday: string | undefined;
     screeningDate: string | undefined;
     screeningTime: string | undefined;
+
+    screeningterminIso8601: string | undefined | null;
+
     screeningSonderfarbe: number | undefined;
 
     // these 3 items refer to the displayed entries above (wrt to programm titel or main feature titel)
@@ -22,12 +33,35 @@ interface Props {
 
     mainfilms: FilmDTOFormPlus[];
     vorfilms: FilmDTOFormPlus[];
+
+    screeningTotalDuration: number;
 }
+            // utils
+            function getDtstamp(now) {
+                const year = now.getUTCFullYear();
+                const month = now.getUTCMonth() + 1; // JS months are 0-based
+
+                if (month >= 4 && month <= 9) {
+                    // April to September
+                    return `${year}0401T000000Z`;
+                } else if (month <= 3) {
+                    // January to March
+                    return `${year - 1}1001T000000Z`;
+                } else {
+                    // October to December
+                    return `${year}1001T000000Z`;
+                }
+            }
 
 export default function TerminFilmDetailsCard({
+                                                  tnr,
+
                                                   screeningWeekday,
                                                   screeningDate,
                                                   screeningTime,
+
+                                                  screeningterminIso8601,
+
                                                   screeningSonderfarbe,
 
                                                   programmtitel,
@@ -36,7 +70,19 @@ export default function TerminFilmDetailsCard({
 
                                                   mainfilms,
                                                   vorfilms,
+
+                                                  screeningTotalDuration,
                                               }: Props) {
+
+    const calenderTitle = programmtitel ? programmtitel : mainfilms[0].film.titel;
+    console.log(calenderTitle);
+
+    const icsFileName = createICSFileName(calenderTitle, screeningterminIso8601);
+    const calenderDateObj = createDateAndTimeForAddToCalendarButton(screeningterminIso8601, screeningTotalDuration);
+
+
+const rawContent = `UID:${tnr}-uniqueid@pupille.org
+DTSTAMP:${getDtstamp( new Date() )}`;
 
     return (
         <Card
@@ -56,9 +102,37 @@ export default function TerminFilmDetailsCard({
                     className="text-end"
                     style={{
                         color: '#FFD036',
+                        backgroundColor: "inherit",
+                        borderBottom: "inherit",
                         marginBottom: '0.0rem',
                     }}
                 >
+
+                    <div style={{ display: "flex", justifyContent: "center", marginBottom: '0.5rem', }}>
+                        <AddToCalendarButton
+                            name={"Pupille: " + calenderTitle}
+                            startDate={calenderDateObj.startDate}
+                            startTime={calenderDateObj.startTime}
+                            endDate={calenderDateObj.endDate}
+                            endTime={calenderDateObj.endTime}
+                            timeZone="Europe/Berlin" // Handles DST automatically
+
+                            options={['iCal', 'Apple', 'Google', 'Microsoft365', 'MicrosoftTeams', 'Outlook.com']}
+                            uid={tnr + "-uidTermin@pupille.org"}
+                            iCalFileName={"pupille-" +  icsFileName}
+
+                            // inline={true}
+                            label="Termin speichern"
+                            // hideTextLabelButton={true}
+
+                            pastDateHandling="hide"
+                            size="1"
+                            lightMode={"dark"}
+                            hideBackground={true}
+                            hideBranding={true}
+                        />
+                    </div>
+
                     {screeningWeekday} | {screeningDate} | {screeningTime}
                 </Card.Header>
 
@@ -84,6 +158,21 @@ export default function TerminFilmDetailsCard({
                         {render(programmbesonderheit)}
                     </Card.Text>
                 )}
+
+                <p>
+                    <ICalendarLink
+                        event={createCalenderEvent(
+                            "Pupille-Kino: " + calenderTitle,
+                            screeningterminIso8601,
+                            screeningTotalDuration,
+                        )}
+                        filename={icsFileName}
+                        rawContent={rawContent}
+                    >
+                        Add to Calendar
+                    </ICalendarLink>
+                </p>
+
 
                 {/*###############################*/}
 

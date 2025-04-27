@@ -250,7 +250,7 @@ td {
 }
 
 /* NARROW PARENT ADJUSTMENT */
-@media (max-width: 1000px) {
+@media (max-width: 600px) {
     .overview-row {
         flex-direction: column;
         align-items: flex-start;

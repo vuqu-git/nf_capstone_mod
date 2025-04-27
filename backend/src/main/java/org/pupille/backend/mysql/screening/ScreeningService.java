@@ -17,7 +17,9 @@ import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ScreeningService {
@@ -151,44 +153,6 @@ public class ScreeningService {
 
 
     public TerminDTOFormWithFilmsDTOFormPlus getTerminWithFilmsPlusByTerminId(Long tnr) {
-//        // Fetch Termin
-//        Termin termin = terminRepository.findById(tnr)
-//                .orElseThrow(() -> new RuntimeException("Termin not found"));
-//
-//        // Get all connections with films
-//        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
-//
-//        // Map to DTOs with connection info
-//        List<FilmDTOFormPlus> filmDTOs = connections.stream()
-//                .filter(tv -> tv.getFilm() != null)
-//                .sorted(
-//                        // Primary sort: vorfilm == false/null first
-//                        Comparator.comparing(
-//                                        (Terminverknuepfung tv) -> {
-//                                            Boolean vorfilm = tv.getVorfilm();
-//                                            return vorfilm != null && vorfilm; // true means it's in the second group
-//                                        },
-//                                        Comparator.nullsFirst(Comparator.naturalOrder())
-//                                )
-//                                // Secondary sort: rang ascending within groups
-//                                .thenComparing(
-//                                        tv -> tv.getRang(),
-//                                        Comparator.nullsFirst(Short::compare)
-//                                )
-//                )
-//                .map(tv -> new FilmDTOFormPlus(
-//                        new FilmDTOForm(tv.getFilm()),
-//                        tv.getVorfilm(),
-//                        tv.getRang()
-//                ))
-//                .toList();
-//
-//
-//        return new TerminDTOFormWithFilmsDTOFormPlus(
-//                new TerminDTOForm(termin),
-//                filmDTOs
-//        );
-
         // Fetch Termin
         Termin termin = terminRepository.findById(tnr)
                 .orElseThrow(() -> new RuntimeException("Termin not found"));
@@ -217,21 +181,28 @@ public class ScreeningService {
                 .map(this::convertToFilmDTO)
                 .toList();
 
+        int screeningDuration = Stream.concat(mainFilms.stream(), vorfilms.stream())
+                .map(f -> f.getFilm().getLaufzeit())  // Extract laufzeit (could be null)
+                .filter(Objects::nonNull)             // Ignore null values
+                .mapToInt(Integer::intValue)          // Convert to primitive int
+                .sum();                               // Sum remaining values
+
         return new TerminDTOFormWithFilmsDTOFormPlus(
                 new TerminDTOForm(termin),
                 mainFilms,
-                vorfilms
+                vorfilms,
+                screeningDuration
         );
     }
 
         // ***** utils method *****
-        private FilmDTOFormPlus convertToFilmDTO(Terminverknuepfung tv) {
-            return new FilmDTOFormPlus(
-                    new FilmDTOForm(tv.getFilm()),
-                    tv.getVorfilm(),
-                    tv.getRang()
-            );
-        }
+            private FilmDTOFormPlus convertToFilmDTO(Terminverknuepfung tv) {
+                return new FilmDTOFormPlus(
+                        new FilmDTOForm(tv.getFilm()),
+                        tv.getVorfilm(),
+                        tv.getRang()
+                );
+            }
 
     public List<TerminDTOWithFilmDTOOverviewArchive> getPastTermineWithFilms() {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Berlin"));

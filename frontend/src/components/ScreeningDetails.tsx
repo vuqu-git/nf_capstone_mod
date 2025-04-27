@@ -34,9 +34,14 @@ export default function ScreeningDetails() {
     return (
         screeningDetails && (
             <TerminFilmDetailsCard
+                tnr={tnr}
+
                 screeningWeekday={screeningDateObj?.weekday}
                 screeningDate={screeningDateObj?.date}
                 screeningTime={screeningDateObj?.time}
+
+                screeningterminIso8601={screeningDetails.termin.termin}
+
                 screeningSonderfarbe={1}
 
                 programmtitel={screeningDetails.termin.titel} // d.h. der titel in der Tabelle Termin
@@ -45,6 +50,8 @@ export default function ScreeningDetails() {
 
                 mainfilms={screeningDetails.mainfilms}
                 vorfilms={screeningDetails.vorfilms}
+
+                screeningTotalDuration={screeningDetails.screeningTotalDuration}
             />
         )
     )

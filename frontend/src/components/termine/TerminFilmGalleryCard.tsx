@@ -57,7 +57,7 @@ export default function TerminFilmGalleryCard({
         //     'rgba(13, 13, 12, 0.7) 70%, ' + // Faster transition to near opaque
         //     'rgba(13, 13, 12, 1) 100%)',
 
-        height: '150%', // Adjust the height of the fade as needed
+        height: '100%', // Adjust the height of the fade as needed
         background: 'linear-gradient(to bottom, ' +
             'rgba(13, 13, 12, 0) 0%, ' +
             'rgba(13, 13, 12, 0.2) 55%, ' +

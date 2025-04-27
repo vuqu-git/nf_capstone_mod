@@ -1,3 +1,23 @@
+// import ICalendarLink, { Event as ICalendarEvent } from "react-icalendar-link";
+//
+// interface CalendarEvent {
+//     title: string;
+//     description?: string;
+//     startTime: string;
+//     endTime: string;
+//     location?: string;
+// }
+//
+// const event: CalendarEvent  = {
+//     title: "My Title",
+//     description: "My Description",
+//     startTime: "2025-04-26T10:30:00+02:00",
+//     endTime: "2025-04-26T12:00:00+02:00",
+//     location: "10 Carlotta St, Artarmon NSW 2064, Australia",
+// };
+
+import { AddToCalendarButton } from 'add-to-calendar-button-react';
+
 export default function ContentNotes() {
 
     return (
@@ -25,6 +45,62 @@ export default function ContentNotes() {
                 <p style={{textAlign: 'right',}}>
                     Stand: 16. April 2024
                 </p>
+
+                {/*<ICalendarLink event={event} filename="my-event.ics">*/}
+                {/*    Add to Calendar*/}
+                {/*</ICalendarLink>*/}
+
+                <AddToCalendarButton
+
+                    buttonStyle="date"
+
+                    name="Movie: Inception"
+                    startDate="2025-09-01"
+                    startTime="18:00"
+                    endDate="2025-09-02"
+                    endTime="00:30"
+                    timeZone="Europe/Berlin" // Handles DST automatically
+                    options={['Apple', 'Google', 'iCal']}
+
+                    uid={"123"}
+                    iCalFileName={"icsdatei"}
+
+                    // inline={true}
+                    label="Termin speichern"
+                    // hideTextLabelButton={true}
+
+                    // listStyle="modal"
+                    pastDateHandling="hide"
+                    size="1"
+                    lightMode={"dark"}
+                    hideBackground={true}
+                    hideBranding={true}
+                />
+
+                <AddToCalendarButton
+
+                    name="Movie: Inception"
+                    startDate="2025-09-01"
+                    startTime="18:00"
+                    endDate="2025-09-02"
+                    endTime="00:30"
+                    timeZone="Europe/Berlin" // Handles DST automatically
+                    options={['Apple', 'Google', 'iCal']}
+
+                    uid={"123"}
+                    iCalFileName={"icsdatei"}
+
+                    // inline={true}
+                    label="Termin speichern"
+                    hideTextLabelButton={true}
+
+                    // listStyle="modal"
+                    pastDateHandling="hide"
+                    size="1"
+                    lightMode={"dark"}
+                    hideBackground={true}
+                    hideBranding={true}
+                />
 
             </section>
         </div>
