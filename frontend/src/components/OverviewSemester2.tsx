@@ -88,13 +88,14 @@ import {Link, useLoaderData} from "react-router-dom";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
 import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
 import {render} from "../utils/render.tsx";
+import {AddToCalendarButton} from "add-to-calendar-button-react";
 
 export default function OverviewSemester() {
     const semesterTermine = useLoaderData<TerminDTOWithFilmDTOOverviewSemester[]>();
 
     return (
         <div>
-            <section>
+            <section style={{paddingLeft: '0.75rem', paddingRight: '0.5rem'}}>
                 <h1 className="mb-4">Semesterübersicht</h1>
 
                 {semesterTermine && semesterTermine.length > 0 && (
@@ -105,9 +106,43 @@ export default function OverviewSemester() {
                             return (
                                 <div key={termin.terminId} className="overview-row">
                                     <div className="overview-date">
+
+
+
                                         <div className="weekday">{screeningDateObj?.weekday}</div>
-                                        <div className="date">{screeningDateObj?.date}</div>
-                                        <div className="time">{screeningDateObj?.time}</div>
+                                        <div className="date">{screeningDateObj?.date} {screeningDateObj?.time}</div>
+
+                                        <div className="calendar">
+                                            <AddToCalendarButton
+                                                name="Movie: Inception"
+                                                startDate="2025-09-01"
+                                                startTime="18:00"
+                                                endDate="2025-09-02"
+                                                endTime="00:30"
+                                                timeZone="Europe/Berlin" // Handles DST automatically
+                                                options={['Apple', 'Google', 'iCal']}
+
+                                                uid={"123"}
+                                                iCalFileName={"icsdatei"}
+
+                                                inline={true}
+                                                label="T"
+                                                hideTextLabelButton={true}
+
+                                                trigger="click"
+
+                                                pastDateHandling="hide"
+                                                size="0"
+                                                lightMode={"dark"}
+                                                // hideBackground={true}
+                                                hideBranding={true}
+
+                                                buttonStyle="round"
+
+
+                                            />
+                                        </div>
+
                                     </div>
 
                                     <div className="overview-title">

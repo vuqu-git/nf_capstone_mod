@@ -117,7 +117,7 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                             endTime={calenderDateObj.endTime}
                             timeZone="Europe/Berlin" // Handles DST automatically
 
-                            options={['iCal', 'Apple', 'Google', 'Microsoft365', 'MicrosoftTeams', 'Outlook.com']}
+                            options={['iCal', 'Apple', 'Google']}
                             uid={tnr + "-uidTermin@pupille.org"}
                             iCalFileName={"pupille-" +  icsFileName}
 
@@ -128,7 +128,7 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                             pastDateHandling="hide"
                             size="1"
                             lightMode={"dark"}
-                            hideBackground={true}
+                            // hideBackground={true}
                             hideBranding={true}
                         />
                     </div>

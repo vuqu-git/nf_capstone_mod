@@ -90,7 +90,7 @@ export default function ContentNotes() {
                     uid={"123"}
                     iCalFileName={"icsdatei"}
 
-                    // inline={true}
+                    inline={true}
                     label="Termin speichern"
                     hideTextLabelButton={true}
 
