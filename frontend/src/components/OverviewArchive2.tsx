@@ -131,13 +131,13 @@ export default function OverviewArchive2() {
             }
 
             rows.push(
-                <tr key={termin.terminId}>
+                <tr key={termin.tnr}>
                     <td style={{ padding: '0.5rem 2rem 0.5rem 0.25rem', whiteSpace: 'nowrap', textAlign: 'right' }}>
                         {formatDateInOverviewArchive(termin.screeningTime)}
                     </td>
                     <td style={{ padding: '0.5rem 0' }}>
                         <Link
-                            to={`/details/${termin.terminId}`}
+                            to={`/details/${termin.tnr}`}
                             className="custom-link"
                         >
                             {!termin.titel ? (

@@ -121,6 +121,8 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                             uid={tnr + "-uidTermin@pupille.org"}
                             iCalFileName={"pupille-" +  icsFileName}
 
+                            trigger="click"
+
                             // inline={true}
                             label="Termin speichern"
                             // hideTextLabelButton={true}
@@ -130,7 +132,6 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                             lightMode={"dark"}
                             // hideBackground={true}
                             hideBranding={true}
-
                         />
                     </div>
 

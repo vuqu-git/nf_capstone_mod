@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record TerminDTOWithFilmDTOGallery(
-        Long terminId,
+        Long tnr,
         LocalDateTime screeningTime,
         String titel,
         String kurztext,

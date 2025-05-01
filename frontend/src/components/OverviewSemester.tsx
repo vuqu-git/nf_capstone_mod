@@ -57,7 +57,7 @@ export default function OverviewSemester() {
                         {semesterTermine.map(termin => {
                             const screeningDateObj = formatDateTime(termin.screeningTime, true, true);
                             return (
-                                <tr key={termin.terminId}>
+                                <tr key={termin.tnr}>
                                     <td style={{ padding: '0.5rem 0.25rem', whiteSpace: 'nowrap' }}>
                                         {screeningDateObj?.weekday}
                                     </td>
@@ -71,7 +71,7 @@ export default function OverviewSemester() {
                                         {!termin.titel ? (
                                             <>
                                                 <Link
-                                                    to={`/details/${termin.terminId}`}
+                                                    to={`/details/${termin.tnr}`}
                                                     className="custom-link"
                                                 >
                                                     {render(termin.films[0]?.titel) ?? ""}
@@ -84,7 +84,7 @@ export default function OverviewSemester() {
                                             </>
                                         ) : (
                                             <Link
-                                                to={`/details/${termin.terminId}`}
+                                                to={`/details/${termin.tnr}`}
                                                 className="custom-link"
                                             >
                                                 {render(termin.titel)}

@@ -2,7 +2,7 @@ import FilmDTOOverviewSemester from "./FilmDTOOverviewSemester.ts";
 
 // this one mirrors TerminDTOWithFilmDTOOverviewSemester
 interface TerminDTOWithFilmDTOOverviewSemester{
-    terminId: number;
+    tnr: number;
     screeningTime?: string;
     titel?: string | null;
 

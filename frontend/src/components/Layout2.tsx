@@ -49,7 +49,7 @@ export default function Layout2() {
                 >
                     <Row className="justify-content-center"> {/* Center the content */}
 
-                        <Col md={12} lg={8} xl={7} className="px-0"> {/* Adjust the column widths for different screen sizes */}
+                        <Col md={12} lg={7} xl={6} className="px-0"> {/* Adjust the column widths for different screen sizes */}
                             {/*px-0 sets both horizontal paddings (left and right) to zero for all breakpoints, including extra small screens*/}
                             {/*To set the left and right padding to zero on your <Col> for extra small screens (less than 576px) in React Bootstrap, use the Bootstrap utility class px-0*/}
 
@@ -60,7 +60,7 @@ export default function Layout2() {
                     </Row>
                     <BackToTopButton
                         parentId="container"
-                        rightPercent={0.05} // !!!!! 5% inside from parent's right edge !!!!!
+                        rightPercent={0.10} // !!!!! 5% inside from parent's right edge !!!!!
                     />
                 </Container>
             </main>

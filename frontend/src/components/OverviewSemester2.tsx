@@ -112,7 +112,7 @@ export default function OverviewSemester() {
 
 
                             return (
-                                <div key={termin.terminId} className="overview-row">
+                                <div key={termin.tnr} className="overview-row">
                                     <div className="overview-date">
 
 
@@ -130,13 +130,13 @@ export default function OverviewSemester() {
                                                 timeZone="Europe/Berlin" // Handles DST automatically
                                                 options={['Apple', 'Google', 'iCal']}
 
-                                                uid={termin.terminId + "-uidTermin@pupille.org"}
+                                                uid={termin.tnr + "-uidTermin@pupille.org"}
                                                 iCalFileName={"pupille-" +  icsFileName}
 
                                                 inline={true}
                                                 hideTextLabelButton={true}
 
-                                                trigger="click"
+
 
                                                 pastDateHandling="hide"
                                                 size="0"
@@ -154,7 +154,7 @@ export default function OverviewSemester() {
                                     <div className="overview-title">
                                         {!termin.titel ? (
                                             <>
-                                                <Link to={`/details/${termin.terminId}`} className="custom-link">
+                                                <Link to={`/details/${termin.tnr}`} className="custom-link">
                                                     {render(termin.mainfilms[0]?.titel) ?? ""}
                                                 </Link>
                                                 {termin.mainfilms[0]?.besonderheit && (
@@ -164,7 +164,7 @@ export default function OverviewSemester() {
                                                 )}
                                             </>
                                         ) : (
-                                            <Link to={`/details/${termin.terminId}`} className="custom-link">
+                                            <Link to={`/details/${termin.tnr}`} className="custom-link">
                                                 {render(termin.titel)}
                                                 <ol className="film-list">
                                                     {termin.mainfilms.map(film => (

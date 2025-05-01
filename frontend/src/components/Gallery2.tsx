@@ -46,7 +46,7 @@ export default function Gallery2() {
                         if (termin.titel) {
                             return (
                                 <div
-                                    key={termin.terminId}
+                                    key={termin.tnr}
                                     style={{
                                         paddingTop: "1.5rem",
                                         paddingBottom: "1.5rem"
@@ -68,14 +68,14 @@ export default function Gallery2() {
                                         besonderheit={termin.besonderheit ? termin.besonderheit : null}
                                         filmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
 
-                                        tnr={termin.terminId} // for navigation to certain route
+                                        tnr={termin.tnr} // for navigation to certain route
                                     />
                                 </div>
                             );
                         } else if (termin.films?.length > 0) {
                             return (
                                 <div
-                                    key={termin.terminId}
+                                    key={termin.tnr}
                                     style={{
                                         paddingTop: "1.5rem",
                                         paddingBottom: "1.5rem"
@@ -96,7 +96,7 @@ export default function Gallery2() {
                                         besonderheit={termin.films[0]?.besonderheit ? termin.films[0]?.besonderheit : null}
                                         filmFormat={termin.films[0]?.format ? termin.films[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
 
-                                        tnr={termin.terminId} // for navigation to certain route
+                                        tnr={termin.tnr} // for navigation to certain route
                                     />
                                 </div>
                             );

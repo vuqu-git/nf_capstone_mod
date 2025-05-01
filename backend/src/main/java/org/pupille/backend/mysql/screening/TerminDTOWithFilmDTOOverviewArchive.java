@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record TerminDTOWithFilmDTOOverviewArchive(
-        Long terminId,
+        Long tnr,
         LocalDateTime screeningTime,
         String titel,
         List<FilmDTOOverviewArchive> films
