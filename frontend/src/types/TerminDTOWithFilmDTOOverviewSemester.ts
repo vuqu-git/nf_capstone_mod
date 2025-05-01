@@ -6,7 +6,9 @@ interface TerminDTOWithFilmDTOOverviewSemester{
     screeningTime?: string;
     titel?: string | null;
 
-    films: FilmDTOOverviewSemester[];
+    mainfilms: FilmDTOOverviewSemester[];
+
+    screeningTotalDuration: number;
 }
 
 export default TerminDTOWithFilmDTOOverviewSemester;

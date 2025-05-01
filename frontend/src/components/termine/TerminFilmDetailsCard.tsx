@@ -16,7 +16,7 @@ import {createDateAndTimeForAddToCalendarButton} from "../../utils/createDateAnd
 
 
 interface Props {
-    tnr: string;
+    tnr: string | undefined;
 
     screeningWeekday: string | undefined;
     screeningDate: string | undefined;
@@ -74,7 +74,7 @@ export default function TerminFilmDetailsCard({
                                                   screeningTotalDuration,
                                               }: Props) {
 
-    const calenderTitle = programmtitel ? programmtitel : mainfilms[0].film.titel;
+    const calenderTitle = programmtitel ? programmtitel : mainfilms[0].film.titel ?? "";
     console.log(calenderTitle);
 
     const icsFileName = createICSFileName(calenderTitle, screeningterminIso8601);
@@ -117,7 +117,7 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                             endTime={calenderDateObj.endTime}
                             timeZone="Europe/Berlin" // Handles DST automatically
 
-                            options={['iCal', 'Apple', 'Google']}
+                            options={['Apple', 'Google', 'iCal']}
                             uid={tnr + "-uidTermin@pupille.org"}
                             iCalFileName={"pupille-" +  icsFileName}
 
@@ -126,10 +126,11 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                             // hideTextLabelButton={true}
 
                             pastDateHandling="hide"
-                            size="1"
+                            size="2"
                             lightMode={"dark"}
                             // hideBackground={true}
                             hideBranding={true}
+
                         />
                     </div>
 

@@ -10,9 +10,10 @@ public record TerminDTOWithFilmDTOOverviewSemester(
         Long terminId,
         LocalDateTime screeningTime,
         String titel,
-        List<FilmDTOOverviewSemester> films
+        List<FilmDTOOverviewSemester> mainfilms,
+        Integer screeningTotalDuration
 ) {
-    public TerminDTOWithFilmDTOOverviewSemester(Termin termin, List<Film> films) {
+    public TerminDTOWithFilmDTOOverviewSemester(Termin termin, List<Film> films, Integer screeningTotalDuration) {
         this(
                 termin.getTnr(),
                 termin.getTermin(),
@@ -20,7 +21,37 @@ public record TerminDTOWithFilmDTOOverviewSemester(
 
                 films.stream()
                         .map(FilmDTOOverviewSemester::new)
-                        .toList()
+                        .toList(),
+
+                screeningTotalDuration
         );
     }
 }
+
+
+//public record TerminDTOWithFilmDTOOverviewSemester(
+//        Long terminId,
+//        LocalDateTime screeningTime,
+//        String titel,
+//        List<FilmDTOOverviewSemester> mainfilms,
+//        List<FilmDTOOverviewSemester> vorfilms,
+//        Integer screeningTotalDuration
+//) {
+//        public TerminDTOWithFilmDTOOverviewSemester(Termin termin, List<Film> films, List<Film> vorfilms, Integer screeningTotalDuration) {
+//        this(
+//                termin.getTnr(),
+//                termin.getTermin(),
+//                termin.getTitel(),
+//
+//                films.stream()
+//                        .map(FilmDTOOverviewSemester::new)
+//                        .toList(),
+//
+//                vorfilms.stream()
+//                        .map(FilmDTOOverviewSemester::new)
+//                        .toList(),
+//
+//                screeningTotalDuration
+//        );
+//    }
+//}

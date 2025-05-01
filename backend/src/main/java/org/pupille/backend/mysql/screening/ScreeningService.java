@@ -14,10 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -181,7 +178,7 @@ public class ScreeningService {
                 .map(this::convertToFilmDTO)
                 .toList();
 
-        int screeningDuration = Stream.concat(mainFilms.stream(), vorfilms.stream())
+        int screeningTotalDuration = Stream.concat(mainFilms.stream(), vorfilms.stream())
                 .map(f -> f.getFilm().getLaufzeit())  // Extract laufzeit (could be null)
                 .filter(Objects::nonNull)             // Ignore null values
                 .mapToInt(Integer::intValue)          // Convert to primitive int
@@ -191,7 +188,7 @@ public class ScreeningService {
                 new TerminDTOForm(termin),
                 mainFilms,
                 vorfilms,
-                screeningDuration
+                screeningTotalDuration
         );
     }
 
@@ -227,44 +224,62 @@ public class ScreeningService {
                 .collect(Collectors.toList()); // Convert stream to List
     }
 
-
     public List<TerminDTOWithFilmDTOOverviewSemester> getTermineByCurrentSemester() {
 
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Berlin"));
-        LocalDateTime startDateSummer = LocalDateTime.of(now.getYear(), 4, 1, 0, 0);
-        LocalDateTime endDateSummer = LocalDateTime.of(now.getYear(), 9, 30, 23, 59, 59);
-        LocalDateTime startDateWinter = LocalDateTime.of(now.getYear(), 10, 1, 0, 0);
-        LocalDateTime endDateWinter = LocalDateTime.of(now.getYear() + 1, 3, 31, 23, 59, 59);
 
-        // Adjust year for winter end date if current date is in Jan-Mar
-        if (now.getMonthValue() >= 1 && now.getMonthValue() <= 3) {
-            startDateWinter = LocalDateTime.of(now.getYear() - 1, 10, 1, 0, 0);
-            endDateWinter = LocalDateTime.of(now.getYear(), 3, 31, 23, 59, 59);
-        } else if (now.getMonthValue() >= 10) {
-            endDateWinter = LocalDateTime.of(now.getYear() + 1, 3, 31, 23, 59, 59);
-        }
+        boolean isWinter = now.getMonthValue() >= 10 || now.getMonthValue() <= 3;
+
+        LocalDateTime startDate = isWinter
+                ? (now.getMonthValue() <= 3
+                    ? LocalDateTime.of(now.getYear() - 1, 10, 1, 0, 0)
+                    : LocalDateTime.of(now.getYear(), 10, 1, 0, 0))
+                : LocalDateTime.of(now.getYear(), 4, 1, 0, 0);
+
+        LocalDateTime endDate = isWinter
+                ? LocalDateTime.of(now.getMonthValue() <= 3 ? now.getYear() : now.getYear() + 1, 3, 31, 23, 59, 59)
+                : LocalDateTime.of(now.getYear(), 9, 30, 23, 59, 59);
 
         List<Termin> termineInSemester = terminRepository.findTermineByCurrentSemester(
-                now, startDateSummer, endDateSummer, startDateWinter, endDateWinter
+                now, startDate, endDate, startDate, endDate
         );
+
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         List<Long> terminIds = termineInSemester.stream()
                 .map(Termin::getTnr)
                 .collect(Collectors.toList());
 
-        List<Terminverknuepfung> connections = terminverknuepfungRepository
-                .findWithFilmsByTerminIds(terminIds);
+        Map<Long, List<Terminverknuepfung>> connectionsByTerminId = terminverknuepfungRepository
+                .findWithFilmsByTerminIds(terminIds)
+                .stream()
+                .collect(Collectors.groupingBy(tv -> tv.getTermin().getTnr()));
 
         return termineInSemester.stream()
                 .map(termin -> {
-                    List<Film> films = connections.stream()
-                            .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
-                            .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
-                            .map(Terminverknuepfung::getFilm)
-                            .collect(Collectors.toList());
-                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films);
+                    List<Terminverknuepfung> connections = connectionsByTerminId.getOrDefault(termin.getTnr(), List.of());
+
+                    List<Film> films = new ArrayList<>();
+                    List<Film> vorfilms = new ArrayList<>();
+
+                    for (Terminverknuepfung tv : connections) {
+                        if (Boolean.TRUE.equals(tv.getVorfilm())) {
+                            vorfilms.add(tv.getFilm());
+                        } else {
+                            films.add(tv.getFilm());
+                        }
+                    }
+
+                    int screeningTotalDuration = Stream.concat(films.stream(), vorfilms.stream())
+                            .map(Film::getLaufzeit)
+                            .filter(Objects::nonNull)
+                            .mapToInt(Integer::intValue)
+                            .sum();
+
+                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, screeningTotalDuration);
+//                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, vorfilms, screeningTotalDuration);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

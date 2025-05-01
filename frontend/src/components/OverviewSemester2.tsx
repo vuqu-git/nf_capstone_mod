@@ -89,6 +89,8 @@ import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOO
 import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
 import {render} from "../utils/render.tsx";
 import {AddToCalendarButton} from "add-to-calendar-button-react";
+import {createDateAndTimeForAddToCalendarButton} from "../utils/createDateAndTimeForAddToCalendarButton.ts";
+import {createICSFileName} from "../utils/createICSFileName.ts";
 
 export default function OverviewSemester() {
     const semesterTermine = useLoaderData<TerminDTOWithFilmDTOOverviewSemester[]>();
@@ -101,7 +103,13 @@ export default function OverviewSemester() {
                 {semesterTermine && semesterTermine.length > 0 && (
                     <div className="overview-container">
                         {semesterTermine.map(termin => {
+
                             const screeningDateObj = formatDateTime(termin.screeningTime, true, true);
+                            const calenderDateObj = createDateAndTimeForAddToCalendarButton(termin.screeningTime, termin.screeningTotalDuration);
+
+                            const calenderTitle = termin.titel ? termin.titel : termin.mainfilms[0].titel;
+                            const icsFileName = createICSFileName(calenderTitle, termin.screeningTime);
+
 
                             return (
                                 <div key={termin.terminId} className="overview-row">
@@ -114,19 +122,18 @@ export default function OverviewSemester() {
 
                                         <div className="calendar">
                                             <AddToCalendarButton
-                                                name="Movie: Inception"
-                                                startDate="2025-09-01"
-                                                startTime="18:00"
-                                                endDate="2025-09-02"
-                                                endTime="00:30"
+                                                name={"Pupille: " + calenderTitle}
+                                                startDate={calenderDateObj.startDate}
+                                                startTime={calenderDateObj.startTime}
+                                                endDate={calenderDateObj.endDate}
+                                                endTime={calenderDateObj.endTime}
                                                 timeZone="Europe/Berlin" // Handles DST automatically
                                                 options={['Apple', 'Google', 'iCal']}
 
-                                                uid={"123"}
-                                                iCalFileName={"icsdatei"}
+                                                uid={termin.terminId + "-uidTermin@pupille.org"}
+                                                iCalFileName={"pupille-" +  icsFileName}
 
                                                 inline={true}
-                                                label="T"
                                                 hideTextLabelButton={true}
 
                                                 trigger="click"
@@ -139,7 +146,6 @@ export default function OverviewSemester() {
 
                                                 buttonStyle="round"
 
-
                                             />
                                         </div>
 
@@ -149,11 +155,11 @@ export default function OverviewSemester() {
                                         {!termin.titel ? (
                                             <>
                                                 <Link to={`/details/${termin.terminId}`} className="custom-link">
-                                                    {render(termin.films[0]?.titel) ?? ""}
+                                                    {render(termin.mainfilms[0]?.titel) ?? ""}
                                                 </Link>
-                                                {termin.films[0]?.besonderheit && (
+                                                {termin.mainfilms[0]?.besonderheit && (
                                                     <p className="besonderheit">
-                                                        {render(termin.films[0]?.besonderheit) ?? ""}
+                                                        {render(termin.mainfilms[0]?.besonderheit) ?? ""}
                                                     </p>
                                                 )}
                                             </>
@@ -161,7 +167,7 @@ export default function OverviewSemester() {
                                             <Link to={`/details/${termin.terminId}`} className="custom-link">
                                                 {render(termin.titel)}
                                                 <ol className="film-list">
-                                                    {termin.films.map(film => (
+                                                    {termin.mainfilms.map(film => (
                                                         <li key={film.filmId}>{render(film.titel)}</li>
                                                     ))}
                                                 </ol>
