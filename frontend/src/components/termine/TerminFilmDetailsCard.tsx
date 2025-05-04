@@ -1,5 +1,5 @@
 import Card from 'react-bootstrap/Card';
-import {render} from "../../utils/render.tsx";
+import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 
 import './TerminFilmDetailsCard.css';
 
@@ -22,7 +22,7 @@ interface Props {
     screeningDate: string | undefined;
     screeningTime: string | undefined;
 
-    screeningterminIso8601: string | undefined | null;
+    screeningterminIso8601: string | undefined;
 
     screeningSonderfarbe: number | undefined;
 
@@ -74,8 +74,7 @@ export default function TerminFilmDetailsCard({
                                                   screeningTotalDuration,
                                               }: Props) {
 
-    const calenderTitle = programmtitel ? programmtitel : mainfilms[0].film.titel ?? "";
-    console.log(calenderTitle);
+    const calenderTitle = programmtitel ? programmtitel : mainfilms[0].film.titel ?? "Film in der Pupille";
 
     const icsFileName = createICSFileName(calenderTitle, screeningterminIso8601);
     const calenderDateObj = createDateAndTimeForAddToCalendarButton(screeningterminIso8601, screeningTotalDuration);
@@ -146,18 +145,18 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                         marginBottom: '1.5rem'
                     }}
                 >
-                    {render(programmtitel)}
+                    {renderHtmlText(programmtitel)}
                 </Card.Title>
 
                 {programmtext && (
                     <Card.Text style={{color: '#cfd6e1'}}>
-                        {render(programmtext)}
+                        {renderHtmlText(programmtext)}
                     </Card.Text>
                 )}
 
                 {programmbesonderheit && (
                     <Card.Text style={{color: '#cfd6e1'}}>
-                        {render(programmbesonderheit)}
+                        {renderHtmlText(programmbesonderheit)}
                     </Card.Text>
                 )}
 

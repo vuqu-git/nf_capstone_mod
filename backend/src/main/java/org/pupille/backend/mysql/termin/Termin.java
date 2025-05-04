@@ -1,8 +1,10 @@
 package org.pupille.backend.mysql.termin;
 
 import jakarta.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.pupille.backend.mysql.terminverknuepfung.Terminverknuepfung;
 
 import java.time.LocalDate;
@@ -17,16 +19,16 @@ import java.util.List;
 public class Termin {
 
     @Id
-//    @Column(name = "tnr", nullable = false) // Map to "tnr" column in the database
+    //    @Column(name = "tnr", nullable = false) // Map to "tnr" column in the database
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Use auto-increment
-//    GenerationType.IDENTITY tells JPA to rely on the database's identity column (auto-increment) to generate primary key values.
-//    This is specific to databases like MySQL that support auto-increment.
+    //    GenerationType.IDENTITY tells JPA to rely on the database's identity column (auto-increment) to generate primary key values.
+    //    This is specific to databases like MySQL that support auto-increment.
     private Long tnr; // Primary key
 
-//    @NotNull
+    @Column(nullable = false)
     private LocalDateTime termin; // datetime
 
-//    @NotBlank // Ensure non-null and non-empty
+    // @NotBlank // Ensure non-null and non-empty
     private String titel;
 
     @Column(columnDefinition = "TEXT")

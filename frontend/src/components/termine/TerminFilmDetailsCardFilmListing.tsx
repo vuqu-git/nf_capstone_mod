@@ -1,5 +1,5 @@
 import Card from 'react-bootstrap/Card';
-import {render} from "../../utils/render.tsx";
+import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 
 import {Film} from "../../types/Film.ts";
 import {structureStabString} from "../../utils/structureStabString.ts";
@@ -46,17 +46,17 @@ export default function TerminFilmDetailsListing({
                 {(() => {
                     const titleContentA = f.originaltitel ? (
                         <>
-                            {render(f.originaltitel)}
+                            {renderHtmlText(f.originaltitel)}
                             <br />
-                            ({render(f.titel)})
+                            ({renderHtmlText(f.titel)})
                         </>
-                    ) : render(f.titel);
+                    ) : renderHtmlText(f.titel);
 
                     const titleContentB = f.originaltitel ? (
                         <>
-                            {render(f.originaltitel)} ({render(f.titel)})
+                            {renderHtmlText(f.originaltitel)} ({renderHtmlText(f.titel)})
                         </>
-                    ) : render(f.titel);
+                    ) : renderHtmlText(f.titel);
 
                     if (numberOfF === 1) {
                         return <>{fType}{titleContentA}</>;
@@ -84,7 +84,7 @@ export default function TerminFilmDetailsListing({
                     className="style-video-in-card"
                     style={{color: '#cfd6e1'}}
                 >
-                    {render(f.text || "k.A.")}
+                    {renderHtmlText(f.text || "k.A.")}
                 </Card.Text>
 
                 {/****** content note ******/}
@@ -121,7 +121,7 @@ export default function TerminFilmDetailsListing({
                             textAlign: 'right',
                         }}
                     >
-                        {render(f.besonderheit)}
+                        {renderHtmlText(f.besonderheit)}
                     </Card.Text>
                 }
 
@@ -136,7 +136,7 @@ export default function TerminFilmDetailsListing({
                             {f.laufzeit && <div className="row"><div className="label">Länge</div><div className="value">{f.laufzeit} min</div></div>}
                             {f.sprache && <div className="row"><div className="label">Sprache</div><div className="value">{f.sprache}</div></div>}
                             {f.untertitel && <div className="row"><div className="label">Untertitel</div><div className="value">{f.untertitel}</div></div>}
-                            {f.farbe && <div className="row"><div className="label">Farbigkeit</div><div className="value">{render(f.farbe)}</div></div>}
+                            {f.farbe && <div className="row"><div className="label">Farbigkeit</div><div className="value">{renderHtmlText(f.farbe)}</div></div>}
                             {f.format && <div className="row"><div className="label">Format</div><div className="value">{f.format}</div></div>}
                             {f.fsk && <div className="row"><div className="label">FSK</div><div className="value">{f.fsk}</div></div>}
                         </div>
@@ -151,8 +151,8 @@ export default function TerminFilmDetailsListing({
                         <div className="table-block">
                             {structuredStab.map(row => (
                                 <div className="row" key={row.abbrev}>
-                                    <div className="label">{render(row.abbrev)}</div>
-                                    <div className="value">{render(row.entry)}</div>
+                                    <div className="label">{renderHtmlText(row.abbrev)}</div>
+                                    <div className="value">{renderHtmlText(row.entry)}</div>
                                 </div>
                             ))}
                         </div>

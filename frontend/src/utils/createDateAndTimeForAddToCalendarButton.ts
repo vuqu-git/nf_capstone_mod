@@ -1,4 +1,17 @@
-export function createDateAndTimeForAddToCalendarButton(screeningterminIso8601: string, screeningTotalDuration: number) {
+export function createDateAndTimeForAddToCalendarButton(
+    screeningterminIso8601?: string, // Make the input optional
+    screeningTotalDuration: number = 0, //Provide a default value in case it is undefined
+) {
+
+    if (!screeningterminIso8601) {
+        return { // Return empty strings => <AddToCalendarButton /> won't display in case of these values
+            startDate: '',
+            startTime: '',
+            endDate: '',
+            endTime: '',
+        };
+    }
+
     const start = new Date(screeningterminIso8601);
     const end = new Date(start.getTime() + screeningTotalDuration * 60000); // 60000 ms in a minute
 

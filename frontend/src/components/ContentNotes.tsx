@@ -54,7 +54,7 @@ export default function ContentNotes() {
 
                     buttonStyle="date"
 
-                    name="Movie: Inception"
+                    name="Movie: The Prestige"
                     startDate="2025-09-01"
                     startTime="18:00"
                     endDate="2025-09-02"

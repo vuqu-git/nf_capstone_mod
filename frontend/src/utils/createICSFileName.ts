@@ -1,6 +1,6 @@
 export function createICSFileName(
     title: string,
-    startTime: string,
+    startTime?: string,
 ): string {
 
     const newTitle = title.toLowerCase()
@@ -8,7 +8,12 @@ export function createICSFileName(
                                     .replace(/\s+/g, "-") // Replace whitespace with hyphens
                                     .replace(/[^a-z0-9-]/g, "") // Remove all non-alphanumeric characters except hyphens
 
-    const newStartTime = startTime.slice(0, 10).replace(/-/g, ''); // Take only YYYY-MM-DD and remove "-"
+    let fileName = newTitle; // Start with the title
 
-    return `${newTitle}-${newStartTime}`;
+    if (startTime) {
+        const newStartTime = startTime ? startTime.slice(0, 10).replace(/-/g, '') : ""; // Take only YYYY-MM-DD and remove "-"
+        fileName += `-${newStartTime}`; // Add hyphen and startTime only if startTime exists
+    }
+
+    return fileName;
 }

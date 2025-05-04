@@ -207,6 +207,7 @@ export default function TerminForm() {
                         name="termin"
                         value={selectedTermin.termin || ""}
                         onChange={handleFormChange}
+                        required
                     />
                 </Form.Group>
 

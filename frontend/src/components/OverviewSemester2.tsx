@@ -87,7 +87,7 @@
 import {Link, useLoaderData} from "react-router-dom";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
 import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
-import {render} from "../utils/render.tsx";
+import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import {createDateAndTimeForAddToCalendarButton} from "../utils/createDateAndTimeForAddToCalendarButton.ts";
 import {createICSFileName} from "../utils/createICSFileName.ts";
@@ -155,20 +155,20 @@ export default function OverviewSemester() {
                                         {!termin.titel ? (
                                             <>
                                                 <Link to={`/details/${termin.tnr}`} className="custom-link">
-                                                    {render(termin.mainfilms[0]?.titel) ?? ""}
+                                                    {renderHtmlText(termin.mainfilms[0]?.titel) ?? ""}
                                                 </Link>
                                                 {termin.mainfilms[0]?.besonderheit && (
                                                     <p className="besonderheit">
-                                                        {render(termin.mainfilms[0]?.besonderheit) ?? ""}
+                                                        {renderHtmlText(termin.mainfilms[0]?.besonderheit) ?? ""}
                                                     </p>
                                                 )}
                                             </>
                                         ) : (
                                             <Link to={`/details/${termin.tnr}`} className="custom-link">
-                                                {render(termin.titel)}
+                                                {renderHtmlText(termin.titel)}
                                                 <ol className="film-list">
                                                     {termin.mainfilms.map(film => (
-                                                        <li key={film.filmId}>{render(film.titel)}</li>
+                                                        <li key={film.filmId}>{renderHtmlText(film.titel)}</li>
                                                     ))}
                                                 </ol>
                                             </Link>

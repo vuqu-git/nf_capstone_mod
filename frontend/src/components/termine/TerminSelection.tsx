@@ -26,7 +26,8 @@ export default function TerminSelection({ termine, selectedTerminId, onSelectTer
                 onChange={handleSelectChange}
                 // style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
             >
-                <option value="">Select a Termin to edit (or leave empty to add new)</option>
+                {/*<option value="" disabled selected>Select a Termin to edit (or leave empty to add new)</option>*/}
+                <option value="" selected>Select a Termin to edit (or leave empty to add new)</option>
                 {termine.map((t: TerminDTOSelection) => (
                     <option key={t.tnr} value={t.tnr}>
                         {`${formatDateInTerminSelectOption(t.termin)} | ${t.titel} | #${t.tnr}`}

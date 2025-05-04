@@ -68,7 +68,7 @@ import './Overview.css';
 
 import TerminDTOWithFilmDTOOverviewArchive from "../types/TerminDTOWithFilmDTOOverviewArchive.ts";
 import {formatDateInOverviewArchive} from "../utils/formatDateInOverviewArchive.ts";
-import {render} from "../utils/render.tsx";
+import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {Link, useLoaderData} from "react-router-dom";
 import {JSX} from "react";
 
@@ -142,17 +142,17 @@ export default function OverviewArchive2() {
                         >
                             {!termin.titel ? (
                                 <>
-                                    {render(termin.films[0]?.titel) ?? ""}
+                                    {renderHtmlText(termin.films[0]?.titel) ?? ""}
                                 </>
                             ) : (
                                 <>
-                                    {render(termin.titel)}
+                                    {renderHtmlText(termin.titel)}
                                     <ol style={{ marginBottom: '0rem' }}>
                                         {termin.films.map(film => (
                                             <li key={film.filmId}
                                                 style={{ fontSize: '0.75em'}}
                                             >
-                                                {render(film.titel)}
+                                                {renderHtmlText(film.titel)}
                                             </li>
                                         ))}
                                     </ol>

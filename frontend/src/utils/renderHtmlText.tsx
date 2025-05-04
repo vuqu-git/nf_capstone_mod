@@ -1,11 +1,11 @@
-const render = (htmlString: string | null | undefined) => {
+const renderHtmlText = (htmlString: string | null | undefined) => {
     if (htmlString == null) {
         return undefined; // Or perhaps an empty div: <div />; or some other fallback
     }
     return <span dangerouslySetInnerHTML={{ __html: htmlString }} />;
 };
 
-export { render }; // Export the function with the desired name
+export { renderHtmlText }; // Export the function with the desired name
 
 // // Example usage (ONLY if 'trustedHTML' is guaranteed to be safe):
 // const trustedHTML = "<strong>This is bold and <em>italic</em>.</strong>";
@@ -13,10 +13,6 @@ export { render }; // Export the function with the desired name
 //
 // // You can then use 'htmlElement' in your JSX:
 // // <div>{htmlElement}</div>
-
-
-
-
 
 
 

@@ -4,7 +4,7 @@ import './Overview.css';
 
 import axios from "axios";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
-import {render} from "../utils/render.tsx";
+import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {Link} from "react-router-dom";
 import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
 
@@ -74,11 +74,11 @@ export default function OverviewSemester() {
                                                     to={`/details/${termin.tnr}`}
                                                     className="custom-link"
                                                 >
-                                                    {render(termin.films[0]?.titel) ?? ""}
+                                                    {renderHtmlText(termin.films[0]?.titel) ?? ""}
                                                 </Link>
                                                 {termin.films[0]?.besonderheit && (
                                                     <p style={{ fontSize: '0.75em', marginBottom: '0' }}>
-                                                        {render(termin.films[0]?.besonderheit) ?? ""}
+                                                        {renderHtmlText(termin.films[0]?.besonderheit) ?? ""}
                                                     </p>
                                                 )}
                                             </>
@@ -87,10 +87,10 @@ export default function OverviewSemester() {
                                                 to={`/details/${termin.tnr}`}
                                                 className="custom-link"
                                             >
-                                                {render(termin.titel)}
+                                                {renderHtmlText(termin.titel)}
                                                 <ol style={{ marginBottom: '0' }}>
                                                     {termin.films.map(film => (
-                                                        <li key={film.filmId}>{render(film.titel)}</li>
+                                                        <li key={film.filmId}>{renderHtmlText(film.titel)}</li>
                                                     ))}
                                                 </ol>
                                             </Link>

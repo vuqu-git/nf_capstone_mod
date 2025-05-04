@@ -1,5 +1,5 @@
 import Card from 'react-bootstrap/Card';
-import {render} from "../../utils/render.tsx";
+import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 import {CSSProperties} from "react";
 import './TerminFilmGalleryCard.css';
 import { useNavigate } from "react-router-dom";
@@ -167,7 +167,7 @@ export default function TerminFilmGalleryCard({
                                 as="h3"
                                 style={overlayTitleStyle}
                             >
-                                {render(titel)}
+                                {renderHtmlText(titel)}
                             </Card.Title>
                         )}
 
@@ -256,7 +256,7 @@ export default function TerminFilmGalleryCard({
                             // marginTop: jahr ? '' : '1rem', // sonst zu viel Abstand
                     }}
                     >
-                        {render(kurztext)}
+                        {renderHtmlText(kurztext)}
                     </Card.Text>
                 )}
 
@@ -274,7 +274,7 @@ export default function TerminFilmGalleryCard({
                                 textAlign: 'right',
                             }}
                     >
-                        {render(besonderheit)}
+                        {renderHtmlText(besonderheit)}
                     </Card.Text>
                 }
 
