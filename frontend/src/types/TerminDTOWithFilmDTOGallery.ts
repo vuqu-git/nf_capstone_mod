@@ -3,7 +3,7 @@ import FilmDTOGallery from "./FilmDTOGallery.ts";
 // this one mirrors TerminDTOWithFilmDTOGallery
 interface TerminDTOWithFilmDTOGallery {
     tnr: number;
-    screeningTime?: string;
+    vorstellungsbeginn?: string;
     titel?: string | null;
     kurztext?: string | null;
     besonderheit?: string| null;

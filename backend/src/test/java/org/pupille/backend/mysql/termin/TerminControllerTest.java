@@ -61,7 +61,7 @@ class TerminControllerTest {
     @Test
     void testCreateAndGetTermin() throws Exception {
         Termin termin = new Termin();
-        termin.setTermin(LocalDateTime.now());
+        termin.setVorstellungsbeginn(LocalDateTime.now());
         termin.setTitel("Test Termin");
         termin.setText("Test Text");
         termin.setKurztext("Short Test Text");

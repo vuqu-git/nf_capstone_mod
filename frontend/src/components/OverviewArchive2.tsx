@@ -25,7 +25,7 @@
 //                         {archiveTermine.map(termin => (
 //                             <tr key={termin.terminId}>
 //                                 <td style={{ padding: '0.5rem 2rem 0.5rem 0.25rem', whiteSpace: 'nowrap', textAlign: 'right' }}>
-//                                     {formatDateInOverviewArchive(termin.screeningTime)}
+//                                     {formatDateInOverviewArchive(termin.vorstellungsbeginn)}
 //                                 </td>
 //                                 <td style={{ padding: '0.5rem 0' }}>
 //                                     <Link
@@ -87,8 +87,8 @@ export default function OverviewArchive2() {
         for (let i = 0; i < archiveTermine.length; i++) {
             const termin = archiveTermine[i];
 
-            if (!termin.screeningTime) continue;
-            const screeningDate = new Date(termin.screeningTime);
+            if (!termin.vorstellungsbeginn) continue;
+            const screeningDate = new Date(termin.vorstellungsbeginn);
 
             const year = screeningDate.getFullYear();
             const month = screeningDate.getMonth() + 1; // Month is 0-indexed
@@ -133,7 +133,7 @@ export default function OverviewArchive2() {
             rows.push(
                 <tr key={termin.tnr}>
                     <td style={{ padding: '0.5rem 2rem 0.5rem 0.25rem', whiteSpace: 'nowrap', textAlign: 'right' }}>
-                        {formatDateInOverviewArchive(termin.screeningTime)}
+                        {formatDateInOverviewArchive(termin.vorstellungsbeginn)}
                     </td>
                     <td style={{ padding: '0.5rem 0' }}>
                         <Link

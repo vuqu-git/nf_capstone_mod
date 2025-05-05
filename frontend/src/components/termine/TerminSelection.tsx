@@ -30,7 +30,7 @@ export default function TerminSelection({ termine, selectedTerminId, onSelectTer
                 <option value="" selected>Select a Termin to edit (or leave empty to add new)</option>
                 {termine.map((t: TerminDTOSelection) => (
                     <option key={t.tnr} value={t.tnr}>
-                        {`${formatDateInTerminSelectOption(t.termin)} | ${t.titel} | #${t.tnr}`}
+                        {`${formatDateInTerminSelectOption(t.vorstellungsbeginn)} | ${t.titel} | #${t.tnr}`}
                     </option>
                 ))}
             </Form.Select>

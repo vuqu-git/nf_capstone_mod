@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class TerminDTOForm {
 
     private Long tnr;
-    private LocalDateTime termin;
+    private LocalDateTime vorstellungsbeginn;
     private String titel;
     private String text;
     private String kurztext;
@@ -26,7 +26,7 @@ public class TerminDTOForm {
 
     public TerminDTOForm(Termin termin) {
         this.tnr = termin.getTnr();
-        this.termin = termin.getTermin();
+        this.vorstellungsbeginn = termin.getVorstellungsbeginn();
         this.titel = termin.getTitel();
         this.text = termin.getText();
         this.kurztext = termin.getKurztext();

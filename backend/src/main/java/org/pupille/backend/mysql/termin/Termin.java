@@ -25,8 +25,8 @@ public class Termin {
     //    This is specific to databases like MySQL that support auto-increment.
     private Long tnr; // Primary key
 
-    @Column(nullable = false)
-    private LocalDateTime termin; // datetime
+    @Column(nullable = false, name = "termin")
+    private LocalDateTime vorstellungsbeginn; // datetime
 
     // @NotBlank // Ensure non-null and non-empty
     private String titel;

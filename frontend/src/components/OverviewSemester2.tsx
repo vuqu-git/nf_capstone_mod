@@ -104,11 +104,11 @@ export default function OverviewSemester() {
                     <div className="overview-container">
                         {semesterTermine.map(termin => {
 
-                            const screeningDateObj = formatDateTime(termin.screeningTime, true, true);
-                            const calenderDateObj = createDateAndTimeForAddToCalendarButton(termin.screeningTime, termin.screeningTotalDuration);
+                            const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, true, true);
+                            const calenderDateObj = createDateAndTimeForAddToCalendarButton(termin.vorstellungsbeginn, termin.screeningTotalDuration);
 
                             const calenderTitle = termin.titel ? termin.titel : termin.mainfilms[0].titel;
-                            const icsFileName = createICSFileName(calenderTitle, termin.screeningTime);
+                            const icsFileName = createICSFileName(calenderTitle, termin.vorstellungsbeginn);
 
 
                             return (

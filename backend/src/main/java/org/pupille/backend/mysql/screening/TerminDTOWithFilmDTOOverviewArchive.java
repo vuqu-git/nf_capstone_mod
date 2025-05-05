@@ -8,14 +8,14 @@ import java.util.List;
 
 public record TerminDTOWithFilmDTOOverviewArchive(
         Long tnr,
-        LocalDateTime screeningTime,
+        LocalDateTime vorstellungsbeginn,
         String titel,
         List<FilmDTOOverviewArchive> films
 ) {
     public TerminDTOWithFilmDTOOverviewArchive(Termin termin, List<Film> films) {
         this(
                 termin.getTnr(),
-                termin.getTermin(),
+                termin.getVorstellungsbeginn(),
                 termin.getTitel(),
 
                 films.stream()

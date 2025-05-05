@@ -51,7 +51,7 @@ export default function OverviewArchive() {
                         {archiveTermine.map(termin => (
                             <tr key={termin.tnr}>
                                 <td style={{ padding: '0.5rem 2rem 0.5rem 0.25rem', whiteSpace: 'nowrap', textAlign: 'right' }}>
-                                    {formatDateInOverviewArchive(termin.screeningTime)}
+                                    {formatDateInOverviewArchive(termin.vorstellungsbeginn)}
                                 </td>
                                 <td style={{ padding: '0.5rem 0' }}>
                                     <Link

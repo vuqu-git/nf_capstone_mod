@@ -30,8 +30,8 @@ public class TerminService {
                 .collect(Collectors.toList());
     }
 
-        public List<TerminProjectionSelection> getAllTermineByOrderByTerminDesc() {
-        return terminRepository.findAllByOrderByTerminDesc();
+        public List<TerminProjectionSelection> getAllTermineByOrderByVorstellungsbeginnDesc() {
+        return terminRepository.findAllByOrderByVorstellungsbeginnDesc();
     }
 
     public Optional<TerminDTOForm> getTerminById(Long tnr) {
@@ -46,7 +46,7 @@ public class TerminService {
     public TerminDTOForm updateTermin(Long tnr, Termin terminDetails) {
         return terminRepository.findById(tnr)
                 .map(termin -> {
-                    termin.setTermin(terminDetails.getTermin());
+                    termin.setVorstellungsbeginn(terminDetails.getVorstellungsbeginn());
                     termin.setTitel(terminDetails.getTitel());
                     termin.setText(terminDetails.getText());
                     termin.setKurztext(terminDetails.getKurztext());

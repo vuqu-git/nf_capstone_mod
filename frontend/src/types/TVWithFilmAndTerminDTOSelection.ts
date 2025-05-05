@@ -5,5 +5,5 @@ export interface TVWithFilmAndTerminDTOSelection {
     rang?: number | null; // Corresponds to Short in Java
 
     film: {titel?: string | null, jahr?: number | null, directors?: string | null}
-    termin: {termin?: string, titel?: string | null}
+    termin: {vorstellungsbeginn?: string, titel?: string | null}
 }

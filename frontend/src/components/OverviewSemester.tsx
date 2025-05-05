@@ -55,7 +55,7 @@ export default function OverviewSemester() {
 
                         <tbody>
                         {semesterTermine.map(termin => {
-                            const screeningDateObj = formatDateTime(termin.screeningTime, true, true);
+                            const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, true, true);
                             return (
                                 <tr key={termin.tnr}>
                                     <td style={{ padding: '0.5rem 0.25rem', whiteSpace: 'nowrap' }}>

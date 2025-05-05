@@ -16,21 +16,18 @@ export default function Admin() {
                 <ul>
                     <li><Link
                         to={`/addnews`}
-                        className="custom-link"
                     >
                         Add
                     </Link></li>
 
                     <li><Link
                         to={`/editnews`}
-                        className="custom-link"
                     >
                         Edit
                     </Link></li>
 
                     <li><Link
                         to={`/deletenews`}
-                        className="custom-link"
                     >
                         Delete
                     </Link></li>
@@ -42,7 +39,6 @@ export default function Admin() {
                 <ul>
                     <li><Link
                         to={`/adminfilme`}
-                        className="custom-link"
                     >
                         Add, Edit, Delete
                     </Link></li>
@@ -54,7 +50,6 @@ export default function Admin() {
                 <ul>
                     <li><Link
                         to={`/admintermine`}
-                        className="custom-link"
                     >
                         Add, Edit, Delete
                     </Link></li>
@@ -66,7 +61,6 @@ export default function Admin() {
                 <ul>
                     <li><Link
                         to={`/admintvennew`}
-                        className="custom-link"
                     >
                         Add, Edit, Delete
                     </Link></li>

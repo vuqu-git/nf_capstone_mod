@@ -4,6 +4,6 @@ import java.time.LocalDateTime;
 
 public interface TerminProjectionSelection {
     Long getTnr();
-    LocalDateTime getTermin();
+    LocalDateTime getVorstellungsbeginn();
     String getTitel();
 }

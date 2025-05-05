@@ -4,6 +4,8 @@ import axios from "axios";
 import NewsForm from "./NewsForm.tsx";
 
 import { preprocessFormData } from '../../utils/PreprocessingFormData.ts';
+import {Link} from "react-router-dom";
+import * as React from "react";
 
 const baseURL = "/api/news";
 
@@ -45,6 +47,10 @@ export default function AddNews() {
 
     return (
         <div>
+            <Link to={`/admin`}>
+                zum Adminbereich
+            </Link>
+
             <NewsForm
                 newsItem={addingNews}
                 handleSubmit={handleSaveNews}

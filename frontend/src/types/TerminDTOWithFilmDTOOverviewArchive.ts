@@ -3,7 +3,7 @@ import FilmDTOOverviewArchive from "./FilmDTOOverviewArchive.ts";
 // this one mirrors TerminDTOWithFilmDTOOverviewArchive
 interface TerminDTOWithFilmDTOOverviewArchive{
     tnr: number;
-    screeningTime?: string;
+    vorstellungsbeginn?: string;
     titel?: string | null;
 
     films: FilmDTOOverviewArchive[];

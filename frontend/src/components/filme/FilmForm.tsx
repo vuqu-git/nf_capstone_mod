@@ -6,6 +6,7 @@ import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
 import {copyToClipboard} from "../../utils/copyToClipboard.ts";
+import {Link} from "react-router-dom";
 
 const baseURL = "/api/filme";
 
@@ -227,6 +228,10 @@ export default function FilmForm() {
 
     return (
         <div>
+            <Link to={`/admin`}>
+                zum Adminbereich
+            </Link>
+
             <h3 className="mt-3">{selectedFilmId ? "Edit or delete " : "Add new "} Film</h3>
 
             <FilmSelection
