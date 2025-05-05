@@ -270,14 +270,14 @@ public class ScreeningService {
                         }
                     }
 
-                    int terminGesamtlaufzeit = Stream.concat(films.stream(), vorfilms.stream())
+                    int screeningTotalDuration = Stream.concat(films.stream(), vorfilms.stream())
                             .map(Film::getLaufzeit)
                             .filter(Objects::nonNull)
                             .mapToInt(Integer::intValue)
                             .sum();
 
-                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, terminGesamtlaufzeit);
-//                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, vorfilms, terminGesamtlaufzeit);
+                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, screeningTotalDuration);
+//                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, vorfilms, screeningTotalDuration);
                 })
                 .toList();
     }
