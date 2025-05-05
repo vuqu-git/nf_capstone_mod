@@ -48,7 +48,7 @@ public record TVWithFilmAndTerminDTOSelection(
                         extractDirectors(tv.getFilm().getStab())
                 ),
                 new TerminProjectionForTVSelection(
-                        tv.getTermin().getTermin(),
+                        tv.getTermin().getVorstellungsbeginn(),
                         tv.getTermin().getTitel()
                 )
         );

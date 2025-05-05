@@ -7,11 +7,5 @@ export default interface TerminDTOFormWithFilmsDTOFormPlus {
     termin: Termin;
     mainfilms: FilmDTOFormPlus[];
     vorfilms: FilmDTOFormPlus[];
+    terminGesamtlaufzeit: number
 }
-
-
-// interface FilmDTOFormPlus {
-//     film: Film;
-//     vorfilm: boolean | null;
-//     rang: number | null;
-// }

@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record TerminDTOWithFilmDTOOverviewArchive(
-        Long terminId,
-        LocalDateTime screeningTime,
+        Long tnr,
+        LocalDateTime vorstellungsbeginn,
         String titel,
         List<FilmDTOOverviewArchive> films
 ) {
     public TerminDTOWithFilmDTOOverviewArchive(Termin termin, List<Film> films) {
         this(
                 termin.getTnr(),
-                termin.getTermin(),
+                termin.getVorstellungsbeginn(),
                 termin.getTitel(),
 
                 films.stream()

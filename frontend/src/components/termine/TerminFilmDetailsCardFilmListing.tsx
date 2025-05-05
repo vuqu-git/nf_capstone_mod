@@ -1,5 +1,5 @@
 import Card from 'react-bootstrap/Card';
-import {render} from "../../utils/render.tsx";
+import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 
 import {Film} from "../../types/Film.ts";
 import {structureStabString} from "../../utils/structureStabString.ts";
@@ -46,17 +46,17 @@ export default function TerminFilmDetailsListing({
                 {(() => {
                     const titleContentA = f.originaltitel ? (
                         <>
-                            {render(f.originaltitel)}
+                            {renderHtmlText(f.originaltitel)}
                             <br />
-                            ({render(f.titel)})
+                            ({renderHtmlText(f.titel)})
                         </>
-                    ) : render(f.titel);
+                    ) : renderHtmlText(f.titel);
 
                     const titleContentB = f.originaltitel ? (
                         <>
-                            {render(f.originaltitel)} ({render(f.titel)})
+                            {renderHtmlText(f.originaltitel)} ({renderHtmlText(f.titel)})
                         </>
-                    ) : render(f.titel);
+                    ) : renderHtmlText(f.titel);
 
                     if (numberOfF === 1) {
                         return <>{fType}{titleContentA}</>;
@@ -80,31 +80,35 @@ export default function TerminFilmDetailsListing({
 
                 {/****** text ******/}
                 {/*******----*******/}
-                <Card.Text
-                    className="style-video-in-card"
-                    style={{color: '#cfd6e1'}}
-                >
-                    {render(f.text || "k.A.")}
-                </Card.Text>
+                { f.text && (
+                    <Card.Text
+                        className="style-video-in-card"
+                        style={{color: '#cfd6e1'}}
+                    >
+                        {renderHtmlText(f.text)}
+                    </Card.Text>
+                )}
 
                 {/****** content note ******/}
                 {/*******------------*******/}
-                <Accordion flush data-bs-theme="dark" className="mb-3">
-                    <Accordion.Item eventKey="0" >
-                        <Accordion.Header>
-                            <span className="w-100 text-center">Hinweis auf sensible Inhalte</span>
-                        </Accordion.Header>
-                        <Accordion.Body>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                            minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                            aliquip ex ea commodo consequat. Duis aute irure dolor in
-                            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                            culpa qui officia deserunt mollit anim id est laborum.
-                        </Accordion.Body>
-                    </Accordion.Item>
-                </Accordion>
+                { f.contentNote && (
+                    <Accordion flush data-bs-theme="dark" className="mb-3">
+                        <Accordion.Item eventKey="0" >
+                            <Accordion.Header>
+                                <span className="w-100 text-center">Hinweis auf sensible Inhalte</span>
+                            </Accordion.Header>
+                            <Accordion.Body>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                culpa qui officia deserunt mollit anim id est laborum.
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+                )}
 
                 {/****** besonderheit ******/}
                 {/*******------------*******/}
@@ -121,7 +125,7 @@ export default function TerminFilmDetailsListing({
                             textAlign: 'right',
                         }}
                     >
-                        {render(f.besonderheit)}
+                        {renderHtmlText(f.besonderheit)}
                     </Card.Text>
                 }
 
@@ -136,14 +140,14 @@ export default function TerminFilmDetailsListing({
                             {f.laufzeit && <div className="row"><div className="label">Länge</div><div className="value">{f.laufzeit} min</div></div>}
                             {f.sprache && <div className="row"><div className="label">Sprache</div><div className="value">{f.sprache}</div></div>}
                             {f.untertitel && <div className="row"><div className="label">Untertitel</div><div className="value">{f.untertitel}</div></div>}
-                            {f.farbe && <div className="row"><div className="label">Farbigkeit</div><div className="value">{render(f.farbe)}</div></div>}
+                            {f.farbe && <div className="row"><div className="label">Farbigkeit</div><div className="value">{renderHtmlText(f.farbe)}</div></div>}
                             {f.format && <div className="row"><div className="label">Format</div><div className="value">{f.format}</div></div>}
                             {f.fsk && <div className="row"><div className="label">FSK</div><div className="value">{f.fsk}</div></div>}
                         </div>
                     </div>
                 )}
 
-                {/****** stab & bestezung ******/}
+                {/****** stab & besetzung ******/}
                 {/*******----------------*******/}
                 {structuredStab && (
                     <div className="section-block"> {/* This will be the last .section-block */}
@@ -151,8 +155,8 @@ export default function TerminFilmDetailsListing({
                         <div className="table-block">
                             {structuredStab.map(row => (
                                 <div className="row" key={row.abbrev}>
-                                    <div className="label">{render(row.abbrev)}</div>
-                                    <div className="value">{render(row.entry)}</div>
+                                    <div className="label">{renderHtmlText(row.abbrev)}</div>
+                                    <div className="value">{renderHtmlText(row.entry)}</div>
                                 </div>
                             ))}
                         </div>

@@ -40,7 +40,7 @@ public class ScreeningController {
     }
 
     @GetMapping("/screenings-semester")
-    public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreeningsForTest() {
+    public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreenings() {
         return screeningService.getTermineByCurrentSemester();
     }
 }

@@ -212,7 +212,7 @@ td {
 /* DATE SECTION */
 .overview-date {
     display: grid;
-    grid-template-columns: 1fr 2fr 2fr; /* 3 equal columns */
+    grid-template-columns: 1fr 5fr 2fr; /* 3 columns */
     gap: 0.5rem;
     min-width: 180px;
     max-width: 100%;
@@ -233,7 +233,7 @@ td {
 }
 
 /* Additional styling */
-.weekday, .date, .time {
+.weekday, .date, .calendar {
     color: inherit;
 }
 
@@ -250,7 +250,7 @@ td {
 }
 
 /* NARROW PARENT ADJUSTMENT */
-@media (max-width: 1000px) {
+@media (max-width: 600px) {
     .overview-row {
         flex-direction: column;
         align-items: flex-start;
@@ -280,7 +280,15 @@ td {
 
 
 
-
+.calendar {
+    min-width: 40px; /* Adjust as needed */
+    min-height: 40px; /* Adjust as needed */
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    /* Optional: prevent shrinking/growing */
+    flex: 0 0 45px;
+}
 
 
 

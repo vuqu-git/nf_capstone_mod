@@ -25,8 +25,8 @@ public class TerminController {
     }
 
     @GetMapping("/allsorted")
-    public ResponseEntity<List<TerminProjectionSelection>> getAllTermineByOrderByTitelAsc() {
-        List<TerminProjectionSelection> termine = terminService.getAllTermineByOrderByTerminDesc();
+    public ResponseEntity<List<TerminProjectionSelection>> getAllTermineByOrderByVorstellungsbeginnDesc() {
+        List<TerminProjectionSelection> termine = terminService.getAllTermineByOrderByVorstellungsbeginnDesc();
         return ResponseEntity.ok(termine);
     }
 

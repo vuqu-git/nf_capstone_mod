@@ -7,20 +7,23 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record TerminDTOWithFilmDTOOverviewSemester(
-        Long terminId,
-        LocalDateTime screeningTime,
+        Long tnr,
+        LocalDateTime vorstellungsbeginn,
         String titel,
-        List<FilmDTOOverviewSemester> films
+        List<FilmDTOOverviewSemester> mainfilms,
+        Integer terminGesamtlaufzeit
 ) {
-    public TerminDTOWithFilmDTOOverviewSemester(Termin termin, List<Film> films) {
+    public TerminDTOWithFilmDTOOverviewSemester(Termin termin, List<Film> films, Integer terminGesamtlaufzeit) {
         this(
                 termin.getTnr(),
-                termin.getTermin(),
+                termin.getVorstellungsbeginn(),
                 termin.getTitel(),
 
                 films.stream()
                         .map(FilmDTOOverviewSemester::new)
-                        .toList()
+                        .toList(),
+
+                terminGesamtlaufzeit
         );
     }
 }

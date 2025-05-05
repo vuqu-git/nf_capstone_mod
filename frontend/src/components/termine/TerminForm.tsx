@@ -6,6 +6,7 @@ import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 
 import { preprocessFormData } from '../../utils/PreprocessingFormData.ts';
+import {Link} from "react-router-dom";
 
 const baseURL = "/api/termine";
 
@@ -184,6 +185,10 @@ export default function TerminForm() {
 
     return (
         <div>
+            <Link to={`/admin`}>
+                zum Adminbereich
+            </Link>
+
             <h3 className="mt-3">{selectedTerminId ? "Edit or delete " : "Add new "} Termin</h3>
 
             <TerminSelection
@@ -200,13 +205,14 @@ export default function TerminForm() {
 
                 <h3 className="mt-3">Termin details</h3>
 
-                <Form.Group controlId="termin" className="mt-3">
-                    <Form.Label>Termin</Form.Label>
+                <Form.Group controlId="vorstellungsbeginn" className="mt-3">
+                    <Form.Label>Vorstellungsbeginn*</Form.Label>
                     <Form.Control
                         type="datetime-local"
-                        name="termin"
-                        value={selectedTermin.termin || ""}
+                        name="vorstellungsbeginn"
+                        value={selectedTermin.vorstellungsbeginn || ""}
                         onChange={handleFormChange}
+                        required
                     />
                 </Form.Group>
 

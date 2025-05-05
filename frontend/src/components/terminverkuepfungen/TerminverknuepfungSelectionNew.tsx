@@ -27,7 +27,7 @@ export default function TerminverknuepfungSelectionNew({ tvenFT, selectedTVId, o
                 <option value="">Select a Terminverknuepfung to edit (or leave unselected to add a new Terminverknuepfung)</option>
                 {tvenFT.map((tvFT: TVWithFilmAndTerminDTOSelection) => (
                     <option key={`${tvFT.tnr},${tvFT.fnr}`} value={`${tvFT.tnr},${tvFT.fnr}`}>
-                        tnr : fnr | #{tvFT.tnr} : #{tvFT.fnr} | {tvFT.termin.termin?.slice(0,-3)} : {tvFT.film.titel} ({tvFT.film.directors}, {tvFT.film.jahr})
+                        tnr : fnr | #{tvFT.tnr} : #{tvFT.fnr} | {tvFT.termin.vorstellungsbeginn?.slice(0,-3)} : {tvFT.film.titel} ({tvFT.film.directors}, {tvFT.film.jahr})
                     </option>
                 ))}
             </Form.Select>

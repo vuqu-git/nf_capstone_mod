@@ -40,7 +40,7 @@ public interface TerminverknuepfungRepository extends JpaRepository<Terminverknu
     @Query("SELECT tv FROM Terminverknuepfung tv " +
             "JOIN FETCH tv.film " +
             "JOIN FETCH tv.termin " +
-            "ORDER BY tv.termin.termin DESC")
+            "ORDER BY tv.termin.vorstellungsbeginn DESC")
     List<Terminverknuepfung> findAllWithFilmAndTerminOrderByTerminDesc();
 
 

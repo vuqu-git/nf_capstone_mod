@@ -11,6 +11,7 @@ import FilmSelection from "../filme/FilmSelection.tsx";
 import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import TerminSelection from "../termine/TerminSelection.tsx";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
+import {Link} from "react-router-dom";
 
 
 const baseURL = "/api/terminverknuepfung";
@@ -22,7 +23,7 @@ const emptyTVForForm = {
     rang: undefined,
 
     film: {titel: '', jahr: undefined, directors: ""},
-    termin: {termin: "", titel: ""},
+    termin: {vorstellungsbeginn: "", titel: ""},
 }
 
 export default function TerminverknuepfungFormNew() {
@@ -248,6 +249,10 @@ export default function TerminverknuepfungFormNew() {
 
     return (
         <div>
+            <Link to={`/admin`}>
+                zum Adminbereich
+            </Link>
+
             <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and existing Termin"}</h3>
 
             <TerminverknuepfungSelectionNew
@@ -283,7 +288,7 @@ export default function TerminverknuepfungFormNew() {
                     {allTermine.map((t: TerminDTOSelection) => (
                         <option key={t.tnr} value={t.tnr}>
                             {/*{`${formatDate(t.termin)}: ${t.titel} | #${t.tnr}`}*/}
-                            {`${formatDateInTerminSelectOption(t.termin)} | #${t.tnr}`}
+                            {`${formatDateInTerminSelectOption(t.vorstellungsbeginn)} | #${t.tnr}`}
                             {/*{`${t.termin?.slice(0,-3)} | #${t.tnr}`}*/}
                         </option>
                     ))}

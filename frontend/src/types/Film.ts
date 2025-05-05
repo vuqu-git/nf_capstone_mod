@@ -18,6 +18,9 @@ export type Film = {
     bild?: string | null,
     sonderfarbeTitel?: number | null,
     sonderfarbe?: number | null,
+
+    contentNote?: string,
+
 }
 
 // Explanation of Nullability in TypeScript:

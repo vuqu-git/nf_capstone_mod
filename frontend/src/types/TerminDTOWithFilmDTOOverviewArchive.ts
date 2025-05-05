@@ -2,8 +2,8 @@ import FilmDTOOverviewArchive from "./FilmDTOOverviewArchive.ts";
 
 // this one mirrors TerminDTOWithFilmDTOOverviewArchive
 interface TerminDTOWithFilmDTOOverviewArchive{
-    terminId: number;
-    screeningTime?: string;
+    tnr: number;
+    vorstellungsbeginn?: string;
     titel?: string | null;
 
     films: FilmDTOOverviewArchive[];

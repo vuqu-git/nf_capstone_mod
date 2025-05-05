@@ -2,11 +2,13 @@ import FilmDTOOverviewSemester from "./FilmDTOOverviewSemester.ts";
 
 // this one mirrors TerminDTOWithFilmDTOOverviewSemester
 interface TerminDTOWithFilmDTOOverviewSemester{
-    terminId: number;
-    screeningTime?: string;
+    tnr: number;
+    vorstellungsbeginn?: string;
     titel?: string | null;
 
-    films: FilmDTOOverviewSemester[];
+    mainfilms: FilmDTOOverviewSemester[];
+
+    terminGesamtlaufzeit: number;
 }
 
 export default TerminDTOWithFilmDTOOverviewSemester;

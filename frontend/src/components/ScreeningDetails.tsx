@@ -27,16 +27,21 @@ export default function ScreeningDetails() {
     if (error) return <div className="text-danger">{error}</div>;
     // if (!screeningDetails) return <div>No screening found</div>;
 
-    const screeningDateObj = screeningDetails && screeningDetails.termin.termin
-        ? formatDateTime(screeningDetails.termin.termin)
+    const screeningDateObj = screeningDetails && screeningDetails.termin.vorstellungsbeginn
+        ? formatDateTime(screeningDetails.termin.vorstellungsbeginn)
         : undefined;
 
     return (
         screeningDetails && (
             <TerminFilmDetailsCard
+                tnr={tnr}
+
                 screeningWeekday={screeningDateObj?.weekday}
                 screeningDate={screeningDateObj?.date}
                 screeningTime={screeningDateObj?.time}
+
+                vorstellungsbeginnIso8601={screeningDetails.termin.vorstellungsbeginn}
+
                 screeningSonderfarbe={1}
 
                 programmtitel={screeningDetails.termin.titel} // d.h. der titel in der Tabelle Termin
@@ -45,6 +50,8 @@ export default function ScreeningDetails() {
 
                 mainfilms={screeningDetails.mainfilms}
                 vorfilms={screeningDetails.vorfilms}
+
+                terminGesamtlaufzeit={screeningDetails.terminGesamtlaufzeit}
             />
         )
     )

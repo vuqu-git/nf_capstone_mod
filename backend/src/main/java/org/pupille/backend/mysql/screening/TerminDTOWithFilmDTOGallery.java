@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record TerminDTOWithFilmDTOGallery(
-        Long terminId,
-        LocalDateTime screeningTime,
+        Long tnr,
+        LocalDateTime vorstellungsbeginn,
         String titel,
         String kurztext,
         String besonderheit,
@@ -20,7 +20,7 @@ public record TerminDTOWithFilmDTOGallery(
     public TerminDTOWithFilmDTOGallery(Termin termin, List<Film> films) {
         this(
                 termin.getTnr(),
-                termin.getTermin(),
+                termin.getVorstellungsbeginn(),
                 termin.getTitel(),
                 termin.getKurztext(),
                 termin.getBesonderheit(),
