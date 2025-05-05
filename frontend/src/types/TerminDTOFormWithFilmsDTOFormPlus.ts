@@ -7,5 +7,5 @@ export default interface TerminDTOFormWithFilmsDTOFormPlus {
     termin: Termin;
     mainfilms: FilmDTOFormPlus[];
     vorfilms: FilmDTOFormPlus[];
-    screeningTotalDuration: number
+    terminGesamtlaufzeit: number
 }

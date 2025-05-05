@@ -11,9 +11,9 @@ public record TerminDTOWithFilmDTOOverviewSemester(
         LocalDateTime vorstellungsbeginn,
         String titel,
         List<FilmDTOOverviewSemester> mainfilms,
-        Integer screeningTotalDuration
+        Integer terminGesamtlaufzeit
 ) {
-    public TerminDTOWithFilmDTOOverviewSemester(Termin termin, List<Film> films, Integer screeningTotalDuration) {
+    public TerminDTOWithFilmDTOOverviewSemester(Termin termin, List<Film> films, Integer terminGesamtlaufzeit) {
         this(
                 termin.getTnr(),
                 termin.getVorstellungsbeginn(),
@@ -23,7 +23,7 @@ public record TerminDTOWithFilmDTOOverviewSemester(
                         .map(FilmDTOOverviewSemester::new)
                         .toList(),
 
-                screeningTotalDuration
+                terminGesamtlaufzeit
         );
     }
 }

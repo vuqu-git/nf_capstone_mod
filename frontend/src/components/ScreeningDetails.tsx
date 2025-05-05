@@ -40,7 +40,7 @@ export default function ScreeningDetails() {
                 screeningDate={screeningDateObj?.date}
                 screeningTime={screeningDateObj?.time}
 
-                screeningterminIso8601={screeningDetails.termin.vorstellungsbeginn}
+                vorstellungsbeginnIso8601={screeningDetails.termin.vorstellungsbeginn}
 
                 screeningSonderfarbe={1}
 
@@ -51,7 +51,7 @@ export default function ScreeningDetails() {
                 mainfilms={screeningDetails.mainfilms}
                 vorfilms={screeningDetails.vorfilms}
 
-                screeningTotalDuration={screeningDetails.screeningTotalDuration}
+                terminGesamtlaufzeit={screeningDetails.terminGesamtlaufzeit}
             />
         )
     )

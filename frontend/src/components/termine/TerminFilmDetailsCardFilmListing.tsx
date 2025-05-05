@@ -80,12 +80,14 @@ export default function TerminFilmDetailsListing({
 
                 {/****** text ******/}
                 {/*******----*******/}
-                <Card.Text
-                    className="style-video-in-card"
-                    style={{color: '#cfd6e1'}}
-                >
-                    {renderHtmlText(f.text || "k.A.")}
-                </Card.Text>
+                { f.text && (
+                    <Card.Text
+                        className="style-video-in-card"
+                        style={{color: '#cfd6e1'}}
+                    >
+                        {renderHtmlText(f.text)}
+                    </Card.Text>
+                )}
 
                 {/****** content note ******/}
                 {/*******------------*******/}
@@ -143,7 +145,7 @@ export default function TerminFilmDetailsListing({
                     </div>
                 )}
 
-                {/****** stab & bestezung ******/}
+                {/****** stab & besetzung ******/}
                 {/*******----------------*******/}
                 {structuredStab && (
                     <div className="section-block"> {/* This will be the last .section-block */}

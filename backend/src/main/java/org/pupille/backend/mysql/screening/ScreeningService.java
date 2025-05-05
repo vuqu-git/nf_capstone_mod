@@ -178,7 +178,7 @@ public class ScreeningService {
                 .map(this::convertToFilmDTO)
                 .toList();
 
-        int screeningTotalDuration = Stream.concat(mainFilms.stream(), vorfilms.stream())
+        int terminGesamtlaufzeit = Stream.concat(mainFilms.stream(), vorfilms.stream())
                 .map(f -> f.getFilm().getLaufzeit())  // Extract laufzeit (could be null)
                 .filter(Objects::nonNull)             // Ignore null values
                 .mapToInt(Integer::intValue)          // Convert to primitive int
@@ -188,7 +188,7 @@ public class ScreeningService {
                 new TerminDTOForm(termin),
                 mainFilms,
                 vorfilms,
-                screeningTotalDuration
+                terminGesamtlaufzeit
         );
     }
 
@@ -270,14 +270,14 @@ public class ScreeningService {
                         }
                     }
 
-                    int screeningTotalDuration = Stream.concat(films.stream(), vorfilms.stream())
+                    int terminGesamtlaufzeit = Stream.concat(films.stream(), vorfilms.stream())
                             .map(Film::getLaufzeit)
                             .filter(Objects::nonNull)
                             .mapToInt(Integer::intValue)
                             .sum();
 
-                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, screeningTotalDuration);
-//                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, vorfilms, screeningTotalDuration);
+                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, terminGesamtlaufzeit);
+//                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, vorfilms, terminGesamtlaufzeit);
                 })
                 .toList();
     }

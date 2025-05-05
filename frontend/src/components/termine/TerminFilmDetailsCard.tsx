@@ -22,7 +22,7 @@ interface Props {
     screeningDate: string | undefined;
     screeningTime: string | undefined;
 
-    screeningterminIso8601: string | undefined;
+    vorstellungsbeginnIso8601: string | undefined;
 
     screeningSonderfarbe: number | undefined;
 
@@ -34,7 +34,7 @@ interface Props {
     mainfilms: FilmDTOFormPlus[];
     vorfilms: FilmDTOFormPlus[];
 
-    screeningTotalDuration: number;
+    terminGesamtlaufzeit: number;
 }
             // utils
             function getDtstamp(now) {
@@ -60,7 +60,7 @@ export default function TerminFilmDetailsCard({
                                                   screeningDate,
                                                   screeningTime,
 
-                                                  screeningterminIso8601,
+                                                  vorstellungsbeginnIso8601,
 
                                                   screeningSonderfarbe,
 
@@ -71,13 +71,13 @@ export default function TerminFilmDetailsCard({
                                                   mainfilms,
                                                   vorfilms,
 
-                                                  screeningTotalDuration,
+                                                  terminGesamtlaufzeit,
                                               }: Props) {
 
     const calenderTitle = programmtitel ? programmtitel : mainfilms[0].film.titel ?? "Film in der Pupille";
 
-    const icsFileName = createICSFileName(calenderTitle, screeningterminIso8601);
-    const calenderDateObj = createDateAndTimeForAddToCalendarButton(screeningterminIso8601, screeningTotalDuration);
+    const icsFileName = createICSFileName(calenderTitle, vorstellungsbeginnIso8601);
+    const calenderDateObj = createDateAndTimeForAddToCalendarButton(vorstellungsbeginnIso8601, terminGesamtlaufzeit);
 
 
 const rawContent = `UID:${tnr}-uniqueid@pupille.org
@@ -164,8 +164,8 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                     <ICalendarLink
                         event={createCalenderEvent(
                             "Pupille-Kino: " + calenderTitle,
-                            screeningterminIso8601,
-                            screeningTotalDuration,
+                            vorstellungsbeginnIso8601,
+                            terminGesamtlaufzeit,
                         )}
                         filename={icsFileName}
                         rawContent={rawContent}

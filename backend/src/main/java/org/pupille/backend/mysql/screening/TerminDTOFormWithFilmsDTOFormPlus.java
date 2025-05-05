@@ -14,5 +14,5 @@ public class TerminDTOFormWithFilmsDTOFormPlus {
     private TerminDTOForm termin;
     private List<FilmDTOFormPlus> mainfilms; // vorfilm=false/null
     private List<FilmDTOFormPlus> vorfilms;   // vorfilm=true
-    private Integer screeningTotalDuration;
+    private Integer terminGesamtlaufzeit;
 }
