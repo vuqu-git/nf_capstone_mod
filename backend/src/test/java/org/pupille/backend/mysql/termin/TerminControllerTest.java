@@ -46,6 +46,7 @@ class TerminControllerTest {
     void testCreateAndRetrieveTermin() {
         // Arrange: Create a new Termin entity
         Termin termin = new Termin();
+        termin.setVorstellungsbeginn(LocalDateTime.now());
         termin.setTitel("Test Title");
         termin.setText("Test Text");
 
