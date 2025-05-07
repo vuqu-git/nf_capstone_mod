@@ -1,10 +1,10 @@
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, {useState, FormEvent, ChangeEvent, useEffect} from 'react';
 import AOBForm, { AOBFormData } from './AOBForm.tsx';
 import SupportRequestForm, { SupportRequestFormData } from './SupportRequestForm';
 import SalesInquiryForm, { SalesInquiryFormData } from './SalesInquiryForm';
 import EventOhneProjektion from './EventOhneProjektion'
 import EventMitProjektion from "./EventMitProjektion.tsx";
-import KinomitarbeitForm from "./KinomitarbeitForm.tsx";
+import KinomitarbeitForm, { MitKinotechnikFormData } from "./KinomitarbeitForm.tsx";
 
 interface SubmissionStatus {
     status: 'idle' | 'sending' | 'success' | 'error';
@@ -27,8 +27,18 @@ const issueOptions: IssueConfig[] = [
 
 const ContactForm: React.FC = () => {
     const [selectedIssue, setSelectedIssue] = useState<string>('');
-    const [formData, setFormData] = useState<AOBFormData | SupportRequestFormData | SalesInquiryFormData>({});
+    const [formData, setFormData] = useState<AOBFormData | MitKinotechnikFormData | SupportRequestFormData | SalesInquiryFormData>({});
     const [submissionStatus, setSubmissionStatus] = useState<SubmissionStatus>({ status: 'idle' });
+
+    // Reset state after a successful submission, but keep the success message
+    useEffect(() => {
+        if (submissionStatus.status === 'success') {
+            setSelectedIssue('');
+            setFormData({});
+            // Optionally reset status after a timeout if you want to hide the message after a while:
+            // setTimeout(() => setSubmissionStatus({ status: 'idle' }), 5000);
+        }
+    }, [submissionStatus.status]);
 
     const handleIssueChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSelectedIssue(event.target.value);
@@ -43,17 +53,38 @@ const ContactForm: React.FC = () => {
         }));
     };
 
-    const handleSubmit = async (event: FormEvent, issue: string = selectedIssue, data: AOBFormData | SupportRequestFormData | SalesInquiryFormData = formData) => {
+    // const handleSubmit = async (event: FormEvent, issue: string = selectedIssue, data: AOBFormData | SupportRequestFormData | SalesInquiryFormData = formData) => {
+    //     event.preventDefault();
+    //     setSubmissionStatus({ status: 'sending' });
+    //
+    //     try {
+    //         const response = await fetch(`/api/contact/${issue}`, { // Use the 'issue' parameter here
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify(data),
+    //         });
+
+    const handleSubmit = async (
+        event: FormEvent,
+        explicitIssue?: string, // Optional explicit issue parameter
+        explicitData?: AOBFormData | MitKinotechnikFormData | SupportRequestFormData | SalesInquiryFormData // Optional explicit data
+    ) => {
         event.preventDefault();
         setSubmissionStatus({ status: 'sending' });
 
+        // Use explicit parameters if provided, otherwise use state values
+        const issueToUse = explicitIssue || selectedIssue;
+        const dataToUse = explicitData || formData;
+
         try {
-            const response = await fetch(`/api/contact/${issue}`, { // Use the 'issue' parameter here
+            const response = await fetch(`/api/contact/${issueToUse}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(dataToUse),
             });
 
             if (response.ok) {
@@ -77,7 +108,7 @@ const ContactForm: React.FC = () => {
                         onSubmit={handleSubmit}
                         submissionStatus={submissionStatus}
                         onInputChange={handleChange}
-                        formData={formData as AOBFormData}
+                        formData={formData}
                     />
                 );
             case 'kinomitarbeit':
@@ -92,7 +123,7 @@ const ContactForm: React.FC = () => {
             case 'eventMitProjektion':
                 return (
                     <EventMitProjektion
-                        onSubmit={handleSubmit} // The callback will now receive the issue
+                        onSubmit={handleSubmit} // The callback will now receive the issue from the subselection
                         submissionStatus={submissionStatus}
                         onInputChange={handleChange}
                         formData={formData}
@@ -134,30 +165,38 @@ const ContactForm: React.FC = () => {
                 <p style={{ color: 'red' }}>{submissionStatus.message}</p>
             )}
 
-            <p>
-                Für eine strukturierte Bearbeitung von Anfragen bitten wir darum, ausschließlich das Kontaktformular auf unserer Webseite zu verwenden.
-            </p>
-            <p>
-                Da das gesamte Kinoteam ehrenamtlich arbeitet, kann die Beantwortung etwas Zeit in Anspruch nehmen – wir bitten um Verständnis und etwas Geduld.
-            </p>
+            {submissionStatus.status !== 'success' && (
+                <>
+                    <p>
+                        Für eine strukturierte Bearbeitung von Anfragen bitten wir darum, ausschließlich das Kontaktformular auf unserer Webseite zu verwenden.
+                    </p>
+                    <p>
+                        Da das gesamte Kinoteam ehrenamtlich arbeitet, kann die Beantwortung etwas Zeit in Anspruch nehmen – wir bitten um Verständnis und etwas Geduld.
+                    </p>
+                </>
+            )}
 
-            <div>
-                {/*<label htmlFor="issue">Anliegen:</label>*/}
-                <select id="issue" value={selectedIssue} onChange={handleIssueChange}>
-                    <option key="" value="" disabled>
-                        Bitte Anliegen auswählen.
-                    </option>
-                    {issueOptions.map((option) => (
-                        <option key={option.value} value={option.value}>
-                            {option.label}
-                        </option>
-                    ))}
-                </select>
-            </div>
-
-            {renderForm()}
+            {/* Only show dropdown and form if not success */}
+            {submissionStatus.status !== 'success' && (
+                <>
+                    <div>
+                        <select id="issue" value={selectedIssue} onChange={handleIssueChange}>
+                            <option key="" value="" disabled>
+                                Bitte Anliegen auswählen.
+                            </option>
+                            {issueOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    {renderForm()}
+                </>
+            )}
         </div>
     );
+
 };
 
 export default ContactForm;

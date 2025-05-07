@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 
-interface MitKinotechnikFormData {
+export interface MitKinotechnikFormData {
     betreff: string;
     ansprechperson: string;
     email: string;

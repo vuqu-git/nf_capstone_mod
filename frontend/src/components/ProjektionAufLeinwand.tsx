@@ -1,4 +1,4 @@
-import {Accordion, Badge, CardGroup} from "react-bootstrap";
+import {Badge, CardGroup} from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 
 export default function ProjektionAufLeinwand() {

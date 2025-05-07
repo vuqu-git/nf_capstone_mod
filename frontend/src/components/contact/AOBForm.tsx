@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FormEvent } from 'react'; // Import FormEvent
 
-interface AOBFormData {
+export interface AOBFormData {
     subject: string;
     name: string;
     email: string;
@@ -8,7 +8,7 @@ interface AOBFormData {
 }
 
 interface AOBFormProps {
-    onSubmit: (event: FormEvent, data: AOBFormData) => void; // Expect the event as the first argument
+    onSubmit: (event: FormEvent, issue?: string, data?: AOBFormData) => void;
     submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; message?: string | null };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     formData: AOBFormData;
@@ -17,7 +17,8 @@ interface AOBFormProps {
 const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
     const handleLocalSubmit = (event: FormEvent) => {
         event.preventDefault(); // Prevent the child form's default submission
-        onSubmit(event, formData); // Call the parent's onSubmit and pass the event and data
+        onSubmit(event, undefined, formData); // Call the parent's onSubmit
+
     };
     return (
         <form onSubmit={handleLocalSubmit}>

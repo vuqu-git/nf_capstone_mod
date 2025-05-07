@@ -53,8 +53,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubmit, onInputChan
         <form onSubmit={handleSubmit}>
             <Badge bg="warning" text="dark">Hinweis:</Badge>
             <p>
-                Für Kooperationen im Sommersemester ist der Einsendeschluss für Anfragen der 31. Januar. Für das
-                Wintersemester ist es der 31. Juli. {momentaneAnfrageFuerSemester}
+                Der Einsendeschluss für Kooperationsanfragen ist der 31. Januar (für das Sommersemester) und 31. Juli (für das Wintersemester). {momentaneAnfrageFuerSemester}
             </p>
             <div>
                 <label htmlFor="betreff">Betreff*:</label>
@@ -153,7 +152,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubmit, onInputChan
                     id="terminpraeferenz"
                     name="terminpraeferenz"
                     value={formData.terminpraeferenz || ''}
-                    placeholder="Spieltage sind Montag und Mittwoch in der Vorlesungszeit"
+                    placeholder="Spieltage sind Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
                     onChange={onInputChange}
                     required
                     style={{ width: '100%', height: '56px' }}

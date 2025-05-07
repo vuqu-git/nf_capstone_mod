@@ -9,7 +9,7 @@ interface KinomitarbeitFormData {
 }
 
 interface KinomitarbeitFormProps {
-    onSubmit: (event: FormEvent, data: KinomitarbeitFormData) => void; // Expect the event as the first argument
+    onSubmit: (event: FormEvent, issue?: string, data?: KinomitarbeitFormData) => void;
     submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; message?: string | null };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     formData: KinomitarbeitFormData;
@@ -18,7 +18,7 @@ interface KinomitarbeitFormProps {
 const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
     const handleLocalSubmit = (event: FormEvent) => {
         event.preventDefault(); // Prevent the child form's default submission
-        onSubmit(event, formData); // Call the parent's onSubmit and pass the event and data
+        onSubmit(event, undefined, formData); // Call the parent's onSubmit
     };
     return (
         <form onSubmit={handleLocalSubmit}>
