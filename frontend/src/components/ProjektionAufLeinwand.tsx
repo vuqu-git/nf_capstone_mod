@@ -17,7 +17,7 @@ export default function ProjektionAufLeinwand() {
                         <Badge bg="danger">Wichtig:</Badge> Bevor Ihr uns kontaktiert, bitte klärt immer <b>selber vorher</b>
                     </p>
                     <ul>
-                        <li>die Mietung und Verfügbarkeit des Festsaals mit dem  <a href="https://asta-frankfurt.de/kontakt" target="_blank">AStA</a> (je nach Projekt
+                        <li>die Mietung und Verfügbarkeit des Festsaals mit dem  <a href="https://asta-frankfurt.de/kontakt" target="_blank">AStA</a> (je nach Projekt bzw. Veranstaltung
                             kann die Nutzung auch kostenlos sein, siehe <a href="https://asta-frankfurt.de/angebote/studierendenhaus/raeume-nutzen-mieten" target="_blank">Preisliste</a>)
                         </li>
                         <li>und im Fall einer öffentlichen Filmvorführung die Lizenz mit dem Rechteinhaber des Films.</li>
@@ -32,13 +32,13 @@ export default function ProjektionAufLeinwand() {
 
                 <CardGroup>
                 <Card bg="dark" text="white" border="success">
-                    <Card.Header><Card.Title>ganz eigenständig</Card.Title></Card.Header>
+                    <Card.Header><Card.Title>&#10102; ganz eigenständig</Card.Title></Card.Header>
                     <Card.Body>
 
                         <Card.Text>
                             <p>
                                 Dazu müsstet Ihr als Erstes den Festsaal beim AStA buchen und eigene Technik mitbringen (z.B. Boxen und Beamer). Dann wärt ihr zeitlich und organisatorisch ganz unabhängig von uns.
-                                Unsere Leinwand könnt ihr auf jeden Fall nutzen. Der Schlüssel zum Ausrollen liegt an der Pforte des Studierendenhauses.
+                                Unsere Leinwand könnt ihr auf jeden Fall nutzen. Der Schlüssel zum Ausrollen liegt bei der Pforte des Studierendenhauses.
                             </p>
                             <p>
                                 Hinweis: Das Technik-Team des AStA verleiht Technik (bspw. Boxen, Beamer, Mikrofone) für Veranstaltungen und erklärt bei Bedarf den Aufbau.
@@ -48,7 +48,7 @@ export default function ProjektionAufLeinwand() {
                 </Card>
 
                 <Card bg="dark" text="white" border="success">
-                    <Card.Header><Card.Title>mit professioneller Kinotechnik</Card.Title></Card.Header>
+                    <Card.Header><Card.Title>&#10103; mit professioneller Kinotechnik</Card.Title></Card.Header>
                     <Card.Body>
 
                         <Card.Text>
@@ -73,13 +73,13 @@ export default function ProjektionAufLeinwand() {
                 </h3>
                 <div>
                     <p>
-                        <Badge bg="primary">Hinweis:</Badge> Bitte richtet in diesem Fall eure Anfrage an uns bis zum Einsendeschluss am 31. Januar (für das Sommersemester) bzw.
+                        <Badge bg="warning" text="dark">Hinweis:</Badge> Bitte richtet in diesem Fall eure Anfrage an uns bis zum Einsendeschluss am 31. Januar (für das Sommersemester) bzw.
                         am 31. Juli (für das Wintersemester) und schreibt einige Sätze wie ihr euch die Zusammenarbeit sowie Arbeitsteilung vorstellt.
                     </p>
                 </div>
 
                 <Card bg="dark" text="white" border="warning">
-                    <Card.Header><Card.Title>Film zeigen als Kooperation in unserem Programm</Card.Title>
+                    <Card.Header><Card.Title>&#10103; Film zeigen als Kooperation in unserem Programm</Card.Title>
                     </Card.Header>
                     <Card.Body>
                         <Card.Text>

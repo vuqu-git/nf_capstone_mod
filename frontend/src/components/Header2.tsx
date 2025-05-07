@@ -35,7 +35,7 @@ export default function Header2() {
                             <NavDropdown.Item href="#action/2.4">Unsere Kinogeschichte</NavDropdown.Item>
 
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/2.5">
+                            <NavDropdown.Item href="/kontakt">
                                 Kontakt
                             </NavDropdown.Item>
                             <NavDropdown.Item href="#action/2.6">

@@ -26,6 +26,7 @@ import TerminDTOWithFilmDTOOverviewSemester from "./types/TerminDTOWithFilmDTOOv
 import TerminDTOWithFilmDTOOverviewArchive from "./types/TerminDTOWithFilmDTOOverviewArchive.ts";
 import ContentNotes from "./components/ContentNotes.tsx";
 import ProjektionAufLeinwand from "./components/ProjektionAufLeinwand.tsx";
+import ContactForm from "./components/contact/ContactForm.tsx";
 
 const router = createBrowserRouter([
     {
@@ -65,6 +66,11 @@ const router = createBrowserRouter([
             {
                 path: "kinoprojektion",
                 element: <ProjektionAufLeinwand />,
+                handle: { scrollMode: "pathname" },
+            },
+            {
+                path: "kontakt",
+                element: <ContactForm />,
                 handle: { scrollMode: "pathname" },
             },
 
