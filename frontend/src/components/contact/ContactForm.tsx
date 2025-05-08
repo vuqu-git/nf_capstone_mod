@@ -4,7 +4,7 @@ import SupportRequestForm, { SupportRequestFormData } from './SupportRequestForm
 import SalesInquiryForm, { SalesInquiryFormData } from './SalesInquiryForm';
 import EventOhneProjektion from './EventOhneProjektion'
 import EventMitProjektion from "./EventMitProjektion.tsx";
-import KinomitarbeitForm, { MitKinotechnikFormData } from "./KinomitarbeitForm.tsx";
+import KinomitarbeitForm, { KinomitarbeitFormData } from "./KinomitarbeitForm.tsx";
 
 interface SubmissionStatus {
     status: 'idle' | 'sending' | 'success' | 'error';
@@ -27,7 +27,7 @@ const issueOptions: IssueConfig[] = [
 
 const ContactForm: React.FC = () => {
     const [selectedIssue, setSelectedIssue] = useState<string>('');
-    const [formData, setFormData] = useState<AOBFormData | MitKinotechnikFormData | SupportRequestFormData | SalesInquiryFormData>({});
+    const [formData, setFormData] = useState<AOBFormData | KinomitarbeitFormData | SupportRequestFormData | SalesInquiryFormData>({});
     const [submissionStatus, setSubmissionStatus] = useState<SubmissionStatus>({ status: 'idle' });
 
     // Reset state after a successful submission, but keep the success message
@@ -92,7 +92,7 @@ const ContactForm: React.FC = () => {
                 setFormData({});
             } else {
                 const errorData = await response.json();
-                setSubmissionStatus({ status: 'error', message: errorData.message || 'Something went wrong.' });
+                setSubmissionStatus({ status: 'error', message: errorData.nachricht || 'Something went wrong.' });
             }
         } catch (error: any) {
             console.error('Error sending message:', error);

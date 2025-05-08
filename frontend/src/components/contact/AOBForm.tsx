@@ -1,15 +1,15 @@
 import React, { ChangeEvent, FormEvent } from 'react'; // Import FormEvent
 
 export interface AOBFormData {
-    subject: string;
+    betreff: string;
     name: string;
     email: string;
-    message: string;
+    nachricht: string;
 }
 
 interface AOBFormProps {
     onSubmit: (event: FormEvent, issue?: string, data?: AOBFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; message?: string | null };
+    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     formData: AOBFormData;
 }
@@ -23,12 +23,12 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
     return (
         <form onSubmit={handleLocalSubmit}>
             <div>
-                <label htmlFor="subject">Betreff*:</label>
+                <label htmlFor="betreff">Betreff*:</label>
                 <input
                     type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject || ''} // Ensure initial value is defined
+                    id="betreff"
+                    name="betreff"
+                    value={formData.betreff || ''} // Ensure initial value is defined
                     onChange={onInputChange}
                     required
                 />
@@ -55,11 +55,11 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                 />
             </div>
             <div>
-                <label htmlFor="message">Nachricht*:</label>
+                <label htmlFor="nachricht">Nachricht*:</label>
                 <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message || ''}  // Ensure initial value is defined
+                    id="nachricht"
+                    name="nachricht"
+                    value={formData.nachricht || ''}  // Ensure initial value is defined
                     onChange={onInputChange}
                     required
                 />

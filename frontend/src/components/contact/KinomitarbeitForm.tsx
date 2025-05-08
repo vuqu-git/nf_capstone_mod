@@ -1,16 +1,15 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 
-interface KinomitarbeitFormData {
-    subject: string;
+export interface KinomitarbeitFormData {
     name: string;
     email: string;
-    message: string;
+    nachricht: string;
     stundenEngagement: number;
 }
 
 interface KinomitarbeitFormProps {
     onSubmit: (event: FormEvent, issue?: string, data?: KinomitarbeitFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; message?: string | null };
+    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     formData: KinomitarbeitFormData;
 }
@@ -45,11 +44,11 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                 />
             </div>
             <div>
-                <label htmlFor="message">Nachricht*:</label>
+                <label htmlFor="nachricht">Nachricht*:</label>
                 <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message || ''}  // Ensure initial value is defined
+                    id="nachricht"
+                    name="nachricht"
+                    value={formData.nachricht || ''}  // Ensure initial value is defined
                     onChange={onInputChange}
                     required
                     style={{ width: '100%', height: '336px' }}
@@ -57,7 +56,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
             </div>
 
             <div>
-                <label htmlFor="stundenEngagement">Engagement (Schätzung in h) im Durchschnitt pro Monat:</label>
+                <label htmlFor="stundenEngagement">Geschätztes Engagement (in h) im Durchschnitt pro Monat:</label>
                 <input
                     type="number"
                     id="stundenEngagement"

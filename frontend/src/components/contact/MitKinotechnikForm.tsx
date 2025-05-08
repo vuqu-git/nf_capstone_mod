@@ -208,7 +208,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubmit, onInp
                     htmlFor="wurdeGelesenHinweisEventlocation"
                     style={{ color: errorMessage && !formData.wurdeGelesenHinweisEventlocation ? 'red' : 'inherit' }}
                 >
-                    Hiermit bestätige ich, dass im Fall einer öffentlichen Veranstaltung bei Werbemaßnahmen der "Festsaal im Studierendenhaus" als Veranstaltungsort genannt wird und <b>nicht</b> Pupille-Kino, da die Pupille <b>nicht</b> der Veranstalter ist.
+                    Hiermit bestätige ich, dass bei Werbemaßnahmen der "Festsaal im Studierendenhaus" als Veranstaltungsort genannt wird und <b>nicht</b> Pupille-Kino, da die Pupille nicht der Veranstalter ist.
                 </label>
             </div>
 

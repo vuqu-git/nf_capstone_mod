@@ -18,7 +18,7 @@ export default function ScreeningDetails() {
                 setScreeningDetails(response.data);
             })
             .catch(err => {
-                setError(err.response?.data?.message || "Error loading screening details");
+                setError(err.response?.data?.nachricht || "Error loading screening details");
             })
             .finally(() => setLoading(false));
     }, [tnr]);

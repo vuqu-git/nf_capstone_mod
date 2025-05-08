@@ -61,7 +61,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
             })
             .catch((error) => {
                 // Log any error that occurs during the request
-                console.error('Error occurred while sending the request:', error.message);
+                console.error('Error occurred while sending the request:', error.nachricht);
             })
             .finally(() => {
                 // Optional: Perform any cleanup or final actions here

@@ -53,7 +53,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubmit, onInputChan
         <form onSubmit={handleSubmit}>
             <Badge bg="warning" text="dark">Hinweis:</Badge>
             <p>
-                Der Einsendeschluss für Kooperationsanfragen ist der 31. Januar (für das Sommersemester) und 31. Juli (für das Wintersemester). {momentaneAnfrageFuerSemester}
+                Der Einsendeschluss für Kooperationsanfragen ist der 31. Januar (für das Sommersemester) sowie der 31. Juli (für das Wintersemester). {momentaneAnfrageFuerSemester}
             </p>
             <div>
                 <label htmlFor="betreff">Betreff*:</label>
