@@ -142,7 +142,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubmit, onInputChan
                     value={formData.nachricht || ''}
                     onChange={onInputChange}
                     required
-                    style={{ width: '100%', height: '336px' }}
+                    style={{ height: '300px' }}
                 />
             </div>
 
@@ -155,7 +155,6 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubmit, onInputChan
                     placeholder="Spieltage sind Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
                     onChange={onInputChange}
                     required
-                    style={{ width: '100%', height: '56px' }}
                 />
             </div>
 
@@ -167,7 +166,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubmit, onInputChan
                     value={formData.zusammenarbeit || ''}
                     onChange={onInputChange}
                     required
-                    style={{ width: '100%', height: '140px' }}
+                    style={{ height: '150px' }}
                 />
             </div>
 

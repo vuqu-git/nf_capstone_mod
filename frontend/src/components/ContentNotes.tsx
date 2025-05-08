@@ -15,6 +15,7 @@
 //     endTime: "2025-04-26T12:00:00+02:00",
 //     location: "10 Carlotta St, Artarmon NSW 2064, Australia",
 // };
+import './NomalContent.css';
 
 import { AddToCalendarButton } from 'add-to-calendar-button-react';
 
@@ -22,8 +23,8 @@ export default function ContentNotes() {
 
     return (
         <div>
-            <section>
-                <h2 className="mb-4">
+            <section className="normal-content-container">
+                <h2>
                     Triggerwarnungen und Content Notes
                 </h2>
                 <p>

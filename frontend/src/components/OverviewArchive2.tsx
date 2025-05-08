@@ -175,8 +175,8 @@ export default function OverviewArchive2() {
 
     return (
         <div>
-            <section>
-                <h1 className="mb-4">Programmarchiv</h1>
+            <section className="normal-content-container">
+                <h2>Programmarchiv</h2>
                 {renderArchiveWithSemesterHeaders()}
             </section>
         </div>

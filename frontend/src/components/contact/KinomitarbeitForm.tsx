@@ -51,7 +51,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                     value={formData.nachricht || ''}  // Ensure initial value is defined
                     onChange={onInputChange}
                     required
-                    style={{ width: '100%', height: '336px' }}
+                    style={{ height: '300px' }}
                 />
             </div>
 

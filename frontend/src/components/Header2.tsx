@@ -38,7 +38,7 @@ export default function Header2() {
                             <NavDropdown.Item href="/kontakt">
                                 Kontakt
                             </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/2.6">
+                            <NavDropdown.Item href="/impressum">
                                 Impressum
                             </NavDropdown.Item>
                         </NavDropdown>

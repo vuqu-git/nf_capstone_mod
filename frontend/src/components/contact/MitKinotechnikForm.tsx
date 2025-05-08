@@ -103,7 +103,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubmit, onInp
                     value={formData.nachricht || ''}
                     onChange={onInputChange}
                     required
-                    style={{ width: '100%', height: '336px' }}
+                    style={{ width: '100%', height: '300px' }}
                 />
             </div>
 

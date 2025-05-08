@@ -1,4 +1,5 @@
 import React, { ChangeEvent, FormEvent } from 'react'; // Import FormEvent
+import './Forms.css';
 
 export interface AOBFormData {
     betreff: string;
@@ -62,6 +63,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     value={formData.nachricht || ''}  // Ensure initial value is defined
                     onChange={onInputChange}
                     required
+                    style={{ height: '300px' }}
                 />
             </div>
             <button type="submit" disabled={submissionStatus.status === 'sending'}>Nachricht senden</button>

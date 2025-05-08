@@ -97,8 +97,8 @@ export default function OverviewSemester() {
 
     return (
         <div>
-            <section style={{paddingLeft: '0.75rem', paddingRight: '0.5rem'}}>
-                <h1 className="mb-4">Semesterübersicht</h1>
+            <section className="normal-content-container">
+                <h2>Semesterübersicht</h2>
 
                 {semesterTermine && semesterTermine.length > 0 && (
                     <div className="overview-container">

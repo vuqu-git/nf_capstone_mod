@@ -17,9 +17,9 @@ interface SubSelectionConfig {
 }
 
 const subSelectionOptions: SubSelectionConfig[] = [
-    { value: 'eigenstaendig', label: 'ganz eigenständig' },
-    { value: 'mitkinotechnik', label: 'mit professioneller Kinotechnik' },
-    { value: 'kooperation', label: 'gemeinsam in Kooperation mit Pupille' },
+    { value: 'eigenstaendig', label: '➀ ganz eigenständig' },
+    { value: 'mitkinotechnik', label: '➁ mit professioneller Kinotechnik' },
+    { value: 'kooperation', label: '➂ gemeinsam in Kooperation mit Pupille' },
 ];
 
 interface FormData {

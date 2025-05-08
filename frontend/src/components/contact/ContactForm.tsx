@@ -1,3 +1,5 @@
+import './Forms.css';
+
 import React, {useState, FormEvent, ChangeEvent, useEffect} from 'react';
 import AOBForm, { AOBFormData } from './AOBForm.tsx';
 import SupportRequestForm, { SupportRequestFormData } from './SupportRequestForm';
@@ -17,10 +19,10 @@ interface IssueConfig {
 }
 
 const issueOptions: IssueConfig[] = [
-    { value: 'aob', label: 'Sonstiges' },
-    { value: 'kinomitarbeit', label: 'Kinomitarbeit' },
     { value: 'eventOhneProjektion', label: 'Veranstaltung im Festsaal ohne Projektion' },
     { value: 'eventMitProjektion', label: 'Veranstaltung im Festsaal mit Projektion' },
+    { value: 'kinomitarbeit', label: 'Kinomitarbeit' },
+    { value: 'aob', label: 'Sonstiges' },
     // { value: 'support', label: 'Support Request' },
     // { value: 'sales', label: 'Sales Inquiry' },
 ];
@@ -69,7 +71,7 @@ const ContactForm: React.FC = () => {
     const handleSubmit = async (
         event: FormEvent,
         explicitIssue?: string, // Optional explicit issue parameter
-        explicitData?: AOBFormData | MitKinotechnikFormData | SupportRequestFormData | SalesInquiryFormData // Optional explicit data
+        explicitData?: AOBFormData | KinomitarbeitFormData | SupportRequestFormData | SalesInquiryFormData // Optional explicit data
     ) => {
         event.preventDefault();
         setSubmissionStatus({ status: 'sending' });
@@ -133,32 +135,35 @@ const ContactForm: React.FC = () => {
                 return (
                     <EventOhneProjektion/>
                 );
-            case 'support':
-                return (
-                    <SupportRequestForm
-                        onSubmit={handleSubmit}
-                        submissionStatus={submissionStatus}
-                        onInputChange={handleChange}
-                        formData={formData as SupportRequestFormData}
-                    />
-                );
-            case 'sales':
-                return (
-                    <SalesInquiryForm
-                        onSubmit={handleSubmit}
-                        submissionStatus={submissionStatus}
-                        onInputChange={handleChange}
-                        formData={formData as SalesInquiryFormData}
-                    />
-                );
+            // case 'support':
+            //     return (
+            //         <SupportRequestForm
+            //             onSubmit={handleSubmit}
+            //             submissionStatus={submissionStatus}
+            //             onInputChange={handleChange}
+            //             formData={formData as SupportRequestFormData}
+            //         />
+            //     );
+            // case 'sales':
+            //     return (
+            //         <SalesInquiryForm
+            //             onSubmit={handleSubmit}
+            //             submissionStatus={submissionStatus}
+            //             onInputChange={handleChange}
+            //             formData={formData as SalesInquiryFormData}
+            //         />
+            //     );
             default:
                 return null;
         }
     };
 
     return (
-        <div>
+        <div className="contact-form-container">
             <h2>Kontakt</h2>
+            <h3>fernmündlich</h3>
+            <p>Telefon: 069 7982 8976</p>
+            <h3>schriftlich</h3>
             {submissionStatus.status === 'sending' && <p>Sende Nachricht...</p>}
             {submissionStatus.status === 'success' && <p>Vielen Dank! Deine Nachricht wurde gesendet.</p>}
             {submissionStatus.status === 'error' && submissionStatus.message && (
