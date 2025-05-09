@@ -141,6 +141,8 @@ input[type="tel"]:focus {
     /*background: #181a22;*/
     /*border-radius: 14px;*/
     /*box-shadow: 0 6px 24px rgba(0,0,0,0.28);*/
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
     color: #cfd6e1;
 }
 

@@ -19,7 +19,7 @@ export default function ProjektionAufLeinwand() {
                 </h3>
 
                 <CardGroup>
-                <Card bg="dark" text="white" border="success">
+                <Card bg="dark" text="white" border="warning">
                     <Card.Header><Card.Title>&#10112; ganz eigenständig</Card.Title></Card.Header>
                     <Card.Body>
 
@@ -36,7 +36,7 @@ export default function ProjektionAufLeinwand() {
                     </Card.Body>
                 </Card>
 
-                <Card bg="dark" text="white" border="success">
+                <Card bg="dark" text="white" border="warning">
                     <Card.Header><Card.Title>&#10113; mit professioneller Kinotechnik</Card.Title></Card.Header>
                     <Card.Body>
 

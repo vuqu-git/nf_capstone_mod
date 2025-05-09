@@ -28,93 +28,121 @@ import ContentNotes from "./components/ContentNotes.tsx";
 import ProjektionAufLeinwand from "./components/ProjektionAufLeinwand.tsx";
 import ContactForm from "./components/contact/ContactForm.tsx";
 import Impressum from "./components/Impressum.tsx";
+import BaseLayout from "./components/LayoutWrapper/BaseLayout.tsx";
+import TextLayout from "./components/LayoutWrapper/TextLayout.tsx";
+import ScreeningLayout from "./components/LayoutWrapper/ScreeningLayout.tsx";
+import OverviewAndFormLayout from "./components/LayoutWrapper/OverviewAndFormLayout.tsx";
+import Kinobesuch from "./components/Kinobesuch.tsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Layout2 />,
+        element: <BaseLayout />,
         children: [
             {
-                index: true,
-                loader: getGalleryData,
-                element: <Gallery2 />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "semester",
-                loader: getSemesterScreenings,
-                element: <OverviewSemester2 />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "archive",
-                loader: getArchiveScreenings,
-                element: <OverviewArchive2 />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "details/:tnr",
-                element: <ScreeningDetails />,
-                // no usage of loader here, beacuse the data is fetched with ScreeningDetails
-                // loader: ({ params }) => getScreeningDetails(params.tnr),
-                handle: { scrollMode: "pathname" } // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
-            },
-            {
-                path: "contentnotes",
-                element: <ContentNotes />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "kinoprojektion",
-                element: <ProjektionAufLeinwand />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "kontakt",
-                element: <ContactForm />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "impressum",
-                element: <Impressum />,
-                handle: { scrollMode: "pathname" },
+                element: <ScreeningLayout />, // No path, acts as a layout wrapper
+                children: [
+                    {
+                        index: true,
+                        loader: getGalleryData,
+                        element: <Gallery2 />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "details/:tnr",
+                        element: <ScreeningDetails />,
+                        // no usage of loader here, beacuse the data is fetched with ScreeningDetails
+                        // loader: ({ params }) => getScreeningDetails(params.tnr),
+                        handle: { scrollMode: "pathname" } // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
+                    },
+                ],
             },
 
             {
-                path: "admin",
-                element: <Admin />,
-                handle: { scrollMode: "pathname" },
+                element: <OverviewAndFormLayout />, // No path, acts as a layout wrapper
+                children: [
+                    {
+                        path: "semester",
+                        loader: getSemesterScreenings,
+                        element: <OverviewSemester2 />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "archive",
+                        loader: getArchiveScreenings,
+                        element: <OverviewArchive2 />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "kontakt",
+                        element: <ContactForm />,
+                        handle: { scrollMode: "pathname" },
+                    },
+
+                    {
+                        path: "admin",
+                        element: <Admin />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "addnews",
+                        element: <AddNews />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "editnews",
+                        element: <EditDeleteNews />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "deletenews",
+                        element: <EditDeleteNews />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "adminfilme",
+                        element: <FilmForm />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "admintermine",
+                        element: <TerminForm />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "admintvennew",
+                        element: <TerminverknuepfungFormNew />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                ],
             },
+
             {
-                path: "addnews",
-                element: <AddNews />,
-                handle: { scrollMode: "pathname" },
+                element: <TextLayout />, // No path, acts as a layout wrapper
+                children: [
+                    {
+                        path: "kinobesuch",
+                        element: <Kinobesuch />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "contentnotes",
+                        element: <ContentNotes />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "kinoprojektion",
+                        element: <ProjektionAufLeinwand />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "impressum",
+                        element: <Impressum />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                ],
             },
-            {
-                path: "editnews",
-                element: <EditDeleteNews />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "deletenews",
-                element: <EditDeleteNews />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "adminfilme",
-                element: <FilmForm />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "admintermine",
-                element: <TerminForm />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "admintvennew",
-                element: <TerminverknuepfungFormNew />,
-                handle: { scrollMode: "pathname" },
-            },
+
 
             // {
             //     path: "link-to-hash",

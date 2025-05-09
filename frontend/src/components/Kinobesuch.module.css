@@ -1,0 +1,27 @@
+.gridContainer {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Creates two columns: auto width for h3, and the rest for p */
+    gap: 10px; /* Adjust the gap as needed */
+}
+
+.gridContainer h3 {
+    text-align: left;
+    margin-bottom: 0.5em; /* Add some space below the h3 */
+}
+
+.gridContainer p {
+    text-align: right;
+    margin-top: 0; /* Remove default top margin for alignment */
+    margin-bottom: 0.5em; /* Add some space below the p */
+}
+
+/* If you want the images to span both columns */
+.gridContainer img {
+    grid-column: 1 / -1;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+
+
+

@@ -173,7 +173,7 @@ export default function TerminFilmGalleryCard({
 
                         { jahr &&
                             <Card.Text
-                                className="filminfo-and-stab"
+                                className="filminfo-and-stab-overview"
                                 style={{ marginTop: '0.0rem' }}
                             >
                                 {jahr}

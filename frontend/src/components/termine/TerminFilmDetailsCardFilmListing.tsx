@@ -133,7 +133,7 @@ export default function TerminFilmDetailsListing({
                 {/*******------------------*******/}
                 {(f.land || f.jahr || f.laufzeit || f.sprache || f.untertitel || f.farbe || f.format || f.fsk) && (
                     <div className="section-block">
-                        <Card.Title as="h6" className="filminfo-and-stab">Filminformationen:</Card.Title>
+                        <Card.Title as="h6" className="filminfo-and-stab-details">Filminformationen:</Card.Title>
                         <div className="table-block">
                             {f.land && <div className="row"><div className="label">Land</div><div className="value">{f.land}</div></div>}
                             {f.jahr && <div className="row"><div className="label">Jahr</div><div className="value">{f.jahr}</div></div>}
@@ -151,7 +151,7 @@ export default function TerminFilmDetailsListing({
                 {/*******----------------*******/}
                 {structuredStab && (
                     <div className="section-block"> {/* This will be the last .section-block */}
-                        <Card.Title as="h6" className="filminfo-and-stab">Stab und Besetzung:</Card.Title>
+                        <Card.Title as="h6" className="filminfo-and-stab-details">Stab und Besetzung:</Card.Title>
                         <div className="table-block">
                             {structuredStab.map(row => (
                                 <div className="row" key={row.abbrev}>
