@@ -17,27 +17,30 @@ interface Props {
     kurztext: string | null;
     jahr: number | undefined;
     besonderheit: string | null;
-
     filmFormat: string | undefined;
+    laufzeit: number | undefined;
+    regie: string | undefined;
 
     tnr: number
 }
 
 export default function TerminFilmGalleryCard({
-                                         screeningWeekday,
-                                         screeningDate,
-                                         screeningTime,
-                                         screeningSonderfarbe,
-                                         bild,
-                                         offsetImageInGallery,
+                                                  screeningWeekday,
+                                                  screeningDate,
+                                                  screeningTime,
+                                                  screeningSonderfarbe,
+                                                  bild,
+                                                  offsetImageInGallery,
 
-                                         titel,
-                                         kurztext,
-                                         jahr,
-                                         besonderheit,
-                                         filmFormat,
-                                         tnr
-                                     }: Props) {
+                                                  titel,
+                                                  kurztext,
+                                                  jahr,
+                                                  besonderheit,
+                                                  filmFormat,
+                                                  laufzeit,
+                                                  regie,
+                                                  tnr
+                                              }: Props) {
 
     const cardImageStyle: CSSProperties  = {
         position: 'relative',
@@ -171,12 +174,16 @@ export default function TerminFilmGalleryCard({
                             </Card.Title>
                         )}
 
-                        { jahr &&
+                        { (regie || jahr || laufzeit) &&
                             <Card.Text
                                 className="filminfo-and-stab-overview"
                                 style={{ marginTop: '0.0rem' }}
                             >
-                                {jahr}
+                                {[
+                                    regie,
+                                    jahr,
+                                    laufzeit !== undefined ? laufzeit + " Min." : undefined
+                                ].filter(Boolean).join(', ')}
                             </Card.Text>
                         }
 

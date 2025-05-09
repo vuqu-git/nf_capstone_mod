@@ -6,7 +6,8 @@ interface FilmDTOGallery {
     jahr?: number;
     bild?: string | null;
     format?: string | null;
-        // fskRating?: string;
+    laufzeit?: number | null;
+    regie?: string | null;
 }
 
 export default FilmDTOGallery;

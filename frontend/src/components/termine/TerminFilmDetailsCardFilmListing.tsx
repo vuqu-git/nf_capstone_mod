@@ -137,7 +137,7 @@ export default function TerminFilmDetailsListing({
                         <div className="table-block">
                             {f.land && <div className="row"><div className="label">Land</div><div className="value">{f.land}</div></div>}
                             {f.jahr && <div className="row"><div className="label">Jahr</div><div className="value">{f.jahr}</div></div>}
-                            {f.laufzeit && <div className="row"><div className="label">Länge</div><div className="value">{f.laufzeit} min</div></div>}
+                            {f.laufzeit && <div className="row"><div className="label">Länge</div><div className="value">{f.laufzeit} Min.</div></div>}
                             {f.sprache && <div className="row"><div className="label">Sprache</div><div className="value">{f.sprache}</div></div>}
                             {f.untertitel && <div className="row"><div className="label">Untertitel</div><div className="value">{f.untertitel}</div></div>}
                             {f.farbe && <div className="row"><div className="label">Farbigkeit</div><div className="value">{renderHtmlText(f.farbe)}</div></div>}

@@ -67,6 +67,7 @@ export default function Gallery2() {
                                         jahr={undefined}
                                         besonderheit={termin.besonderheit ? termin.besonderheit : null}
                                         filmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+                                        laufzeit={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
 
                                         tnr={termin.tnr} // for navigation to certain route
                                     />
@@ -94,7 +95,8 @@ export default function Gallery2() {
                                         kurztext={termin.films[0]?.kurztext ? termin.films[0]?.kurztext : null}
                                         jahr={termin.films[0]?.jahr}
                                         besonderheit={termin.films[0]?.besonderheit ? termin.films[0]?.besonderheit : null}
-                                        filmFormat={termin.films[0]?.format ? termin.films[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+                                        filmFormat={termin.films[0]?.format ? termin.films[0]?.format : undefined}
+                                        laufzeit={termin.films[0]?.laufzeit}
 
                                         tnr={termin.tnr} // for navigation to certain route
                                     />
