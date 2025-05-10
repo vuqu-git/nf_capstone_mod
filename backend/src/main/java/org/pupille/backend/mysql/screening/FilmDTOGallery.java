@@ -11,6 +11,7 @@ public record FilmDTOGallery(
         Integer jahr,
         String format,
         Integer laufzeit
+        // placeholder for String regie
 ) {
     public FilmDTOGallery(Film film) {
         this(

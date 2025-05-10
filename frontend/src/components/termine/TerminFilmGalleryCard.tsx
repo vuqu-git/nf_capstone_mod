@@ -176,8 +176,7 @@ export default function TerminFilmGalleryCard({
 
                         { (regie || jahr || laufzeit) &&
                             <Card.Text
-                                className="filminfo-and-stab-overview"
-                                style={{ marginTop: '0.0rem' }}
+                                className="filminfo-and-stab-gallery"
                             >
                                 {[
                                     regie,

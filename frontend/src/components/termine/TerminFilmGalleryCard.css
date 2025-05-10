@@ -179,7 +179,8 @@
 /*Styling for display of year and director below the film title*/
 /*#############################################################*/
 
-.filminfo-and-stab-overview {
+.filminfo-and-stab-gallery {
     color: #9ac7fa;
     font-weight: 400;
+    margin-top: 0rem;
 }

@@ -91,6 +91,7 @@ import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import {createDateAndTimeForAddToCalendarButton} from "../utils/createDateAndTimeForAddToCalendarButton.ts";
 import {createICSFileName} from "../utils/createICSFileName.ts";
+import Card from "react-bootstrap/Card";
 
 export default function OverviewSemester() {
     const semesterTermine = useLoaderData<TerminDTOWithFilmDTOOverviewSemester[]>();
@@ -153,10 +154,25 @@ export default function OverviewSemester() {
 
                                     <div className="overview-title">
                                         {!termin.titel ? (
+                                            // case: Hauptfilm + evtl Vorfilm
                                             <>
                                                 <Link to={`/details/${termin.tnr}`} className="custom-link">
                                                     {renderHtmlText(termin.mainfilms[0]?.titel) ?? ""}
                                                 </Link>
+
+                                                { (termin.mainfilms[0]?.regie || termin.mainfilms[0]?.jahr || termin.mainfilms[0]?.laufzeit) &&
+                                                    <p
+                                                        className="filminfo-and-stab-details"
+                                                        style={{ marginTop: '0.0rem', marginBottom: '0.0rem', fontSize: '0.8rem' }}
+                                                    >
+                                                        {[
+                                                            termin.mainfilms[0]?.regie,
+                                                            termin.mainfilms[0]?.jahr,
+                                                            termin.mainfilms[0]?.laufzeit !== undefined ? termin.mainfilms[0]?.laufzeit + " Min." : undefined
+                                                        ].filter(Boolean).join(', ')}
+                                                    </p>
+                                                }
+
                                                 {termin.mainfilms[0]?.besonderheit && (
                                                     <p className="besonderheit">
                                                         {renderHtmlText(termin.mainfilms[0]?.besonderheit) ?? ""}
@@ -164,6 +180,7 @@ export default function OverviewSemester() {
                                                 )}
                                             </>
                                         ) : (
+                                            // Filmprogramm
                                             <Link to={`/details/${termin.tnr}`} className="custom-link">
                                                 {renderHtmlText(termin.titel)}
                                                 <ol className="film-list">

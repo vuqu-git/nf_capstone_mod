@@ -259,25 +259,24 @@ public class ScreeningService {
                 .map(termin -> {
                     List<Terminverknuepfung> connections = connectionsByTerminId.getOrDefault(termin.getTnr(), List.of());
 
-                    List<Film> films = new ArrayList<>();
+                    List<Film> mainfilms = new ArrayList<>();
                     List<Film> vorfilms = new ArrayList<>();
 
                     for (Terminverknuepfung tv : connections) {
                         if (Boolean.TRUE.equals(tv.getVorfilm())) {
                             vorfilms.add(tv.getFilm());
                         } else {
-                            films.add(tv.getFilm());
+                            mainfilms.add(tv.getFilm());
                         }
                     }
 
-                    int screeningTotalDuration = Stream.concat(films.stream(), vorfilms.stream())
+                    int terminGesamtlaufzeit = Stream.concat(mainfilms.stream(), vorfilms.stream())
                             .map(Film::getLaufzeit)
                             .filter(Objects::nonNull)
                             .mapToInt(Integer::intValue)
                             .sum();
 
-                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, screeningTotalDuration);
-//                    return new TerminDTOWithFilmDTOOverviewSemester(termin, films, vorfilms, screeningTotalDuration);
+                    return new TerminDTOWithFilmDTOOverviewSemester(termin, mainfilms, terminGesamtlaufzeit);
                 })
                 .toList();
     }
