@@ -1,88 +1,109 @@
-//
 // import './Overview.css';
 //
-// import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
-// import {render} from "../utils/render.tsx";
 // import {Link, useLoaderData} from "react-router-dom";
+// import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
 // import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
+// import {renderHtmlText} from "../utils/renderHtmlText.tsx";
+// import {AddToCalendarButton} from "add-to-calendar-button-react";
+// import {createDateAndTimeForAddToCalendarButton} from "../utils/createDateAndTimeForAddToCalendarButton.ts";
+// import {createICSFileName} from "../utils/createICSFileName.ts";
 //
-//
-// // interface Props {
-// //
-// // }
-//
-// // export default function OverviewSemester({ }: Props) {
 // export default function OverviewSemester() {
-//
 //     const semesterTermine = useLoaderData<TerminDTOWithFilmDTOOverviewSemester[]>();
 //
-//
 //     return (
-//         <div>
-//             <section>
-//                 <h1>Semesterübersicht</h1>
+//         <section className="normal-content-container">
+//             <h2>Semesterübersicht</h2>
 //
-//                 {/*{!errorMessage && isLoaded && semesterTermine.length === 0 && (*/}
-//                 {/*    <p>Die Termine für das Semester werden demnächst veröffentlicht.</p>*/}
-//                 {/*)}*/}
+//             {semesterTermine && semesterTermine.length > 0 && (
+//                 <div className="overview-container">
+//                     {semesterTermine.map(termin => {
 //
-//                 {semesterTermine && semesterTermine.length > 0 ? (
-//                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+//                         const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, true, true);
+//                         const calenderDateObj = createDateAndTimeForAddToCalendarButton(termin.vorstellungsbeginn, termin.terminGesamtlaufzeit);
 //
-//                         <tbody>
-//                         {semesterTermine.map(termin => {
-//                             const screeningDateObj = formatDateTime(termin.screeningTime, true, true);
-//                             return (
-//                                 <tr key={termin.terminId}>
-//                                     <td style={{ padding: '0.5rem 0.25rem', whiteSpace: 'nowrap' }}>
-//                                         {screeningDateObj?.weekday}
-//                                     </td>
-//                                     <td style={{ padding: '0.5rem 0.25rem', whiteSpace: 'nowrap', textAlign: 'right' }}>
-//                                         {screeningDateObj?.date}
-//                                     </td>
-//                                     <td style={{ padding: '0.5rem 2rem 0.5rem 0.25rem', whiteSpace: 'nowrap', textAlign: 'right' }}>
-//                                         {screeningDateObj?.time}
-//                                     </td>
-//                                     <td style={{ padding: '0.5rem 0' }}>
-//                                         {!termin.titel ? (
-//                                             <>
-//                                                 <Link
-//                                                     to={`/details/${termin.terminId}`}
-//                                                     className="custom-link"
-//                                                 >
-//                                                     {render(termin.films[0]?.titel) ?? ""}
-//                                                 </Link>
-//                                                 {termin.films[0]?.besonderheit && (
-//                                                     <p style={{ fontSize: '0.75em', marginBottom: '0' }}>
-//                                                         {render(termin.films[0]?.besonderheit) ?? ""}
-//                                                     </p>
-//                                                 )}
-//                                             </>
-//                                         ) : (
-//                                             <Link
-//                                                 to={`/details/${termin.terminId}`}
-//                                                 className="custom-link"
-//                                             >
-//                                                 {render(termin.titel)}
-//                                                 <ol style={{ marginBottom: '0' }}>
-//                                                     {termin.films.map(film => (
-//                                                         <li key={film.filmId}>{render(film.titel)}</li>
-//                                                     ))}
-//                                                 </ol>
+//                         const calenderTitle = termin.titel ?? termin.mainfilms[0].titel;
+//                         const icsFileName = createICSFileName(calenderTitle, termin.vorstellungsbeginn);
+//
+//                         return (
+//                             <div key={termin.tnr} className="overview-row">
+//                                 <div className="overview-date">
+//
+//                                     <div className="weekday">{screeningDateObj?.weekday}</div>
+//                                     <div className="datetime">{screeningDateObj?.date} {screeningDateObj?.time}</div>
+//
+//                                     <div className="calendar">
+//                                         <AddToCalendarButton
+//                                             name={"Pupille: " + calenderTitle}
+//                                             startDate={calenderDateObj.startDate}
+//                                             startTime={calenderDateObj.startTime}
+//                                             endDate={calenderDateObj.endDate}
+//                                             endTime={calenderDateObj.endTime}
+//                                             timeZone="Europe/Berlin" // Handles DST automatically
+//                                             options={['Apple', 'Google', 'iCal']}
+//
+//                                             uid={termin.tnr + "-uidTermin@pupille.org"}
+//                                             iCalFileName={"pupille-" +  icsFileName}
+//
+//                                             inline={true}
+//                                             hideTextLabelButton={true}
+//
+//                                             pastDateHandling="hide"
+//                                             size="0"
+//                                             lightMode={"dark"}
+//                                             // hideBackground={true}
+//                                             hideBranding={true}
+//                                             buttonStyle="round"
+//                                         />
+//                                     </div>
+//                                 </div>
+//
+//                                 <div className="overview-title">
+//                                     {!termin.titel ? (
+//                                         // case: Hauptfilm + evtl Vorfilm
+//                                         <>
+//                                             <Link to={`/details/${termin.tnr}`} className="custom-link">
+//                                                 {renderHtmlText(termin.mainfilms[0]?.titel) ?? ""}
 //                                             </Link>
-//                                         )}
-//                                     </td>
-//                                 </tr>
-//                             );
-//                         })}
-//                         </tbody>
-//                     </table>
-//                 ) : null} {/* else' part with null */}
-//             </section>
-//         </div>
+//
+//                                             { (termin.mainfilms[0]?.regie || termin.mainfilms[0]?.jahr || termin.mainfilms[0]?.laufzeit) &&
+//                                                 <p className="filminfo-and-stab-details filminfo-in-semester-overview">
+//                                                     {[
+//                                                         termin.mainfilms[0]?.regie,
+//                                                         termin.mainfilms[0]?.jahr,
+//                                                         termin.mainfilms[0]?.laufzeit !== undefined ? termin.mainfilms[0]?.laufzeit + " Min." : undefined
+//                                                     ].filter(Boolean).join(', ')}
+//                                                 </p>
+//                                             }
+//
+//                                             {termin.mainfilms[0]?.besonderheit && (
+//                                                 <p className="besonderheit">
+//                                                     {renderHtmlText(termin.mainfilms[0]?.besonderheit) ?? ""}
+//                                                 </p>
+//                                             )}
+//                                         </>
+//                                     ) : (
+//                                         // Filmprogramm
+//                                         <Link to={`/details/${termin.tnr}`} className="custom-link">
+//                                             {renderHtmlText(termin.titel)}
+//                                             <ol className="film-list">
+//                                                 {termin.mainfilms.map(film => (
+//                                                     <li key={film.filmId}>{renderHtmlText(film.titel)}</li>
+//                                                 ))}
+//                                             </ol>
+//                                         </Link>
+//                                     )}
+//                                 </div>
+//                             </div>
+//                         );
+//                     })}
+//                 </div>
+//             )}
+//         </section>
 //     );
-// };
+// }
 
+import './Overview.css';
 
 import {Link, useLoaderData} from "react-router-dom";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
@@ -91,112 +112,98 @@ import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import {createDateAndTimeForAddToCalendarButton} from "../utils/createDateAndTimeForAddToCalendarButton.ts";
 import {createICSFileName} from "../utils/createICSFileName.ts";
-import Card from "react-bootstrap/Card";
 
 export default function OverviewSemester() {
     const semesterTermine = useLoaderData<TerminDTOWithFilmDTOOverviewSemester[]>();
 
     return (
-        <div>
-            <section className="normal-content-container">
-                <h2>Semesterübersicht</h2>
+        <section className="normal-content-container">
+            <h2>Semesterübersicht</h2>
 
-                {semesterTermine && semesterTermine.length > 0 && (
-                    <div className="overview-container">
-                        {semesterTermine.map(termin => {
+            {semesterTermine && semesterTermine.length > 0 && (
+                <ul className="overview-container">
+                    {semesterTermine.map(termin => {
 
-                            const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, true, true);
-                            const calenderDateObj = createDateAndTimeForAddToCalendarButton(termin.vorstellungsbeginn, termin.terminGesamtlaufzeit);
+                        const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, true, true);
+                        const calenderDateObj = createDateAndTimeForAddToCalendarButton(termin.vorstellungsbeginn, termin.terminGesamtlaufzeit);
 
-                            const calenderTitle = termin.titel ? termin.titel : termin.mainfilms[0].titel;
-                            const icsFileName = createICSFileName(calenderTitle, termin.vorstellungsbeginn);
+                        const calenderTitle = termin.titel ?? termin.mainfilms[0].titel;
+                        const icsFileName = createICSFileName(calenderTitle, termin.vorstellungsbeginn);
 
+                        return (
+                            <li key={termin.tnr} className="overview-row">
+                                <div className="overview-date">
 
-                            return (
-                                <div key={termin.tnr} className="overview-row">
-                                    <div className="overview-date">
+                                    <div className="weekday">{screeningDateObj?.weekday}</div>
+                                    <div className="datetime">{screeningDateObj?.date} {screeningDateObj?.time}</div>
 
+                                    <div className="calendar">
+                                        <AddToCalendarButton
+                                            name={"Pupille: " + calenderTitle}
+                                            startDate={calenderDateObj.startDate}
+                                            startTime={calenderDateObj.startTime}
+                                            endDate={calenderDateObj.endDate}
+                                            endTime={calenderDateObj.endTime}
+                                            timeZone="Europe/Berlin" // Handles DST automatically
+                                            options={['Apple', 'Google', 'iCal']}
 
+                                            uid={termin.tnr + "-uidTermin@pupille.org"}
+                                            iCalFileName={"pupille-" +  icsFileName}
 
-                                        <div className="weekday">{screeningDateObj?.weekday}</div>
-                                        <div className="date">{screeningDateObj?.date} {screeningDateObj?.time}</div>
+                                            inline={true}
+                                            hideTextLabelButton={true}
 
-                                        <div className="calendar">
-                                            <AddToCalendarButton
-                                                name={"Pupille: " + calenderTitle}
-                                                startDate={calenderDateObj.startDate}
-                                                startTime={calenderDateObj.startTime}
-                                                endDate={calenderDateObj.endDate}
-                                                endTime={calenderDateObj.endTime}
-                                                timeZone="Europe/Berlin" // Handles DST automatically
-                                                options={['Apple', 'Google', 'iCal']}
-
-                                                uid={termin.tnr + "-uidTermin@pupille.org"}
-                                                iCalFileName={"pupille-" +  icsFileName}
-
-                                                inline={true}
-                                                hideTextLabelButton={true}
-
-
-
-                                                pastDateHandling="hide"
-                                                size="0"
-                                                lightMode={"dark"}
-                                                // hideBackground={true}
-                                                hideBranding={true}
-
-                                                buttonStyle="round"
-
-                                            />
-                                        </div>
-
-                                    </div>
-
-                                    <div className="overview-title">
-                                        {!termin.titel ? (
-                                            // case: Hauptfilm + evtl Vorfilm
-                                            <>
-                                                <Link to={`/details/${termin.tnr}`} className="custom-link">
-                                                    {renderHtmlText(termin.mainfilms[0]?.titel) ?? ""}
-                                                </Link>
-
-                                                { (termin.mainfilms[0]?.regie || termin.mainfilms[0]?.jahr || termin.mainfilms[0]?.laufzeit) &&
-                                                    <p
-                                                        className="filminfo-and-stab-details"
-                                                        style={{ marginTop: '0.0rem', marginBottom: '0.0rem', fontSize: '0.8rem' }}
-                                                    >
-                                                        {[
-                                                            termin.mainfilms[0]?.regie,
-                                                            termin.mainfilms[0]?.jahr,
-                                                            termin.mainfilms[0]?.laufzeit !== undefined ? termin.mainfilms[0]?.laufzeit + " Min." : undefined
-                                                        ].filter(Boolean).join(', ')}
-                                                    </p>
-                                                }
-
-                                                {termin.mainfilms[0]?.besonderheit && (
-                                                    <p className="besonderheit">
-                                                        {renderHtmlText(termin.mainfilms[0]?.besonderheit) ?? ""}
-                                                    </p>
-                                                )}
-                                            </>
-                                        ) : (
-                                            // Filmprogramm
-                                            <Link to={`/details/${termin.tnr}`} className="custom-link">
-                                                {renderHtmlText(termin.titel)}
-                                                <ol className="film-list">
-                                                    {termin.mainfilms.map(film => (
-                                                        <li key={film.filmId}>{renderHtmlText(film.titel)}</li>
-                                                    ))}
-                                                </ol>
-                                            </Link>
-                                        )}
+                                            pastDateHandling="hide"
+                                            size="0"
+                                            lightMode={"dark"}
+                                            // hideBackground={true}
+                                            hideBranding={true}
+                                            buttonStyle="round"
+                                        />
                                     </div>
                                 </div>
-                            );
-                        })}
-                    </div>
-                )}
-            </section>
-        </div>
+
+                                <div className="overview-title">
+                                    {!termin.titel ? (
+                                        // case: Hauptfilm + evtl Vorfilm
+                                        <>
+                                            <Link to={`/details/${termin.tnr}`} className="custom-link">
+                                                {renderHtmlText(termin.mainfilms[0]?.titel) ?? ""}
+                                            </Link>
+
+                                            { (termin.mainfilms[0]?.regie || termin.mainfilms[0]?.jahr || termin.mainfilms[0]?.laufzeit) &&
+                                                <p className="filminfo-and-stab-details filminfo-in-semester-overview">
+                                                    {[
+                                                        termin.mainfilms[0]?.regie,
+                                                        termin.mainfilms[0]?.jahr,
+                                                        termin.mainfilms[0]?.laufzeit !== undefined ? termin.mainfilms[0]?.laufzeit + " Min." : undefined
+                                                    ].filter(Boolean).join(', ')}
+                                                </p>
+                                            }
+
+                                            {termin.mainfilms[0]?.besonderheit && (
+                                                <p className="besonderheit">
+                                                    {renderHtmlText(termin.mainfilms[0]?.besonderheit) ?? ""}
+                                                </p>
+                                            )}
+                                        </>
+                                    ) : (
+                                        // Filmprogramm
+                                        <Link to={`/details/${termin.tnr}`} className="custom-link">
+                                            {renderHtmlText(termin.titel)}
+                                            <ol className="film-list">
+                                                {termin.mainfilms.map(film => (
+                                                    <li key={film.filmId}>{renderHtmlText(film.titel)}</li>
+                                                ))}
+                                            </ol>
+                                        </Link>
+                                    )}
+                                </div>
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
+        </section>
     );
 }

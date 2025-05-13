@@ -152,7 +152,7 @@ public class ScreeningService {
     public TerminDTOFormWithFilmsDTOFormPlus getTerminWithFilmsPlusByTerminId(Long tnr) {
         // Fetch Termin
         Termin termin = terminRepository.findById(tnr)
-                .orElseThrow(() -> new RuntimeException("Termin not found"));
+                .orElseThrow(() -> new NoSuchElementException("Termin not found"));
 
         // Get all connections with films
         List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);

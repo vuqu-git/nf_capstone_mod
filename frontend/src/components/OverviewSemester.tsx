@@ -51,7 +51,7 @@ export default function OverviewSemester() {
                 )}
 
                 {semesterTermine && semesterTermine.length > 0 ? (
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <table>
 
                         <tbody>
                         {semesterTermine.map(termin => {

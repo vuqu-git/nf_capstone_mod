@@ -46,7 +46,7 @@ export default function OverviewArchive() {
                 )}
 
                 {archiveTermine && archiveTermine.length > 0 ? (
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <table>
                         <tbody>
                         {archiveTermine.map(termin => (
                             <tr key={termin.tnr}>

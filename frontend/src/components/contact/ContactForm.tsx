@@ -18,7 +18,7 @@ interface IssueConfig {
     label: string;
 }
 
-const issueOptions: IssueConfig[] = [
+const issueSelectOptions: IssueConfig[] = [
     { value: 'eventOhneProjektion', label: 'Veranstaltung im Festsaal ohne Projektion' },
     { value: 'eventMitProjektion', label: 'Veranstaltung im Festsaal mit Projektion' },
     { value: 'kinomitarbeit', label: 'Kinomitarbeit' },
@@ -161,8 +161,11 @@ const ContactForm: React.FC = () => {
     return (
         <div className="contact-form-container">
             <h2>Kontakt</h2>
+
             <h3>fernmündlich</h3>
+            <p>I.d.R. nur taggleich vor und nach den Spielterminen erreichbar unter.</p>
             <p>Telefon: 069 7982 8976</p>
+
             <h3>schriftlich</h3>
             {submissionStatus.status === 'sending' && <p>Sende Nachricht...</p>}
             {submissionStatus.status === 'success' && <p>Vielen Dank! Deine Nachricht wurde gesendet.</p>}
@@ -173,7 +176,7 @@ const ContactForm: React.FC = () => {
             {submissionStatus.status !== 'success' && (
                 <>
                     <p>
-                        Für eine strukturierte Bearbeitung von Anfragen bitten wir darum, ausschließlich das Kontaktformular auf unserer Webseite zu verwenden.
+                        Für eine schnelle und strukturierte Bearbeitung von Anfragen bitten wir darum, ausschließlich das Kontaktformular auf unserer Webseite zu verwenden.
                     </p>
                     <p>
                         Da das gesamte Kinoteam ehrenamtlich arbeitet, kann die Beantwortung etwas Zeit in Anspruch nehmen – wir bitten um Verständnis und etwas Geduld.
@@ -189,7 +192,7 @@ const ContactForm: React.FC = () => {
                             <option key="" value="" disabled>
                                 Bitte Anliegen auswählen.
                             </option>
-                            {issueOptions.map((option) => (
+                            {issueSelectOptions.map((option) => (
                                 <option key={option.value} value={option.value}>
                                     {option.label}
                                 </option>

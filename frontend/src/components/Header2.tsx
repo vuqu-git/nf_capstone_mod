@@ -7,7 +7,11 @@ export default function Header2() {
 
         <Navbar expand="lg" className="custom-navbar fs-5">
             <Container>
-                <Navbar.Brand as={Link} to="/">
+                <Navbar.Brand
+                    as={Link}
+                    to="/"
+                    // style={{ paddingLeft: '3rem' }}
+                >
                     <img
                         src="https://pupille.org/bilder/allgemein/Pupille-Logo.svg"
                         alt="Pupille Logo"
@@ -17,7 +21,10 @@ export default function Header2() {
                     />
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav">
+                <Navbar.Collapse
+                    id="basic-navbar-nav"
+                    // style={{ paddingRight: '3rem' }}
+                >
                     <Nav className="ms-auto">
 
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
@@ -35,7 +42,8 @@ export default function Header2() {
                             <NavDropdown.Item href="#action/2.4">Unsere Kinogeschichte</NavDropdown.Item>
 
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="/kontakt">
+
+                            <NavDropdown.Item as={Link} to="/kontakt">
                                 Kontakt
                             </NavDropdown.Item>
                             <NavDropdown.Item href="/impressum">
@@ -44,13 +52,10 @@ export default function Header2() {
                         </NavDropdown>
 
                         <Nav.Link href="#fb">FB</Nav.Link>
-
                         <Nav.Link href="#insta">Insta</Nav.Link>
-
                     </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
-
     )
 }

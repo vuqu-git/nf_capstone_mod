@@ -1,4 +1,4 @@
-// // corresponds to java class FilmDTOForm
+// corresponds to java class FilmDTOForm
 
 import {Film} from "./Film.ts";
 

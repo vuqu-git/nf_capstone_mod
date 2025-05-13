@@ -10,7 +10,7 @@ import TerminFilmDetailsListing from "./TerminFilmDetailsCardFilmListing.tsx";
 
 import {createCalenderEvent} from "../../utils/createCalenderEvent.ts";
 import {createICSFileName} from "../../utils/createICSFileName.ts";
-import ICalendarLink from "react-icalendar-link";
+
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import {createDateAndTimeForAddToCalendarButton} from "../../utils/createDateAndTimeForAddToCalendarButton.ts";
 
@@ -159,20 +159,6 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                         {renderHtmlText(programmbesonderheit)}
                     </Card.Text>
                 )}
-
-                <p>
-                    <ICalendarLink
-                        event={createCalenderEvent(
-                            "Pupille-Kino: " + calenderTitle,
-                            vorstellungsbeginnIso8601,
-                            terminGesamtlaufzeit,
-                        )}
-                        filename={icsFileName}
-                        rawContent={rawContent}
-                    >
-                        Add to Calendar
-                    </ICalendarLink>
-                </p>
 
 
                 {/*###############################*/}

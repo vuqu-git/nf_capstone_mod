@@ -17,9 +17,12 @@ export type Film = {
     stab?: string | null,
     bild?: string | null,
     sonderfarbeTitel?: number | null,
-    sonderfarbe?: number | null,
-
+    sonderfarbe?: number | null, // this one needs to be changed to string
+    // to be implemented
     contentNote?: string,
+    regie?: string,
+    patenschaft?: string,
+
 
 }
 

@@ -1,34 +1,5 @@
-table {
-    border-collapse: collapse;
-    width: 100%; /* Make the table take full width */
-}
-
-td {
-    vertical-align: top;
-}
-
-/*for semester overview*/
-/***********************/
-
-/*.custom-link {*/
-/*    text-decoration: none;*/
-/*    color: inherit;*/
-/*    !*transition: color 0.3s;*!*/
-
-/*    border-bottom: 2px solid transparent; !* Set thickness, but invisible by default *!*/
-/*    display: inline-block; !* Important for the border to span the content *!*/
-
-/*    font-weight: 600;*/
-/*}*/
-
-/*.custom-link:hover {*/
-/*    !*color: whitesmoke;*!*/
-/*    border-bottom: 2px solid #FFD036;  !* Thick underline with your color *!*/
-/*}*/
-
-/*##########################################################*/
-
-
+/*for links in both the overviews*/
+/*********************************/
 .custom-link {
     text-decoration: none;
     color: inherit;
@@ -45,151 +16,51 @@ td {
     background-position-x: left;
 }
 
+/*******************************/
+/*for OverviewArchive component*/
+/*******************************/
+table {
+    border-collapse: collapse;
+    width: 100%; /* Make the table take full width */
+}
+
+td {
+    vertical-align: top;
+}
 
 
+.semester-header-row {
+    background-color: #ffd036;
+}
+
+.semester-header-cell {
+    padding: 0.3rem;
+    font-weight: 600;
+    color: black;
+}
+
+.screening-date-cell {
+    padding: 0.5rem 2rem 0.5rem 0.25rem;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.screening-title-cell {
+    padding: 0.5rem 0;
+}
+
+.multiple-films-list {
+    margin-bottom: 0rem;
+}
+
+.multiple-films-list-item {
+    font-size: 0.75em;
+}
 
 
-
-
-
-
-/*.custom-link {*/
-/*    !*color: #427FC1;*!*/
-/*    color: inherit;*/
-/*    position: relative;*/
-/*    text-decoration: none;*/
-/*    font-weight: 600;*/
-/*}*/
-
-/*.custom-link::before {*/
-/*    content: '';*/
-/*    position: absolute;*/
-/*    width: 100%;*/
-/*    height: 2px;*/
-/*    background-color: #FFD036;*/
-/*    bottom: 0;*/
-/*    left: 0;*/
-/*    transform-origin: right;*/
-/*    transform: scaleX(0);*/
-/*    transition: transform .2s ease-in-out;*/
-/*}*/
-
-/*.custom-link:hover::before {*/
-/*    transform-origin: left;*/
-/*    transform: scaleX(1);*/
-/*}*/
-
-
-/*##########################################################*/
-/*.custom-link {*/
-/*    text-decoration: none;*/
-/*    color: inherit;*/
-
-/*    background:*/
-/*            linear-gradient(*/
-/*                    to right,*/
-/*                    #cfd6e1,*/
-/*                    #FFD036*/
-/*            ),*/
-/*            linear-gradient(*/
-/*                    to right,*/
-/*                    rgba(255, 0, 0, 1),*/
-/*                    rgba(255, 0, 180, 1),*/
-/*                    rgba(0, 100, 200, 1)*/
-/*            );*/
-/*    background-size: 100% 1px, 0 1px;*/
-/*    background-position: 100% 100%, 0 100%;*/
-/*    background-repeat: no-repeat;*/
-/*    transition: background-size 400ms;*/
-
-/*}*/
-
-/*.custom-link:hover {*/
-/*    background-size: 0 1px, 100% 1px;*/
-/*}*/
-
-
-
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-
-
-/*.overview-container {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    gap: 1rem;*/
-/*}*/
-
-/*.overview-row {*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*    align-items: flex-start;*/
-/*    flex-wrap: wrap;*/
-/*    border-bottom: 1px solid #666;*/
-/*    padding-bottom: 0.5rem;*/
-/*}*/
-
-/*!* Reduced gap between weekday, date, and time *!*/
-/*.overview-date {*/
-/*    display: flex;*/
-/*    flex-direction: row;*/
-/*    gap: 0.5rem; !* Reduced gap from 1rem to 0.5rem *!*/
-/*    min-width: 220px;*/
-/*    justify-content: flex-end;*/
-/*    text-align: right;*/
-/*    white-space: nowrap;*/
-/*    font-size: 0.9rem;*/
-/*    flex-shrink: 0;*/
-/*}*/
-
-/*!* Apply the same color to weekday, date, and time *!*/
-/*.weekday, .date, .time {*/
-/*    color: inherit;  !* Set the same color for all three *!*/
-/*}*/
-
-/*.weekday {*/
-/*    font-weight: 600;*/
-/*}*/
-
-/*.overview-title {*/
-/*    flex: 1;*/
-/*    min-width: 200px;*/
-/*    margin-left: 1rem; !* Space between time and title *!*/
-/*}*/
-
-/*.besonderheit {*/
-/*    font-size: 0.75em;*/
-/*    margin-bottom: 0;*/
-/*    color: #999;*/
-/*}*/
-
-/*.film-list {*/
-/*    margin-bottom: 0;*/
-/*    padding-left: 1rem;*/
-/*    font-size: 0.95em;*/
-/*}*/
-
-/*!* Responsive: Stack on small screens *!*/
-/*@media (max-width: 600px) {*/
-/*    .overview-row {*/
-/*        flex-direction: column;*/
-/*        align-items: flex-start;*/
-/*    }*/
-
-/*    .overview-date {*/
-/*        justify-content: flex-start;*/
-/*        text-align: left;*/
-/*        flex-direction: column;*/
-/*        gap: 0;*/
-/*        margin-bottom: 0.5rem;*/
-/*    }*/
-
-/*    .overview-title {*/
-/*        margin-left: 0; !* Remove extra margin on small screens *!*/
-/*    }*/
-/*}*/
-
-
-
+/********************************/
+/*for OverviewSemester component*/
+/********************************/
 .overview-container {
     display: flex;
     flex-direction: column;
@@ -222,6 +93,17 @@ td {
     white-space: nowrap;
 }
 
+/*this calendar style is not needed i.e. no change at all*/
+/*.calendar {*/
+/*    min-width: 40px; !* Adjust as needed *!*/
+/*    min-height: 40px; !* Adjust as needed *!*/
+/*    display: flex;*/
+/*    align-items: flex-start;*/
+/*    justify-content: flex-start;*/
+/*    !* Optional: prevent shrinking/growing *!*/
+/*    flex: 0 0 45px;*/
+/*}*/
+
 /* TITLE SECTION */
 .overview-title {
     flex: 1;
@@ -233,7 +115,7 @@ td {
 }
 
 /* Additional styling */
-.weekday, .date, .calendar {
+.weekday, .datetime, .calendar {
     color: inherit;
 }
 
@@ -249,8 +131,17 @@ td {
     font-size: 0.75em;
 }
 
+/*filminfo (light blue) in semester overview*/
+.filminfo-in-semester-overview {
+    margin-top: 0.0rem;
+    margin-bottom: 0.0rem;
+    font-size: 0.8rem;
+}
+
+
 /* NARROW PARENT ADJUSTMENT */
-@media (max-width: 600px) {
+/* here stacking format*/
+@media (max-width: 575px) {
     .overview-row {
         flex-direction: column;
         align-items: flex-start;
@@ -275,99 +166,3 @@ td {
         gap: 0.5rem;
     }
 }
-
-
-
-
-
-.calendar {
-    min-width: 40px; /* Adjust as needed */
-    min-height: 40px; /* Adjust as needed */
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    /* Optional: prevent shrinking/growing */
-    flex: 0 0 45px;
-}
-
-
-
-
-
-
-
-/*.overview-container {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    gap: 1rem;*/
-/*}*/
-
-/*.overview-row {*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*    align-items: flex-start;*/
-/*    flex-wrap: wrap;*/
-/*    border-bottom: 1px solid #666;*/
-/*    padding-bottom: 0.5rem;*/
-/*}*/
-
-/*!* Adjust weekday, date, and time to move them to the left *!*/
-/*.overview-date {*/
-/*    display: flex;*/
-/*    flex-direction: row;*/
-/*    gap: 0.5rem; !* Reduced gap from 1rem to 0.5rem *!*/
-/*    min-width: 220px;*/
-/*    justify-content: flex-start; !* Move weekday, date, and time to the left *!*/
-/*    text-align: left; !* Align text to the left *!*/
-/*    white-space: nowrap;*/
-/*    font-size: 0.9rem;*/
-/*    flex-shrink: 0;*/
-/*}*/
-
-/*!* Apply the same color to weekday, date, and time *!*/
-/*.weekday, .date, .time {*/
-/*    color: inherit;  !* Set the same color for all three *!*/
-/*}*/
-
-/*.weekday {*/
-/*    font-weight: 600;*/
-/*}*/
-
-/*!* Increase space for the title *!*/
-/*.overview-title {*/
-/*    flex: 1;*/
-/*    min-width: 200px;*/
-/*    margin-left: 1rem; !* Increased space between time and title *!*/
-/*}*/
-
-/*.besonderheit {*/
-/*    font-size: 0.75em;*/
-/*    margin-bottom: 0;*/
-/*    color: #999;*/
-/*}*/
-
-/*.film-list {*/
-/*    margin-bottom: 0;*/
-/*    padding-left: 1rem;*/
-/*    font-size: 0.95em;*/
-/*}*/
-
-/*!* Responsive: Stack on small screens *!*/
-/*@media (max-width: 600px) {*/
-/*    .overview-row {*/
-/*        flex-direction: column;*/
-/*        align-items: flex-start;*/
-/*    }*/
-
-/*    .overview-date {*/
-/*        justify-content: flex-start;*/
-/*        text-align: left;*/
-/*        flex-direction: column;*/
-/*        gap: 0;*/
-/*        margin-bottom: 0.5rem;*/
-/*    }*/
-
-/*    .overview-title {*/
-/*        margin-left: 0; !* Remove extra margin on small screens *!*/
-/*    }*/
-/*}*/

@@ -11,7 +11,6 @@ import axios from "axios";
 
 import ScreeningDetails from "./components/ScreeningDetails.tsx";
 import Gallery2 from "./components/Gallery2.tsx";
-import Layout2 from "./components/Layout2.tsx";
 import Admin from "./components/Admin.tsx";
 import OverviewSemester2 from "./components/OverviewSemester2.tsx";
 import OverviewArchive2 from "./components/OverviewArchive2.tsx";
@@ -51,7 +50,7 @@ const router = createBrowserRouter([
                     {
                         path: "details/:tnr",
                         element: <ScreeningDetails />,
-                        // no usage of loader here, beacuse the data is fetched with ScreeningDetails
+                        // no usage of loader here, because the data is fetched within ScreeningDetails
                         // loader: ({ params }) => getScreeningDetails(params.tnr),
                         handle: { scrollMode: "pathname" } // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
                     },

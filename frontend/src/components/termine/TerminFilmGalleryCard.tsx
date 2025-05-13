@@ -17,6 +17,7 @@ interface Props {
     kurztext: string | null;
     jahr: number | undefined;
     besonderheit: string | null;
+
     filmFormat: string | undefined;
     laufzeit: number | undefined;
     regie: string | undefined;

@@ -16,29 +16,26 @@ public class ScreeningController {
     @Autowired
     private ScreeningService screeningService;
 
+    // for Gallery react component
     @GetMapping("/screenings")
     public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
         return screeningService.getFutureTermineWithFilms();
     }
 
-//    // not required because the list doesn't contain any termin data
-//    @GetMapping("/screeningsold/{tnr}")
-//    public ResponseEntity<List<FilmDTOForm>> getFilmsForTermin(@PathVariable Long tnr) {
-//        List<FilmDTOForm> films = screeningService.getFilmsByTerminId(tnr);
-//        return ResponseEntity.ok(films);
-//    }
-
+    // for ScreeningDetails react component
     @GetMapping("/screenings/{tnr}")
     public ResponseEntity<TerminDTOFormWithFilmsDTOFormPlus> getTerminWithFilmsPlusForTermin(@PathVariable Long tnr) {
         TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTerminId(tnr);
         return ResponseEntity.ok(terminWithFilmsPlus);
     }
 
+    // for OverviewArchive react component
     @GetMapping("/screenings-archive")
     public List<TerminDTOWithFilmDTOOverviewArchive> getArchiveScreenings() {
         return screeningService.getPastTermineWithFilms();
     }
 
+    // for SemesterArchive react component
     @GetMapping("/screenings-semester")
     public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreenings() {
         return screeningService.getTermineByCurrentSemester();

@@ -23,9 +23,9 @@ export default function ScreeningDetails() {
             .finally(() => setLoading(false));
     }, [tnr]);
 
-    // if (loading) return <div className="text-warning">&#127902; Loading screening...</div>;
-    if (error) return <div className="text-danger">{error}</div>;
-    // if (!screeningDetails) return <div>No screening found</div>;
+    if (loading) return <div className="text-warning text-center">&#127902; Loading screening...</div>;
+    // if (error) return <div className="text-danger">{error}</div>;
+    // if (!screeningDetails) return <div>Keine Vorführung gefunden</div>;
 
     const screeningDateObj = screeningDetails && screeningDetails.termin.vorstellungsbeginn
         ? formatDateTime(screeningDetails.termin.vorstellungsbeginn)
@@ -44,9 +44,9 @@ export default function ScreeningDetails() {
 
                 screeningSonderfarbe={1}
 
-                programmtitel={screeningDetails.termin.titel} // d.h. der titel in der Tabelle Termin
-                programmtext={screeningDetails.termin.text} // d.h. der text in der Tabelle Termin
-                programmbesonderheit={screeningDetails.termin.besonderheit} // d.h. die besonderheit in der Tabelle Termin
+                programmtitel={screeningDetails.termin.titel} // d.h. der titel in der SQL-Tabelle Termin
+                programmtext={screeningDetails.termin.text} // d.h. der text in der SQL-Tabelle Termin
+                programmbesonderheit={screeningDetails.termin.besonderheit} // d.h. die besonderheit in der SQL-Tabelle Termin
 
                 mainfilms={screeningDetails.mainfilms}
                 vorfilms={screeningDetails.vorfilms}

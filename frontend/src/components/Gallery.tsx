@@ -13,7 +13,6 @@ import './Gallery.css';
 
 export default function Gallery() {
 
-
     const {
         isLoadingAllNews,
         allNews,
@@ -66,7 +65,6 @@ export default function Gallery() {
         getValidNews();
         getScreeningGalleryEntries();
     }, [])
-
 
     const [readyToRender, setReadyToRender] = useState(false);
 
@@ -157,7 +155,6 @@ export default function Gallery() {
         }
     }, [isLoadingNews, isLoadingScreenings]);
 
-
     return (
         // <div style={{ visibility: readyToRender ? 'visible' : 'hidden' }}>
 
@@ -166,31 +163,8 @@ export default function Gallery() {
             opacity: readyToRender ? 1 : 0,
             transition: 'opacity 0.4s ease-in-out'
         }}>
-
-            {/*<h1>Welcome to Pupille</h1>*/}
-            {/*<p>*/}
-            {/* Lorem ipsum dolor sit */}
-            {/*</p>*/}
-
-            {/*<section>*/}
-            {/*    <h2>(all) News</h2>*/}
-            {/*    {   isLoadingAllNews ? (*/}
-            {/*        <div className="text-warning mb-3">&#x1f504; Loading all news...</div>*/}
-            {/*    ) : error ? (*/}
-            {/*        <div className="text-danger mb-3">{error}</div>*/}
-            {/*    ) : (*/}
-            {/*        allNews.map(n => (*/}
-            {/*            <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>*/}
-            {/*            )*/}
-            {/*        ))*/}
-            {/*    }*/}
-            {/*</section>*/}
-
             <section>
                 {
-                    // isLoadingNews ? (
-                    //     <div className="text-warning mb-3">&#x1f4f0; Loading news...</div>
-                    // ) :
                     validNews && screeningGalleryEntries && (
                         <>
                             {/*<h3 style={{paddingTop: '2rem', paddingBottom: '2rem'}}>Neuigkeiten</h3>*/}
@@ -203,12 +177,8 @@ export default function Gallery() {
                 }
             </section>
 
-
             <section>
                 {
-                    //     isLoadingScreenings ? (
-                    //     <div className="text-warning mb-3">&#127902; Loading screenings...</div>
-                    // ) : (
                     validNews && screeningGalleryEntries && (
                         <>
                             {/*<h3>Programm</h3>*/}
@@ -281,13 +251,8 @@ export default function Gallery() {
                                 })}
                         </>
                     )
-                    // )
                 }
             </section>
-
         </div>
-
     );
-
-
 }

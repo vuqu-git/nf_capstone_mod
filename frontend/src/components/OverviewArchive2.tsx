@@ -1,69 +1,3 @@
-// import './Overview.css';
-//
-// import TerminDTOWithFilmDTOOverviewArchive from "../types/TerminDTOWithFilmDTOOverviewArchive.ts";
-// import {formatDateInOverviewArchive} from "../utils/formatDateInOverviewArchive.ts";
-// import {render} from "../utils/render.tsx";
-// import {Link, useLoaderData} from "react-router-dom";
-//
-// // interface Props {
-// //
-// // }
-//
-// // export default function OverviewArchive({ }: Props) {
-// export default function OverviewArchive2() {
-//
-//     const archiveTermine = useLoaderData<TerminDTOWithFilmDTOOverviewArchive[]>();
-//
-//     return (
-//         <div>
-//             <section>
-//                 <h1>Programmarchiv</h1>
-//
-//                 {archiveTermine && archiveTermine.length > 0 ? (
-//                     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-//                         <tbody>
-//                         {archiveTermine.map(termin => (
-//                             <tr key={termin.terminId}>
-//                                 <td style={{ padding: '0.5rem 2rem 0.5rem 0.25rem', whiteSpace: 'nowrap', textAlign: 'right' }}>
-//                                     {formatDateInOverviewArchive(termin.vorstellungsbeginn)}
-//                                 </td>
-//                                 <td style={{ padding: '0.5rem 0' }}>
-//                                     <Link
-//                                         to={`/details/${termin.terminId}`}
-//                                         className="custom-link"
-//                                     >
-//                                         {!termin.titel ? (
-//                                             <>
-//                                                 {render(termin.films[0]?.titel) ?? ""}
-//                                             </>
-//                                         ) : (
-//                                             <>
-//                                                 {render(termin.titel)}
-//                                                 <ol style={{ marginBottom: '0rem' }}>
-//                                                     {termin.films.map(film => (
-//                                                         <li key={film.filmId}
-//                                                             style={{ fontSize: '0.75em'}}
-//                                                         >
-//                                                             {render(film.titel)}
-//                                                         </li>
-//                                                     ))}
-//                                                 </ol>
-//                                             </>
-//                                         )}
-//                                     </Link>
-//                                 </td>
-//                             </tr>
-//                         ))}
-//                         </tbody>
-//                     </table>
-//                 ) : null} {/* 'else' part with null */}
-//             </section>
-//         </div>
-//
-//     );
-// };
-
-
 import './Overview.css';
 
 import TerminDTOWithFilmDTOOverviewArchive from "../types/TerminDTOWithFilmDTOOverviewArchive.ts";
@@ -115,13 +49,9 @@ export default function OverviewArchive2() {
 
             if (headerText) {
                 rows.push(
-                    <tr key={`header-${currentSemester}`} style={{ backgroundColor: '#ffd036' }}>
+                    <tr key={`header-${currentSemester}`} className="semester-header-row">
                         <td
-                            style={{
-                                padding: '0.3rem',
-                                fontWeight: '600',
-                                color: 'black',
-                            }}
+                            className="semester-header-cell"
                             colSpan={2}
                         >
                             {headerText}
@@ -132,10 +62,10 @@ export default function OverviewArchive2() {
 
             rows.push(
                 <tr key={termin.tnr}>
-                    <td style={{ padding: '0.5rem 2rem 0.5rem 0.25rem', whiteSpace: 'nowrap', textAlign: 'right' }}>
+                    <td className="screening-date-cell">
                         {formatDateInOverviewArchive(termin.vorstellungsbeginn)}
                     </td>
-                    <td style={{ padding: '0.5rem 0' }}>
+                    <td className="screening-title-cell">
                         <Link
                             to={`/details/${termin.tnr}`}
                             className="custom-link"
@@ -147,11 +77,9 @@ export default function OverviewArchive2() {
                             ) : (
                                 <>
                                     {renderHtmlText(termin.titel)}
-                                    <ol style={{ marginBottom: '0rem' }}>
+                                    <ol className="multiple-films-list">
                                         {termin.films.map(film => (
-                                            <li key={film.filmId}
-                                                style={{ fontSize: '0.75em'}}
-                                            >
+                                            <li key={film.filmId} className="multiple-films-list-item">
                                                 {renderHtmlText(film.titel)}
                                             </li>
                                         ))}
@@ -167,7 +95,7 @@ export default function OverviewArchive2() {
         }
 
         return (
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <table>
                 <tbody>{rows}</tbody>
             </table>
         );
