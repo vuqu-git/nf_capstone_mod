@@ -18,10 +18,10 @@ export interface KooperationFormData {
 }
 
 interface KooperationFormProps {
-    onSubFormSubmit: (event: FormEvent, data: KooperationFormData | null) => void;
+    onSubFormSubmit: (event: FormEvent, data: KooperationFormData) => void;
     submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-    formData: KooperationFormData | null;
+    formData: KooperationFormData;
 }
 
 const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, submissionStatus, onInputChange, formData }) => {
@@ -61,14 +61,14 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     type="text"
                     id="betreff"
                     name="betreff"
-                    value={formData?.betreff || ''}
+                    value={formData.betreff || ''}
                     onChange={onInputChange}
                     required
                 />
             </div>
             <div>
                 <label htmlFor="ansprechperson">Ansprechperson*:</label>
-                <input type="text" id="ansprechperson" name="ansprechperson" value={formData?.ansprechperson || ''} onChange={onInputChange} required/>
+                <input type="text" id="ansprechperson" name="ansprechperson" value={formData.ansprechperson || ''} onChange={onInputChange} required/>
             </div>
             <div>
                 <label htmlFor="email">Email*:</label>
@@ -76,7 +76,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     type="email"
                     id="email"
                     name="email"
-                    value={formData?.email || ''}
+                    value={formData.email || ''}
                     onChange={onInputChange}
                     required
                 />
@@ -87,7 +87,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     type="tel"
                     id="telefon"
                     name="telefon"
-                    value={formData?.telefon || ''}
+                    value={formData.telefon || ''}
                     onChange={onInputChange}
                 />
             </div>
@@ -98,7 +98,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     type="text"
                     id="filmtitel"
                     name="filmtitel"
-                    value={formData?.filmtitel || ''}
+                    value={formData.filmtitel || ''}
                     onChange={onInputChange}
                     required
                 />
@@ -109,7 +109,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     type="text"
                     id="verleih"
                     name="verleih"
-                    value={formData?.verleih || ''}
+                    value={formData.verleih || ''}
                     onChange={onInputChange}
                     required
                 />
@@ -119,7 +119,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                 <select
                     id="format"
                     name="format"
-                    value={formData?.format || ''}
+                    value={formData.format || ''}
                     onChange={onInputChange}
                     required
                 >
@@ -139,7 +139,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                 <textarea
                     id="nachricht"
                     name="nachricht"
-                    value={formData?.nachricht || ''}
+                    value={formData.nachricht || ''}
                     onChange={onInputChange}
                     required
                     style={{ height: '300px' }}
@@ -151,7 +151,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                 <textarea
                     id="terminpraeferenz"
                     name="terminpraeferenz"
-                    value={formData?.terminpraeferenz || ''}
+                    value={formData.terminpraeferenz || ''}
                     placeholder="Spieltage sind Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
                     onChange={onInputChange}
                     required
@@ -163,7 +163,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                 <textarea
                     id="zusammenarbeit"
                     name="zusammenarbeit"
-                    value={formData?.zusammenarbeit || ''}
+                    value={formData.zusammenarbeit || ''}
                     onChange={onInputChange}
                     required
                     style={{ height: '150px' }}

@@ -8,10 +8,10 @@ export interface KinomitarbeitFormData {
 }
 
 interface KinomitarbeitFormProps {
-    onSubmit: (event: FormEvent, issue?: string, data?: KinomitarbeitFormData | null) => void;
+    onSubmit: (event: FormEvent, issue?: string, data?: KinomitarbeitFormData) => void;
     submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-    formData: KinomitarbeitFormData | null;
+    formData: KinomitarbeitFormData;
 }
 
 const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
@@ -29,7 +29,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                     type="text"
                     id="name"
                     name="name"
-                    value={formData?.name || ''}     // Ensure initial value is defined
+                    value={formData.name || ''}     // Ensure initial value is defined
                     onChange={onInputChange}
                     required
                 />
@@ -40,7 +40,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                     type="email"
                     id="email"
                     name="email"
-                    value={formData?.email || ''}    // Ensure initial value is defined
+                    value={formData.email || ''}    // Ensure initial value is defined
                     onChange={onInputChange}
                     required
                 />
@@ -50,7 +50,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                 <textarea
                     id="nachricht"
                     name="nachricht"
-                    value={formData?.nachricht || ''}  // Ensure initial value is defined
+                    value={formData.nachricht || ''}  // Ensure initial value is defined
                     onChange={onInputChange}
                     required
                     style={{ height: '300px' }}
@@ -63,7 +63,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                     type="number"
                     id="stundenEngagement"
                     name="stundenEngagement"
-                    value={formData?.stundenEngagement !== undefined ? formData?.stundenEngagement : 0}
+                    value={formData.stundenEngagement !== undefined ? formData.stundenEngagement : 0}
                     onChange={onInputChange}
                     min="0"
                     step="0.5" />

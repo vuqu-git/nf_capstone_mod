@@ -21,10 +21,10 @@ export interface MitKinotechnikFormData {
 }
 
 interface MitKinotechnikFormProps {
-    onSubFormSubmit: (event: FormEvent, data: MitKinotechnikFormData | null) => void;
+    onSubFormSubmit: (event: FormEvent, data: MitKinotechnikFormData) => void;
     submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-    formData: MitKinotechnikFormData | null;
+    formData: MitKinotechnikFormData;
 }
 
 const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit, submissionStatus, onInputChange, formData }) => {
@@ -37,8 +37,8 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
         if (target.type === 'checkbox') {
             const checkboxTarget = target as HTMLInputElement; // Explicitly cast to HTMLInputElement
             const { name, checked } = checkboxTarget;
-            const isAstaChecked = name === 'istGemietetBeiAsta' ? checked : formData?.istGemietetBeiAsta;
-            const isLocationHintChecked = name === 'wurdeGelesenHinweisEventlocation' ? checked : formData?.wurdeGelesenHinweisEventlocation;
+            const isAstaChecked = name === 'istGemietetBeiAsta' ? checked : formData.istGemietetBeiAsta;
+            const isLocationHintChecked = name === 'wurdeGelesenHinweisEventlocation' ? checked : formData.wurdeGelesenHinweisEventlocation;
 
             if (isAstaChecked && isLocationHintChecked) {
                 setErrorMissingConfirmationMessage(null); // Clear the error message
@@ -49,7 +49,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
 
     const handleLocalSubmit = (event: FormEvent) => {
         event.preventDefault();
-        if (formData?.istGemietetBeiAsta && formData?.wurdeGelesenHinweisEventlocation) {
+        if (formData.istGemietetBeiAsta && formData.wurdeGelesenHinweisEventlocation) {
             onSubFormSubmit(event, formData);
             setErrorMissingConfirmationMessage(null); // Clear any previous error message
         } else {
@@ -65,14 +65,14 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     type="text"
                     id="betreff"
                     name="betreff"
-                    value={formData?.betreff || ''}
+                    value={formData.betreff || ''}
                     onChange={onInputChange}
                     required
                 />
             </div>
             <div>
                 <label htmlFor="ansprechperson">Ansprechperson*:</label>
-                <input type="text" id="ansprechperson" name="ansprechperson" value={formData?.ansprechperson || ''} onChange={onInputChange} required/>
+                <input type="text" id="ansprechperson" name="ansprechperson" value={formData.ansprechperson || ''} onChange={onInputChange} required/>
             </div>
             <div>
                 <label htmlFor="email">Email*:</label>
@@ -80,7 +80,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     type="email"
                     id="email"
                     name="email"
-                    value={formData?.email || ''}
+                    value={formData.email || ''}
                     onChange={onInputChange}
                     required
                 />
@@ -91,7 +91,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     type="tel"
                     id="telefon"
                     name="telefon"
-                    value={formData?.telefon || ''}
+                    value={formData.telefon || ''}
                     onChange={onInputChange}
                 />
             </div>
@@ -101,7 +101,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 <textarea
                     id="nachricht"
                     name="nachricht"
-                    value={formData?.nachricht || ''}
+                    value={formData.nachricht || ''}
                     onChange={onInputChange}
                     required
                     style={{ width: '100%', height: '300px' }}
@@ -110,7 +110,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
 
             <div>
                 <label htmlFor="projektionsinhalt">Projektionsinhalt* (bspw. Filmtitel):</label>
-                <input type="text" id="projektionsinhalt" name="projektionsinhalt" value={formData?.projektionsinhalt || ''} onChange={onInputChange} required/>
+                <input type="text" id="projektionsinhalt" name="projektionsinhalt" value={formData.projektionsinhalt || ''} onChange={onInputChange} required/>
             </div>
 
             <div>
@@ -119,7 +119,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     type="text"
                     id="verleih"
                     name="verleih"
-                    value={formData?.verleih || ''}
+                    value={formData.verleih || ''}
                     onChange={onInputChange}
                 />
             </div>
@@ -129,7 +129,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 <select
                     id="format"
                     name="format"
-                    value={formData?.format || ''}
+                    value={formData.format || ''}
                     onChange={onInputChange}
                     required
                 >
@@ -150,7 +150,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     type="number"
                     id="anzMikrofone"
                     name="anzMikrofone"
-                    value={formData?.anzMikrofone !== undefined ? formData?.anzMikrofone : 0}
+                    value={formData.anzMikrofone !== undefined ? formData.anzMikrofone : 0}
                     onChange={onInputChange}
                     min="0"
                     max="2"
@@ -163,7 +163,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     type="datetime-local"
                     id="veranstaltungsbeginn"
                     name="veranstaltungsbeginn"
-                    value={formData?.veranstaltungsbeginn || ''}
+                    value={formData.veranstaltungsbeginn || ''}
                     onChange={onInputChange}
                     required
                 />
@@ -175,7 +175,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     type="datetime-local"
                     id="veranstaltungsende"
                     name="veranstaltungsende"
-                    value={formData?.veranstaltungsende || ''}
+                    value={formData.veranstaltungsende || ''}
                     onChange={onInputChange}
                     required
                 />
@@ -186,12 +186,12 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     type="checkbox"
                     id="istGemietetBeiAsta"
                     name="istGemietetBeiAsta"
-                    checked={formData?.istGemietetBeiAsta || false}
+                    checked={formData.istGemietetBeiAsta || false}
                     onChange={handleInputChange}
                 />
                 <label
                     htmlFor="istGemietetBeiAsta"
-                    style={{ color: errorMissingConfirmationMessage && !formData?.istGemietetBeiAsta ? 'red' : 'inherit' }}
+                    style={{ color: errorMissingConfirmationMessage && !formData.istGemietetBeiAsta ? 'red' : 'inherit' }}
                 >
                     Ich bestätige, dass für den oben genannten Zeitraum der Festsaal beim AStA bereits reserviert bzw. gemietet wurde.
                 </label>
@@ -202,12 +202,12 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     type="checkbox"
                     id="wurdeGelesenHinweisEventlocation"
                     name="wurdeGelesenHinweisEventlocation"
-                    checked={formData?.wurdeGelesenHinweisEventlocation || false}
+                    checked={formData.wurdeGelesenHinweisEventlocation || false}
                     onChange={handleInputChange}
                 />
                 <label
                     htmlFor="wurdeGelesenHinweisEventlocation"
-                    style={{ color: errorMissingConfirmationMessage && !formData?.wurdeGelesenHinweisEventlocation ? 'orange' : 'inherit' }}
+                    style={{ color: errorMissingConfirmationMessage && !formData.wurdeGelesenHinweisEventlocation ? 'orange' : 'inherit' }}
                 >
                     Hiermit bestätige ich, dass bei Werbemaßnahmen der "Festsaal im Studierendenhaus" als Veranstaltungsort genannt wird und <b>nicht</b> Pupille-Kino, da die Pupille nicht der Veranstalter ist.
                 </label>

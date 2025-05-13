@@ -207,7 +207,7 @@ const ContactForm: React.FC = () => {
     const [selectedIssue, setSelectedIssue] = useState<string>('');
 
     // formData management only for AOBForm and KinomitarbeitForm; for the subforms c.f. EventMitProjektion and the subFormData management there
-    const [formData, setFormData] = useState<AOBFormData | KinomitarbeitFormData | null>(null);
+    const [formData, setFormData] = useState<AOBFormData | KinomitarbeitFormData>({});
 
     const [submissionStatus, setSubmissionStatus] = useState<SubmissionStatus>({ status: 'idle' });
 
@@ -215,7 +215,7 @@ const ContactForm: React.FC = () => {
     useEffect(() => {
         if (submissionStatus.status === 'success') {
             setSelectedIssue('');
-            setFormData(null);
+            setFormData({});
             // Optionally reset status after a timeout if you want to hide the message after a while:
             // setTimeout(() => setSubmissionStatus({ status: 'idle' }), 5000);
         }
@@ -223,28 +223,22 @@ const ContactForm: React.FC = () => {
 
     const handleIssueSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSelectedIssue(event.target.value);
-        setFormData(null);
+        setFormData({});
     };
 
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        if (!formData) return; // Prevent updates if formData is null
-
         const { name, value } = event.target;
-        setFormData((prevData) =>
-            // treatment when prevData is null
-            prevData
-                ? {
-                    ...prevData,
-                    [name]: value,
-                }
-                : prevData // remains null if prevData is null
+        setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            })
         );
     };
 
     const handleGlobalSubmit = async (
         event: FormEvent,
         explicitIssue?: string, // optional parameter
-        explicitData?: AOBFormData | KinomitarbeitFormData | EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData | null // optional parameter
+        explicitData?: AOBFormData | KinomitarbeitFormData | EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData // optional parameter
     ) => {
         event.preventDefault(); //maybe remove this because in the (grand) child's handleLocalSubmit event.preventDefault() is already called
         setSubmissionStatus({ status: 'sending' });
@@ -264,7 +258,7 @@ const ContactForm: React.FC = () => {
 
             if (response.ok) {
                 setSubmissionStatus({ status: 'success' });
-                setFormData(null);
+                setFormData({});
             } else {
                 const errorData = await response.json();
                 setSubmissionStatus({ status: 'error', message: errorData.nachricht || 'Something went wrong.' });
@@ -283,7 +277,7 @@ const ContactForm: React.FC = () => {
                         onSubmit={handleGlobalSubmit}
                         submissionStatus={submissionStatus}
                         onInputChange={handleChange}
-                        formData={formData as AOBFormData | null}
+                        formData={formData as AOBFormData}
                     />
                 );
             case 'kinomitarbeit':
@@ -292,7 +286,7 @@ const ContactForm: React.FC = () => {
                         onSubmit={handleGlobalSubmit}
                         submissionStatus={submissionStatus}
                         onInputChange={handleChange}
-                        formData={formData as KinomitarbeitFormData | null}
+                        formData={formData as KinomitarbeitFormData}
                     />
                 );
             case 'eventMitProjektion':

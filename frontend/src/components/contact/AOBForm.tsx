@@ -89,10 +89,10 @@ export interface AOBFormData {
 }
 
 interface AOBFormProps {
-    onSubmit: (event: FormEvent, issue?: string, data?: AOBFormData | null) => void;
+    onSubmit: (event: FormEvent, issue?: string, data?: AOBFormData) => void;
     submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-    formData: AOBFormData | null;
+    formData: AOBFormData;
 }
 
 const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
@@ -109,7 +109,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     type="text"
                     id="betreff"
                     name="betreff"
-                    value={formData?.betreff || ''} // Ensure initial value is defined
+                    value={formData.betreff || ''} // Ensure initial value is defined
                     onChange={onInputChange}
                     required
                 />
@@ -120,7 +120,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     type="text"
                     id="name"
                     name="name"
-                    value={formData?.name || ''}     // Ensure initial value is defined
+                    value={formData.name || ''}     // Ensure initial value is defined
                     onChange={onInputChange}
                 />
             </div>
@@ -130,7 +130,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     type="email"
                     id="email"
                     name="email"
-                    value={formData?.email || ''}    // Ensure initial value is defined
+                    value={formData.email || ''}    // Ensure initial value is defined
                     onChange={onInputChange}
                     required
                 />
@@ -140,7 +140,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                 <textarea
                     id="nachricht"
                     name="nachricht"
-                    value={formData?.nachricht || ''}  // Ensure initial value is defined
+                    value={formData.nachricht || ''}  // Ensure initial value is defined
                     onChange={onInputChange}
                     required
                     style={{ height: '300px' }}

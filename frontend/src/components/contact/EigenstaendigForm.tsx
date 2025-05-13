@@ -105,10 +105,10 @@ export interface EigenstaendigFormData {
 }
 
 interface EigenstaendigFormProps {
-    onSubFormSubmit: (event: FormEvent, data: EigenstaendigFormData | null) => void;
+    onSubFormSubmit: (event: FormEvent, data: EigenstaendigFormData) => void;
     submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-    formData: EigenstaendigFormData | null;
+    formData: EigenstaendigFormData;
 }
 
 const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, submissionStatus, onInputChange, formData }) => {
@@ -130,17 +130,17 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
                     type="text"
                     id="betreff"
                     name="betreff"
-                    value={formData?.betreff ?? ''}
+                    value={formData.betreff ?? ''}
                     onChange={onInputChange}
                 />
             </div>
             <div>
                 <label htmlFor="ansprechperson">Ansprechperson*:</label>
-                <input type="text" id="ansprechperson" name="ansprechperson" value={formData?.ansprechperson || ''} onChange={onInputChange} required />
+                <input type="text" id="ansprechperson" name="ansprechperson" value={formData.ansprechperson || ''} onChange={onInputChange} required />
             </div>
             <div>
                 <label htmlFor="email">Email*:</label>
-                <input type="email" id="email" name="email" value={formData?.email || ''} onChange={onInputChange} required />
+                <input type="email" id="email" name="email" value={formData.email || ''} onChange={onInputChange} required />
             </div>
 
             <div>
@@ -149,7 +149,7 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
                     type="datetime-local"
                     id="veranstaltungsbeginn"
                     name="veranstaltungsbeginn"
-                    value={formData?.veranstaltungsbeginn || ''}
+                    value={formData.veranstaltungsbeginn || ''}
                     onChange={onInputChange}
                     required
                 />
@@ -161,7 +161,7 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
                     type="datetime-local"
                     id="veranstaltungsende"
                     name="veranstaltungsende"
-                    value={formData?.veranstaltungsende || ''}
+                    value={formData.veranstaltungsende || ''}
                     onChange={onInputChange}
                     required
                 />

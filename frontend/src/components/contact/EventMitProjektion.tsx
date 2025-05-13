@@ -141,53 +141,37 @@ const subSelectionOptions: SubSelectionConfig[] = [
 
 const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submissionStatus }) => {
     const [selectedSubSelection, setSelectedSubSelection] = useState<string>('');
-    const [subFormData, setSubFormData] = useState<
-        EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData | null
-    >(null);
+    const [subFormData, setSubFormData] = useState<EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData>({});
 
     const handleIssueSubSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSelectedSubSelection(event.target.value);
-        setSubFormData(null); // Reset sub-form data to null
+        setSubFormData({});
     };
 
-    const handleSubFormChange = (
-        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-    ) => {
+    const handleSubFormChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = event.target;
-        if (!subFormData) return; // Prevent updates if no form is selected
-
         if (type === 'checkbox') {
-            setSubFormData((prevData) =>
-                // treatment when prevData is null
-                prevData
-                    ? {
-                        ...prevData,
-                        [name]: (event.target as HTMLInputElement).checked,
-                    }
-                    : prevData // remains null if prevData is null
-            );
+            setSubFormData((prevData) => ({
+                ...prevData,
+                [name]: (event.target as HTMLInputElement).checked,
+            }));
         } else {
-            setSubFormData((prevData) =>
-                // treatment when prevData is null
-                prevData
-                    ? {
-                        ...prevData,
-                        [name]: value,
-                    }
-                    : prevData // remains null if prevData is null
-            );
+            setSubFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
         }
     };
 
     const onSubFormSubmit = (
         event: FormEvent,
-        data: EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData | null
+        data: EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData
     ) => {
         onSubmit(event, selectedSubSelection, data);
     };
 
     const renderSubForm = () => {
-        if (!selectedSubSelection) return null;
+        if (!selectedSubSelection) return null; // not sure if really required !?!?!?!??!
 
         switch (selectedSubSelection) {
             case 'eigenstaendig':
@@ -198,7 +182,7 @@ const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submi
                         onInputChange={handleSubFormChange as (
                             event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
                         ) => void}
-                        formData={subFormData as EigenstaendigFormData | null}
+                        formData={subFormData as EigenstaendigFormData}
                     />
                 );
             case 'mitkinotechnik':
@@ -209,7 +193,7 @@ const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submi
                         onInputChange={handleSubFormChange as (
                             event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
                         ) => void}
-                        formData={subFormData as MitKinotechnikFormData | null}
+                        formData={subFormData as MitKinotechnikFormData}
                     />
                 );
             case 'kooperation':
@@ -220,7 +204,7 @@ const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submi
                         onInputChange={handleSubFormChange as (
                             event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
                         ) => void}
-                        formData={subFormData as KooperationFormData | null}
+                        formData={subFormData as KooperationFormData}
                     />
                 );
             default:
