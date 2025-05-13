@@ -123,7 +123,7 @@ interface EventMitProjektionProps {
     onSubmit: (
         event: FormEvent,
         issue: string,
-        data: EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData | null
+        data: EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData
     ) => void;
     submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; message?: string | null };
 }
@@ -140,11 +140,11 @@ const subSelectionOptions: SubSelectionConfig[] = [
 ];
 
 const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submissionStatus }) => {
-    const [selectedSubSelection, setSelectedSubSelection] = useState<string>('');
+    const [selectedIssuesSubSelection, setSelectedIssuesSubSelection] = useState<string>('');
     const [subFormData, setSubFormData] = useState<EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData>({});
 
     const handleIssueSubSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        setSelectedSubSelection(event.target.value);
+        setSelectedIssuesSubSelection(event.target.value);
         setSubFormData({});
     };
 
@@ -165,15 +165,16 @@ const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submi
 
     const onSubFormSubmit = (
         event: FormEvent,
-        data: EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData
+        formData: EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData
     ) => {
-        onSubmit(event, selectedSubSelection, data);
+        // 2nd parameter selectedIssuesSubSelection targets the subselection (or the subform) with the possible values eigenstaendig, mitkinotechnik or kooperation
+        onSubmit(event, selectedIssuesSubSelection, formData);
     };
 
     const renderSubForm = () => {
-        if (!selectedSubSelection) return null; // not sure if really required !?!?!?!??!
+        if (!selectedIssuesSubSelection) return null; // not sure if really required !?!?!?!??!
 
-        switch (selectedSubSelection) {
+        switch (selectedIssuesSubSelection) {
             case 'eigenstaendig':
                 return (
                     <EigenstaendigForm
@@ -223,7 +224,7 @@ const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submi
                     </a>
                     .
                 </p>
-                <select id="subSelection" value={selectedSubSelection} onChange={handleIssueSubSelectionChange}>
+                <select id="subSelection" value={selectedIssuesSubSelection} onChange={handleIssueSubSelectionChange}>
                     <option key="" value="" disabled>
                         Bitte Durchführungsart der Veranstaltung auswählen.
                     </option>

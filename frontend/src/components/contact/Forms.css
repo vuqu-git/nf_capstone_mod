@@ -133,6 +133,12 @@ input[type="tel"]:focus {
     border-color:#FFD036;
 }
 
+
+/*keeps the disabled option "Bitte Anliegen auswählen" and "Bitte Durchführungsart ... auswählen" in dark grey when hovering over the select*/
+select option[value=""] {
+    color: #6c6c6c;
+}
+
 /*********************************************/
 
 .contact-form-container {

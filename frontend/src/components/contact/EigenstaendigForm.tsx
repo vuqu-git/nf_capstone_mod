@@ -94,6 +94,7 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import {Badge} from "react-bootstrap";
 import HinweisWerbungVeranstaltungsort from "./HinweisWerbungVeranstaltungsort.tsx";
+import {useDateRangeValidation} from "../../hooks/useDateRangeValidation.ts";
 
 export interface EigenstaendigFormData {
     betreff: string;
@@ -117,6 +118,11 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
         event.preventDefault();
         onSubFormSubmit(event, formData);
     };
+
+    const dateRangeError = useDateRangeValidation(
+        formData.veranstaltungsbeginn,
+        formData.veranstaltungsende
+    );
 
     return (
         <form onSubmit={handleLocalSubmit}>
@@ -165,6 +171,10 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
                     onChange={onInputChange}
                     required
                 />
+
+                <div style={{ minHeight: '1.5em' }}>
+                    {dateRangeError && <p className="text-danger m-0">{dateRangeError}</p>}
+                </div>
             </div>
 
             <Badge bg="warning" text="dark">
@@ -172,7 +182,7 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
             </Badge>
             <HinweisWerbungVeranstaltungsort />
 
-            <button type="submit" disabled={submissionStatus.status === 'sending'}>Mitteilung senden</button>
+            <button type="submit" disabled={submissionStatus.status === 'sending' || !!dateRangeError}>Mitteilung senden</button>
             <p><sub>*Pflichtfelder</sub></p>
 
             {submissionStatus.status === 'sending' &&

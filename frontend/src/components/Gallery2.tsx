@@ -19,6 +19,9 @@ export default function Gallery2() {
     const visibleScreenings = screeningGalleryEntries
         .filter(termin => termin.veroeffentlichen !== null && termin.veroeffentlichen !== 0);
 
+    // for testing semester break
+    // const visibleScreenings = [];
+
     return (
         <>
             {/* Section for news */}

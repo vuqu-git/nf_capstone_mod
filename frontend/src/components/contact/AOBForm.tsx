@@ -96,11 +96,16 @@ interface AOBFormProps {
 }
 
 const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
-    const handleLocalSubmit = (event: FormEvent) => {
-        event.preventDefault(); // Prevent the child form's default submission
-        onSubmit(event, undefined, formData); // Call the parent's onSubmit which is called handleGlobalSubmit there
 
+    const handleLocalSubmit = (event: FormEvent) => {
+        // Prevent the child form's default submission
+        event.preventDefault();
+
+        // Call the parent's onSubmit which is called handleGlobalSubmit there, 2nd parameter explicitIssue of handleGlobalSubmit is undefined here
+        // i.e. ContactForm the state variable selectedIssueSelection is used (for recognizing kinomitarbeit or aob)
+        onSubmit(event, undefined, formData);
     };
+
     return (
         <form onSubmit={handleLocalSubmit}>
             <div>

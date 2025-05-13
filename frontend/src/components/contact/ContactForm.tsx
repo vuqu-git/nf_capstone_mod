@@ -204,7 +204,8 @@ const issueSelectOptions: IssueConfig[] = [
 ];
 
 const ContactForm: React.FC = () => {
-    const [selectedIssue, setSelectedIssue] = useState<string>('');
+    // selectedIssueSelection here manages only the options aob, kinomitarbeit, eventOhneProjektion and eventMitProjektion (see issueSelectOptions interface)
+    const [selectedIssueSelection, setSelectedIssueSelection] = useState<string>('');
 
     // formData management only for AOBForm and KinomitarbeitForm; for the subforms c.f. EventMitProjektion and the subFormData management there
     const [formData, setFormData] = useState<AOBFormData | KinomitarbeitFormData>({});
@@ -214,7 +215,7 @@ const ContactForm: React.FC = () => {
     // Reset state after a successful submission, but keep the success message
     useEffect(() => {
         if (submissionStatus.status === 'success') {
-            setSelectedIssue('');
+            setSelectedIssueSelection('');
             setFormData({});
             // Optionally reset status after a timeout if you want to hide the message after a while:
             // setTimeout(() => setSubmissionStatus({ status: 'idle' }), 5000);
@@ -222,7 +223,7 @@ const ContactForm: React.FC = () => {
     }, [submissionStatus.status]);
 
     const handleIssueSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        setSelectedIssue(event.target.value);
+        setSelectedIssueSelection(event.target.value);
         setFormData({});
     };
 
@@ -244,7 +245,7 @@ const ContactForm: React.FC = () => {
         setSubmissionStatus({ status: 'sending' });
 
         // Use explicit parameters if provided, otherwise use state values
-        const issueToUse = explicitIssue || selectedIssue;
+        const issueToUse = explicitIssue || selectedIssueSelection;
         const dataToUse = explicitData || formData;
 
         try {
@@ -270,7 +271,7 @@ const ContactForm: React.FC = () => {
     };
 
     const renderForm = () => {
-        switch (selectedIssue) {
+        switch (selectedIssueSelection) {
             case 'aob':
                 return (
                     <AOBForm
@@ -334,7 +335,7 @@ const ContactForm: React.FC = () => {
             {submissionStatus.status !== 'success' && (
                 <>
                     <div>
-                        <select id="issue" value={selectedIssue} onChange={handleIssueSelectionChange}>
+                        <select id="issue" value={selectedIssueSelection} onChange={handleIssueSelectionChange}>
                             <option key="" value="" disabled>
                                 Bitte Anliegen auswählen.
                             </option>

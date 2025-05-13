@@ -1,4 +1,5 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
+import {useDateRangeValidation} from "../../hooks/useDateRangeValidation.ts";
 
 export interface MitKinotechnikFormData {
     betreff: string;
@@ -46,7 +47,6 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
         }
     };
 
-
     const handleLocalSubmit = (event: FormEvent) => {
         event.preventDefault();
         if (formData.istGemietetBeiAsta && formData.wurdeGelesenHinweisEventlocation) {
@@ -56,6 +56,11 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
             setErrorMissingConfirmationMessage('Bitte bestätige beide Punkte, um die Anfrage zu senden.');
         }
     };
+
+    const dateRangeError = useDateRangeValidation(
+        formData.veranstaltungsbeginn,
+        formData.veranstaltungsende
+    );
 
     return (
         <form onSubmit={handleLocalSubmit}>
@@ -181,6 +186,8 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 />
             </div>
 
+            {dateRangeError && <p className="text-danger">{dateRangeError}</p>}
+
             <div>
                 <input
                     type="checkbox"
@@ -213,7 +220,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 </label>
             </div>
 
-            <button type="submit" disabled={submissionStatus.status === 'sending'}>Anfrage senden</button>
+            <button type="submit" disabled={submissionStatus.status === 'sending' || !!dateRangeError}>Anfrage senden</button>
             <p><sub>*Pflichtfelder</sub></p>
             {errorMissingConfirmationMessage && <p style={{ color: 'orange' }}>{errorMissingConfirmationMessage}</p>}
 
