@@ -184,7 +184,7 @@ export default function TerminForm() {
     };
 
     return (
-        <div>
+        <div data-bs-theme="dark">
             <Link to={`/admin`}>
                 zum Adminbereich
             </Link>

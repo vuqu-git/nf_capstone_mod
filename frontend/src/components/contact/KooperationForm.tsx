@@ -1,4 +1,5 @@
 import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import styles from './Forms.module.css';
 import {Badge} from "react-bootstrap";
 
 export interface KooperationFormData {
@@ -50,13 +51,13 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
 
 
     return (
-        <form onSubmit={handleLocalSubmit}>
+        <form className={styles.formContainer} onSubmit={handleLocalSubmit}>
             <Badge bg="warning" text="dark">Hinweis:</Badge>
-            <p>
+            <p className={styles.formDescription}>
                 Der Einsendeschluss für Kooperationsanfragen ist der 31. Januar (für das Sommersemester) sowie der 31. Juli (für das Wintersemester). {momentaneAnfrageFuerSemester}
             </p>
-            <div>
-                <label htmlFor="betreff">Betreff*:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="betreff">Betreff*:</label>
                 <input
                     type="text"
                     id="betreff"
@@ -64,14 +65,23 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     value={formData.betreff || ''}
                     onChange={onInputChange}
                     required
+                    className={styles.textInput}
                 />
             </div>
-            <div>
-                <label htmlFor="ansprechperson">Ansprechperson*:</label>
-                <input type="text" id="ansprechperson" name="ansprechperson" value={formData.ansprechperson || ''} onChange={onInputChange} required/>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson*:</label>
+                <input
+                    type="text"
+                    id="ansprechperson"
+                    name="ansprechperson"
+                    value={formData.ansprechperson || ''}
+                    onChange={onInputChange}
+                    required
+                    className={styles.textInput}
+                />
             </div>
-            <div>
-                <label htmlFor="email">Email*:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="email">Email*:</label>
                 <input
                     type="email"
                     id="email"
@@ -79,21 +89,23 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     value={formData.email || ''}
                     onChange={onInputChange}
                     required
+                    className={styles.emailInput}
                 />
             </div>
-            <div>
-                <label htmlFor="telefon">Telefonnummer:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="telefon">Telefonnummer:</label>
                 <input
                     type="tel"
                     id="telefon"
                     name="telefon"
                     value={formData.telefon || ''}
                     onChange={onInputChange}
+                    className={styles.telInput}
                 />
             </div>
 
-            <div>
-                <label htmlFor="filmtitel">Filmtitel*:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="filmtitel">Filmtitel*:</label>
                 <input
                     type="text"
                     id="filmtitel"
@@ -101,10 +113,11 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     value={formData.filmtitel || ''}
                     onChange={onInputChange}
                     required
+                    className={styles.textInput}
                 />
             </div>
-            <div>
-                <label htmlFor="verleih">Verleiher/Rechteinhaber des vorgeschlagenen Films*:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="verleih">Verleiher/Rechteinhaber des vorgeschlagenen Films*:</label>
                 <input
                     type="text"
                     id="verleih"
@@ -112,42 +125,45 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     value={formData.verleih || ''}
                     onChange={onInputChange}
                     required
+                    className={styles.textInput}
                 />
             </div>
-            <div>
-                <label htmlFor="format">Abspielformat*:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="format">Abspielformat*:</label>
                 <select
                     id="format"
                     name="format"
                     value={formData.format || ''}
                     onChange={onInputChange}
                     required
+                    className={styles.formSelect}
                 >
-                    <option value="" disabled>Bitte auswählen</option>
-                    <option value="DCP">DCP</option>
-                    <option value="Blu-ray">Blu-ray</option>
-                    <option value="DVD">DVD</option>
-                    <option value="Datei auf PC">Filmdatei</option>
-                    <option value="35mm">35mm</option>
-                    <option value="16mm">16mm</option>
-                    <option value="noch unbekannt">noch unbekannt</option>
+                    <option value="" disabled className={styles.selectOption}>Bitte auswählen</option>
+                    <option value="DCP" className={styles.selectOption}>DCP</option>
+                    <option value="Blu-ray" className={styles.selectOption}>Blu-ray</option>
+                    <option value="DVD" className={styles.selectOption}>DVD</option>
+                    <option value="Datei auf PC" className={styles.selectOption}>Filmdatei</option>
+                    <option value="35mm" className={styles.selectOption}>35mm</option>
+                    <option value="16mm" className={styles.selectOption}>16mm</option>
+                    <option value="noch unbekannt" className={styles.selectOption}>noch unbekannt</option>
                 </select>
             </div>
 
-            <div>
-                <label htmlFor="nachricht">Eure Nachricht*:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="nachricht">Eure Nachricht*:</label>
                 <textarea
                     id="nachricht"
                     name="nachricht"
                     value={formData.nachricht || ''}
                     onChange={onInputChange}
                     required
+                    className={styles.textareaField}
                     style={{ height: '300px' }}
                 />
             </div>
 
-            <div>
-                <label htmlFor="terminpraeferenz">{terminPraeferenzLabel}</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="terminpraeferenz">{terminPraeferenzLabel}</label>
                 <textarea
                     id="terminpraeferenz"
                     name="terminpraeferenz"
@@ -155,26 +171,36 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     placeholder="Spieltage sind Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
                     onChange={onInputChange}
                     required
+                    className={styles.textareaField}
                 />
             </div>
 
-            <div>
-                <label htmlFor="zusammenarbeit">Eure Vorstellungen zur Arbeitsteilung und Kostenbeteiligung (u.a. Ticketeinnahmen, Filmbestellung, Vorführlizenz)*:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="zusammenarbeit">
+                    Eure Vorstellungen zur Arbeitsteilung und Kostenbeteiligung (u.a. Ticketeinnahmen, Filmbestellung, Vorführlizenz)*:
+                </label>
                 <textarea
                     id="zusammenarbeit"
                     name="zusammenarbeit"
                     value={formData.zusammenarbeit || ''}
                     onChange={onInputChange}
                     required
+                    className={styles.textareaField}
                     style={{ height: '150px' }}
                 />
             </div>
 
-            <button type="submit" disabled={submissionStatus.status === 'sending'}>Anfrage senden</button>
-            <p><sub>*Pflichtfelder</sub></p>
+            <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={submissionStatus.status === 'sending'}
+            >
+                Anfrage senden
+            </button>
+            <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
             {submissionStatus.status === 'sending' &&
-                <p className="text-warning">&#x2709; Sende Nachricht...</p>
+                <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
             }
         </form>
     );

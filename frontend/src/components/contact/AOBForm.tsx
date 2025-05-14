@@ -1,85 +1,5 @@
-// import React, { ChangeEvent, FormEvent } from 'react'; // Import FormEvent
-// import './Forms.css';
-//
-// export interface AOBFormData {
-//     betreff: string;
-//     name: string;
-//     email: string;
-//     nachricht: string;
-// }
-//
-// interface AOBFormProps {
-//     onSubmit: (event: FormEvent, issue?: string, data?: AOBFormData) => void;
-//     submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
-//     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-//     formData: AOBFormData;
-// }
-//
-// const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
-//     const handleLocalSubmit = (event: FormEvent) => {
-//         event.preventDefault(); // Prevent the child form's default submission
-//         onSubmit(event, undefined, formData); // Call the parent's onSubmit which is called handleGlobalSubmit there
-//
-//     };
-//     return (
-//         <form onSubmit={handleLocalSubmit}>
-//             <div>
-//                 <label htmlFor="betreff">Betreff*:</label>
-//                 <input
-//                     type="text"
-//                     id="betreff"
-//                     name="betreff"
-//                     value={formData.betreff || ''} // Ensure initial value is defined
-//                     onChange={onInputChange}
-//                     required
-//                 />
-//             </div>
-//             <div>
-//                 <label htmlFor="name">Name:</label>
-//                 <input
-//                     type="text"
-//                     id="name"
-//                     name="name"
-//                     value={formData.name || ''}     // Ensure initial value is defined
-//                     onChange={onInputChange}
-//                 />
-//             </div>
-//             <div>
-//                 <label htmlFor="email">Email*:</label>
-//                 <input
-//                     type="email"
-//                     id="email"
-//                     name="email"
-//                     value={formData.email || ''}    // Ensure initial value is defined
-//                     onChange={onInputChange}
-//                     required
-//                 />
-//             </div>
-//             <div>
-//                 <label htmlFor="nachricht">Nachricht*:</label>
-//                 <textarea
-//                     id="nachricht"
-//                     name="nachricht"
-//                     value={formData.nachricht || ''}  // Ensure initial value is defined
-//                     onChange={onInputChange}
-//                     required
-//                     style={{ height: '300px' }}
-//                 />
-//             </div>
-//             <button type="submit" disabled={submissionStatus.status === 'sending'}>Nachricht senden</button>
-//             <p><sub>*Pflichtfelder</sub></p>
-//
-//             {submissionStatus.status === 'sending' &&
-//                 <p className="text-warning">&#x2709; Sende Nachricht...</p>
-//             }
-//         </form>
-//     );
-// };
-//
-// export default AOBForm;
-
 import React, { ChangeEvent, FormEvent } from 'react'; // Import FormEvent
-import './Forms.css';
+import styles from './Forms.module.css';
 
 export interface AOBFormData {
     betreff: string;
@@ -107,9 +27,9 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
     };
 
     return (
-        <form onSubmit={handleLocalSubmit}>
-            <div>
-                <label htmlFor="betreff">Betreff*:</label>
+        <form className={styles.formContainer} onSubmit={handleLocalSubmit}>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="betreff">Betreff*:</label>
                 <input
                     type="text"
                     id="betreff"
@@ -117,20 +37,22 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     value={formData.betreff || ''} // Ensure initial value is defined
                     onChange={onInputChange}
                     required
+                    className={styles.textInput}
                 />
             </div>
-            <div>
-                <label htmlFor="name">Name:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="name">Name:</label>
                 <input
                     type="text"
                     id="name"
                     name="name"
                     value={formData.name || ''}     // Ensure initial value is defined
                     onChange={onInputChange}
+                    className={styles.textInput}
                 />
             </div>
-            <div>
-                <label htmlFor="email">Email*:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="email">Email*:</label>
                 <input
                     type="email"
                     id="email"
@@ -138,24 +60,32 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     value={formData.email || ''}    // Ensure initial value is defined
                     onChange={onInputChange}
                     required
+                    className={styles.emailInput}
                 />
             </div>
-            <div>
-                <label htmlFor="nachricht">Nachricht*:</label>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="nachricht">Nachricht*:</label>
                 <textarea
                     id="nachricht"
                     name="nachricht"
                     value={formData.nachricht || ''}  // Ensure initial value is defined
                     onChange={onInputChange}
                     required
+                    className={styles.textareaField}
                     style={{ height: '300px' }}
                 />
             </div>
-            <button type="submit" disabled={submissionStatus.status === 'sending'}>Nachricht senden</button>
-            <p><sub>*Pflichtfelder</sub></p>
+            <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={submissionStatus.status === 'sending'}
+            >
+                Nachricht senden
+            </button>
+            <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
             {submissionStatus.status === 'sending' &&
-                <p className="text-warning">&#x2709; Sende Nachricht...</p>
+                <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
             }
         </form>
     );

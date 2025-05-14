@@ -7,7 +7,7 @@ export default function EditDeleteNews() {
     const location = useLocation();
 
     return (
-        <div className="container mt-4">
+        <div className="container mt-4" data-bs-theme="dark">
             <Link to={`/admin`}>
                 zum Adminbereich
             </Link>
