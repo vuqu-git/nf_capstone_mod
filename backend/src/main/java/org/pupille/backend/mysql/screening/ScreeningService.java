@@ -281,4 +281,173 @@ public class ScreeningService {
                 .toList();
     }
 
+                //    public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsSlideshow() {
+                //        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+                //        LocalTime fixedTime = LocalTime.of(0, 1);
+                //        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+                //
+                //        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+                //        if (futureTermine.isEmpty() || futureTermine.size() == 1) {
+                //            return List.of(); // Either no future Termine or only one (which we must exclude)
+                //        }
+                //
+                //        // Sort by vorstellungsbeginn ascending
+                //        futureTermine.sort(Comparator.comparing(Termin::getVorstellungsbeginn));
+                //
+                //        // Exclude the first upcoming screening
+                //        List<Termin> relevantTermine = futureTermine.subList(1, futureTermine.size());
+                //
+                //        List<Long> terminIds = relevantTermine.stream()
+                //                .map(Termin::getTnr)
+                //                .toList();
+                //
+                //        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTerminIds(terminIds);
+                //
+                //        Map<Long, List<Terminverknuepfung>> groupedConnections = connections.stream()
+                //                .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm()) // exclude Vorfilme
+                //                .collect(Collectors.groupingBy(tv -> tv.getTermin().getTnr()));
+                //
+                //        return relevantTermine.stream()
+                //                .map(termin -> {
+                //                    List<FilmDTOForm> mainfilms = groupedConnections.getOrDefault(termin.getTnr(), List.of()).stream()
+                //                            .sorted(Comparator.comparing(Terminverknuepfung::getRang, Comparator.nullsLast(Short::compareTo)))
+                //                            .map(tv -> new FilmDTOForm(tv.getFilm()))
+                //                            .toList();
+                //
+                //                    return new TerminDTOWithFilmDTOSlideshow(termin, mainfilms);
+                //                })
+                //                .toList();
+                //    }
+
+
+//    public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsForSlideshow() {
+//        // Get the current time (with fixed time for consistency)
+//        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+//        LocalTime fixedTime = LocalTime.of(0, 1);
+//        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+//
+//        // 1. Get future Termine
+//        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+//
+//        // 2. Get related films in batch (using the termin IDs)
+//        List<Long> terminIds = futureTermine.stream()
+//                .map(Termin::getTnr)
+//                .collect(Collectors.toList());
+//
+//        List<Terminverknuepfung> connections = terminverknuepfungRepository
+//                .findWithFilmsByTerminIds(terminIds);
+//
+//        // 3. Exclude the first next Termin
+//        if (!futureTermine.isEmpty()) {
+//            futureTermine.remove(0); // Remove the first Termin (this is the one happening next)
+//        }
+//
+//        // 4. Prepare the list of TerminDTOWithFilmDTOSlideshow objects
+//        return futureTermine.stream()
+//                .map(termin -> {
+//                    // Filter and sort films that are NOT vorfilms
+//                    List<Film> mainfilms = connections.stream()
+//                            .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+//                            .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())  // Exclude vorfilms
+//                            .sorted(Comparator.comparing(Terminverknuepfung::getRang, Comparator.nullsFirst(Short::compare))) // Sort by rang ascending
+//                            .map(Terminverknuepfung::getFilm)
+//                            .collect(Collectors.toList());
+//
+//                    // Return the TerminDTOWithFilmDTOSlideshow object
+//                    return new TerminDTOWithFilmDTOSlideshow(termin, mainfilms);
+//                })
+//                .collect(Collectors.toList());
+//    }
+
+//    public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsForSlideshow() {
+//        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+//        LocalTime fixedTime = LocalTime.of(0, 1);
+//        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+//
+//        // 1. Get all future Termine
+//        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+//
+//        // 2. Filter only those with veroeffentlichen != null and > 0
+//        List<Termin> publishableTermine = futureTermine.stream()
+//                .filter(t -> t.getVeroeffentlichen() != null && t.getVeroeffentlichen() > 0)
+//                .sorted(Comparator.comparing(Termin::getVorstellungsbeginn))
+//                .collect(Collectors.toList());
+//
+//        // 3. Exclude the first next publishable Termin
+//        if (!publishableTermine.isEmpty()) {
+//            publishableTermine.remove(0);
+//        }
+//
+//        // 4. Collect their IDs
+//        List<Long> terminIds = publishableTermine.stream()
+//                .map(Termin::getTnr)
+//                .collect(Collectors.toList());
+//
+//        // 5. Load all Terminverknuepfung with film relations
+//        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTerminIds(terminIds);
+//
+//        // 6. Map to DTOs
+//        return publishableTermine.stream()
+//                .map(termin -> {
+//                    List<Film> mainfilms = connections.stream()
+//                            .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+//                            .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
+//                            .sorted(Comparator.comparing(Terminverknuepfung::getRang, Comparator.nullsFirst(Short::compare)))
+//                            .map(Terminverknuepfung::getFilm)
+//                            .collect(Collectors.toList());
+//
+//                    return new TerminDTOWithFilmDTOSlideshow(termin, mainfilms);
+//                })
+//                .collect(Collectors.toList());
+//    }
+
+    public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsForSlideshow(Optional<Integer> next) {
+        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+        LocalTime fixedTime = LocalTime.of(0, 1);
+        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+
+        // 1. Get all future Termine
+        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+
+        // 2. Filter veroeffentlichen > 0
+        List<Termin> publishableTermine = futureTermine.stream()
+                .filter(t -> t.getVeroeffentlichen() != null && t.getVeroeffentlichen() > 0)
+                .sorted(Comparator.comparing(Termin::getVorstellungsbeginn))
+                .collect(Collectors.toList());
+
+        // 3. Exclude the first next Termin
+        if (!publishableTermine.isEmpty()) {
+            publishableTermine.remove(0);
+        }
+
+        // 4. Apply 'next' limit if present
+        if (next.isPresent() && next.get() > 0 && publishableTermine.size() > next.get()) {
+            publishableTermine = publishableTermine.subList(0, next.get());
+        }
+
+        // 5. Get termin IDs
+        List<Long> terminIds = publishableTermine.stream()
+                .map(Termin::getTnr)
+                .collect(Collectors.toList());
+
+        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTerminIds(terminIds);
+
+        // 6. Build DTOs
+        return publishableTermine.stream()
+                .map(termin -> {
+                    List<Film> mainfilms = connections.stream()
+                            .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+                            .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
+                            .sorted(Comparator.comparing(Terminverknuepfung::getRang, Comparator.nullsFirst(Short::compare)))
+                            .map(Terminverknuepfung::getFilm)
+                            .collect(Collectors.toList());
+
+                    return new TerminDTOWithFilmDTOSlideshow(termin, mainfilms);
+                })
+                .collect(Collectors.toList());
+    }
+
+
+
+
 }

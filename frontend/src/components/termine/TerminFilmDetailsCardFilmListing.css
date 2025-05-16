@@ -1,4 +1,39 @@
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+/* Styling for Titel, Text, Besonderheit */
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+.film-title{
+    color: #FFD036;
+    border-top: 3px solid #FFD036;
+    padding-top: 1rem;
+}
+
+.film-title-with-image-padding{
+    padding-bottom:  1rem;
+}
+
+.film-text{
+    color: #cfd6e1;
+}
+
+.style-video-in-card iframe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    border-radius: 5px;
+    display: block;
+}
+
+.film-besonderheit{
+    border-top: 2px dotted #FFD036;
+    border-bottom: 2px dotted #FFD036;
+    padding: 0.5rem 0em;
+    color: #cfd6e1;
+    text-align: right;
+}
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 /* Styling for trigger warning */
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -106,13 +141,11 @@
     /*width: auto;     !* Let label size to content *!*/
 }
 
-
-
 /*##############################################*/
 
 
 /* Media query for small screens - Apply stacking only to the "Stab und Besetzung" section: specifically target .row, .label, and .value within the LAST .section-block */
-@media (max-width: 500px) {
+@media (max-width: 350px) {
     .section-block:last-child .row { /* Target rows within the last section-block (Stab und Besetzung) */
         flex-direction: column; /* Stack label above value on small screens */
         gap: 0.0rem; /* Space between stacked label and value */

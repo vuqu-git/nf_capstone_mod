@@ -1,0 +1,112 @@
+.slideshowContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: auto auto auto auto auto;
+    gap: 1.2rem 2rem;
+    background: black;
+    color: white;
+    height: 100vh;
+    padding: 2rem;
+    align-items: start;
+
+    /*background image*/
+    background-image: url('../assets/images/sideBackgroundA.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* 1st row, full width */
+.screeningDate {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+    font-size: 30px;
+    font-weight: 550;
+    color: #ffd036;
+}
+
+/* 2nd row, full width */
+.filmTitle {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+    font-size: 60px;
+    font-weight: 600;
+    color: #ffd036;
+}
+
+/* 3rd row, full width */
+.filmMeta {
+    grid-column: 1 / 3;
+    grid-row: 3 / 4;
+    font-size: 25px;
+    font-weight: 550;
+    color: #9ac7fa;
+}
+
+/* 4th row, 1st column */
+.filmShortText {
+    grid-column: 1 / 2;
+    grid-row: 4 / 5;
+    font-size: 25px;
+    font-weight: 550;
+}
+
+/* 5th row, 1st column */
+.filmSpecial {
+    grid-column: 1 / 2;
+    grid-row: 5 / 6;
+    font-size: 25px;
+    font-weight: 550;
+}
+
+.filmShortText,
+.filmSpecial {
+    font-size: 25px;
+    font-weight: 550;
+    display: flex;
+    align-items: center;      /* vertical centering */
+    /*justify-content: center;  !* horizontal centering *!*/
+    height: 100%;             /* make sure it fills the grid cell */
+}
+
+
+/*########################################*/
+
+/* 4th & 5th row, 2nd column, spans two rows */
+.filmTrailer {
+    grid-column: 2 / 3;
+    grid-row: 4 / 6;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* YouTube iframe styling */
+.filmTrailer iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* Optional: Add aspect ratio constraints */
+.filmTrailer {
+    aspect-ratio: 16/9; /* Default YouTube ratio */
+}
+
+@supports not (aspect-ratio: 16/9) {
+    /* Fallback for older browsers */
+    .filmTrailer::before {
+        content: "";
+        display: block;
+        padding-top: 56.25%; /* 16:9 aspect ratio */
+    }
+
+    .filmTrailer iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}

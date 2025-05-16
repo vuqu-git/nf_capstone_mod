@@ -54,7 +54,7 @@ export default function Gallery2() {
                             };
 
                             return (
-                                <article key={termin.tnr} style={{ paddingTop: "1.5rem", paddingBottom: "1.5rem" }}>
+                                <article key={termin.tnr} className="gallery-article-padding">
                                     {/*for programms of (multiple) films*/}
                                     {/***********************************/}
                                     {termin.titel ? (

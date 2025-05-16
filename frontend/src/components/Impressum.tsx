@@ -19,7 +19,7 @@ export default function Impressum() {
 
             <h3>Kontakt</h3>
             <p>
-                fernmündlich unter der Telefonnummer 069 7982 8976
+                fernmündlich unter der Telefonnummer <a href="tel:06979828976">069 7982 8976</a>
             </p>
             <p>
                 schriftlich über das <Link to={`/kontakt`}>Kontaktformular</Link>

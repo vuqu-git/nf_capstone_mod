@@ -16,7 +16,7 @@ import OverviewSemester2 from "./components/OverviewSemester2.tsx";
 import OverviewArchive2 from "./components/OverviewArchive2.tsx";
 import EditDeleteNews from "./components/news/EditDeleteNews.tsx";
 import AddNews from "./components/news/AddNews.tsx";
-import TerminverknuepfungFormNew from "./components/terminverkuepfungen/TerminverknuepfungFormNew.tsx";
+import TerminverknuepfungForm from "./components/terminverkuepfungen/TerminverknuepfungForm.tsx";
 import TerminForm from "./components/termine/TerminForm.tsx";
 import FilmForm from "./components/filme/FilmForm.tsx";
 import TerminDTOWithFilmDTOGallery from "./types/TerminDTOWithFilmDTOGallery.ts";
@@ -32,6 +32,8 @@ import TextLayout from "./components/LayoutWrapper/TextLayout.tsx";
 import ScreeningLayout from "./components/LayoutWrapper/ScreeningLayout.tsx";
 import OverviewAndFormLayout from "./components/LayoutWrapper/OverviewAndFormLayout.tsx";
 import Kinobesuch from "./components/Kinobesuch.tsx";
+import Slideshow from "./components/Slideshow.tsx";
+import Preview from "./components/Preview.tsx";
 
 const router = createBrowserRouter([
     {
@@ -110,7 +112,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "admintvennew",
-                        element: <TerminverknuepfungFormNew />,
+                        element: <TerminverknuepfungForm />,
                         handle: { scrollMode: "pathname" },
                     },
                 ],
@@ -150,6 +152,17 @@ const router = createBrowserRouter([
             // },
         ],
     },
+
+    {
+        path: "slideshow",
+        element: <Slideshow />,
+        handle: { scrollMode: "pathname" },
+    },
+    {
+        path: "preview",
+        element: <Preview />,
+        handle: { scrollMode: "pathname" },
+    }
 ]);
 
 if (import.meta.hot) {

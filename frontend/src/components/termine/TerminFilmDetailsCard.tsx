@@ -2,18 +2,11 @@ import Card from 'react-bootstrap/Card';
 import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 
 import './TerminFilmDetailsCard.css';
-
-
-
 import FilmDTOFormPlus from "../../types/FilmDTOFormPlus.ts";
 import TerminFilmDetailsListing from "./TerminFilmDetailsCardFilmListing.tsx";
-
-import {createCalenderEvent} from "../../utils/createCalenderEvent.ts";
 import {createICSFileName} from "../../utils/createICSFileName.ts";
-
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import {createDateAndTimeForAddToCalendarButton} from "../../utils/createDateAndTimeForAddToCalendarButton.ts";
-
 
 interface Props {
     tnr: string | undefined;
@@ -24,7 +17,7 @@ interface Props {
 
     vorstellungsbeginnIso8601: string | undefined;
 
-    screeningSonderfarbe: number | undefined;
+    screeningSonderfarbe: string | undefined;
 
     // these 3 items refer to the displayed entries above (wrt to programm titel or main feature titel)
     programmtitel: string | undefined | null;
@@ -36,22 +29,6 @@ interface Props {
 
     terminGesamtlaufzeit: number;
 }
-            // utils
-            function getDtstamp(now) {
-                const year = now.getUTCFullYear();
-                const month = now.getUTCMonth() + 1; // JS months are 0-based
-
-                if (month >= 4 && month <= 9) {
-                    // April to September
-                    return `${year}0401T000000Z`;
-                } else if (month <= 3) {
-                    // January to March
-                    return `${year - 1}1001T000000Z`;
-                } else {
-                    // October to December
-                    return `${year}1001T000000Z`;
-                }
-            }
 
 export default function TerminFilmDetailsCard({
                                                   tnr,
@@ -75,39 +52,20 @@ export default function TerminFilmDetailsCard({
                                               }: Props) {
 
     const calenderTitle = programmtitel ? programmtitel : mainfilms[0].film.titel ?? "Film in der Pupille";
-
     const icsFileName = createICSFileName(calenderTitle, vorstellungsbeginnIso8601);
     const calenderDateObj = createDateAndTimeForAddToCalendarButton(vorstellungsbeginnIso8601, terminGesamtlaufzeit);
 
-
-const rawContent = `UID:${tnr}-uniqueid@pupille.org
-DTSTAMP:${getDtstamp( new Date() )}`;
-
     return (
         <Card
-            className="pupille-glow"
-            style={{
-                backgroundColor: '#0D0D0C',
-                borderRadius: '15px',
-                overflow: 'hidden',
-                marginTop: '3rem',
-                marginBottom: '3rem',
-            }}
-            text="light"
+            className="terminFilm-card"
         >
             <Card.Body>
                 <Card.Header
                     as="h4"
-                    className="text-end"
-                    style={{
-                        color: '#FFD036',
-                        backgroundColor: "inherit",
-                        borderBottom: "inherit",
-                        marginBottom: '0.0rem',
-                    }}
+                    className="terminFilm-card-header"
                 >
 
-                    <div style={{ display: "flex", justifyContent: "center", marginBottom: '0.5rem', }}>
+                    <div className="add-to-calendar-button-container">
                         <AddToCalendarButton
                             name={"Pupille: " + calenderTitle}
                             startDate={calenderDateObj.startDate}
@@ -139,29 +97,24 @@ DTSTAMP:${getDtstamp( new Date() )}`;
 
                 <Card.Title
                     as="h3"
-                    style={{
-                        color: '#FFD036',
-                        marginTop: '1.5rem',
-                        marginBottom: '1.5rem'
-                    }}
+                    className="program-title"
                 >
                     {renderHtmlText(programmtitel)}
                 </Card.Title>
 
                 {programmtext && (
-                    <Card.Text style={{color: '#cfd6e1'}}>
+                    <Card.Text className="program-text">
                         {renderHtmlText(programmtext)}
                     </Card.Text>
                 )}
 
                 {programmbesonderheit && (
-                    <Card.Text style={{color: '#cfd6e1'}}>
+                    <Card.Text className="program-text">
                         {renderHtmlText(programmbesonderheit)}
                     </Card.Text>
                 )}
 
-
-                {/*###############################*/}
+                {/*###############################################*/}
 
                 {mainfilms.map((filmPlusObj, index) => {
                     const film = filmPlusObj.film;
@@ -175,24 +128,24 @@ DTSTAMP:${getDtstamp( new Date() )}`;
                             index={index}
                             f={film}
                             numberOfF={mainfilms.length}
-                            fType={(mainfilms.length == 1) ? "" : "Film: "}
+                            fType={(mainfilms.length == 1) ? "" : "Film:"}
                         />
                     );
                 })}
 
                 {vorfilms.map((filmPlusObj, index) => {
-                    const film = filmPlusObj.film;
+                    const vorfilm = filmPlusObj.film;
 
                     // Check if film properties exist
-                    if (!film) return null;
+                    if (!vorfilm) return null;
 
                     return (
                         <TerminFilmDetailsListing
                             key={index}
                             index={index}
-                            f={film}
+                            f={vorfilm}
                             numberOfF={vorfilms.length}
-                            fType={"Vorfilm: "}
+                            fType={"Vorfilm:"}
                         />
                     );
                 })}

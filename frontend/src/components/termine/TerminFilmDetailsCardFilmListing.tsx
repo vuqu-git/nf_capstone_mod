@@ -5,6 +5,7 @@ import {Film} from "../../types/Film.ts";
 import {structureStabString} from "../../utils/structureStabString.ts";
 import './TerminFilmDetailsCardFilmListing.css';
 import {Accordion} from "react-bootstrap";
+import {getFilmTitleForFilmDetailsCardFilmListing} from "../../utils/getFilmTitleForFilmDetailsCardFilmListing.tsx";
 
 interface Props {
     index: number;
@@ -28,42 +29,9 @@ export default function TerminFilmDetailsListing({
             {/*******----------*******/}
             <Card.Title
                 as="h3"
-                style={{
-                    color: '#FFD036',
-                    borderTop: '3px solid #FFD036',
-                    paddingTop: '1rem',
-                    paddingBottom: f.bild ? '1rem' : undefined, // Only adds padding if f.bild exists
-                }}
+                className={`film-title ${f.bild ? 'film-title-with-image-padding' : ''}`}
             >
-                {/*{(() => {*/}
-                {/*    if (numberOfF === 1) {*/}
-                {/*        return <>{fType}{render(f.titel)}</>;*/}
-                {/*    } else {*/}
-                {/*        return <>{index + 1}. {fType}{render(f.titel)}</>;*/}
-                {/*    }*/}
-                {/*})()}*/}
-
-                {(() => {
-                    const titleContentA = f.originaltitel ? (
-                        <>
-                            {renderHtmlText(f.originaltitel)}
-                            <br />
-                            ({renderHtmlText(f.titel)})
-                        </>
-                    ) : renderHtmlText(f.titel);
-
-                    const titleContentB = f.originaltitel ? (
-                        <>
-                            {renderHtmlText(f.originaltitel)} ({renderHtmlText(f.titel)})
-                        </>
-                    ) : renderHtmlText(f.titel);
-
-                    if (numberOfF === 1) {
-                        return <>{fType}{titleContentA}</>;
-                    } else {
-                        return <>{index + 1}. {fType}{titleContentB}</>;
-                    }
-                })()}
+                {getFilmTitleForFilmDetailsCardFilmListing({ f, fType, numberOfF, index, renderHtmlText })}
             </Card.Title>
 
             {/****** image ******/}
@@ -77,13 +45,11 @@ export default function TerminFilmDetailsListing({
             )}
 
             <Card.Body>
-
                 {/****** text ******/}
                 {/*******----*******/}
                 { f.text && (
                     <Card.Text
-                        className="style-video-in-card"
-                        style={{color: '#cfd6e1'}}
+                        className="film-text style-video-in-card iframe"
                     >
                         {renderHtmlText(f.text)}
                     </Card.Text>
@@ -98,13 +64,7 @@ export default function TerminFilmDetailsListing({
                                 <span className="w-100 text-center">Hinweis auf sensible Inhalte</span>
                             </Accordion.Header>
                             <Accordion.Body>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                                minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                                aliquip ex ea commodo consequat. Duis aute irure dolor in
-                                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                                pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                                culpa qui officia deserunt mollit anim id est laborum.
+                                {f.contentNote}
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
@@ -115,15 +75,7 @@ export default function TerminFilmDetailsListing({
                 {
                     f.besonderheit &&
                     <Card.Text
-                        style={{
-                            // borderTop: '1px solid #FFD036',
-                            // borderBottom: '1px solid #FFD036',
-                            borderTop: '2px dotted #FFD036',
-                            borderBottom: '2px dotted #FFD036',
-                            padding: '0.5rem 0em',
-                            color: '#cfd6e1',
-                            textAlign: 'right',
-                        }}
+                        className="film-besonderheit"
                     >
                         {renderHtmlText(f.besonderheit)}
                     </Card.Text>
@@ -162,7 +114,6 @@ export default function TerminFilmDetailsListing({
                         </div>
                     </div>
                 )}
-
             </Card.Body>
         </div>
     )

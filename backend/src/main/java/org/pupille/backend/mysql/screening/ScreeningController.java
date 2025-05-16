@@ -2,12 +2,10 @@ package org.pupille.backend.mysql.screening;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -40,4 +38,22 @@ public class ScreeningController {
     public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreenings() {
         return screeningService.getTermineByCurrentSemester();
     }
+
+    // For Slideshow react component
+//    @GetMapping("/screenings/slideshow")
+//    public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsForSlideshow() {
+//        List<TerminDTOWithFilmDTOSlideshow> termineWithFilms = screeningService.getFutureTermineWithFilmsForSlideshow();
+//        return termineWithFilms;
+//    }
+
+    @GetMapping("/screenings/slideshow")
+    public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsForSlideshow(
+            @RequestParam(value = "next", required = false) Optional<Integer> next
+    ) {
+        return screeningService.getFutureTermineWithFilmsForSlideshow(next);
+    }
+
+
+
+
 }

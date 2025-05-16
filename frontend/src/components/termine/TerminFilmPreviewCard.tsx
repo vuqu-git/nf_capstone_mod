@@ -24,7 +24,7 @@ interface Props {
     tnr: number;
 }
 
-export default function TerminFilmGalleryCard({
+export default function TerminFilmPreviewCard({
                                                   screeningWeekday,
                                                   screeningDate,
                                                   screeningTime,
@@ -64,9 +64,17 @@ export default function TerminFilmGalleryCard({
                     <div className="gradient-overlay">
                         <Card.Text className="overlay-analog-date">
                             {filmFormat?.includes("mm") && (
-                                <span className="analog-box">{filmFormat}</span>
+                                <span className="analog-box"
+                                      style={{
+                                          fontSize: '1.3rem',
+                                      }}
+                                >{filmFormat}</span>
                             )}
-                            <span className="overlay-time">
+                            <span className="overlay-time"
+                                  style={{
+                                      fontSize: '2.25rem',
+                                  }}
+                            >
                 {screeningWeekday || screeningDate || screeningTime ? (
                     <>
                         {screeningWeekday} | {screeningDate} | {screeningTime}
@@ -78,13 +86,22 @@ export default function TerminFilmGalleryCard({
                         </Card.Text>
 
                         {titel && (
-                            <Card.Title as="h3" className="overlay-title">
+                            <Card.Title as="h3"
+                                        className="overlay-title"
+                                        style={{
+                                            fontSize: '2.5rem',
+                                        }}
+                            >
                                 {renderHtmlText(titel)}
                             </Card.Title>
                         )}
 
                         {(regie || jahr || laufzeit) && (
-                            <Card.Text className="filminfo-and-stab-gallery">
+                            <Card.Text className="filminfo-and-stab-gallery"
+                                       style={{
+                                           fontSize: '1.6rem',
+                                       }}
+                            >
                                 {[regie, jahr, laufzeit !== undefined ? laufzeit + " Min." : undefined]
                                     .filter(Boolean)
                                     .join(', ')}
@@ -94,15 +111,25 @@ export default function TerminFilmGalleryCard({
                 </div>
             )}
 
-            <Card.Body>
+            <Card.Body
+                style={{
+                    paddingTop: '0rem',
+                }}
+            >
                 {kurztext && (
-                    <Card.Text className="card-kurztext">
+                    <Card.Text className="card-kurztext"
+                               style={{
+                                   fontSize: '1.6rem',
+                               }}
+                    >
                         {renderHtmlText(kurztext)}
                     </Card.Text>
                 )}
 
                 {besonderheit && (
-                    <Card.Text className="card-besonderheit" style={{ borderTop: kurztext ? undefined : 'none' }}>
+                    <Card.Text className="card-besonderheit"
+                               style={{ fontSize: '1.6rem', borderTop: kurztext ? undefined : 'none' }}
+                    >
                         {renderHtmlText(besonderheit)}
                     </Card.Text>
                 )}

@@ -1,0 +1,88 @@
+
+/*.slideshowContainer {*/
+/*    background-color: black;*/
+/*    display: flex;*/
+/*    justify-content: center; !* center horizontally *!*/
+/*    !*align-items: center;     !* center vertically *!*!*/
+/*    height: 100vh;           !* full viewport height *!*/
+/*    width: 100vw;            !* full viewport width *!*/
+/*    overflow: hidden;*/
+/*}*/
+
+/*.slideshowContent {*/
+/*    width: 900px;            !* fixed width *!*/
+/*    height: 450px;           !* fixed height or auto, depending on content *!*/
+/*    max-width: 100%;         !* responsive fallback *!*/
+/*    max-height: 100%;*/
+/*    padding-top: 25px;*/
+/*}*/
+
+
+
+/*.slideshowContainer {*/
+/*    background-color: black;*/
+/*    display: flex;*/
+/*    justify-content: center; !* center horizontally *!*/
+/*    !*align-items: center;     !* center vertically *!*!*/
+/*    height: 100vh;           !* full viewport height *!*/
+/*    width: 100vw;            !* full viewport width *!*/
+/*    overflow: hidden;*/
+
+/*    transition: opacity 2s ease;*/
+/*    opacity: 1;*/
+/*}*/
+
+/*.slideshowContent {*/
+/*    width: 900px;            !* fixed width *!*/
+/*    height: 450px;           !* fixed height or auto, depending on content *!*/
+/*    max-width: 100%;         !* responsive fallback *!*/
+/*    max-height: 100%;*/
+/*    padding-top: 25px;*/
+/*}*/
+
+
+/*.fadeOut {*/
+/*    opacity: 0;*/
+/*    transition: opacity 1s ease;*/
+/*}*/
+
+/*.fadeIn {*/
+/*    opacity: 1;*/
+/*    transition: opacity 1s ease;*/
+/*}*/
+
+
+.slideshowContainer {
+    background-color: black;
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;     /* center vertically */
+    height: 100vh;           /* full viewport height */
+    width: 100vw;            /* full viewport width */
+    overflow: hidden;
+    transition: opacity 2s ease;
+    opacity: 1;
+}
+
+.slideshowContent {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center children vertically */
+    align-items: center;     /* Center children horizontally */
+    width: 1100px;
+    /* Remove the fixed height */
+    max-width: 100%;
+    /*max-height: 95vh; !* Adjust this value to leave some margin if needed *!*/
+    max-height: 100vh; /* Adjust this value to leave some margin if needed */
+}
+
+
+.fadeOut {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.fadeIn {
+    opacity: 1;
+    transition: opacity 1s ease;
+}

@@ -29,6 +29,13 @@ export default function Kinobesuch() {
                 </div>
 
                 <div className={styles["section-row"]}>
+                    <h3 className={styles["section-row"]}>Spielbetrieb</h3>
+                    <div className={styles["section-content"]}>
+                        <p>Während der Vorlesungszeit jedes Semester veranstalten wir jeweils montags und mittwochs Filmvorführungen (außer an gesetzlichen Feiertagen). Darüber hinaus können vereinzelt auch an anderen Wochentagen – einschließlich der vorlesungsfreien Zeit – Filme gezeigt werden.</p>
+                    </div>
+                </div>
+
+                <div className={styles["section-row"]}>
                     <h3 className={styles["section-row"]}>Adresse</h3>
                     <div className={styles["section-content"]}>
                         <p>
