@@ -10,7 +10,6 @@ import EditDeleteNews from "./components/news/EditDeleteNews.tsx";
 import FilmForm from "./components/filme/FilmForm.tsx";
 import TerminForm from "./components/termine/TerminForm.tsx";
 
-import DTpicker from "./components/termine/DTpicker.tsx";
 import TerminverknuepfungForm from "./components/terminverkuepfungen/TerminverknuepfungForm.tsx";
 
 import ScreeningDetails from "./components/ScreeningDetails.tsx";

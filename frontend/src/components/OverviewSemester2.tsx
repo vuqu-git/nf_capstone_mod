@@ -2,7 +2,7 @@ import './Overview.css';
 
 import {Link, useLoaderData} from "react-router-dom";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
-import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
+import {formatDateTime} from "../utils/formatDateTime.ts";
 import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import {createDateAndTimeForAddToCalendarButton} from "../utils/createDateAndTimeForAddToCalendarButton.ts";

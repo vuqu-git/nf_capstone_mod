@@ -6,7 +6,7 @@ import axios from "axios";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
 import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {Link} from "react-router-dom";
-import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
+import {formatDateTime} from "../utils/formatDateTime.ts";
 
 
 // interface Props {

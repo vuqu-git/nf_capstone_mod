@@ -23,16 +23,17 @@ import TerminDTOWithFilmDTOGallery from "./types/TerminDTOWithFilmDTOGallery.ts"
 import {News} from "./types/News.ts";
 import TerminDTOWithFilmDTOOverviewSemester from "./types/TerminDTOWithFilmDTOOverviewSemester.ts";
 import TerminDTOWithFilmDTOOverviewArchive from "./types/TerminDTOWithFilmDTOOverviewArchive.ts";
-import ContentNotes from "./components/ContentNotes.tsx";
-import ProjektionAufLeinwand from "./components/ProjektionAufLeinwand.tsx";
+import ContentNotes from "./components/other/ContentNotes.tsx";
+import ProjektionAufLeinwand from "./components/other/ProjektionAufLeinwand.tsx";
 import ContactForm from "./components/contact/ContactForm.tsx";
-import Impressum from "./components/Impressum.tsx";
+import Impressum from "./components/other/Impressum.tsx";
 import BaseLayout from "./components/LayoutWrapper/BaseLayout.tsx";
 import TextLayout from "./components/LayoutWrapper/TextLayout.tsx";
 import ScreeningLayout from "./components/LayoutWrapper/ScreeningLayout.tsx";
 import OverviewAndFormLayout from "./components/LayoutWrapper/OverviewAndFormLayout.tsx";
-import Kinobesuch from "./components/Kinobesuch.tsx";
+import Kinobesuch from "./components/other/Kinobesuch.tsx";
 import Slideshow from "./components/Slideshow.tsx";
+import StartPreview from "./components/StartPreview.tsx";
 import Preview from "./components/Preview.tsx";
 
 const router = createBrowserRouter([
@@ -115,6 +116,12 @@ const router = createBrowserRouter([
                         element: <TerminverknuepfungForm />,
                         handle: { scrollMode: "pathname" },
                     },
+
+                    {
+                        path: "preview",
+                        element: <Preview />,
+                        handle: { scrollMode: "pathname" },
+                    }
                 ],
             },
 
@@ -159,8 +166,8 @@ const router = createBrowserRouter([
         handle: { scrollMode: "pathname" },
     },
     {
-        path: "preview",
-        element: <Preview />,
+        path: "startpreview",
+        element: <StartPreview />,
         handle: { scrollMode: "pathname" },
     }
 ]);

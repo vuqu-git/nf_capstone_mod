@@ -60,8 +60,8 @@
     height: 100vh;           /* full viewport height */
     width: 100vw;            /* full viewport width */
     overflow: hidden;
-    transition: opacity 2s ease;
-    opacity: 1;
+    /*transition: opacity 2s ease;*/
+    /*opacity: 1;*/
 }
 
 .slideshowContent {
@@ -70,7 +70,6 @@
     justify-content: center; /* Center children vertically */
     align-items: center;     /* Center children horizontally */
     width: 1100px;
-    /* Remove the fixed height */
     max-width: 100%;
     /*max-height: 95vh; !* Adjust this value to leave some margin if needed *!*/
     max-height: 100vh; /* Adjust this value to leave some margin if needed */

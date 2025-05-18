@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
-import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
+import {preprocessFormData} from "../../utils/preprocessFormData.ts";
 import {TVWithFilmAndTerminDTOSelection} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
 import TerminverknuepfungSelection from "./TerminverknuepfungSelection.tsx";
 import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";

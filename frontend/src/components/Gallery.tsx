@@ -6,7 +6,7 @@ import NewsCard from "./news/NewsCard.tsx";
 import {useAllNews} from "../hooks/useAllNews.ts";
 import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
 
-import { formatDateTime } from '../utils/DateTimeFormatForGallery.ts';
+import { formatDateTime } from '../utils/formatDateTime.ts';
 import TerminFilmGalleryCard from "./termine/TerminFilmGalleryCard.tsx";
 
 import './Gallery.css';

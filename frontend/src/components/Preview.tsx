@@ -1,384 +1,284 @@
-import React, {useEffect, useState} from "react";
+import React, {useState, useEffect, ChangeEvent} from "react";
+import TerminSelection from "./TerminSelection";
+import Termin from "../../types/Termin.ts";
+import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
+import {Button, Form} from "react-bootstrap";
 import axios from "axios";
-import styles from "./Preview.module.css";
-import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
-import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
-import TerminFilmPreviewCard from "./termine/TerminFilmPreviewCard.tsx";
+
+import { preprocessFormData } from '../../utils/preprocessFormData.ts';
+import {Link, useNavigate} from "react-router-dom";
+
+const baseURL = "/api/termine";
+
+const emptyTerminForForm = {
+    tnr: 0,
+    termin: '',
+    titel: '',
+    text: '',
+    kurztext: '',
+    besonderheit: '',
+    bild: '',
+    startReservierung: '',
+    linkReservierung: '',
+    sonderfarbeTitel: undefined,
+    sonderfarbe: undefined,
+    veroeffentlichen: 0,
+}
+
+interface Configuration {
+    duration?: number;
+    next?: number;
+    skipnext?: boolean;
+}
+
+export default function Preview() {
+
+    const [configuration, setConfiguration] = useState<Configuration>({
+        duration: undefined,
+        next: undefined,
+        skipnext: true,
+    });
+
+    const navigate = useNavigate();
 
 
 
-const initialSlides: TerminDTOWithFilmDTOGallery[] = [
-    {
-        "tnr": 850,
-        "vorstellungsbeginn": "2025-05-16T19:00:00",
-        "titel": null,
-        "kurztext": null,
-        "besonderheit": null,
-        "bild": null,
-        "sonderfarbe": null,
-        "veroeffentlichen": 1,
-        "films": [
-            {
-                "filmId": 1259,
-                "titel": "Komponiertes Kino &ndash; Werkschau Johannes Kreidler",
-                "kurztext": "In dem Filmen des Komponisten Johannes Kreidler wird das Komponieren zu einer multimedialen Arbeit mit Klang als Bild.",
-                "besonderheit": "In Anwesenheit von Johannes Kreidler. Eine Kooperation mit der Frankfurter Gesellschaft f&uuml;r Neue Musik und dem Institut f&uuml;r Musikwissenschaft.",
-                "bild": "Johannes_Kreidler.jpg",
-                "jahr": null,
-                "format": null,
-                "laufzeit": 67
-            }
-        ]
-    },
-    {
-        "tnr": 851,
-        "vorstellungsbeginn": "2025-05-19T20:15:00",
-        "titel": null,
-        "kurztext": null,
-        "besonderheit": null,
-        "bild": null,
-        "sonderfarbe": null,
-        "veroeffentlichen": 1,
-        "films": [
-            {
-                "filmId": 1260,
-                "titel": "A Killer Romance",
-                "kurztext": "Ein Collegeprofessor, der als Undercoverkiller arbeitet, verstrickt sich in ein gef&auml;hrliches Spiel aus L&uuml;gen und Begierde, als er sich in eine Auftraggeberin verliebt.",
-                "besonderheit": null,
-                "bild": "A_Killer-Romance.jpg",
-                "jahr": 2023,
-                "format": "DCP",
-                "laufzeit": 116
-            }
-        ]
-    },
-    {
-        "tnr": 852,
-        "vorstellungsbeginn": "2025-05-21T20:15:00",
-        "titel": null,
-        "kurztext": null,
-        "besonderheit": null,
-        "bild": null,
-        "sonderfarbe": null,
-        "veroeffentlichen": 1,
-        "films": [
-            {
-                "filmId": 1261,
-                "titel": "Ich bin ein Elefant, Madame",
-                "kurztext": "Peter Zadek inszeniert die Schule als Miniatur der Gesellschaft, in der die 68er f&uuml;r Umschwung und Unruhe sorgen. Voller anarchistischer Momente bringt der Film diesen Geist auf die Leinwand.",
-                "besonderheit": null,
-                "bild": "Ich_bin_ein_Elefant_Madame.jpg",
-                "jahr": 1969,
-                "format": "DCP",
-                "laufzeit": 102
-            }
-        ]
-    },
-    {
-        "tnr": 853,
-        "vorstellungsbeginn": "2025-05-26T20:15:00",
-        "titel": null,
-        "kurztext": null,
-        "besonderheit": null,
-        "bild": null,
-        "sonderfarbe": null,
-        "veroeffentlichen": 1,
-        "films": [
-            {
-                "filmId": 1262,
-                "titel": "Der Schatz",
-                "kurztext": "Zwei Filme &uuml;ber schatzsuchende V&auml;ter: eine lakonische Kom&ouml;die aus der rum&auml;nischen Nouvelle Vague, in der drei M&auml;nner aneinandergeraten und ein explosiver, englischer Kindergeburtstag.",
-                "besonderheit": null,
-                "bild": "Der_Schatz.jpg",
-                "jahr": 2015,
-                "format": "DCP",
-                "laufzeit": 89
-            }
-        ]
-    },
-    {
-        "tnr": 854,
-        "vorstellungsbeginn": "2025-05-28T17:00:00",
-        "titel": null,
-        "kurztext": null,
-        "besonderheit": null,
-        "bild": null,
-        "sonderfarbe": null,
-        "veroeffentlichen": 1,
-        "films": [
-            {
-                "filmId": 1263,
-                "titel": "Hazy Life",
-                "kurztext": "Das Japanische Filmfestival Nippon Connection wird 25 und kehrt am 29. Mai in die Pupille zur&uuml;ck, wo das Festival die ersten Jahre stattgefunden hat! Wir feiern das Jubil&auml;um mit drei Filmen der allerersten Festivalausgabe: Nobuhiro Yamashitas Hazy Life (1999), Toshiaki Toyodas Pornostar (1998) und Tetsuro Takeuchis Wild Zero (1999).",
-                "besonderheit": "Im Rahmen von Nippon Connection Filmfestival. In Anwesenheit von Nobuhiro Yamashita. Tickets gibt es ab dem 3. Mai auf der Festivalwebseite: NipponConnection.com",
-                "bild": "Hazy_Life.jpg",
-                "jahr": 1999,
-                "format": "16mm",
-                "laufzeit": 84
-            }
-        ]
-    },
-    {
-        "tnr": 855,
-        "vorstellungsbeginn": "2025-05-28T19:15:00",
-        "titel": null,
-        "kurztext": null,
-        "besonderheit": null,
-        "bild": null,
-        "sonderfarbe": null,
-        "veroeffentlichen": 1,
-        "films": [
-            {
-                "filmId": 1264,
-                "titel": "Pornostar",
-                "kurztext": null,
-                "besonderheit": "Im Rahmen von Nippon Connection Filmfestival. In Anwesenheit von Toshiaki Toyoda. Tickets gibt es ab dem 3. Mai auf der Festivalwebseite: NipponConnection.com",
-                "bild": "Pornostar.jpg",
-                "jahr": 1998,
-                "format": "35mm",
-                "laufzeit": 98
-            }
-        ]
-    },
-    {
-        "tnr": 856,
-        "vorstellungsbeginn": "2025-05-28T21:30:00",
-        "titel": null,
-        "kurztext": null,
-        "besonderheit": null,
-        "bild": null,
-        "sonderfarbe": null,
-        "veroeffentlichen": 1,
-        "films": [
-            {
-                "filmId": 1265,
-                "titel": "Wild Zero",
-                "kurztext": null,
-                "besonderheit": "Im Rahmen von Nippon Connection Filmfestival. Tickets gibt es ab dem 3. Mai auf der Festivalwebseite: NipponConnection.com",
-                "bild": "Wild_Zero.jpg",
-                "jahr": 1999,
-                "format": null,
-                "laufzeit": 98
-            }
-        ]
-    },
-    {
-        "tnr": 857,
-        "vorstellungsbeginn": "2025-06-02T20:15:00",
-        "titel": null,
-        "kurztext": null,
-        "besonderheit": null,
-        "bild": null,
-        "sonderfarbe": null,
-        "veroeffentlichen": 1,
-        "films": [
-            {
-                "filmId": 1266,
-                "titel": "Einfach mal was Sch&ouml;nes",
-                "kurztext": "Karla, kurz vor ihrem 40. Geburtstag, hat einen gro&szlig;en Wunsch: ein eigenes Kind. Da der passende Mann fehlt, beschlie&szlig;t sie, ihren Kinderwunsch allein in die Hand zu nehmen, doch ihre chaotische Familie und eine ungeplante Liebschaft wirbeln ihre Pl&auml;ne durcheinander.",
-                "besonderheit": null,
-                "bild": "Einfach_mal_was_Schoenes.jpg",
-                "jahr": 2022,
-                "format": "DCP",
-                "laufzeit": 116
-            }
-        ]
-    }
+    const [allTermine, setAllTermine] = useState<TerminDTOSelection[]>([]); // All Termine fetched from the server
+    const [selectedTerminId, setSelectedTerminId] = useState<number | undefined>(undefined); // Selected Termin for editing or deleting
+    const [selectedTermin, setSelectedTermin] = useState<Termin>(emptyTerminForForm); // Termin data for the form
 
-];
+    const [errorMessage, setErrorMessage] = useState<string>("");
+    const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
 
-// interface SlideshowProps {
-//     slideDuration?: number;
-// }
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // for POST, PUT
+    const [isGetLoading, setIsGetLoading] = useState(false); // for GET
 
-// const Preview: React.FC<SlideshowProps> = ({
-//                                                  slideDuration = 5000,
-//                                              }) => {
-//     const [termineForSlides, setTermineForSlides] = useState<TerminDTOWithFilmDTOGallery[]>(initialSlides);
-//     const [currentIndex, setCurrentIndex] = useState(0);
-//
-//     // useEffect(() => {
-//     //     axios
-//     //         .get<TerminDTOWithFilmDTOGallery[]>("/api/screenings"),
-//     //         .then((response) => {
-//     //             setSlides(response.data);
-//     //         })
-//     //         .catch((error) => {
-//     //             console.error("Failed to fetch slideshow data:", error);
-//     //         });
-//     // }, []);
-//
-//     useEffect(() => {
-//         const interval = setInterval(() => {
-//             setCurrentIndex((prevIndex) =>
-//                 termineForSlides.length > 0 ? (prevIndex + 1) % termineForSlides.length : 0
-//             );
-//         }, slideDuration);
-//
-//         return () => clearInterval(interval);
-//     }, [termineForSlides]);
-//
-//     if (termineForSlides.length === 0) {
-//         return <div>Loading slideshow...</div>;
-//     }
-//
-//     const termin = termineForSlides[currentIndex];
-//     const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, false, false);
-//
-//     const screeningCardProps = {
-//         screeningWeekday: screeningDateObj?.weekday ?? "",
-//         screeningDate: screeningDateObj?.date ?? "",
-//         screeningTime: screeningDateObj?.time ?? "",
-//         offsetImageInGallery: undefined, // instead of undefined, insert a number from 0 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
-//         tnr: termin.tnr
-//     };
-//
-//     return (
-//         <div className={styles.slideshowContainer}>
-//             <div className={styles.slideshowContent}>
-//
-//                 {termin.titel ? (
-//                     <TerminFilmGalleryCard
-//                         {...screeningCardProps}
-//                         screeningSonderfarbe="red-glow"
-//                         bild={termin.bild ?? null}
-//                         titel={termin.titel}
-//                         kurztext={termin.kurztext ?? null}
-//                         jahr={undefined}
-//                         besonderheit={termin.besonderheit ?? null}
-//                         filmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
-//                         laufzeit={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
-//                         regie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
-//                     />
-//                 ) : (
-//                     termin.films?.length > 0 && (
-//                         <>
-//                             {/*screening consists of 1 main film + shorts possibly*/}
-//                             {/*****************************************************/}
-//                             <TerminFilmGalleryCard
-//                                 {...screeningCardProps}
-//                                 screeningSonderfarbe="pupille-glow"
-//                                 bild={termin.films[0]?.bild ?? null}
-//                                 titel={termin.films[0]?.titel ?? null}
-//                                 kurztext={termin.films[0]?.kurztext ?? null}
-//                                 jahr={termin.films[0]?.jahr}
-//                                 besonderheit={termin.films[0]?.besonderheit ?? null}
-//                                 filmFormat={termin.films[0]?.format ?? undefined} // concise: filmFormat={termin.films[0]?.format ?? undefined}
-//                                 laufzeit={termin.films[0]?.laufzeit ?? undefined}
-//                                 regie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
-//                             />
-//                         </>
-//                     )
-//                 )}
-//             </div>
-//         </div>
-//
-//     );
-// };
-//
-// export default Preview;
+    const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made manually by the user
 
-const FADE_DURATION = 2000; // 2 seconds
-const SLIDE_DURATION = 10000;
+    // GET all termine
+    const getAllTermine = () => {
+        // setIsLoading(true);
+        setErrorMessage("");
 
-const Preview: React.FC = () => {
-    const [termineForSlides, setTermineForSlides] = useState<TerminDTOWithFilmDTOGallery[]>(initialSlides);
-    const [currentIndex, setCurrentIndex] = useState(0);
-
-    const [isFadingOut, setIsFadingOut] = useState(false);
-    const [isFadingIn, setIsFadingIn] = useState(false);
-
-    // useEffect(() => {
-    //     axios
-    //         .get<TerminDTOWithFilmDTOGallery[]>("/api/screenings"),
-    //         .then((response) => {
-    //             setSlides(response.data);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Failed to fetch slideshow data:", error);
-    //         });
-    // }, []);
-
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setIsFadingOut(true); // Start fade out
-            setTimeout(() => {
-                setCurrentIndex((prevIndex) =>
-                    termineForSlides.length > 0 ? (prevIndex + 1) % termineForSlides.length : 0
-                );
-                setIsFadingOut(false);
-                setIsFadingIn(true); // Start fade in
-                setTimeout(() => {
-                    setIsFadingIn(false);
-                }, FADE_DURATION);
-            }, FADE_DURATION);
-        }, SLIDE_DURATION);
-
-        return () => clearInterval(interval);
-    }, [termineForSlides, SLIDE_DURATION]);
-
-    if (termineForSlides.length === 0) {
-        return <div>Loading slideshow...</div>;
-    }
-
-    const termin = termineForSlides[currentIndex];
-    const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, false, false);
-
-    const screeningCardProps = {
-        screeningWeekday: screeningDateObj?.weekday ?? "",
-        screeningDate: screeningDateObj?.date ?? "",
-        screeningTime: screeningDateObj?.time ?? "",
-        offsetImageInGallery: undefined, // instead of undefined, insert a number from 0 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
-        tnr: termin.tnr
+        axios.get(`${baseURL}/allsorted`)
+            .then((response) => setAllTermine(response.data))
+            .catch((error) => {
+                const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                setErrorMessage(errorMessage);
+            })
+        // .finally(() => setIsLoading(false));
     };
 
+    // Fetch all termine for the dropdown selection
+    useEffect(() => {
+        getAllTermine();
+    }, []);
+
+    // // Fetch the selected termin details only if we are editing or deleting
+    // useEffect(() => {
+    //
+    //     if (selectionChanged) {
+    //         // Reset the success message when the selected termin changes
+    //         setSuccessMessage("");
+    //         setSelectionChanged(false); // Reset the flag
+    //     }
+    //
+    //     if (selectedTerminId) {
+    //         // GET single termin (details)
+    //         const getSingleTermin = () => {
+    //
+    //             setIsGetLoading(true);
+    //             setErrorMessage("");
+    //
+    //             axios.get(`${baseURL}/${selectedTerminId}`)
+    //                 .then((response) => setSelectedTermin(response.data))
+    //                 .catch((error) => {
+    //                     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    //                     setErrorMessage(errorMessage);
+    //                 })
+    //                 .finally(() => setIsGetLoading(false));
+    //         };
+    //
+    //         getSingleTermin();
+    //
+    //     } else {
+    //         // Reset the form for adding a new termin
+    //         setSelectedTermin(emptyTerminForForm);
+    //     }
+    // }, [selectedTerminId]);
+
+
+    // // Handle the form submission (PUT or POST)
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
+    //
+    //     setErrorMessage("");
+    //     setSuccessMessage("");
+    //     setIsLoading(true);
+    //
+    //     // Check if we're adding or editing a termin
+    //     if (selectedTerminId) {
+    //         // Editing an existing termin (PUT request)
+    //
+    //         axios.put(`${baseURL}/${selectedTerminId}`, preprocessFormData(selectedTermin))
+    //             .then(() => {
+    //                 setSuccessMessage("Termin updated successfully!");
+    //
+    //                 getAllTermine();
+    //                 setSelectedTerminId(undefined); // Reset the selection
+    //                 setSelectedTermin(emptyTerminForForm); // Reset the form
+    //             })
+    //             .catch((error) => {
+    //                 const errorMessage = error instanceof Error ? error.message : "Update failed";
+    //                 setErrorMessage(errorMessage);
+    //             })
+    //             .finally(() => setIsLoading(false));
+    //     } else {
+    //
+    //         // ###################################################
+    //         const { tnr, ...terminInFormWithoutFnr } = selectedTermin;
+    //         // ###################################################
+    //
+    //         // axios.post(`${baseURL}`, selectedTermin)
+    //         axios.post(`${baseURL}`, preprocessFormData(terminInFormWithoutFnr))
+    //             .then(() => {
+    //                 setSuccessMessage("Termin saved successfully!");
+    //
+    //                 getAllTermine();
+    //                 // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
+    //                 setSelectedTermin(emptyTerminForForm); // Reset the form
+    //             })
+    //             .catch((error) => {
+    //                 const errorMessage = error instanceof Error ? error.message : "Saving failed";
+    //                 setErrorMessage(errorMessage);
+    //             })
+    //             .finally(() => setIsLoading(false));
+    //
+    //     }
+    // };
+
+
+
+    // Handle termin form field changes
+    const handleFormChange = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+        const { name, value, type } = e.target;
+
+        setConfiguration((prevData: Configuration | undefined) => {
+            if (prevData) {
+                return {
+                    ...prevData,
+                    [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+                };
+            }
+            return {
+                [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+            };
+        });
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const queryParams = new URLSearchParams();
+
+        if (configuration.duration !== undefined) {
+            queryParams.set('duration', String(configuration.duration));
+        }
+        if (configuration.next !== undefined) {
+            queryParams.set('next', String(configuration.next));
+        }
+        if (configuration.skipnext !== undefined) {
+            queryParams.set('skipnext', String(configuration.skipnext));
+        }
+
+        const queryString = queryParams.toString();
+        navigate(`/startpreview${queryString ? `?${queryString}` : ''}`);
+    };
+
+    // // Handle selection changes
+    // const handleSelectionChange = (id: number | undefined) => {
+    //     setSelectedTerminId(id);
+    //     setSelectionChanged(true); // Set flag when selection changes
+    // };
+
     return (
-        <div className={styles.slideshowContainer}>
-            <div
-                className={
-                    `${styles.slideshowContent} ` +
-                    `${isFadingOut ? styles.fadeOut : ""} ` +
-                    `${isFadingIn ? styles.fadeIn : ""}`
-                }
-            >
-                {termin.titel ? (
-                    <TerminFilmPreviewCard
-                        {...screeningCardProps}
-                        screeningSonderfarbe="red-glow"
-                        bild={termin.bild ?? null}
-                        titel={termin.titel}
-                        kurztext={termin.kurztext ?? null}
-                        jahr={undefined}
-                        besonderheit={termin.besonderheit ?? null}
-                        filmFormat={undefined} // for filmFormat treatment with undefined (instead of null)
-                        laufzeit={undefined} // for filmFormat treatment with undefined (instead of null)
-                        regie={undefined} // for regie treatment with undefined (instead of null)
-                    />
-                ) : (
-                    termin.films?.length > 0 && (
-                        <>
-                            {/*screening consists of 1 main film + shorts possibly*/}
-                            {/*****************************************************/}
-                            <TerminFilmPreviewCard
-                                {...screeningCardProps}
-                                screeningSonderfarbe="pupille-glow"
-                                bild={termin.films[0]?.bild ?? null}
-                                titel={termin.films[0]?.titel ?? null}
-                                kurztext={termin.films[0]?.kurztext ?? null}
-                                jahr={termin.films[0]?.jahr}
-                                besonderheit={termin.films[0]?.besonderheit ?? null}
-                                filmFormat={termin.films[0]?.format ?? undefined}
-                                laufzeit={termin.films[0]?.laufzeit ?? undefined}
-                                regie={undefined} // for regie treatment with undefined (instead of null)
-                            />
-                        </>
-                    )
-                )}
+        <div data-bs-theme="dark">
+            <Link to={`/admin`}>
+                zum Adminbereich
+            </Link>
+
+            <h3 className="mt-3">Hinweise</h3>
+
+            <p>Im Edge Browser ist das aktivieren sowie deaktivieren komplette Vollbildansicht (ohne jegliche Menüs und Leisten) mit der Taste <b>F11</b> möglich.</p>
+            <p>Für eine optimale Darstellung wird eine Bildschirmhöhe von mindestens 1080 Pixeln empfohlen.</p>
+
+            {/*<TerminSelection*/}
+            {/*    termine={allTermine}*/}
+            {/*    selectedTerminId={selectedTerminId}*/}
+            {/*    onSelectTermin={handleSelectionChange}*/}
+            {/*/>*/}
+
+            <div style={{ minHeight: '30px' }}>
+                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading Termin details... Please wait!</div>}
             </div>
+
+            <Form onSubmit={handleSubmit}>
+
+                <h3 className="mt-3">Configure Preview</h3>
+
+                <Form.Group controlId="duration" className="mt-3">
+                    <Form.Label>Anzeigedauer pro Vorführung in Sekunden</Form.Label>
+                    <Form.Control
+                        type="number"
+                        name="duration"
+                        min="1"
+                        placeholder="60"
+                        value={configuration.duration || ""}
+                        onChange={handleFormChange}
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="next" className="mt-3">
+                    <Form.Label>Anzahl der angezeigten nächsten Vorführungen</Form.Label>
+
+                    <Form.Control
+                        type="number"
+                        name="next"
+                        min="1"
+                        // placeholder="10"
+                        value={configuration.next || ""}
+                        onChange={handleFormChange}
+                    />
+                    <Form.Text className="text-muted">
+                        Leerlassen für <b>alle</b> künftigen Vorführungen
+                    </Form.Text>
+                </Form.Group>
+
+                <Form.Group controlId="skipnext" className="mt-3">
+                    <Form.Check
+                        type="checkbox"
+                        name="skipnext"
+                        label="Unmittelbar nächste Vorführung überspringen"
+                        checked={configuration?.skipnext || false}
+                        onChange={handleFormChange}
+                    />
+                    <Form.Text className="text-muted">
+                        Wenn am Spieltag einer Vorführung die Preview gespielt wird, sollte der Haken gesetzt werden.
+                    </Form.Text>
+                </Form.Group>
+
+
+                <Button variant="primary" type="submit" className="mt-4">
+                    Start preview
+                </Button>
+            </Form>
+
+            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedTerminId ? "updating " : "saving "} termin entry... Please wait!</div>}
+            {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
+            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
         </div>
     );
-
-};
-
-export default Preview;
+}

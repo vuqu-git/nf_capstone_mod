@@ -1,6 +1,6 @@
 import TerminDTOFormWithFilmsDTOFormPlus from "../types/TerminDTOFormWithFilmsDTOFormPlus.ts";
 import TerminFilmDetailsCard from "./termine/TerminFilmDetailsCard.tsx";
-import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
+import {formatDateTime} from "../utils/formatDateTime.ts";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";

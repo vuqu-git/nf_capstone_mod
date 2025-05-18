@@ -1,5 +1,5 @@
 import {useLoaderData} from "react-router-dom";
-import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
+import {formatDateTime} from "../utils/formatDateTime.ts";
 import TerminFilmGalleryCard from "./termine/TerminFilmGalleryCard.tsx";
 import NewsCard from "./news/NewsCard.tsx";
 

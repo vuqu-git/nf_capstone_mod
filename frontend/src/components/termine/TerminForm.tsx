@@ -5,7 +5,7 @@ import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 
-import { preprocessFormData } from '../../utils/PreprocessingFormData.ts';
+import { preprocessFormData } from '../../utils/preprocessFormData.ts';
 import {Link} from "react-router-dom";
 
 const baseURL = "/api/termine";

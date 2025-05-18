@@ -4,7 +4,7 @@ import {Film} from "../../types/Film.ts";
 import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
-import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
+import {preprocessFormData} from "../../utils/preprocessFormData.ts";
 import {copyToClipboard} from "../../utils/copyToClipboard.ts";
 import {Link} from "react-router-dom";
 
