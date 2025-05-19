@@ -194,7 +194,7 @@ export default function TerminFilmPreviewCard({
 
     useEffect(() => {
         const handleMouseMove = (event: MouseEvent) => {
-            if (event.clientY <= 40) { // Adjust '5' to control the sensitivity/thickness
+            if (event.clientY <= 44) { // Adjust '5' to control the sensitivity/thickness
                 setIsTopHovering(true);
             } else {
                 setIsTopHovering(false);
@@ -221,7 +221,7 @@ export default function TerminFilmPreviewCard({
                     role="button"
                     aria-label="Show Preview"
                 >
-                    Click to stop preview!
+                    Click here to stop preview.
                 </div>
             )}
             <Card
@@ -230,7 +230,7 @@ export default function TerminFilmPreviewCard({
                 role="button"
             >
                 {bild && (
-                    <div className="image-aspect-ratio-container">
+                    <div className="image-aspect-ratio-container" style={{paddingTop: '52.25%'}}>
                         <Card.Img
                             variant="top"
                             src={`https://www.pupille.org/bilder/filmbilder/${bild}`}
@@ -276,7 +276,7 @@ export default function TerminFilmPreviewCard({
                             {(regie || jahr || laufzeit) && (
                                 <Card.Text className="filminfo-and-stab-gallery"
                                            style={{
-                                               fontSize: '1.6rem',
+                                               fontSize: '1.8rem',
                                            }}
                                 >
                                     {[regie, jahr, laufzeit !== undefined ? laufzeit + " Min." : undefined]
@@ -296,7 +296,7 @@ export default function TerminFilmPreviewCard({
                     {kurztext && (
                         <Card.Text className="card-kurztext"
                                    style={{
-                                       fontSize: '1.6rem',
+                                       fontSize: '1.8rem',
                                    }}
                         >
                             {renderHtmlText(kurztext)}
@@ -305,7 +305,7 @@ export default function TerminFilmPreviewCard({
 
                     {besonderheit && (
                         <Card.Text className="card-besonderheit"
-                                   style={{ fontSize: '1.6rem', borderTop: kurztext ? undefined : 'none' }}
+                                   style={{ fontSize: '1.8rem', borderTop: kurztext ? undefined : 'none', padding: '0 0' }}
                         >
                             {renderHtmlText(besonderheit)}
                         </Card.Text>
