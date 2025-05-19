@@ -71,20 +71,20 @@ export default function Gallery2() {
                                             regie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
                                         />
                                     ) : (
-                                        termin.films?.length > 0 && (
+                                        termin.mainfilms?.length > 0 && (
                                             <>
                                                 {/*screening consists of 1 main film + shorts possibly*/}
                                                 {/*****************************************************/}
                                                 <TerminFilmGalleryCard
                                                     {...screeningCardProps}
                                                     screeningSonderfarbe="pupille-glow"
-                                                    bild={termin.films[0]?.bild ?? null}
-                                                    titel={termin.films[0]?.titel ?? null}
-                                                    kurztext={termin.films[0]?.kurztext ?? null}
-                                                    jahr={termin.films[0]?.jahr}
-                                                    besonderheit={termin.films[0]?.besonderheit ?? null}
-                                                    filmFormat={termin.films[0]?.format ?? undefined} // concise: filmFormat={termin.films[0]?.format ?? undefined}
-                                                    laufzeit={termin.films[0]?.laufzeit ?? undefined}
+                                                    bild={termin.mainfilms[0]?.bild ?? null}
+                                                    titel={termin.mainfilms[0]?.titel ?? null}
+                                                    kurztext={termin.mainfilms[0]?.kurztext ?? null}
+                                                    jahr={termin.mainfilms[0]?.jahr}
+                                                    besonderheit={termin.mainfilms[0]?.besonderheit ?? null}
+                                                    filmFormat={termin.mainfilms[0]?.format ?? undefined} // concise: filmFormat={termin.films[0]?.format ?? undefined}
+                                                    laufzeit={termin.mainfilms[0]?.laufzeit ?? undefined}
                                                     regie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
                                                 />
                                             </>

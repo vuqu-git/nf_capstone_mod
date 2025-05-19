@@ -10,7 +10,7 @@ interface TerminDTOWithFilmDTOGallery {
     bild?: string| null;
     sonderfarbe?: number | null;
     veroeffentlichen?: number | null;
-    films: FilmDTOGallery[];
+    mainfilms: FilmDTOGallery[];
 }
 
 export default TerminDTOWithFilmDTOGallery;

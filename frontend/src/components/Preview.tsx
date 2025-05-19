@@ -6,7 +6,9 @@ import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 
 import { preprocessFormData } from '../../utils/preprocessFormData.ts';
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLoaderData, useNavigate} from "react-router-dom";
+import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
+import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
 
 const baseURL = "/api/termine";
 
@@ -33,6 +35,52 @@ interface Configuration {
 
 export default function Preview() {
 
+    const semesterTermine = useLoaderData<TerminDTOWithFilmDTOGallery[]>();
+
+
+    const [selectedTnrs, setSelectedTnrs] = useState<number[]>([]);
+    const [selectedObjects, setSelectedObjects] = useState<TerminDTOWithFilmDTOGallery[]>([]);
+
+    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedValues = Array.from(event.target.selectedOptions, option => option.value);
+
+        // Handle special options
+        if (selectedValues.includes('all')) {
+            // Select all
+            const allTnrs = semesterTermine.map(termin => termin.tnr);
+            setSelectedTnrs(allTnrs);
+            setSelectedObjects(semesterTermine);
+            return;
+        }
+
+        if (selectedValues.includes('all_except_first')) {
+            // Select all except first
+            const allExceptFirst = semesterTermine.slice(1).map(termin => termin.tnr);
+            setSelectedTnrs(allExceptFirst);
+            setSelectedObjects(semesterTermine.slice(1));
+            return;
+        }
+
+        // Normal selection
+        const selectedTnrsNum = selectedValues.map(Number);
+        setSelectedTnrs(selectedTnrsNum);
+        setSelectedObjects(semesterTermine.filter(termin => selectedTnrsNum.includes(termin.tnr)));
+    };
+
+    // Determine if special options should appear selected
+    const isAllSelected = selectedTnrs.length === semesterTermine.length;
+    const isAllExceptFirstSelected =
+        selectedTnrs.length === semesterTermine.length - 1 &&
+        semesterTermine.slice(1).every(termin => selectedTnrs.includes(termin.tnr));
+
+    const selectValue = isAllSelected
+        ? ['all']
+        : isAllExceptFirstSelected
+            ? ['all_except_first']
+            : selectedTnrs.map(String);
+
+    // ######################################################
+
     const [configuration, setConfiguration] = useState<Configuration>({
         duration: undefined,
         next: undefined,
@@ -56,24 +104,24 @@ export default function Preview() {
 
     const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made manually by the user
 
-    // GET all termine
-    const getAllTermine = () => {
-        // setIsLoading(true);
-        setErrorMessage("");
-
-        axios.get(`${baseURL}/allsorted`)
-            .then((response) => setAllTermine(response.data))
-            .catch((error) => {
-                const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-                setErrorMessage(errorMessage);
-            })
-        // .finally(() => setIsLoading(false));
-    };
-
-    // Fetch all termine for the dropdown selection
-    useEffect(() => {
-        getAllTermine();
-    }, []);
+    // // GET all termine
+    // const getAllTermine = () => {
+    //     // setIsLoading(true);
+    //     setErrorMessage("");
+    //
+    //     axios.get(`${baseURL}/allsorted`)
+    //         .then((response) => setAllTermine(response.data))
+    //         .catch((error) => {
+    //             const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    //             setErrorMessage(errorMessage);
+    //         })
+    //     // .finally(() => setIsLoading(false));
+    // };
+    //
+    // // Fetch all termine for the dropdown selection
+    // useEffect(() => {
+    //     getAllTermine();
+    // }, []);
 
     // // Fetch the selected termin details only if we are editing or deleting
     // useEffect(() => {
@@ -279,6 +327,50 @@ export default function Preview() {
             {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedTerminId ? "updating " : "saving "} termin entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
             {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
+
+
+            {/*###########################################*/}
+
+            <>
+                <Form.Group>
+                    <Form.Label>Wähle die Vorführungen für die Preview aus</Form.Label>
+                    <Form.Select
+                        multiple
+                        htmlSize={semesterTermine.length + 2} // +2 for both special options
+                        value={selectValue}
+                        onChange={handleChange}
+                    >
+                        <option key="all" value="all">
+                            Alle Vorführungstermine
+                        </option>
+                        <option key="all_except_first" value="all_except_first">
+                            Alle Vorführungstermine ohne den nächsten
+                        </option>
+                        {semesterTermine.map(termin => (
+                            <option key={termin.tnr} value={termin.tnr}>
+                                {termin.vorstellungsbeginn?.slice(0,-3)} | {termin.titel || termin.mainfilms[0].titel}
+                                {/*{termin.vorstellungsbeginn} | {termin.titel || "kein Programmtitel"}*/}
+                            </option>
+                        ))}
+                    </Form.Select>
+                    <Form.Text className="text-muted">
+                        Halte STRG (Windows) oder CMD (Mac) gedrückt, um mehrere, nicht zusammenhängende Vorführungstermine auszuwählen.
+                    </Form.Text>
+                </Form.Group>
+
+                <div className="mt-3">
+                    <h5>Ausgewählte Termine:</h5>
+                    <ul>
+                        {selectedObjects.map(termin => (
+                            <li key={termin.tnr}>
+                                {termin.titel || termin.mainfilms[0].titel} ({termin.vorstellungsbeginn?.slice(0,-3)})
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </>
+
+
         </div>
     );
 }

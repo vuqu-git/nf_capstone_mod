@@ -17,7 +17,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "bild": null,
         "sonderfarbe": null,
         "veroeffentlichen": 1,
-        "films": [
+        "mainfilms": [
             {
                 "filmId": 1259,
                 "titel": "Komponiertes Kino &ndash; Werkschau Johannes Kreidler",
@@ -39,7 +39,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "bild": null,
         "sonderfarbe": null,
         "veroeffentlichen": 1,
-        "films": [
+        "mainfilms": [
             {
                 "filmId": 1260,
                 "titel": "A Killer Romance",
@@ -61,7 +61,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "bild": null,
         "sonderfarbe": null,
         "veroeffentlichen": 1,
-        "films": [
+        "mainfilms": [
             {
                 "filmId": 1261,
                 "titel": "Ich bin ein Elefant, Madame",
@@ -83,7 +83,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "bild": null,
         "sonderfarbe": null,
         "veroeffentlichen": 1,
-        "films": [
+        "mainfilms": [
             {
                 "filmId": 1262,
                 "titel": "Der Schatz",
@@ -105,7 +105,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "bild": null,
         "sonderfarbe": null,
         "veroeffentlichen": 1,
-        "films": [
+        "mainfilms": [
             {
                 "filmId": 1263,
                 "titel": "Hazy Life",
@@ -127,7 +127,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "bild": null,
         "sonderfarbe": null,
         "veroeffentlichen": 1,
-        "films": [
+        "mainfilms": [
             {
                 "filmId": 1264,
                 "titel": "Pornostar",
@@ -149,7 +149,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "bild": null,
         "sonderfarbe": null,
         "veroeffentlichen": 1,
-        "films": [
+        "mainfilms": [
             {
                 "filmId": 1265,
                 "titel": "Wild Zero",
@@ -171,7 +171,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "bild": null,
         "sonderfarbe": null,
         "veroeffentlichen": 1,
-        "films": [
+        "mainfilms": [
             {
                 "filmId": 1266,
                 "titel": "Einfach mal was Sch&ouml;nes",
@@ -408,20 +408,20 @@ const StartPreview: React.FC = () => {
                         regie={undefined} // for regie treatment with undefined (instead of null)
                     />
                 ) : (
-                    termin.films?.length > 0 && (
+                    termin.mainfilms?.length > 0 && (
                         <>
                             {/*screening consists of 1 main film + shorts possibly*/}
                             {/*****************************************************/}
                             <TerminFilmPreviewCard
                                 {...screeningCardProps}
                                 screeningSonderfarbe="pupille-glow"
-                                bild={termin.films[0]?.bild ?? null}
-                                titel={termin.films[0]?.titel ?? null}
-                                kurztext={termin.films[0]?.kurztext ?? null}
-                                jahr={termin.films[0]?.jahr}
-                                besonderheit={termin.films[0]?.besonderheit ?? null}
-                                filmFormat={termin.films[0]?.format ?? undefined}
-                                laufzeit={termin.films[0]?.laufzeit ?? undefined}
+                                bild={termin.mainfilms[0]?.bild ?? null}
+                                titel={termin.mainfilms[0]?.titel ?? null}
+                                kurztext={termin.mainfilms[0]?.kurztext ?? null}
+                                jahr={termin.mainfilms[0]?.jahr}
+                                besonderheit={termin.mainfilms[0]?.besonderheit ?? null}
+                                filmFormat={termin.mainfilms[0]?.format ?? undefined}
+                                laufzeit={termin.mainfilms[0]?.laufzeit ?? undefined}
                                 regie={undefined} // for regie treatment with undefined (instead of null)
                             />
                         </>

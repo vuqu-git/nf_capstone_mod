@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 // import "./index.css";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 
 import ScreeningDetails from "./components/ScreeningDetails.tsx";
 import Gallery2 from "./components/Gallery2.tsx";
@@ -35,6 +35,7 @@ import Kinobesuch from "./components/other/Kinobesuch.tsx";
 import Slideshow from "./components/Slideshow.tsx";
 import StartPreview from "./components/StartPreview.tsx";
 import Preview from "./components/Preview.tsx";
+import Preview1Parent from "./components/Preview1Parent.tsx";
 
 const router = createBrowserRouter([
     {
@@ -119,6 +120,7 @@ const router = createBrowserRouter([
 
                     {
                         path: "preview",
+                        loader: getGalleryDataWithoutNews,
                         element: <Preview />,
                         handle: { scrollMode: "pathname" },
                     }
@@ -169,6 +171,12 @@ const router = createBrowserRouter([
         path: "startpreview",
         element: <StartPreview />,
         handle: { scrollMode: "pathname" },
+    },
+    {
+        path: "previewparent",
+        loader: getGalleryDataWithoutNews,
+        element: <Preview1Parent />,
+        handle: { scrollMode: "pathname" },
     }
 ]);
 
@@ -212,6 +220,22 @@ async function getGalleryData(): Promise<GalleryData> {
         //     Throwing a regular Error:
         //     If you throw a regular Error, React Router will also catch it and render the errorElement, but the error object will be an instance of Error, not Response.
         //     This is often used for application-level errors that aren't necessarily HTTP errors.
+    }
+}
+
+async function getGalleryDataWithoutNews(): Promise<TerminDTOWithFilmDTOGallery[]> {
+    try {
+        const response: AxiosResponse<TerminDTOWithFilmDTOGallery[]> = await axios.get("/api/screenings");
+        return response.data;
+    } catch (error: any) {
+        console.error("Error fetching future screenings:", error);
+        if (error.response) {
+            throw new Error(`Failed to load future screening data: Server responded with status ${error.response.status}`);
+        } else if (error.request) {
+            throw new Error("Failed to load future screening data: No response received from the server.");
+        } else {
+            throw new Error(`Failed to load future screening data due to a network or unexpected error: ${error.message}`);
+        }
     }
 }
 

@@ -218,7 +218,7 @@ export default function Gallery() {
                                                 />
                                             </div>
                                         );
-                                    } else if (termin.films?.length > 0) {
+                                    } else if (termin.mainfilms?.length > 0) {
                                         return (
                                             <div
                                                 key={termin.tnr}
@@ -234,13 +234,13 @@ export default function Gallery() {
                                                     screeningDate={screeningDateObj ? screeningDateObj.date : ""}
                                                     screeningTime={screeningDateObj ? screeningDateObj.time : ""}
                                                     screeningSonderfarbe={"pupille-glow"}
-                                                    bild={termin.films[0]?.bild ? termin.films[0]?.bild : null}
+                                                    bild={termin.mainfilms[0]?.bild ? termin.mainfilms[0]?.bild : null}
                                                     offsetImageInGallery={undefined} // instead of undefined, insert a number from 1 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
-                                                    titel={termin.films[0]?.titel ? termin.films[0]?.titel : null}
-                                                    kurztext={termin.films[0]?.kurztext ? termin.films[0]?.kurztext : null}
-                                                    jahr={termin.films[0]?.jahr}
-                                                    besonderheit={termin.films[0]?.besonderheit ? termin.films[0]?.besonderheit : null}
-                                                    filmFormat={termin.films[0]?.format ? termin.films[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+                                                    titel={termin.mainfilms[0]?.titel ? termin.mainfilms[0]?.titel : null}
+                                                    kurztext={termin.mainfilms[0]?.kurztext ? termin.mainfilms[0]?.kurztext : null}
+                                                    jahr={termin.mainfilms[0]?.jahr}
+                                                    besonderheit={termin.mainfilms[0]?.besonderheit ? termin.mainfilms[0]?.besonderheit : null}
+                                                    filmFormat={termin.mainfilms[0]?.format ? termin.mainfilms[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
 
                                                     tnr={termin.tnr} // for navigation to certain route
                                                 />
