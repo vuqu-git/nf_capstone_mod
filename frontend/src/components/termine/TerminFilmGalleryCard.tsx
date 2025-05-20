@@ -59,6 +59,7 @@ export default function TerminFilmGalleryCard({
                         src={`https://www.pupille.org/bilder/filmbilder/${bild}`}
                         {...(offsetImageInGallery && { style: { objectPosition: `center ${offsetImageInGallery}%` } })}
                     />
+                    {/*empty tag for stringer gradient effect*/}
                     <div className="gradient-overlay"></div>
 
                     <div className="gradient-overlay">
