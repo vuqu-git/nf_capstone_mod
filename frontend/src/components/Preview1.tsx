@@ -131,7 +131,6 @@ import {Badge, Col, Container, Form, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {formatDateInTerminSelectOption} from "../utils/formatDateInTerminSelectOption.ts";
 import BackToTopButton from "./BackToTopButton.tsx";
-import OverviewAndFormLayout from "./LayoutWrapper/OverviewAndFormLayout.tsx";
 import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import Header2 from "./Header2.tsx";
 
