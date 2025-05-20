@@ -1,10 +1,10 @@
 
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import TerminDTOWithFilmDTOSlideshow from "../types/TerminDTOWithFilmDTOSlideshow.ts";
+import TerminDTOWithFilmDTOSlideshow from "../../types/TerminDTOWithFilmDTOSlideshow.ts";
 import styles from "./Slideshow.module.css";
-import { renderHtmlText } from "../utils/renderHtmlText.tsx";
-import {formatDateTime} from "../utils/formatDateTime.ts";
+import { renderHtmlText } from "../../utils/renderHtmlText.tsx";
+import {formatDateTime} from "../../utils/formatDateTime.ts";
 
 
 

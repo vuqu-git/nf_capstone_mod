@@ -144,7 +144,6 @@ import Card from 'react-bootstrap/Card';
 import { renderHtmlText } from "../../utils/renderHtmlText.tsx";
 import './TerminFilmGalleryCard.css';
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from 'react';
 
 interface Props {
     screeningWeekday: string | null;
@@ -165,7 +164,6 @@ interface Props {
     regie: string | undefined;
 
     tnr: number;
-    setShowPreview: (value: boolean) => void; // Add this prop
 }
 
 export default function TerminFilmPreviewCard({
@@ -183,47 +181,16 @@ export default function TerminFilmPreviewCard({
                                                   laufzeit,
                                                   regie,
                                                   tnr,
-                                                  setShowPreview, // Destructure the prop
                                               }: Props) {
     const navigate = useNavigate();
-    const [isTopHovering, setIsTopHovering] = useState(false);
 
     const handleClick = () => {
         navigate(`/details/${tnr}`);
     };
 
-    useEffect(() => {
-        const handleMouseMove = (event: MouseEvent) => {
-            if (event.clientY <= 44) { // Adjust '5' to control the sensitivity/thickness
-                setIsTopHovering(true);
-            } else {
-                setIsTopHovering(false);
-            }
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, []);
-
-    const handleTopBarClick = () => {
-        setShowPreview(false);
-    };
 
     return (
         <>
-            {isTopHovering && (
-                <div
-                    className="topHoverBar"
-                    onClick={handleTopBarClick}
-                    role="button"
-                    aria-label="Show Preview"
-                >
-                    Click here to stop preview.
-                </div>
-            )}
             <Card
                 className={`custom-card ${screeningSonderfarbe} zoom-effect`}
                 onClick={handleClick}
@@ -244,13 +211,13 @@ export default function TerminFilmPreviewCard({
                                 {filmFormat?.includes("mm") && (
                                     <span className="analog-box"
                                           style={{
-                                              fontSize: '1.3rem',
+                                              fontSize: '1.5rem',
                                           }}
                                     >{filmFormat}</span>
                                 )}
                                 <span className="overlay-time"
                                       style={{
-                                          fontSize: '2.25rem',
+                                          fontSize: '2.5rem',
                                       }}
                                 >
                     {screeningWeekday || screeningDate || screeningTime ? (
@@ -267,7 +234,7 @@ export default function TerminFilmPreviewCard({
                                 <Card.Title as="h3"
                                             className="overlay-title"
                                             style={{
-                                                fontSize: '2.5rem',
+                                                fontSize: '3.0rem',
                                             }}
                                 >
                                     {renderHtmlText(titel)}
@@ -277,7 +244,7 @@ export default function TerminFilmPreviewCard({
                             {(regie || jahr || laufzeit) && (
                                 <Card.Text className="filminfo-and-stab-gallery"
                                            style={{
-                                               fontSize: '1.8rem',
+                                               fontSize: '2.0rem',
                                            }}
                                 >
                                     {[regie, jahr, laufzeit !== undefined ? laufzeit + " Min." : undefined]
@@ -297,7 +264,7 @@ export default function TerminFilmPreviewCard({
                     {kurztext && (
                         <Card.Text className="card-kurztext"
                                    style={{
-                                       fontSize: '1.8rem',
+                                       fontSize: '2.0rem',
                                    }}
                         >
                             {renderHtmlText(kurztext)}
@@ -306,7 +273,7 @@ export default function TerminFilmPreviewCard({
 
                     {besonderheit && (
                         <Card.Text className="card-besonderheit"
-                                   style={{ fontSize: '1.8rem', borderTop: kurztext ? undefined : 'none', padding: '0 0' }}
+                                   style={{ fontSize: '2.0rem', borderTop: kurztext ? undefined : 'none', padding: '0 0' }}
                         >
                             {renderHtmlText(besonderheit)}
                         </Card.Text>

@@ -32,10 +32,11 @@ import TextLayout from "./components/LayoutWrapper/TextLayout.tsx";
 import ScreeningLayout from "./components/LayoutWrapper/ScreeningLayout.tsx";
 import OverviewAndFormLayout from "./components/LayoutWrapper/OverviewAndFormLayout.tsx";
 import Kinobesuch from "./components/other/Kinobesuch.tsx";
-import Slideshow from "./components/Slideshow.tsx";
-import StartPreview from "./components/StartPreview.tsx";
-import Preview from "./components/Preview.tsx";
-import Preview1Parent from "./components/Preview1Parent.tsx";
+import Slideshow from "./components/slideshow/Slideshow.tsx";
+import StartPreviewQ from "./components/StartPreviewQ.tsx";
+import PreviewQ from "./components/PreviewQ.tsx";
+import Preview1Parent from "./components/previewNotResponsive/Preview1Parent.tsx";
+import PreviewContainer from './components/preview/PreviewContainer.tsx';
 
 const router = createBrowserRouter([
     {
@@ -119,9 +120,9 @@ const router = createBrowserRouter([
                     },
 
                     {
-                        path: "preview",
+                        path: "previewq",
                         loader: getGalleryDataWithoutNews,
-                        element: <Preview />,
+                        element: <PreviewQ />,
                         handle: { scrollMode: "pathname" },
                     }
                 ],
@@ -167,15 +168,25 @@ const router = createBrowserRouter([
         element: <Slideshow />,
         handle: { scrollMode: "pathname" },
     },
+
+    // 1st approach
     {
-        path: "startpreview",
-        element: <StartPreview />,
+        path: "startpreviewq",
+        element: <StartPreviewQ />,
         handle: { scrollMode: "pathname" },
     },
+    // 2nd approach
     {
         path: "previewparent",
         loader: getGalleryDataWithoutNews,
         element: <Preview1Parent />,
+        handle: { scrollMode: "pathname" },
+    },
+    // 3rd approach
+    {
+        path: "preview",
+        loader: getGalleryDataWithoutNews,
+        element: <PreviewContainer />,
         handle: { scrollMode: "pathname" },
     }
 ]);

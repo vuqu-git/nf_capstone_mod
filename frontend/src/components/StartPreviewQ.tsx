@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import styles from "./Preview.module.css";
+import styles from "./PreviewQ.module.css";
 import {formatDateTime} from "../utils/formatDateTime.ts";
 import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
 import TerminFilmPreviewCard from "./termine/TerminFilmPreviewCard.tsx";
@@ -187,101 +187,10 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
 
 ];
 
-// interface SlideshowProps {
-//     slideDuration?: number;
-// }
-
-// const StartPreview: React.FC<SlideshowProps> = ({
-//                                                  slideDuration = 5000,
-//                                              }) => {
-//     const [termineForSlides, setTermineForSlides] = useState<TerminDTOWithFilmDTOGallery[]>(initialSlides);
-//     const [currentIndex, setCurrentIndex] = useState(0);
-//
-//     // useEffect(() => {
-//     //     axios
-//     //         .get<TerminDTOWithFilmDTOGallery[]>("/api/screenings"),
-//     //         .then((response) => {
-//     //             setSlides(response.data);
-//     //         })
-//     //         .catch((error) => {
-//     //             console.error("Failed to fetch slideshow data:", error);
-//     //         });
-//     // }, []);
-//
-//     useEffect(() => {
-//         const interval = setInterval(() => {
-//             setCurrentIndex((prevIndex) =>
-//                 termineForSlides.length > 0 ? (prevIndex + 1) % termineForSlides.length : 0
-//             );
-//         }, slideDuration);
-//
-//         return () => clearInterval(interval);
-//     }, [termineForSlides]);
-//
-//     if (termineForSlides.length === 0) {
-//         return <div>Loading slideshow...</div>;
-//     }
-//
-//     const termin = termineForSlides[currentIndex];
-//     const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, false, false);
-//
-//     const screeningCardProps = {
-//         screeningWeekday: screeningDateObj?.weekday ?? "",
-//         screeningDate: screeningDateObj?.date ?? "",
-//         screeningTime: screeningDateObj?.time ?? "",
-//         offsetImageInGallery: undefined, // instead of undefined, insert a number from 0 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
-//         tnr: termin.tnr
-//     };
-//
-//     return (
-//         <div className={styles.slideshowContainer}>
-//             <div className={styles.slideshowContent}>
-//
-//                 {termin.titel ? (
-//                     <TerminFilmGalleryCard
-//                         {...screeningCardProps}
-//                         screeningSonderfarbe="red-glow"
-//                         bild={termin.bild ?? null}
-//                         titel={termin.titel}
-//                         kurztext={termin.kurztext ?? null}
-//                         jahr={undefined}
-//                         besonderheit={termin.besonderheit ?? null}
-//                         filmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
-//                         laufzeit={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
-//                         regie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
-//                     />
-//                 ) : (
-//                     termin.films?.length > 0 && (
-//                         <>
-//                             {/*screening consists of 1 main film + shorts possibly*/}
-//                             {/*****************************************************/}
-//                             <TerminFilmGalleryCard
-//                                 {...screeningCardProps}
-//                                 screeningSonderfarbe="pupille-glow"
-//                                 bild={termin.films[0]?.bild ?? null}
-//                                 titel={termin.films[0]?.titel ?? null}
-//                                 kurztext={termin.films[0]?.kurztext ?? null}
-//                                 jahr={termin.films[0]?.jahr}
-//                                 besonderheit={termin.films[0]?.besonderheit ?? null}
-//                                 filmFormat={termin.films[0]?.format ?? undefined} // concise: filmFormat={termin.films[0]?.format ?? undefined}
-//                                 laufzeit={termin.films[0]?.laufzeit ?? undefined}
-//                                 regie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
-//                             />
-//                         </>
-//                     )
-//                 )}
-//             </div>
-//         </div>
-//
-//     );
-// };
-//
-// export default StartPreview;
-
 const FADE_DURATION = 1000; // 1000 = 1 second
 const DEFAULT_SLIDE_DURATION = 10000; // 10 seconds
 
-const StartPreview: React.FC = () => {
+const StartPreviewQ: React.FC = () => {
     const [termineForSlides, setTermineForSlides] = useState<TerminDTOWithFilmDTOGallery[]>(initialSlides);
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -433,4 +342,100 @@ const StartPreview: React.FC = () => {
 
 };
 
-export default StartPreview;
+export default StartPreviewQ;
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// this variant has no transition effects
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// interface SlideshowProps {
+//     slideDuration?: number;
+// }
+
+// const StartPreview: React.FC<SlideshowProps> = ({
+//                                                  slideDuration = 5000,
+//                                              }) => {
+//     const [termineForSlides, setTermineForSlides] = useState<TerminDTOWithFilmDTOGallery[]>(initialSlides);
+//     const [currentIndex, setCurrentIndex] = useState(0);
+//
+//     // useEffect(() => {
+//     //     axios
+//     //         .get<TerminDTOWithFilmDTOGallery[]>("/api/screenings"),
+//     //         .then((response) => {
+//     //             setSlides(response.data);
+//     //         })
+//     //         .catch((error) => {
+//     //             console.error("Failed to fetch slideshow data:", error);
+//     //         });
+//     // }, []);
+//
+//     useEffect(() => {
+//         const interval = setInterval(() => {
+//             setCurrentIndex((prevIndex) =>
+//                 termineForSlides.length > 0 ? (prevIndex + 1) % termineForSlides.length : 0
+//             );
+//         }, slideDuration);
+//
+//         return () => clearInterval(interval);
+//     }, [termineForSlides]);
+//
+//     if (termineForSlides.length === 0) {
+//         return <div>Loading slideshow...</div>;
+//     }
+//
+//     const termin = termineForSlides[currentIndex];
+//     const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, false, false);
+//
+//     const screeningCardProps = {
+//         screeningWeekday: screeningDateObj?.weekday ?? "",
+//         screeningDate: screeningDateObj?.date ?? "",
+//         screeningTime: screeningDateObj?.time ?? "",
+//         offsetImageInGallery: undefined, // instead of undefined, insert a number from 0 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
+//         tnr: termin.tnr
+//     };
+//
+//     return (
+//         <div className={styles.slideshowContainer}>
+//             <div className={styles.slideshowContent}>
+//
+//                 {termin.titel ? (
+//                     <TerminFilmGalleryCard
+//                         {...screeningCardProps}
+//                         screeningSonderfarbe="red-glow"
+//                         bild={termin.bild ?? null}
+//                         titel={termin.titel}
+//                         kurztext={termin.kurztext ?? null}
+//                         jahr={undefined}
+//                         besonderheit={termin.besonderheit ?? null}
+//                         filmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+//                         laufzeit={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+//                         regie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
+//                     />
+//                 ) : (
+//                     termin.films?.length > 0 && (
+//                         <>
+//                             {/*screening consists of 1 main film + shorts possibly*/}
+//                             {/*****************************************************/}
+//                             <TerminFilmGalleryCard
+//                                 {...screeningCardProps}
+//                                 screeningSonderfarbe="pupille-glow"
+//                                 bild={termin.films[0]?.bild ?? null}
+//                                 titel={termin.films[0]?.titel ?? null}
+//                                 kurztext={termin.films[0]?.kurztext ?? null}
+//                                 jahr={termin.films[0]?.jahr}
+//                                 besonderheit={termin.films[0]?.besonderheit ?? null}
+//                                 filmFormat={termin.films[0]?.format ?? undefined} // concise: filmFormat={termin.films[0]?.format ?? undefined}
+//                                 laufzeit={termin.films[0]?.laufzeit ?? undefined}
+//                                 regie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
+//                             />
+//                         </>
+//                     )
+//                 )}
+//             </div>
+//         </div>
+//
+//     );
+// };
+//
+// export default StartPreview;
