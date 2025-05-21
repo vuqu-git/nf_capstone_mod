@@ -3,7 +3,7 @@ import axios from "axios";
 import styles from "./PreviewQ.module.css";
 import {formatDateTime} from "../utils/formatDateTime.ts";
 import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
-import TerminFilmPreviewCard from "./termine/TerminFilmPreviewCard.tsx";
+import TerminFilmPreviewCard from "./preview/TerminFilmPreviewCard.tsx";
 import { useLocation } from "react-router-dom";
 
 

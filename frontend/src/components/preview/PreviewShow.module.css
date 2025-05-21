@@ -12,6 +12,12 @@
     position: relative;
     padding: 2vh 2vw;
     box-sizing: border-box;
+
+    /*background image*/
+    background-image: url('../../assets/images/sideBackgroundA.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .slideshowContent {
@@ -63,3 +69,23 @@
     object-fit: cover;
 }
 
+
+
+/* Styling for the top hover bar */
+/*###############################*/
+.topHoverBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 44px; /* Adjust the height of the bar */
+    background-color: red;
+    z-index: 9999; /* Increased z-index to ensure it's on top of everything */
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+}

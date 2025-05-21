@@ -2,7 +2,7 @@ import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery
 import styles from "./PreviewShow.module.css";
 import {useEffect, useRef, useState} from "react";
 import {formatDateTime} from "../../utils/formatDateTime.ts";
-import TerminFilmPreviewCard from "../termine/TerminFilmPreviewCard.tsx";
+import TerminFilmPreviewCard from "./TerminFilmPreviewCard.tsx";
 
 interface Props {
     selectedSemesterTermine: TerminDTOWithFilmDTOGallery[];
@@ -117,7 +117,7 @@ const PreviewShow: React.FC<Props> = ({ selectedSemesterTermine, slideDuration, 
     }
 
     const termin = termineForSlides[currentIndex];
-    const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, false, false);
+    const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, false, true);
 
     const screeningCardProps = {
         screeningWeekday: screeningDateObj?.weekday ?? '',
@@ -132,7 +132,7 @@ const PreviewShow: React.FC<Props> = ({ selectedSemesterTermine, slideDuration, 
             {/* Top hover bar - now outside the card component and correctly positioned */}
             {isTopHovering && (
                 <div
-                    className="topHoverBar"
+                    className={styles.topHoverBar}
                     onClick={handleTopBarClick}
                     role="button"
                     aria-label="Stop Preview"

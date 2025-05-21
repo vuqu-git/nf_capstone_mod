@@ -64,6 +64,7 @@ const PreviewForm: React.FC<Props> = ({
             <Header2 />
             <div className="navbar-gradient"></div>
             {/*this container design if directly from OverviewAndFormLayout component*/}
+            {/*######################################################################*/}
             <Container
                 style={{
                     width: '100%',
@@ -80,7 +81,7 @@ const PreviewForm: React.FC<Props> = ({
                         {/*-------------------------------------------------------------------*/}
 
                         <h1>Preview</h1>
-                        <h3 className="mt-3">Hinweise</h3>
+                        <h3 className="mt-3">Anmerkungen</h3>
 
                         <p>Im Edge Browser ist das Aktivieren sowie Deaktivieren der <b>kompletten</b> Vollbildansicht (ohne jegliche Menüs und Leisten) mit der Taste F11 möglich.</p>
                         <p>Für eine optimale Darstellung wird eine Bildschirmhöhe von mindestens 1080 Pixeln empfohlen.</p>
@@ -116,7 +117,6 @@ const PreviewForm: React.FC<Props> = ({
                                     </option>
                                     {semesterTermine.map((termin) => (
                                         <option key={termin.tnr} value={termin.tnr}>
-                                            {/*{termin.vorstellungsbeginn?.slice(0, -3)} | {termin.titel || termin.mainfilms[0].titel}*/}
                                             {formatDateInTerminSelectOption( termin.vorstellungsbeginn )} | {renderHtmlText( termin.titel || termin.mainfilms[0].titel )}
                                         </option>
                                     ))}
@@ -130,8 +130,8 @@ const PreviewForm: React.FC<Props> = ({
                                 Preview starten
                             </Button>
                         </Form>
-                        <Badge bg="danger" style={{ marginTop: '1.0rem' }}>Tipp:</Badge>
-                        <p>Um während der Preview zu dieser Auswahl zurückzukehren: Cursor zum oberen Bildrand bewegen.</p>
+                        <Badge bg="danger" className="mt-3">Hinweis:</Badge>
+                        <p>Cursor zum oberen Bildrand bewegen, um während der Preview zu dieser Auswahl zurückzukehren</p>
                         {/*-------------------------------------------------------------------*/}
                         {/*-------------------------------------------------------------------*/}
 

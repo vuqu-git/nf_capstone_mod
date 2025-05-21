@@ -2,7 +2,7 @@ import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery
 import styles from "../PreviewQ.module.css";
 import {useEffect, useState} from "react";
 import {formatDateTime} from "../../utils/formatDateTime.ts";
-import TerminFilmPreviewCard from "../termine/TerminFilmPreviewCard.tsx";
+import TerminFilmPreviewCard from "../preview/TerminFilmPreviewCard.tsx";
 
 interface Preview1ChildProps {
     selectedSemesterTermine: TerminDTOWithFilmDTOGallery[];

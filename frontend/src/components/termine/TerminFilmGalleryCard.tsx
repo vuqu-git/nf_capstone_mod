@@ -49,11 +49,13 @@ export default function TerminFilmGalleryCard({
     return (
         <Card
             className={`custom-card ${screeningSonderfarbe} zoom-effect`}
-            onClick={handleClick}
-            role="button"
         >
             {bild && (
-                <div className="image-aspect-ratio-container">
+                <div
+                    className="image-aspect-ratio-container"
+                    onClick={handleClick}
+                    role="button"
+                >
                     <Card.Img
                         variant="top"
                         src={`https://www.pupille.org/bilder/filmbilder/${bild}`}
@@ -68,14 +70,14 @@ export default function TerminFilmGalleryCard({
                                 <span className="analog-box">{filmFormat}</span>
                             )}
                             <span className="overlay-time">
-                {screeningWeekday || screeningDate || screeningTime ? (
-                    <>
-                        {screeningWeekday} | {screeningDate} | {screeningTime}
-                    </>
-                ) : (
-                    'keine Terminangaben'
-                )}
-              </span>
+                                {screeningWeekday || screeningDate || screeningTime ? (
+                                    <>
+                                        {screeningWeekday} | {screeningDate} | {screeningTime}
+                                    </>
+                                ) : (
+                                    'keine Terminangaben'
+                                )}
+                            </span>
                         </Card.Text>
 
                         {titel && (
