@@ -3,7 +3,7 @@ import { News } from "../../types/News.ts";
 import axios from "axios";
 import NewsForm from "./NewsForm.tsx";
 
-import { preprocessFormData } from '../../utils/PreprocessingFormData.ts';
+import { preprocessFormData } from '../../utils/preprocessFormData.ts';
 import {Link} from "react-router-dom";
 import * as React from "react";
 

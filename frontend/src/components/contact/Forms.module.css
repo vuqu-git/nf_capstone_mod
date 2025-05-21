@@ -1,0 +1,442 @@
+/*form {*/
+/*    margin: 1rem auto;*/
+/*    padding: 1.2rem 1.2rem 1rem 1.2rem;*/
+/*    background: #191c23;*/
+/*    border-radius: 12px;*/
+/*    box-shadow: 0 4px 18px rgba(0,0,0,0.25);*/
+/*    color: #cfd6e1;*/
+/*}*/
+
+/*form div {*/
+/*    margin-bottom: 1.1rem;*/
+/*}*/
+
+/*label {*/
+/*    display: block;*/
+/*    margin-bottom: 0.4rem;*/
+/*    font-weight: 500;*/
+/*    color: #cfd6e1;*/
+/*}*/
+
+/*input[type="text"],*/
+/*input[type="email"],*/
+/*textarea {*/
+/*    width: 100%;*/
+/*    padding: 0.3rem 0.5rem;*/
+/*    border: 1.5px solid #353a45;*/
+/*    border-radius: 6px;*/
+/*    background: #232634;*/
+/*    font-size: 1rem;*/
+/*    color: #cfd6e1;*/
+/*    transition: border-color 0.2s, background 0.2s;*/
+/*    box-sizing: border-box;*/
+/*    resize: vertical;*/
+/*}*/
+
+/*input:focus,*/
+/*textarea:focus {*/
+/*    outline: none;*/
+/*    !*border-color: #4f8cff;*!*/
+/*    !*background: #232f4a;*!*/
+/*    border-color:#FFD036;*/
+/*}*/
+
+/*textarea {*/
+/*    min-height: 60px;   !* Larger textarea *!*/
+/*    max-height: 600px;*/
+/*    font-size: 1rem;*/
+/*}*/
+
+/*button[type="submit"] {*/
+/*    padding: 0.5rem 1.2rem;*/
+/*    background: #4f8cff;*/
+/*    color: #fff;*/
+/*    border: none;*/
+/*    border-radius: 6px;*/
+/*    font-size: 1.0rem;*/
+/*    font-weight: 500;*/
+/*    cursor: pointer;*/
+/*    transition: background 0.18s;*/
+/*    box-shadow: 0 2px 6px rgba(79,140,255,0.12);*/
+/*}*/
+
+/*button[type="submit"]:hover:not(:disabled) {*/
+/*    background: #3569c9;*/
+/*}*/
+
+/*button[type="submit"]:disabled {*/
+/*    background: #2c3750;*/
+/*    cursor: not-allowed;*/
+/*}*/
+
+/*sub {*/
+/*    color: #b0b3be;*/
+/*    font-size: 0.95em;*/
+/*}*/
+
+/*!*#################################################*!*/
+
+/*!* Style for number and datetime-local inputs in dark mode *!*/
+
+/*input[type="number"],*/
+/*input[type="datetime-local"] {*/
+/*    width: 100%;*/
+/*    padding: 0.3rem 0.5rem;*/
+/*    border: 1.5px solid #353a45;*/
+/*    border-radius: 6px;*/
+/*    background: #232634;*/
+/*    font-size: 1rem;*/
+/*    color: #cfd6e1;*/
+/*    transition: border-color 0.2s, background 0.2s;*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+/*input[type="number"]:focus,*/
+/*input[type="datetime-local"]:focus {*/
+/*    outline: none;*/
+/*    !*border-color: #4f8cff;*!*/
+/*    !*background: #232f4a;*!*/
+/*    border-color:#FFD036;*/
+/*}*/
+
+/*!* Optional: Style the label to match the rest of the form *!*/
+/*label {*/
+/*    display: block;*/
+/*    margin-bottom: 0.4rem;*/
+/*    font-weight: 500;*/
+/*    color: #cfd6e1;*/
+/*}*/
+
+/*!* Optional: Remove up/down arrows for number input in Chrome *!*/
+/*input[type="number"]::-webkit-inner-spin-button,*/
+/*input[type="number"]::-webkit-outer-spin-button {*/
+/*    -webkit-appearance: none;*/
+/*    margin: 0;*/
+/*}*/
+
+/*input[type="tel"] {*/
+/*    width: 100%;*/
+/*    padding: 0.3rem 0.5rem;*/
+/*    border: 1.5px solid #353a45;*/
+/*    border-radius: 6px;*/
+/*    background: #232634;*/
+/*    font-size: 1rem;*/
+/*    color: #cfd6e1;*/
+/*    transition: border-color 0.2s, background 0.2s;*/
+/*    box-sizing: border-box;*/
+/*}*/
+
+/*input[type="tel"]:focus {*/
+/*    outline: none;*/
+/*    !*border-color: #4f8cff;*!*/
+/*    !*background: #232f4a;*!*/
+/*    border-color:#FFD036;*/
+/*}*/
+
+
+/*!*keeps the disabled option "Bitte Anliegen auswählen" and "Bitte Durchführungsart ... auswählen" in dark grey when hovering over the select*!*/
+/*select option[value=""] {*/
+/*    color: #6c6c6c;*/
+/*}*/
+
+/*!*********************************************!*/
+
+/*.contact-form-container {*/
+/*    !*margin: 2.5rem auto;*!*/
+/*    !*padding: 1.6rem 1.2rem 1.2rem 1.2rem;*!*/
+/*    !*background: #181a22;*!*/
+/*    !*border-radius: 14px;*!*/
+/*    !*box-shadow: 0 6px 24px rgba(0,0,0,0.28);*!*/
+/*    padding-left: 0.5rem;*/
+/*    padding-right: 0.5rem;*/
+/*    color: #cfd6e1;*/
+/*}*/
+
+/*.contact-form-container h2 {*/
+/*    !*margin-top: 0;*!*/
+/*    !*margin-bottom: 1.4rem;*!*/
+/*    font-size: 2rem;*/
+/*    font-weight: 600;*/
+/*    color: #FFD036;*/
+/*    letter-spacing: 0.02em;*/
+/*}*/
+
+/*.contact-form-container h3 {*/
+/*    margin-top: 2rem;*/
+/*    !*margin-bottom: 1.0rem;*!*/
+/*    font-size: 1.3rem;*/
+/*    font-weight: 600;*/
+/*    color: #f4f6fa;*/
+/*    letter-spacing: 0.02em;*/
+/*}*/
+
+/*.contact-form-container p {*/
+/*    margin-bottom: 0.8rem;*/
+/*    color: #c7c9d8;*/
+/*    font-size: 1.05rem;*/
+/*}*/
+
+/*.contact-form-container select {*/
+/*    width: 100%;*/
+/*    padding: 0.35rem 0.5rem;*/
+/*    border: 1.5px solid #353a45;*/
+/*    border-radius: 6px;*/
+/*    background: #232634;*/
+/*    color: #cfd6e1;*/
+/*    font-size: 1rem;*/
+/*    margin-bottom: 1.2rem;*/
+/*    transition: border-color 0.2s, background 0.2s;*/
+/*    appearance: none;*/
+/*}*/
+
+/*.contact-form-container select:focus {*/
+/*    outline: none;*/
+/*    !*border-color: #4f8cff;*!*/
+/*    !*background: #232f4a;*!*/
+/*    border-color:#FFD036;*/
+/*}*/
+
+/*.contact-form-container option {*/
+/*    background: #232634;*/
+/*    color: #cfd6e1;*/
+/*}*/
+
+/*.contact-form-container .status-message {*/
+/*    margin-bottom: 1.2rem;*/
+/*    padding: 0.6rem 1rem;*/
+/*    border-radius: 6px;*/
+/*    font-size: 1rem;*/
+/*    font-weight: 500;*/
+/*}*/
+
+/*.contact-form-container .status-message.sending {*/
+/*    background: #25304a;*/
+/*    color: #8ab4ff;*/
+/*}*/
+
+/*.contact-form-container .status-message.success {*/
+/*    background: #253a2b;*/
+/*    color: #7fffa7;*/
+/*}*/
+
+/*.contact-form-container .status-message.error {*/
+/*    background: #3a2323;*/
+/*    color: #ff7f7f;*/
+/*}*/
+
+
+
+
+
+
+
+
+
+
+/* Forms.module.css */
+
+/* Base form styling */
+.formContainer {
+    margin: 1rem auto;
+    padding: 1.2rem 1.2rem 1rem 1.2rem;
+    background: #191c23;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    color: #cfd6e1;
+}
+
+.formField {
+    margin-bottom: 1.1rem;
+}
+
+.formLabel {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+    color: #cfd6e1;
+}
+
+/* Input and textarea styling */
+.textInput,
+.emailInput,
+.textareaField {
+    width: 100%;
+    padding: 0.3rem 0.5rem;
+    border: 1.5px solid #353a45;
+    border-radius: 6px;
+    background: #232634;
+    font-size: 1rem;
+    color: #cfd6e1;
+    transition: border-color 0.2s, background 0.2s;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.textInput:focus,
+.emailInput:focus,
+.textareaField:focus {
+    outline: none;
+    border-color: #FFD036;
+}
+
+.textareaField {
+    min-height: 60px;   /* Larger textarea */
+    max-height: 600px;
+    font-size: 1rem;
+}
+
+/* Submit button styling */
+.submitButton {
+    padding: 0.5rem 1.2rem;
+    background: #4f8cff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.0rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.18s;
+    box-shadow: 0 2px 6px rgba(79,140,255,0.12);
+}
+
+.submitButton:hover:not(:disabled) {
+    background: #3569c9;
+}
+
+.submitButton:disabled {
+    background: #2c3750;
+    cursor: not-allowed;
+}
+
+.formSubtext {
+    color: #b0b3be;
+    font-size: 0.95em;
+}
+
+/*#################################################*/
+
+/* Number and datetime-local inputs */
+.numberInput,
+.datetimeInput {
+    width: 100%;
+    padding: 0.3rem 0.5rem;
+    border: 1.5px solid #353a45;
+    border-radius: 6px;
+    background: #232634;
+    font-size: 1rem;
+    color: #cfd6e1;
+    transition: border-color 0.2s, background 0.2s;
+    box-sizing: border-box;
+}
+
+.numberInput:focus,
+.datetimeInput:focus {
+    outline: none;
+    border-color: #FFD036;
+}
+
+/* Remove number input spin buttons */
+.numberInput::-webkit-inner-spin-button,
+.numberInput::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Tel input styling */
+.telInput {
+    width: 100%;
+    padding: 0.3rem 0.5rem;
+    border: 1.5px solid #353a45;
+    border-radius: 6px;
+    background: #232634;
+    font-size: 1rem;
+    color: #cfd6e1;
+    transition: border-color 0.2s, background 0.2s;
+    box-sizing: border-box;
+}
+
+.telInput:focus {
+    outline: none;
+    border-color: #FFD036;
+}
+
+/*keeps the disabled option "Bitte Anliegen auswählen" and "Bitte Durchführungsart ... auswählen" in dark grey when hovering over the select*/
+.selectDisabledOption option[value=""] {
+    color: #6c6c6c;
+}
+
+/*********************************************/
+
+/* Contact form container */
+.contactFormWrapper {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    color: #cfd6e1;
+}
+
+.sectionTitle {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #FFD036;
+    letter-spacing: 0.02em;
+}
+
+.subsectionTitle {
+    margin-top: 2rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #f4f6fa;
+    letter-spacing: 0.02em;
+}
+
+.formDescription {
+    margin-bottom: 0.8rem;
+    color: #c7c9d8;
+    font-size: 1.05rem;
+}
+
+/* Select input styling */
+.formSelect {
+    width: 100%;
+    padding: 0.35rem 0.5rem;
+    border: 1.5px solid #353a45;
+    border-radius: 6px;
+    background: #232634;
+    color: #cfd6e1;
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+    transition: border-color 0.2s, background 0.2s;
+    appearance: none;
+}
+
+.formSelect:focus {
+    outline: none;
+    border-color: #FFD036;
+}
+
+.selectOption {
+    background: #232634;
+    color: #cfd6e1;
+}
+
+/* Status messages */
+.statusMessage {
+    margin-bottom: 1.2rem;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.statusSending {
+    color: #8ab4ff;
+}
+
+.statusSuccess {
+    color: #7fffa7;
+}
+
+.statusError {
+    color: #ff7f7f;
+}
+

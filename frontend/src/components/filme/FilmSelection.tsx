@@ -22,7 +22,6 @@ export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: F
                 id="film-selection" // Add id to connect to the label
                 value={selectedFilmId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
-                // style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
             >
                 <option value="">Select a film to edit (or leave empty to add new)</option>
                 {films.map((film) => (

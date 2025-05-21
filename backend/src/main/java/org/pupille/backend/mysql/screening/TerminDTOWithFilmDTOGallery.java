@@ -15,9 +15,9 @@ public record TerminDTOWithFilmDTOGallery(
         String bild,
         Integer sonderfarbe,
         Short veroeffentlichen,
-        List<FilmDTOGallery> films
+        List<FilmDTOGallery> mainfilms
 ) {
-    public TerminDTOWithFilmDTOGallery(Termin termin, List<Film> films) {
+    public TerminDTOWithFilmDTOGallery(Termin termin, List<Film> mainfilms) {
         this(
                 termin.getTnr(),
                 termin.getVorstellungsbeginn(),
@@ -27,7 +27,7 @@ public record TerminDTOWithFilmDTOGallery(
                 termin.getBild(),
                 termin.getSonderfarbe(),
                 termin.getVeroeffentlichen(),
-                films.stream()
+                mainfilms.stream()
                         .map(FilmDTOGallery::new)
                         .toList()
         );

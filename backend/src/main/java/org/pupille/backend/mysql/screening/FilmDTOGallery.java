@@ -9,8 +9,9 @@ public record FilmDTOGallery(
         String besonderheit,
         String bild,
         Integer jahr,
-        String format
-//        String fskRating
+        String format,
+        Integer laufzeit
+        // placeholder for String regie
 ) {
     public FilmDTOGallery(Film film) {
         this(
@@ -20,8 +21,8 @@ public record FilmDTOGallery(
                 film != null ? film.getBesonderheit() : null,
                 film != null ? film.getBild() : null,
                 film != null ? film.getJahr() : null,
-                film != null ? film.getFormat() : null
-//                (film != null && film.getFsk() != null) ? film.getFsk().name().substring(1) : null
+                film != null ? film.getFormat() : null,
+                film != null ? film.getLaufzeit() : null
         );
     }
 }

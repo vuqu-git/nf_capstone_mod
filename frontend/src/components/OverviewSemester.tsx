@@ -6,7 +6,7 @@ import axios from "axios";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
 import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {Link} from "react-router-dom";
-import {formatDateTime} from "../utils/DateTimeFormatForGallery.ts";
+import {formatDateTime} from "../utils/formatDateTime.ts";
 
 
 // interface Props {
@@ -51,7 +51,7 @@ export default function OverviewSemester() {
                 )}
 
                 {semesterTermine && semesterTermine.length > 0 ? (
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                    <table>
 
                         <tbody>
                         {semesterTermine.map(termin => {

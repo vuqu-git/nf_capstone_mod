@@ -1,18 +1,17 @@
 import { Form } from "react-bootstrap";
-
 import React from "react";
-import {Terminverknuepfung} from "../../types/Terminverknuepfung.ts";
+import {TVWithFilmAndTerminDTOSelection} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
 
 interface TVSelectionProps {
-    tven: Terminverknuepfung[];
-    selectedTVId: string | null;
-    onSelectTV: (id: string | null) => void;
+    tvenFT: TVWithFilmAndTerminDTOSelection[];
+    selectedTVId: string | undefined;
+    onSelectTV: (id: string | undefined) => void;
 }
 
-export default function TerminverknuepfungSelection({ tven, selectedTVId, onSelectTV }: TVSelectionProps) {
+export default function TerminverknuepfungSelection({ tvenFT, selectedTVId, onSelectTV }: TVSelectionProps) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        onSelectTV(e.target.value || null);
+        onSelectTV(e.target.value || undefined);
     }
 
     return (
@@ -22,12 +21,11 @@ export default function TerminverknuepfungSelection({ tven, selectedTVId, onSele
                 id="tv-selection" // Add id to connect to the label
                 value={selectedTVId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
-                style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
             >
-                <option value="">Select a Terminverknuepfung to edit (or leave empty to add new)</option>
-                {tven.map((tv: Terminverknuepfung) => (
-                    <option key={`${tv.tnr},${tv.fnr}`} value={`${tv.tnr},${tv.fnr}`}>
-                        tnr : fnr | #{tv.tnr} : #{tv.fnr}
+                <option value="">Select a Terminverknuepfung to edit (or leave unselected to add a new Terminverknuepfung)</option>
+                {tvenFT.map((tvFT: TVWithFilmAndTerminDTOSelection) => (
+                    <option key={`${tvFT.tnr},${tvFT.fnr}`} value={`${tvFT.tnr},${tvFT.fnr}`}>
+                        tnr : fnr | #{tvFT.tnr} : #{tvFT.fnr} | {tvFT.termin.vorstellungsbeginn?.slice(0,-3)} : {tvFT.film.titel} ({tvFT.film.directors}, {tvFT.film.jahr})
                     </option>
                 ))}
             </Form.Select>

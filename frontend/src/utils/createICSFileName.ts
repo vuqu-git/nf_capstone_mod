@@ -1,12 +1,14 @@
 export function createICSFileName(
-    title: string,
+    title: string | null | undefined,
     startTime?: string,
 ): string {
 
-    const newTitle = title.toLowerCase()
-                                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove diacritics (Umlaute, accents, etc.)
-                                    .replace(/\s+/g, "-") // Replace whitespace with hyphens
-                                    .replace(/[^a-z0-9-]/g, "") // Remove all non-alphanumeric characters except hyphens
+    const newTitle = title
+                                ? title.toLowerCase()
+                                        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove diacritics (Umlaute, accents, etc.)
+                                        .replace(/\s+/g, "-") // Replace whitespace with hyphens
+                                        .replace(/[^a-z0-9-]/g, "") // Remove all non-alphanumeric characters except hyphens
+                                : "Pupille";
 
     let fileName = newTitle; // Start with the title
 

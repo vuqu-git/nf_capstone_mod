@@ -61,7 +61,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
             })
             .catch((error) => {
                 // Log any error that occurs during the request
-                console.error('Error occurred while sending the request:', error.message);
+                console.error('Error occurred while sending the request:', error.nachricht);
             })
             .finally(() => {
                 // Optional: Perform any cleanup or final actions here
@@ -72,7 +72,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
     // ################################
     
     return (
-        <>
+        <div data-bs-theme="dark">
             {/* heading based on formType */}
             <h4 className="mb-4">{formType === "edit" ? "Edit News Form" : "Add News Form"}</h4>
 
@@ -156,6 +156,6 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                     Save
                 </Button>
             </Form>
-        </>
+        </div>
     );
 }

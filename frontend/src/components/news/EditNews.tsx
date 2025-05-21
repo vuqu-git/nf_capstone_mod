@@ -5,7 +5,7 @@ import NewsForm from "./NewsForm.tsx";
 import { useAllNews } from "../../hooks/useAllNews.ts";
 import { News } from "../../types/News.ts";
 
-import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
+import {preprocessFormData} from "../../utils/preprocessFormData.ts";
 
 const baseURL = "/api/news";
 

@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
-import TerminverknuepfungSelection from "./TerminverknuepfungSelection";
-
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
-import {Terminverknuepfung} from "../../types/Terminverknuepfung.ts";
-import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
-
+import {preprocessFormData} from "../../utils/preprocessFormData.ts";
+import {TVWithFilmAndTerminDTOSelection} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
+import TerminverknuepfungSelection from "./TerminverknuepfungSelection.tsx";
+import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
+import FilmSelection from "../filme/FilmSelection.tsx";
+import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
+import TerminSelection from "../termine/TerminSelection.tsx";
+// import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
+import {Link} from "react-router-dom";
 
 const baseURL = "/api/terminverknuepfung";
 
@@ -14,16 +18,16 @@ const emptyTVForForm = {
     fnr: 0,
     vorfilm: undefined,
     rang: undefined,
+
+    film: {titel: '', jahr: undefined, directors: ""},
+    termin: {vorstellungsbeginn: "", titel: ""},
 }
 
 export default function TerminverknuepfungForm() {
-    const [allTVs, setAllTVs] = useState<Terminverknuepfung[]>([]); // All Termine fetched from the server
+    const [allTVs, setAllTVs] = useState<TVWithFilmAndTerminDTOSelection[]>([]); // All Termine fetched from the server
 
-    const [selectedTVId, setSelectedTVId] = useState<string | null>(null); // Selected TVId (as concatenated string) for editing or deleting
-    // const [selectedTVTNR, setSelectedTVTNR] = useState<number | null>(null); // Selected TVTNR for editing or deleting
-    // const [selectedTVFNR, setSelectedTVFNR] = useState<number | null>(null); // Selected TVFNR for editing or deleting
-
-    const [selectedTV, setSelectedTV] = useState<Terminverknuepfung>(emptyTVForForm); // Termin data for the form
+    const [selectedTVId, setSelectedTVId] = useState<string | undefined>(undefined); // Selected TVId (as concatenated string) for editing or deleting
+    const [selectedTV, setSelectedTV] = useState<TVWithFilmAndTerminDTOSelection>(emptyTVForForm); // Termin data for the form
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
@@ -39,7 +43,7 @@ export default function TerminverknuepfungForm() {
         // setIsLoading(true);
         setErrorMessage("");
 
-        axios.get(`${baseURL}/plain`)
+        axios.get(`${baseURL}/terminsorted`)
             .then((response) => setAllTVs(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -71,7 +75,7 @@ export default function TerminverknuepfungForm() {
 
                 const [tnr, fnr] = selectedTVId.split(',');
 
-                axios.get(`${baseURL}/plain/${tnr}/${fnr}`)
+                axios.get(`${baseURL}/${tnr}/${fnr}`)
                     .then((response) => setSelectedTV(response.data))
                     .catch((error) => {
                         const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -87,15 +91,6 @@ export default function TerminverknuepfungForm() {
             setSelectedTV(emptyTVForForm);
         }
     }, [selectedTVId]);
-
-    // Handle form field changes, with distinguishing between checked and value
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, type } = e.target;
-        setSelectedTV((prevData: Terminverknuepfung) => ({
-            ...prevData,
-            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
-        }));
-    };
 
 
     // Handle the form submission (PUT or POST)
@@ -113,11 +108,12 @@ export default function TerminverknuepfungForm() {
             const [tnr, fnr] = selectedTVId.split(',');
 
             axios.put(`${baseURL}/${tnr}/${fnr}`, preprocessFormData(selectedTV))
+            // axios.put(`${baseURL}/${selectedTV.tnr}/${selectedTV.fnr}`, preprocessFormData(selectedTV))
                 .then(() => {
-                    setSuccessMessage("Termin updated successfully!");
+                    setSuccessMessage("terminverknuepfung updated successfully!");
 
                     getAllTVs();
-                    setSelectedTVId(null); // Reset the selection
+                    setSelectedTVId(undefined); // Reset the selection
                     setSelectedTV(emptyTVForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -130,10 +126,10 @@ export default function TerminverknuepfungForm() {
 
             axios.post(`${baseURL}/link-film-termin`, preprocessFormData(selectedTV))
                 .then(() => {
-                    setSuccessMessage("Termin saved successfully!");
+                    setSuccessMessage("terminverknuepfung saved successfully!");
 
                     getAllTVs();
-                    // setSelectedTerminId(null); // Reset the selection, not required for POST because selection is unchanged
+                    // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
                     setSelectedTV(emptyTVForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -155,15 +151,14 @@ export default function TerminverknuepfungForm() {
 
             axios.delete(`${baseURL}/${tnr}/${fnr}`)
                 .then(() => {
-                    setSuccessMessage("Termin deleted successfully!");
+                    setSuccessMessage("terminverknuepfung deleted successfully!");
 
                     getAllTVs();
                     setConfirmDeleteOpen(false);
 
                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    // !!! DO NOT reset selectedTerminId immediately !!!
-                    // => I need to set it to remove the delete button after deletion!!
-                    setSelectedTVId(null);
+                    // => I need to set it to remove the delete button from display after deletion!!
+                    setSelectedTVId(undefined);
 
                     setSelectedTV(emptyTVForForm); // Reset the form
                 })
@@ -175,48 +170,149 @@ export default function TerminverknuepfungForm() {
         }
     };
 
-    const handleTerminSelectionChange = (id: string | null) => {
+    // Handle form field changes, with extra distinguishing between checked and value
+    const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, type } = e.target;
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
+            ...prevData,
+            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
+        }));
+    };
+
+    // Handle TV selection changes
+    const handleTVSelectionChange = (id: string | undefined) => {
         setSelectedTVId(id);
         setSelectionChanged(true); // Set flag when selection changes
     };
 
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    // GET all films
+    const [allFilms, setAllFilms] = useState<FilmDTOSelection[]>([]);
+    // const [selectedFilmId, setSelectedFilmId] = useState<number | undefined>(undefined);
+
+    const getAllFilms = () => {
+        setErrorMessage("");
+
+        axios.get(`api/filme/allsorted`)
+            .then((response) => setAllFilms(response.data))
+            .catch((error) => {
+                const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                setErrorMessage(errorMessage);
+            })
+    };
+
+    // Fetch all films for the dropdown selection
+    useEffect(() => {
+        getAllFilms();
+    }, []);
+
+    const handleFilmSelectionChange = (id: number | undefined) => {
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
+            ...prevData,
+            fnr: id,
+        }));
+    };
+
+    // -----------------------------------------------------------
+    // GET all termine
+
+    const [allTermine, setAllTermine] = useState<TerminDTOSelection[]>([]);
+    // const [selectedTerminId, setSelectedTerminId] = useState<number | undefined>(undefined);
+
+    // GET all termine
+    const getAllTermine = () => {
+        setErrorMessage("");
+
+        axios.get(`api/termine/allsorted`)
+            .then((response) => setAllTermine(response.data))
+            .catch((error) => {
+                const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                setErrorMessage(errorMessage);
+            })
+    };
+
+    // Fetch all termine for the dropdown selection
+    useEffect(() => {
+        getAllTermine();
+    }, []);
+
+    const handleTerminSelectionChange = (id: number | undefined) => {
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
+            ...prevData,
+            tnr: id,
+        }));
+    };
+    // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
     return (
-        <div>
-            <h3 className="mt-3">{selectedTVId ? "Edit or delete " : "Add new "} Terminverknuepfung</h3>
+        <div data-bs-theme="dark">
+            <Link to={`/admin`}>
+                zum Adminbereich
+            </Link>
+
+            <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and existing Termin"}</h3>
 
             <TerminverknuepfungSelection
-                tven={allTVs}
+                tvenFT={allTVs}
                 selectedTVId={selectedTVId}
-                onSelectTV={handleTerminSelectionChange}
+                onSelectTV={handleTVSelectionChange}
             />
 
             <div style={{ minHeight: '30px' }}>
                 {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading Termin details... Please wait!</div>}
             </div>
 
+
             <Form onSubmit={handleSubmit}>
 
-                <h3 className="mt-3">Terminverknuepfung form</h3>
+                <h3 className="mt-3">Terminverknuepfung details</h3>
 
-                <Form.Group controlId="tnr" className="mt-3">
-                    <Form.Label>tnr</Form.Label>
-                    <Form.Control
-                        type="number"
-                        name="tnr"
-                        value={selectedTV.tnr || ""}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+                <TerminSelection
+                    termine={allTermine}
+                    selectedTerminId={selectedTV.tnr}
+                    onSelectTermin={handleTerminSelectionChange}
+                />
 
-                <Form.Group controlId="fnr" className="mt-3">
-                    <Form.Label>fnr</Form.Label>
-                    <Form.Control
-                        type="number"
-                        name="fnr"
-                        value={selectedTV.fnr || ""}
-                        onChange={handleChange}
-                    />
-                </Form.Group>
+                {/*<Form.Label htmlFor="termin-selection" className="mt-3">Termin selection</Form.Label>*/}
+                {/*<Form.Select*/}
+                {/*    id="termin-selection" // Add id to connect to the label*/}
+                {/*    name="tnr" // <-- Add name attribute here, so that the generic handleChange can access it*/}
+                {/*    value={selectedTV.tnr ?? ""}*/}
+                {/*    onChange={handleFormChange}*/}
+                {/*    style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}*/}
+                {/*>*/}
+                {/*    <option value="">Select a Termin</option>*/}
+                {/*    {allTermine.map((t: TerminDTOSelection) => (*/}
+                {/*        <option key={t.tnr} value={t.tnr}>*/}
+                {/*            /!*{`${formatDateInTerminSelectOption(t.vorstellungsbeginn)}| ${t.titel} | #${t.tnr}`}*!/*/}
+                {/*            {`${formatDateInTerminSelectOption(t.vorstellungsbeginn)}| #${t.tnr}`}*/}
+                {/*        </option>*/}
+                {/*    ))}*/}
+                {/*</Form.Select>*/}
+
+                {/*---------------------------------------------------------------------------*/}
+                <FilmSelection
+                    films={allFilms}
+                    selectedFilmId={selectedTV.fnr}
+                    onSelectFilm={handleFilmSelectionChange}
+                />
+
+                {/*<Form.Label htmlFor="film-selection" className="mt-3">Film selection</Form.Label>*/}
+                {/*<Form.Select*/}
+                {/*    id="film-selection" // Add id to connect to the label*/}
+                {/*    name="fnr" // // <-- Add name attribute here, so that the generic handleChange can access it*/}
+                {/*    value={selectedTV.fnr ?? ""}*/}
+                {/*    onChange={handleFormChange}*/}
+                {/*    style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}*/}
+                {/*>*/}
+                {/*    <option value="">Select a Film</option>*/}
+                {/*    {allFilms.map((film) => (*/}
+                {/*        <option key={film.fnr} value={film.fnr}>*/}
+                {/*            {`${film.titel} | #${film.fnr}`}*/}
+                {/*        </option>*/}
+                {/*    ))}*/}
+                {/*</Form.Select>*/}
+
 
                 <Form.Group controlId="vorfilm" className="mt-3">
                     <Form.Check
@@ -224,7 +320,7 @@ export default function TerminverknuepfungForm() {
                         label="Vorfilm"
                         name="vorfilm"
                         checked={selectedTV.vorfilm || false}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
@@ -234,12 +330,12 @@ export default function TerminverknuepfungForm() {
                         type="number"
                         name="rang"
                         value={selectedTV.rang || ""}
-                        onChange={handleChange}
+                        onChange={handleFormChange}
                     />
                 </Form.Group>
 
                 <Button variant={selectedTVId ? "success" : "primary"} type="submit" className="mt-4">
-                    {selectedTVId ? "Update " : "Add "} termin entry
+                    {selectedTVId ? "Update " : "Add "} terminverknuepfung entry
                 </Button>
             </Form>
 
@@ -250,13 +346,13 @@ export default function TerminverknuepfungForm() {
                     className="mt-4"
                     onClick={() => setConfirmDeleteOpen(true)}
                 >
-                    Delete termin entry
+                    Delete terminverknuepfung entry
                 </Button>
             )}
 
             {confirmDeleteOpen && (
                 <div className="mt-3">
-                    <p>Are you sure you want to delete this news item?</p>
+                    <p>Are you sure you want to delete this terminverknuepfung entry?</p>
                     <Button variant="secondary" onClick={() => setConfirmDeleteOpen(false)}>
                         Cancel
                     </Button>
@@ -265,7 +361,7 @@ export default function TerminverknuepfungForm() {
                     </Button>
                 </div>
             )}
-            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedTVId ? "updating " : "saving "} termin entry... Please wait!</div>}
+            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedTVId ? "updating " : "saving "} terminverknuepfung entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
             {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
         </div>

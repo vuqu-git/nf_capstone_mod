@@ -6,13 +6,12 @@ import NewsCard from "./news/NewsCard.tsx";
 import {useAllNews} from "../hooks/useAllNews.ts";
 import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
 
-import { formatDateTime } from '../utils/DateTimeFormatForGallery.ts';
+import { formatDateTime } from '../utils/formatDateTime.ts';
 import TerminFilmGalleryCard from "./termine/TerminFilmGalleryCard.tsx";
 
 import './Gallery.css';
 
 export default function Gallery() {
-
 
     const {
         isLoadingAllNews,
@@ -66,7 +65,6 @@ export default function Gallery() {
         getValidNews();
         getScreeningGalleryEntries();
     }, [])
-
 
     const [readyToRender, setReadyToRender] = useState(false);
 
@@ -157,7 +155,6 @@ export default function Gallery() {
         }
     }, [isLoadingNews, isLoadingScreenings]);
 
-
     return (
         // <div style={{ visibility: readyToRender ? 'visible' : 'hidden' }}>
 
@@ -166,31 +163,8 @@ export default function Gallery() {
             opacity: readyToRender ? 1 : 0,
             transition: 'opacity 0.4s ease-in-out'
         }}>
-
-            {/*<h1>Welcome to Pupille</h1>*/}
-            {/*<p>*/}
-            {/* Lorem ipsum dolor sit */}
-            {/*</p>*/}
-
-            {/*<section>*/}
-            {/*    <h2>(all) News</h2>*/}
-            {/*    {   isLoadingAllNews ? (*/}
-            {/*        <div className="text-warning mb-3">&#x1f504; Loading all news...</div>*/}
-            {/*    ) : error ? (*/}
-            {/*        <div className="text-danger mb-3">{error}</div>*/}
-            {/*    ) : (*/}
-            {/*        allNews.map(n => (*/}
-            {/*            <NewsCard key={n.id} variant={n.newsVariant} text={n.text} imageUrl={n.image}/>*/}
-            {/*            )*/}
-            {/*        ))*/}
-            {/*    }*/}
-            {/*</section>*/}
-
             <section>
                 {
-                    // isLoadingNews ? (
-                    //     <div className="text-warning mb-3">&#x1f4f0; Loading news...</div>
-                    // ) :
                     validNews && screeningGalleryEntries && (
                         <>
                             {/*<h3 style={{paddingTop: '2rem', paddingBottom: '2rem'}}>Neuigkeiten</h3>*/}
@@ -203,12 +177,8 @@ export default function Gallery() {
                 }
             </section>
 
-
             <section>
                 {
-                    //     isLoadingScreenings ? (
-                    //     <div className="text-warning mb-3">&#127902; Loading screenings...</div>
-                    // ) : (
                     validNews && screeningGalleryEntries && (
                         <>
                             {/*<h3>Programm</h3>*/}
@@ -248,7 +218,7 @@ export default function Gallery() {
                                                 />
                                             </div>
                                         );
-                                    } else if (termin.films?.length > 0) {
+                                    } else if (termin.mainfilms?.length > 0) {
                                         return (
                                             <div
                                                 key={termin.tnr}
@@ -264,13 +234,13 @@ export default function Gallery() {
                                                     screeningDate={screeningDateObj ? screeningDateObj.date : ""}
                                                     screeningTime={screeningDateObj ? screeningDateObj.time : ""}
                                                     screeningSonderfarbe={"pupille-glow"}
-                                                    bild={termin.films[0]?.bild ? termin.films[0]?.bild : null}
+                                                    bild={termin.mainfilms[0]?.bild ? termin.mainfilms[0]?.bild : null}
                                                     offsetImageInGallery={undefined} // instead of undefined, insert a number from 1 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
-                                                    titel={termin.films[0]?.titel ? termin.films[0]?.titel : null}
-                                                    kurztext={termin.films[0]?.kurztext ? termin.films[0]?.kurztext : null}
-                                                    jahr={termin.films[0]?.jahr}
-                                                    besonderheit={termin.films[0]?.besonderheit ? termin.films[0]?.besonderheit : null}
-                                                    filmFormat={termin.films[0]?.format ? termin.films[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+                                                    titel={termin.mainfilms[0]?.titel ? termin.mainfilms[0]?.titel : null}
+                                                    kurztext={termin.mainfilms[0]?.kurztext ? termin.mainfilms[0]?.kurztext : null}
+                                                    jahr={termin.mainfilms[0]?.jahr}
+                                                    besonderheit={termin.mainfilms[0]?.besonderheit ? termin.mainfilms[0]?.besonderheit : null}
+                                                    filmFormat={termin.mainfilms[0]?.format ? termin.mainfilms[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
 
                                                     tnr={termin.tnr} // for navigation to certain route
                                                 />
@@ -281,13 +251,8 @@ export default function Gallery() {
                                 })}
                         </>
                     )
-                    // )
                 }
             </section>
-
         </div>
-
     );
-
-
 }

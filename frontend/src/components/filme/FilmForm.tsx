@@ -4,7 +4,7 @@ import {Film} from "../../types/Film.ts";
 import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
-import {preprocessFormData} from "../../utils/PreprocessingFormData.ts";
+import {preprocessFormData} from "../../utils/preprocessFormData.ts";
 import {copyToClipboard} from "../../utils/copyToClipboard.ts";
 import {Link} from "react-router-dom";
 
@@ -217,7 +217,7 @@ export default function FilmForm() {
             })
             .catch((error) => {
                 // Log any error that occurs during the request
-                console.error('Error occurred while sending the request:', error.message);
+                console.error('Error occurred while sending the request:', error.nachricht);
             })
             .finally(() => {
                 // Optional: Perform any cleanup or final actions here
@@ -227,7 +227,7 @@ export default function FilmForm() {
     // ########################################
 
     return (
-        <div>
+        <div data-bs-theme="dark">
             <Link to={`/admin`}>
                 zum Adminbereich
             </Link>

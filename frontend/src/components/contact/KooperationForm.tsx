@@ -1,0 +1,209 @@
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import styles from './Forms.module.css';
+import {Badge} from "react-bootstrap";
+
+export interface KooperationFormData {
+    betreff: string;
+    ansprechperson: string;
+    email: string;
+    telefon: string;
+
+    filmtitel: string;
+    verleih: string;
+    format: 'DCP' | 'Blu-ray' | 'DVD' | 'Datei auf PC' | '35mm' | '16mm' | 'noch unbekannt';
+
+    terminpraeferenz: string;
+    nachricht: string;
+    zusammenarbeit: string;
+
+}
+
+interface KooperationFormProps {
+    onSubFormSubmit: (event: FormEvent, data: KooperationFormData) => void;
+    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
+    onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+    formData: KooperationFormData;
+}
+
+const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, submissionStatus, onInputChange, formData }) => {
+
+    const [terminPraeferenzLabel, setTerminPraeferenzLabel] = useState('');
+    const [momentaneAnfrageFuerSemester, setMomentaneAnfrageFuerSemester] = useState('');
+
+    useEffect(() => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth(); // 0-indexed (0 for January, 6 for July)
+
+        if (month >= 3 && month <= 6) { // April (3) to July (6)
+            setTerminPraeferenzLabel(`Eure Terminpräferenzen für das Wintersemester ${year.toString().slice(-2)}/${(year + 1).toString().slice(-2)}*:`);
+            setMomentaneAnfrageFuerSemester(`D.h. momentan sind nur Anfragen für das Wintersemester ${year.toString().slice(-2)}/${(year + 1).toString().slice(-2)} möglich.`)
+        } else { // August (7) to March (2) of the following year
+            setTerminPraeferenzLabel(`Eure Terminpräferenzen für das Sommersemester ${year + 1}*:`);
+            setMomentaneAnfrageFuerSemester(`D.h. momentan sind nur Anfragen für das Sommersemester ${year + 1} möglich.`);
+        }
+    }, []);
+
+    const handleLocalSubmit = (event: FormEvent) => {
+        event.preventDefault();
+        onSubFormSubmit(event, formData);
+    };
+
+
+    return (
+        <form className={styles.formContainer} onSubmit={handleLocalSubmit}>
+            <Badge bg="warning" text="dark">Hinweis:</Badge>
+            <p className={styles.formDescription}>
+                Der Einsendeschluss für Kooperationsanfragen ist der 31. Januar (für das Sommersemester) sowie der 31. Juli (für das Wintersemester). {momentaneAnfrageFuerSemester}
+            </p>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="betreff">Betreff*:</label>
+                <input
+                    type="text"
+                    id="betreff"
+                    name="betreff"
+                    value={formData.betreff || ''}
+                    onChange={onInputChange}
+                    required
+                    className={styles.textInput}
+                />
+            </div>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson*:</label>
+                <input
+                    type="text"
+                    id="ansprechperson"
+                    name="ansprechperson"
+                    value={formData.ansprechperson || ''}
+                    onChange={onInputChange}
+                    required
+                    className={styles.textInput}
+                />
+            </div>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="email">Email*:</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email || ''}
+                    onChange={onInputChange}
+                    required
+                    className={styles.emailInput}
+                />
+            </div>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="telefon">Telefonnummer:</label>
+                <input
+                    type="tel"
+                    id="telefon"
+                    name="telefon"
+                    value={formData.telefon || ''}
+                    onChange={onInputChange}
+                    className={styles.telInput}
+                />
+            </div>
+
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="filmtitel">Filmtitel*:</label>
+                <input
+                    type="text"
+                    id="filmtitel"
+                    name="filmtitel"
+                    value={formData.filmtitel || ''}
+                    onChange={onInputChange}
+                    required
+                    className={styles.textInput}
+                />
+            </div>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="verleih">Verleiher/Rechteinhaber des vorgeschlagenen Films*:</label>
+                <input
+                    type="text"
+                    id="verleih"
+                    name="verleih"
+                    value={formData.verleih || ''}
+                    onChange={onInputChange}
+                    required
+                    className={styles.textInput}
+                />
+            </div>
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="format">Abspielformat*:</label>
+                <select
+                    id="format"
+                    name="format"
+                    value={formData.format || ''}
+                    onChange={onInputChange}
+                    required
+                    className={styles.formSelect}
+                >
+                    <option value="" disabled className={styles.selectOption}>Bitte auswählen</option>
+                    <option value="DCP" className={styles.selectOption}>DCP</option>
+                    <option value="Blu-ray" className={styles.selectOption}>Blu-ray</option>
+                    <option value="DVD" className={styles.selectOption}>DVD</option>
+                    <option value="Datei auf PC" className={styles.selectOption}>Filmdatei</option>
+                    <option value="35mm" className={styles.selectOption}>35mm</option>
+                    <option value="16mm" className={styles.selectOption}>16mm</option>
+                    <option value="noch unbekannt" className={styles.selectOption}>noch unbekannt</option>
+                </select>
+            </div>
+
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="nachricht">Eure Nachricht*:</label>
+                <textarea
+                    id="nachricht"
+                    name="nachricht"
+                    value={formData.nachricht || ''}
+                    onChange={onInputChange}
+                    required
+                    className={styles.textareaField}
+                    style={{ height: '300px' }}
+                />
+            </div>
+
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="terminpraeferenz">{terminPraeferenzLabel}</label>
+                <textarea
+                    id="terminpraeferenz"
+                    name="terminpraeferenz"
+                    value={formData.terminpraeferenz || ''}
+                    placeholder="Spieltage sind Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
+                    onChange={onInputChange}
+                    required
+                    className={styles.textareaField}
+                />
+            </div>
+
+            <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="zusammenarbeit">
+                    Eure Vorstellungen zur Arbeitsteilung und Kostenbeteiligung (u.a. Ticketeinnahmen, Filmbestellung, Vorführlizenz)*:
+                </label>
+                <textarea
+                    id="zusammenarbeit"
+                    name="zusammenarbeit"
+                    value={formData.zusammenarbeit || ''}
+                    onChange={onInputChange}
+                    required
+                    className={styles.textareaField}
+                    style={{ height: '150px' }}
+                />
+            </div>
+
+            <button
+                type="submit"
+                className={styles.submitButton}
+                disabled={submissionStatus.status === 'sending'}
+            >
+                Anfrage senden
+            </button>
+            <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
+
+            {submissionStatus.status === 'sending' &&
+                <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
+            }
+        </form>
+    );
+};
+
+export default KooperationForm;

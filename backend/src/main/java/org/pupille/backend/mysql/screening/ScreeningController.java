@@ -2,12 +2,10 @@ package org.pupille.backend.mysql.screening;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -16,31 +14,46 @@ public class ScreeningController {
     @Autowired
     private ScreeningService screeningService;
 
+    // for Gallery react component
     @GetMapping("/screenings")
     public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
         return screeningService.getFutureTermineWithFilms();
     }
 
-//    // not required because the list doesn't contain any termin data
-//    @GetMapping("/screeningsold/{tnr}")
-//    public ResponseEntity<List<FilmDTOForm>> getFilmsForTermin(@PathVariable Long tnr) {
-//        List<FilmDTOForm> films = screeningService.getFilmsByTerminId(tnr);
-//        return ResponseEntity.ok(films);
-//    }
-
+    // for ScreeningDetails react component
     @GetMapping("/screenings/{tnr}")
     public ResponseEntity<TerminDTOFormWithFilmsDTOFormPlus> getTerminWithFilmsPlusForTermin(@PathVariable Long tnr) {
         TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTerminId(tnr);
         return ResponseEntity.ok(terminWithFilmsPlus);
     }
 
+    // for OverviewArchive react component
     @GetMapping("/screenings-archive")
     public List<TerminDTOWithFilmDTOOverviewArchive> getArchiveScreenings() {
         return screeningService.getPastTermineWithFilms();
     }
 
+    // for SemesterArchive react component
     @GetMapping("/screenings-semester")
     public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreenings() {
         return screeningService.getTermineByCurrentSemester();
     }
+
+    // For Slideshow react component
+//    @GetMapping("/screenings/slideshow")
+//    public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsForSlideshow() {
+//        List<TerminDTOWithFilmDTOSlideshow> termineWithFilms = screeningService.getFutureTermineWithFilmsForSlideshow();
+//        return termineWithFilms;
+//    }
+
+    @GetMapping("/screenings/slideshow")
+    public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsForSlideshow(
+            @RequestParam(value = "next", required = false) Optional<Integer> next
+    ) {
+        return screeningService.getFutureTermineWithFilmsForSlideshow(next);
+    }
+
+
+
+
 }

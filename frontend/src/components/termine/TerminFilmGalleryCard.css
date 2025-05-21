@@ -1,5 +1,4 @@
-
-/*Glow effects around TerminCard component*/
+/*Glow effects around TerminFilmPreviewCard & TerminFilmGalleryCard component*/
 /*########################################*/
 
 /* Pupille Glow */
@@ -104,39 +103,15 @@
 }
 
 
-/*Tiny box for display of film duration or format*/
-/*###############################################*/
+/*Custom card styling*/
+/*###################*/
 
-/*.duration-box {*/
-/*    display: inline-block;*/
-/*    margin-top: 10px;*/
-/*    color: #fff;*/
-/*    padding: 5px;*/
-/*    border-radius: 5px;*/
-/*    border: 1px solid rgba(255, 255, 255, 0.13);*/
-/*}*/
-
-.duration-box {
-    display: inline-block;
-    /*margin-top: 10px;*/
-    /*color: #FFD036;*/
-    /*color: #dc2f02;*/
-    /*color: #197278;*/
-
-    color: #40E0D0;
-    /*color: #C77DBB;*/
-    padding: 5px;
-    border-radius: 5px;
-    /*border: 1px solid #FFD036;*/
-    /*border: 1px solid #dc2f02;*/
-    /*border: 1px solid #197278;*/
-
-    border: 1px solid #40E0D0;
-    /*border: 1px solid #C77DBB;*/
-
-    font-size: 12px;
+.custom-card {
+    background-color: #0D0D0C;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 0; /* equivalent to border-0 class if not using a utility class */
 }
-
 
 /*View of the image in the  gallery*/
 /*#################################*/
@@ -162,24 +137,136 @@
     width: 100%;
     height: 100%;
     object-fit: cover; /* Cover the container while maintaining aspect ratio */
-    object-position: center center; /* Center the image within the container */
+    object-position: center center; /* Center the image within the container ==> this one is overwritten by inline style*/
+}
+            /*Explanation*/
+            /*To control vertical positioning, you can modify the object-position property.*/
+            /*It accepts two values: the horizontal position and the vertical position.*/
+
+            /*object-position: center top;: Aligns the top of the image with the center of the container's width.*/
+            /*object-position: center bottom;: Aligns the bottom of the image with the center of the container's width.*/
+            /*object-position: center 10%;: Positions the image 10% from the top (vertically) and centered horizontally.*/
+            /*object-position: center -10%;: Positions the image 10% from the bottom (vertically) and centered horizontally.*/
+            /*object-position: center 20px;: Positions the image 20 pixels from the top (vertically) and centered horizontally.*/
+            /*object-position: center -30px;: Positions the image 30 pixels from the bottom (vertically) and centered horizontally.*/
+
+
+/*Tiny box for display of film duration or format*/
+/*###############################################*/
+
+.analog-box {
+    display: inline-block;
+    color: #40E0D0;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #40E0D0;
+    font-size: 12px;
+}
+@media screen and (max-width: 767px) {
+    .analog-box{
+        padding: 3px;
+        font-size: 11px;
+    }
 }
 
-    /*To control vertical positioning, you can modify the object-position property.*/
-    /*It accepts two values: the horizontal position and the vertical position.*/
+/*Styling for analog, date, title, kurztext, besonderheit*/
+/*#############################################################*/
 
-    /*object-position: center top;: Aligns the top of the image with the center of the container's width.*/
-    /*object-position: center bottom;: Aligns the bottom of the image with the center of the container's width.*/
-    /*object-position: center 10%;: Positions the image 10% from the top (vertically) and centered horizontally.*/
-    /*object-position: center -10%;: Positions the image 10% from the bottom (vertically) and centered horizontally.*/
-    /*object-position: center 20px;: Positions the image 20 pixels from the top (vertically) and centered horizontally.*/
-    /*object-position: center -30px;: Positions the image 30 pixels from the bottom (vertically) and centered horizontally.*/
+.gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 
+    height: 100%;
+    background: linear-gradient(to bottom,
+    rgba(13, 13, 12, 0) 0%,             /* Fully transparent */
+    rgba(13, 13, 12, 0) 29%,            /* Transparent until 29% */
+    rgba(13, 13, 12, 0.1) 40%,          /* Start fade */
+    rgba(13, 13, 12, 0.3) 53%,          /* Gradual darkening */
+    rgba(13, 13, 12, 0.55) 67%,         /* Mid-dark */
+    rgba(13, 13, 12, 0.75) 82%,         /* Almost dark */
+    rgba(13, 13, 12, 0.92) 100%         /* Very dark, slightly transparent */
+    );
+
+    /*height: 100%;*/
+    /*background: linear-gradient(to bottom,*/
+    /*rgba(13, 13, 12, 0) 0%,        !* Fully transparent *!*/
+    /*rgba(13, 13, 12, 0) 33%,       !* Still transparent at 33% *!*/
+    /*rgba(13, 13, 12, 0.1) 45%,     !* Start to fade in *!*/
+    /*rgba(13, 13, 12, 0.3) 55%,     !* Light fade *!*/
+    /*rgba(13, 13, 12, 0.55) 65%,    !* Mid-dark *!*/
+    /*rgba(13, 13, 12, 0.75) 75%,    !* Quite dark *!*/
+    /*rgba(13, 13, 12, 0.92) 100%    !* Very dark, almost opaque *!*/
+    /*);*/
+
+    /*height: 100%;*/
+    /*background: linear-gradient(to bottom,*/
+    /*rgba(13, 13, 12, 0) 0%,        !* Fully transparent at top *!*/
+    /*rgba(13, 13, 12, 0) 25%,       !* Still transparent at 25% *!*/
+    /*rgba(13, 13, 12, 0.4) 50%,     !* Midway point of transition *!*/
+    /*rgba(13, 13, 12, 0.70) 75%,    !* Approaching bottom *!*/
+    /*rgba(13, 13, 12, 0.92) 100%    !* Very dark and slightly transparent at bottom *!*/
+    /*);*/
+
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-right: 1rem;
+    padding-left: 1rem;
+}
+
+.overlay-analog-date {
+    color: #cfd6e1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 0.0rem;
+}
+
+.overlay-time {
+    font-size: 1.5rem;
+    color: #FFD036;
+    margin-left: auto;
+}
+
+.overlay-title {
+    color: #FFD036;
+    margin-bottom: 0.0rem;
+}
+
+.card-kurztext {
+    color: #cfd6e1;
+}
+
+.card-besonderheit {
+    border-top: 2px dotted #FFD036;
+    padding: 0.3rem 0em;
+    color: #cfd6e1;
+    text-align: right;
+}
 
 /*Styling for display of year and director below the film title*/
 /*#############################################################*/
 
-.filminfo-and-stab {
+.filminfo-and-stab-gallery {
     color: #9ac7fa;
     font-weight: 400;
+    margin-top: 0rem;
+}
+
+
+
+@media screen and (max-width: 767px) {
+    .overlay-time,
+    .overlay-title {
+        font-size: 1.4rem;
+    }
+
+    .card-kurztext,
+    .card-besonderheit,
+    .filminfo-and-stab-gallery {
+        font-size: 0.9rem;
+    }
 }

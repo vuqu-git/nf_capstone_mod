@@ -1,5 +1,4 @@
-
-// for Termin selection
+// for selection in form
 
 interface TerminDTOSelection {
     tnr: number; // Primary key, auto-generated, so it might not be present when creating a new Termin

@@ -7,102 +7,153 @@ import {
 } from "react-router-dom";
 
 // import "./index.css";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 
 import ScreeningDetails from "./components/ScreeningDetails.tsx";
 import Gallery2 from "./components/Gallery2.tsx";
-import Layout2 from "./components/Layout2.tsx";
 import Admin from "./components/Admin.tsx";
 import OverviewSemester2 from "./components/OverviewSemester2.tsx";
 import OverviewArchive2 from "./components/OverviewArchive2.tsx";
 import EditDeleteNews from "./components/news/EditDeleteNews.tsx";
 import AddNews from "./components/news/AddNews.tsx";
-import TerminverknuepfungFormNew from "./components/terminverkuepfungen/TerminverknuepfungFormNew.tsx";
+import TerminverknuepfungForm from "./components/terminverkuepfungen/TerminverknuepfungForm.tsx";
 import TerminForm from "./components/termine/TerminForm.tsx";
 import FilmForm from "./components/filme/FilmForm.tsx";
 import TerminDTOWithFilmDTOGallery from "./types/TerminDTOWithFilmDTOGallery.ts";
 import {News} from "./types/News.ts";
 import TerminDTOWithFilmDTOOverviewSemester from "./types/TerminDTOWithFilmDTOOverviewSemester.ts";
 import TerminDTOWithFilmDTOOverviewArchive from "./types/TerminDTOWithFilmDTOOverviewArchive.ts";
-import ContentNotes from "./components/ContentNotes.tsx";
-import ProjektionAufLeinwand from "./components/ProjektionAufLeinwand.tsx";
+import ContentNotes from "./components/other/ContentNotes.tsx";
+import ProjektionAufLeinwand from "./components/other/ProjektionAufLeinwand.tsx";
+import ContactForm from "./components/contact/ContactForm.tsx";
+import Impressum from "./components/other/Impressum.tsx";
+import BaseLayout from "./components/LayoutWrapper/BaseLayout.tsx";
+import TextLayout from "./components/LayoutWrapper/TextLayout.tsx";
+import ScreeningLayout from "./components/LayoutWrapper/ScreeningLayout.tsx";
+import OverviewAndFormLayout from "./components/LayoutWrapper/OverviewAndFormLayout.tsx";
+import Kinobesuch from "./components/other/Kinobesuch.tsx";
+import Slideshow from "./components/slideshow/Slideshow.tsx";
+import StartPreviewQ from "./components/StartPreviewQ.tsx";
+import PreviewQ from "./components/PreviewQ.tsx";
+import Preview1Parent from "./components/previewNotResponsive/Preview1Parent.tsx";
+import PreviewContainer from './components/preview/PreviewContainer.tsx';
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Layout2 />,
+        element: <BaseLayout />,
         children: [
             {
-                index: true,
-                loader: getGalleryData,
-                element: <Gallery2 />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "semester",
-                loader: getSemesterScreenings,
-                element: <OverviewSemester2 />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "archive",
-                loader: getArchiveScreenings,
-                element: <OverviewArchive2 />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "details/:tnr",
-                element: <ScreeningDetails />,
-                // no usage of loader here, beacuse the data is fetched with ScreeningDetails
-                // loader: ({ params }) => getScreeningDetails(params.tnr),
-                handle: { scrollMode: "pathname" } // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
-            },
-            {
-                path: "contentnotes",
-                element: <ContentNotes />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "kinoprojektion",
-                element: <ProjektionAufLeinwand />,
-                handle: { scrollMode: "pathname" },
+                element: <ScreeningLayout />, // No path, acts as a layout wrapper
+                children: [
+                    {
+                        index: true,
+                        loader: getGalleryData,
+                        element: <Gallery2 />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "details/:tnr",
+                        element: <ScreeningDetails />,
+                        // no usage of loader here, because the data is fetched within ScreeningDetails
+                        // loader: ({ params }) => getScreeningDetails(params.tnr),
+                        handle: { scrollMode: "pathname" } // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
+                    },
+                ],
             },
 
             {
-                path: "admin",
-                element: <Admin />,
-                handle: { scrollMode: "pathname" },
+                element: <OverviewAndFormLayout />, // No path, acts as a layout wrapper
+                children: [
+                    {
+                        path: "semester",
+                        loader: getSemesterScreenings,
+                        element: <OverviewSemester2 />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "archive",
+                        loader: getArchiveScreenings,
+                        element: <OverviewArchive2 />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "kontakt",
+                        element: <ContactForm />,
+                        handle: { scrollMode: "pathname" },
+                    },
+
+                    {
+                        path: "admin",
+                        element: <Admin />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "addnews",
+                        element: <AddNews />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "editnews",
+                        element: <EditDeleteNews />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "deletenews",
+                        element: <EditDeleteNews />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "adminfilme",
+                        element: <FilmForm />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "admintermine",
+                        element: <TerminForm />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "admintvennew",
+                        element: <TerminverknuepfungForm />,
+                        handle: { scrollMode: "pathname" },
+                    },
+
+                    {
+                        path: "previewq",
+                        loader: getGalleryDataWithoutNews,
+                        element: <PreviewQ />,
+                        handle: { scrollMode: "pathname" },
+                    }
+                ],
             },
+
             {
-                path: "addnews",
-                element: <AddNews />,
-                handle: { scrollMode: "pathname" },
+                element: <TextLayout />, // No path, acts as a layout wrapper
+                children: [
+                    {
+                        path: "kinobesuch",
+                        element: <Kinobesuch />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "contentnotes",
+                        element: <ContentNotes />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "kinoprojektion",
+                        element: <ProjektionAufLeinwand />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "impressum",
+                        element: <Impressum />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                ],
             },
-            {
-                path: "editnews",
-                element: <EditDeleteNews />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "deletenews",
-                element: <EditDeleteNews />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "adminfilme",
-                element: <FilmForm />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "admintermine",
-                element: <TerminForm />,
-                handle: { scrollMode: "pathname" },
-            },
-            {
-                path: "admintvennew",
-                element: <TerminverknuepfungFormNew />,
-                handle: { scrollMode: "pathname" },
-            },
+
 
             // {
             //     path: "link-to-hash",
@@ -111,6 +162,33 @@ const router = createBrowserRouter([
             // },
         ],
     },
+
+    {
+        path: "slideshow",
+        element: <Slideshow />,
+        handle: { scrollMode: "pathname" },
+    },
+
+    // 1st approach
+    {
+        path: "startpreviewq",
+        element: <StartPreviewQ />,
+        handle: { scrollMode: "pathname" },
+    },
+    // 2nd approach
+    {
+        path: "previewparent",
+        loader: getGalleryDataWithoutNews,
+        element: <Preview1Parent />,
+        handle: { scrollMode: "pathname" },
+    },
+    // 3rd approach
+    {
+        path: "preview",
+        loader: getGalleryDataWithoutNews,
+        element: <PreviewContainer />,
+        handle: { scrollMode: "pathname" },
+    }
 ]);
 
 if (import.meta.hot) {
@@ -153,6 +231,22 @@ async function getGalleryData(): Promise<GalleryData> {
         //     Throwing a regular Error:
         //     If you throw a regular Error, React Router will also catch it and render the errorElement, but the error object will be an instance of Error, not Response.
         //     This is often used for application-level errors that aren't necessarily HTTP errors.
+    }
+}
+
+async function getGalleryDataWithoutNews(): Promise<TerminDTOWithFilmDTOGallery[]> {
+    try {
+        const response: AxiosResponse<TerminDTOWithFilmDTOGallery[]> = await axios.get("/api/screenings");
+        return response.data;
+    } catch (error: any) {
+        console.error("Error fetching future screenings:", error);
+        if (error.response) {
+            throw new Error(`Failed to load future screening data: Server responded with status ${error.response.status}`);
+        } else if (error.request) {
+            throw new Error("Failed to load future screening data: No response received from the server.");
+        } else {
+            throw new Error(`Failed to load future screening data due to a network or unexpected error: ${error.message}`);
+        }
     }
 }
 

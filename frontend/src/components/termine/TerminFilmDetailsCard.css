@@ -1,13 +1,30 @@
-/*Glow effects used here are set in TerminFilmGalleryCard.css*/
+.terminFilm-card{
+    background-color: #0D0D0C;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
 
-/* For embedded youtube video within <Card.Text> */
-/*###############################################*/
+.terminFilm-card-header {
+    color: #FFD036;
+    background-color: inherit;
+    border-bottom: inherit;
+    text-align: right;
+}
 
-.style-video-in-card iframe {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    border: 0;
-    border-radius: 5px;
-    display: block;
+.add-to-calendar-button-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.0rem;
+}
+
+.program-title {
+    color: #FFD036;
+    margin-top: 1.0rem;
+    margin-bottom: 1.0rem;
+}
+
+.program-text {
+    color: #cfd6e1;
 }
