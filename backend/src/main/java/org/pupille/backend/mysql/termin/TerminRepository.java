@@ -38,5 +38,4 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
                 LocalDateTime startDateWinter,
                 LocalDateTime endDateWinter
         );
-
 }
