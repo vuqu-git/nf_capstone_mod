@@ -13,8 +13,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class NewsService {
-    private final NewsRepo newsRepo;
 
+    private final NewsRepo newsRepo;
     private final IdService idService;
     private final DateNowService dateNowService;
 
