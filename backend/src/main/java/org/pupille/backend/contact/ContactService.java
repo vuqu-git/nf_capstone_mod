@@ -85,7 +85,7 @@ public class ContactService {
             }
             // ~~~~~~~~~~~~~~~
 
-    private void handleAOBInquiry(Map<String, Object> payload) {
+    public void handleAOBInquiry(Map<String, Object> payload) {
         final String betreff = escapeHtml((String) payload.get("betreff"));
         final String email = escapeHtml((String) payload.get("email"));
         final String nachricht = escapeHtml((String) payload.get("nachricht"));
