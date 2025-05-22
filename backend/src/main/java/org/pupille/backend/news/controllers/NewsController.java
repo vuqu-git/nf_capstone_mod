@@ -15,6 +15,13 @@ public class NewsController {
 
     private final NewsService newsService;
 
+    // without usage of @RequiredArgsConstructor you need:
+    //    // Spring 4.3+ automatically uses this constructor for injection
+    //    // No @Autowired needed here for a single constructor
+    //    public NewsController(NewsService newsService) {
+    //        this.newsService = newsService;
+    //    }
+
     @GetMapping("/all")
     public List<News> getAllNews()
     {

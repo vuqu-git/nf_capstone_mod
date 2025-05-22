@@ -5,6 +5,12 @@ import org.pupille.backend.contact.exceptions.InvalidContactDataException;
 import org.pupille.backend.contact.exceptions.InvalidDateTimeFormatException;
 import org.pupille.backend.contact.exceptions.InvalidEngagementHoursFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.MailParseException;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.MailException; // This is the base class for all Spring Mail exceptions
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -54,27 +60,30 @@ public class ContactService {
         }
     }
 
-    private String escapeHtml(String input) {
-        if (input == null) return "";
-        return input.replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\"", "&quot;")
-                .replace("'", "&#39;");
-    }
+            // utils functions
+            // ~~~~~~~~~~~~~~~
+            private String escapeHtml(String input) {
+                if (input == null) return "";
+                return input.replace("&", "&amp;")
+                        .replace("<", "&lt;")
+                        .replace(">", "&gt;")
+                        .replace("\"", "&quot;")
+                        .replace("'", "&#39;");
+            }
 
-    private String formatDateTime(String dateTimeStr) {
-        if (dateTimeStr == null || dateTimeStr.isEmpty()) {
-            return null;
-        }
-        try {
-            LocalDateTime ldt = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            return ldt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'"));
-        } catch (DateTimeParseException e) {
-            System.err.println("Error parsing date/time string: " + dateTimeStr + "  Error: " + e.getMessage());
-            throw new InvalidDateTimeFormatException("Invalid date/time format. Please use ISO 8601 format.");
-        }
-    }
+            private String formatDateTime(String dateTimeStr) {
+                if (dateTimeStr == null || dateTimeStr.isEmpty()) {
+                    return null;
+                }
+                try {
+                    LocalDateTime ldt = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                    return ldt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'"));
+                } catch (DateTimeParseException e) {
+                    System.err.println("Error parsing date/time string: " + dateTimeStr + "  Error: " + e.getMessage());
+                    throw new InvalidDateTimeFormatException("Invalid date/time format. Please use ISO 8601 format.");
+                }
+            }
+            // ~~~~~~~~~~~~~~~
 
     private void handleAOBInquiry(Map<String, Object> payload) {
         final String betreff = escapeHtml((String) payload.get("betreff"));
@@ -106,12 +115,32 @@ public class ContactService {
             messageHelper.setText(htmlBody.toString(), true);
         };
 
+//        try {
+//            mailSender.send(messagePreparator);
+//        } catch (Exception e) {
+//            System.err.println("Error sending email: " + e.getMessage());
+//            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
+//        }
+
+        // more robust error handling:
         try {
             mailSender.send(messagePreparator);
+        } catch (MailAuthenticationException e) {
+            throw new EmailSendingFailedException("Failed to send message due to authentication issues.", e);
+        } catch (MailParseException e) {
+            throw new EmailSendingFailedException("Failed to send message due to malformed email content.", e);
+        } catch (MailSendException e) {
+            // This exception typically wraps lower-level JavaMail exceptions (e.g., SMTP errors)
+            // You can inspect e.getFailedMessages() if you sent multiple messages
+            throw new EmailSendingFailedException("Failed to send message. There might be a temporary issue with the mail server. Please try again later.", e);
+        } catch (MailException e) {
+            // Catch any other Spring Mail related exceptions
+            throw new EmailSendingFailedException("An unexpected error occurred while sending the email. Please try again later.", e);
         } catch (Exception e) {
-            System.err.println("Error sending email: " + e.getMessage());
-            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
+            // Catch any other unexpected exceptions
+            throw new EmailSendingFailedException("An unexpected error occurred. Please try again later.", e);
         }
+
     }
 
     public void handleKinomitarbeit(Map<String, Object> payload) {

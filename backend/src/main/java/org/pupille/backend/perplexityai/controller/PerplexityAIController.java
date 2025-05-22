@@ -11,7 +11,6 @@ public class PerplexityAIController {
 
     private final OpenAIService aiService;
 
-
     @PostMapping("/emojify")
     public String emojiText(@RequestBody(required = true) String text) {
 
