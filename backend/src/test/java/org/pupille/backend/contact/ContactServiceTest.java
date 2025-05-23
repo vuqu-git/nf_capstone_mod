@@ -25,8 +25,8 @@ import java.util.Map;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class) // For JUnit 5
-@MockitoSettings(strictness = Strictness.LENIENT)
+@ExtendWith(MockitoExtension.class) // Syntax for JUnit 5, required for usage of @Mock
+@MockitoSettings(strictness = Strictness.LENIENT) // It makes Mockito less strict about "unnecessary stubbing" (i.e., when you when() a method but that stubbed method is never actually called during the test).
 public class ContactServiceTest {
 
     @Mock // Mock the JavaMailSender

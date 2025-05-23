@@ -1,0 +1,75 @@
+The stack trace shows:
+    "No qualifying bean of type 'org.springframework.mail.javamail.JavaMailSender' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations {}
+    This means Spring tried to instantiate [class X], which expects a JavaMailSender bean (typically injected via constructor), but could not find any such bean in the context.
+
+Explanation of the Error
+~~~~~~~~~~~~~~~~~~~~~~~~
+The error in your Spring Boot application is caused by a missing bean definition for JavaMailSender, which is required by your [class X] class. This is a classic dependency injection problem in Spring, where a component (bean) needed for another service is not available in the application context.
+
+
+Why Did This Happen?
+~~~~~~~~~~~~~~~~~~~~
+    Spring Boot auto-configures a JavaMailSender bean only if the necessary mail configuration properties (like spring.mail.host) are set in your application.properties or application.yml.
+    In your test context (active profile: test), these properties are likely missing, so Spring Boot does not auto-configure the mail sender.
+    As a result, when the test context loads, it cannot inject the required dependency, causing the application context to fail to start
+
+
+How to Fix
+~~~~~~~~~~
+You have several options to resolve this:
+
+1. Add a (dummy) Mail Configuration for Tests
+'''''''''''''''''''''''''''''''''''''''''''''
+    In src/test/resources/application-test.properties (or similar), add dummy mail properties:
+            spring.mail.host=localhost
+            spring.mail.port=1025
+    This will trigger Spring Boot to auto-configure a JavaMailSender bean for tests.
+
+2. Provide a Mock or Stub for JavaMailSender in Tests
+'''''''''''''''''''''''''''''''''''''''''''''''''''''
+    Variant A)
+    In your test configuration, you can define a mock bean:
+
+    @TestConfiguration
+    public class TestMailConfig {
+        @Bean
+        public JavaMailSender javaMailSender() {
+            return Mockito.mock(JavaMailSender.class);
+        }
+    }
+
+    and import that in your test class, for example:
+        @Import(org.pupille.backend.TestMailConfig.class)
+        @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+        @AutoConfigureMockMvc
+        @ActiveProfiles("test") // Activate Test Profile: application-test.properties file is only loaded when 'test' profile is active
+        class NewsControllerIntegrationTest {
+
+    => Which test class?
+    You need to import your @TestConfiguration in EVERY test class that loads the Spring application context and triggers the creation of beans that depend on JavaMailSender.
+    This typically means:
+        Any test class annotated with @SpringBootTest (or similar annotations that load the full context) where, directly or indirectly, a bean requiring JavaMailSender is created .
+        This includes controller integration tests, service integration tests, or any test where the application context fails to start due to a missing JavaMailSender bean.
+        The basic test class under the src/test/java directory (This test class typically has the same name as your main application class (e.g., BackendApplication.java)) has also the @SpringBootTest annotation.
+
+    You do NOT need to import it in:
+        Pure unit tests that do not load the Spring context and manually instantiate the class under test with mocks.
+        Test classes that do not interact with or create beans depending on JavaMailSender.
+
+
+    Variant B)
+    Or use @MockitoBean in EVERY test class that loads the full Spring application context (see above) and where the context tries to instantiate beans that depend on JavaMailSender—directly or indirectly, for example:
+        class NewsControllerIntegrationTest {
+
+            @MockitoBean
+            private JavaMailSender javaMailSender;
+
+            @Autowired
+            private MockMvc mockMvc;
+
+            @Autowired
+            NewsRepo newsTestRepo;
+
+3. Conditional Bean Creation
+''''''''''''''''''''''''''''
+    If your mail functionality is not needed in all profiles, make the injection optional or create the bean only when mail properties are present.

@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.http.MediaType;
@@ -23,14 +25,17 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Import(org.pupille.backend.TestMailConfig.class)
+//@Import(org.pupille.backend.TestMailConfig.class)
 @SpringBootTest
 @ActiveProfiles("test") // Use "test" profile to load application-test.properties
 @AutoConfigureMockMvc
 @Transactional // After the test method finishes (whether it passes or fails), Spring's test framework, by default, will rollback the transaction.
                // This means all changes made during that test method are effectively undone. The database returns to the state it was in before the test method started.
                // This is the opposite of how @Transactional typically behaves in a production application, where it would commit the transaction on success. For tests, the default is rollback for isolation.
-class TerminControllerTest {
+class TerminControllerIntegrationTest {
+
+//    @MockitoBean
+//    private JavaMailSender javaMailSender;
 
     @Autowired
     private MockMvc mockMvc;

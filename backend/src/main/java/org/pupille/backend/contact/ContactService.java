@@ -25,16 +25,17 @@ import java.util.Map;
 public class ContactService {
 
     private final JavaMailSender mailSender;
+
     private final String senderEmail = "no-reply@pupille.org";
     private final String recipientEmail = "quy8vuong@gmail.com";
     private final String bccRecipientEmail = "vuqu@gmx.de";
 
     private static final String CELL_STYLE = "padding:4px;border:1px solid #ddd;text-align:left;";
-    private static final String NO_REPLY_TEXT = "<p style=\"font-size: 0.85em; color: #b00; background-color: #f5f5f5; padding: 8px; border-radius: 4px; margin-top: 10px;\">Diese Nachricht wurde automatisch erzeugt. Antworten an no-reply@pupille.org werden nicht bearbeitet.</p>" ;
-    private static final String INTRO_TEXT = "<p>Nachfolgend sind die vom Kontaktformular übermittelten Daten:</p>" ;
+    private static final String NO_REPLY_TEXT = "<p style=\"font-size: 0.85em; color: #b00; background-color: #f5f5f5; padding: 8px; border-radius: 4px; margin-top: 10px;\">Diese Nachricht wurde automatisch erzeugt. Antworten an no-reply@pupille.org werden nicht bearbeitet.</p>";
+    private static final String INTRO_TEXT = "<p>Nachfolgend sind die vom Kontaktformular übermittelten Daten:</p>";
 
     @Autowired
-    public ContactService(JavaMailSender mailSender) {
+    public ContactService(JavaMailSender mailSender) { // Inject MailServic
         this.mailSender = mailSender;
     }
 
@@ -171,7 +172,7 @@ public class ContactService {
             messageHelper.setTo(recipientEmail);
 //            messageHelper.setCc(email);
             messageHelper.setBcc(bccRecipientEmail);
-            
+
             messageHelper.setSubject("[Kinomitarbeit: Anfrage] " + name);
 
             StringBuilder htmlBody = new StringBuilder();

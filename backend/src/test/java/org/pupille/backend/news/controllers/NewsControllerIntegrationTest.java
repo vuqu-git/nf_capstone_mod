@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(org.pupille.backend.TestMailConfig.class)
+//@Import(org.pupille.backend.TestMailConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
                 // this one searches for class with @SpringBootApplication and starts the overall application (launches entire Spring Boot application context)
                 // => creates a fully configured application context for your tests, effectively booting up a version of your Spring application within the test environment
@@ -35,9 +36,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                             //RANDOM_PORT: Starts the actual server on a random port (great for testing REST APIs)
                             //DEFINED_PORT: Starts the server on a defined port
                             //NONE: No web environment
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc // This tells Spring Boot to automatically configure and create a MockMvc instance and make it available in the test's ApplicationContext
+                      // It's designed to be used in conjunction with @SpringBootTest (which loads the full application context) or @WebMvcTest (which loads a "slice" of the context focused on the web layer).
 @ActiveProfiles("test") // Activate Test Profile: application-test.properties file is only loaded when 'test' profile is active
 class NewsControllerIntegrationTest {
+
+//    @MockitoBean
+//    private JavaMailSender javaMailSender;
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,11 +56,12 @@ class NewsControllerIntegrationTest {
     //      It replaces the real DateNowService bean in the application context with this mock.
     //      It injects this mock into the NewsService where the DateNowService is autowired.
     @MockitoBean
-    private DateNowService mockDateNowService;
+    private DateNowService mockDateNowService; // why IntelliJ says "Private field 'mockDateNowService' is never assigned " => IntelliJ's static analysis is looking for a direct Java assignment statement (like this.mockDateNowService = new DateNowService();), but the assignment is performed dynamically (via @MockitoBean) by the Spring Boot test runner at runtime.
     // usage in a test method: when(dateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 5, 28));
     //      → This line sets the behavior of the mock. When NewsService calls dateNowService.localDateNow(), it will now receive LocalDate.of(2025, 5, 28).
     // example: see test method getValidNews_whenFound_returnNews below
 
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // not required here, because I use the real IdService, but don't test assert the real generated id in addNewsItem test method
     // @MockitoBean
     // private IdService mockIdService;
@@ -105,6 +111,7 @@ class NewsControllerIntegrationTest {
             //    When you need to verify that a specific method on IdService was called by MyService, even if you don't care about its return value or want to control its return value for a specific scenario.
             //    When IdService has side effects (e.g., writes to a database, calls an external API) that you want to prevent during your test, but still need the core logic of IdService for other methods. You could then stub the side-effecting method.
             //    When you need to throw an exception from IdService to test error handling in MyService without changing IdService's production code.
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     @Test
     void getAllNews_whenEmpty_returnEmptyList() throws Exception {
