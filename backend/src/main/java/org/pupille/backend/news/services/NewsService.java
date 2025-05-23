@@ -13,10 +13,20 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class NewsService {
-    private final NewsRepo newsRepo;
 
+    private final NewsRepo newsRepo;
     private final IdService idService;
     private final DateNowService dateNowService;
+
+    // without usage of @RequiredArgsConstructor you need:
+    //    // Constructor for dependency injection
+    //    // @Autowired is technically optional here if there's only one constructor (Spring 4.3+)
+    //    // but it's good practice for clarity or if you add more constructors later
+    //    public NewsService(NewsRepo newsRepo, IdService idService, DateNowService dateNowService) {
+    //        this.newsRepo = newsRepo;
+    //        this.idService = idService;
+    //        this.dateNowService = dateNowService;
+    //    }
 
     private static final String errorMessage = "No news found with the id %s";
 

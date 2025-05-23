@@ -14,21 +14,31 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+// !!! When using @Mock and @InjectMocks => see below the code!!!
+
 class NewsServiceTest {
 
     private NewsRepo mockNewsRepo;
     private IdService mockIdService;
     private DateNowService mockDateNowService;
+
     private NewsService newsService;
 
     private News n1, n2;
 
     @BeforeEach
     void testSetup() {
+        // best practive: Keep mock creation and NewsService initialization inside @BeforeEach to ensure each test starts with fresh, unmodified mocks.
+        //        Advantages:
+        //        Fresh test objects for each test - prevents accidental state mutation between tests
+        //        More explicit control over when objects are created
+        //        Better encapsulation - all test setup happens in one place
         mockNewsRepo = mock(NewsRepo.class);
         mockIdService = mock(IdService.class);
         mockDateNowService = mock(DateNowService.class);
+
         newsService = new NewsService(mockNewsRepo, mockIdService, mockDateNowService);
+
         n1 = new News("1",
                 "Vorführung X fällt aus",
                 null,
@@ -47,25 +57,35 @@ class NewsServiceTest {
     @Test
     void getAllNews_whenEmpty_returnEmptyList() {
 //        // GIVEN
-//        List<News> expected = List.of();
+//        List<News> expected = List.of(); // the crucial thing here is the usage of List.of!
 //        when(mockNewsRepo.findAll()).thenReturn(expected);
 //        // WHEN
-//        // Attention: Because the mock repository is returning an immutable list, the sort operation within getAllNews will throw the UnsupportedOperationException.
+//        // Attention: here with thenReturn(List.of("A", "B")) => the mock repository is returning an immutable list, the sort operation within getAllNews will throw the UnsupportedOperationException.
 //        List<News> actual = newsService.getAllNews();
 //        // THEN
 //        verify(mockNewsRepo).findAll();
 //        assertEquals(expected, actual);
 
         // GIVEN
-        ArrayList<News> expectedArrayList = new ArrayList<>(List.of());
-        when(mockNewsRepo.findAll()).thenReturn(expectedArrayList);
+        List<News> expected = new ArrayList<>(); // !! or new ArrayList<>(List.of()) => using the common implementations ArrayList or LinkedList the resulting List is Mutable
+        when(mockNewsRepo.findAll()).thenReturn(expected);
         // WHEN
-        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getAllNews() );
-
+        List<News> actual = newsService.getAllNews();
         // THEN
         verify(mockNewsRepo).findAll();
-        assertEquals(expectedArrayList, actualArrayList);
-    }
+        assertEquals(expected, actual);
+
+        //        // alternative instead of List, use ArrayList directly for the variables
+        //        // GIVEN
+        //        ArrayList<News> expectedArrayList = new ArrayList<>(List.of());
+        //        when(mockNewsRepo.findAll()).thenReturn(expectedArrayList);
+        //        // WHEN
+        //        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getAllNews() );
+        //
+        //        // THEN
+        //        verify(mockNewsRepo).findAll();
+        //        assertEquals(expectedArrayList, actualArrayList);
+            }
 
     @Test
     void getAllNews_whenNotEmpty_returnNewsList() {
@@ -75,24 +95,33 @@ class NewsServiceTest {
 //        List<News> expected = List.of(n2, n1);
 //        when(mockNewsRepo.findAll()).thenReturn(List.of(n1, n2));
 //        // WHEN
-//        // Attention: Because the mock repository is returning an immutable list, the sort operation within getAllNews will throw the UnsupportedOperationException.
+//        // Attention: here with thenReturn(List.of(n1, n2)) => the mock repository is returning an immutable list, the sort operation within getAllNews will throw the UnsupportedOperationException.
 //        List<News> actual = newsService.getAllNews();
 //        // THEN
 //        verify(mockNewsRepo).findAll();
 //        assertEquals(expected, actual);
 
         // GIVEN
-        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n2, n1));
-        when(mockNewsRepo.findAll()).thenReturn( new ArrayList<>(List.of(n1, n2)) );
-
+        List<News> expected = new ArrayList<>(List.of(n2, n1));
+        when(mockNewsRepo.findAll()).thenReturn( expected );
         // WHEN
         // Attention: Because the mock repository is returning an immutable list, the sort operation within getAllNews will throw the UnsupportedOperationException.
         List<News> actual = newsService.getAllNews();
-        ArrayList<News> actualArrayList = new ArrayList<>(actual);
-
         // THEN
         verify(mockNewsRepo).findAll();
-        assertEquals(expectedArrayList, actualArrayList);
+        assertEquals(expected, actual);
+
+        //        // alternative instead of List, use ArrayList directly for the variables
+        //        // GIVEN
+        //        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n2, n1));
+        //        when(mockNewsRepo.findAll()).thenReturn( new ArrayList<>(List.of(n1, n2)) );
+        //        // WHEN
+        //        // Attention: Because the mock repository is returning an immutable list, the sort operation within getAllNews will throw the UnsupportedOperationException.
+        //        List<News> actual = newsService.getAllNews();
+        //        ArrayList<News> actualArrayList = new ArrayList<>(actual);
+        //        // THEN
+        //        verify(mockNewsRepo).findAll();
+        //        assertEquals(expectedArrayList, actualArrayList);
     }
 
     @Test
@@ -112,7 +141,7 @@ class NewsServiceTest {
     void getNewsById_notFound() {
         // GIVEN
         String id = "3";
-        when(mockNewsRepo.findById(id)).thenReturn(Optional.empty()); //  mock the behavior to ensure it returns an empty Optional
+        //  when(mockNewsRepo.findById(id)).thenReturn(Optional.empty()); // mock the behavior to ensure it returns an empty Optional => but this line is obsolete because implementation of newsService.getNewsById return News and not Optional
         // WHEN + THEN
         assertThrows(NewsNotFoundException.class, () -> newsService.getNewsById(id));
 
@@ -121,7 +150,6 @@ class NewsServiceTest {
         // You must first execute the code under test and then verify any interactions with mock objects.
         // The verify call should be placed after the method under test is executed.
         verify(mockNewsRepo).findById(id); // Verify the method was called
-
     }
 
     @Test
@@ -151,12 +179,12 @@ class NewsServiceTest {
     @Test
     void saveNewsInvalidNews_A() {
         // GIVEN
-        // Simulate ID generation if necessary
+        // Simulate ID generation if necessary, but actually not required
 //        String id = "2";
 //        when(mockIdService.randomId()).thenReturn(id);
 
         // WHEN & THEN
-        // Create an invalid News object with empty fields
+        // Create an invalid News object (here the end date is NOT after the start date), see raised IllegalArgumentException in News class
         assertThrows(IllegalArgumentException.class, () -> newsService.saveNews(new News(null, null, "", LocalDate.now(), LocalDate.now(), "light")));
 
         // SonarQube complains: Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception.
@@ -166,9 +194,11 @@ class NewsServiceTest {
     }
     @Test
     void saveNewsInvalidNews_B() {
-        // Simulate ID generation if necessary
-        String id = "2";
-        when(mockIdService.randomId()).thenReturn(id);
+        // same test as saveNewsInvalidNews_A but written differently
+
+        // Simulate ID generation if necessary, but actually not required
+//        String id = "2";
+//        when(mockIdService.randomId()).thenReturn(id);
 
         try {
             newsService.saveNews(new News("", null, "", LocalDate.now(), LocalDate.now(), "light"));
@@ -178,23 +208,24 @@ class NewsServiceTest {
         }
     }
 
-    // Test Repository Save Failure
-    @Test
-    void saveNewsRepositoryFailure() {
-        String id = "2";
-        when(mockIdService.randomId()).thenReturn(id);
-        when(mockNewsRepo.save(n2)).thenThrow(new RuntimeException("Save failed"));
+    // the following both tests are negligible
+            // Test Repository Save Failure
+            @Test
+            void saveNewsRepositoryFailure() {
+                String id = "2";
+                when(mockIdService.randomId()).thenReturn(id);
+                when(mockNewsRepo.save(n2)).thenThrow(new RuntimeException("Save failed"));
 
-        assertThrows(RuntimeException.class, () -> newsService.saveNews(n2));
-    }
+                assertThrows(RuntimeException.class, () -> newsService.saveNews(n2));
+            }
 
-    // Test Id Generation Failure
-    @Test
-    void saveNewsIdGenerationFailure() {
-        when(mockIdService.randomId()).thenThrow(new RuntimeException("ID generation failed"));
+            // Test Id Generation Failure
+            @Test
+            void saveNewsIdGenerationFailure() {
+                when(mockIdService.randomId()).thenThrow(new RuntimeException("ID generation failed"));
 
-        assertThrows(RuntimeException.class, () -> newsService.saveNews(n2));
-    }
+                assertThrows(RuntimeException.class, () -> newsService.saveNews(n2));
+            }
 
     @Test
     void deleteNews_notFound() {
@@ -215,7 +246,7 @@ class NewsServiceTest {
         // GIVEN
         String id = "2";
         when(mockNewsRepo.existsById(id)).thenReturn(true);
-//        // WHEN
+//        // WHEN // here not required because invocation of newsService.deleteNews(id) happens in the assertDoesNotThrow
 //        newsService.deleteNews(id);
 
         // WHEN & THEN
@@ -290,95 +321,136 @@ class NewsServiceTest {
 
     @Test
     void getNewsByDateInRange_whenEmpty_returnEmptyList() {
-//        // GIVEN
-//        List<News> expected = List.of();
-//
-//        // Simulate ID generation
-//        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
-//
-//        LocalDate currentDate = mockDateNowService.localDateNow();
-//        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
-//        // WHEN
-//        List<News> actual = newsService.getNewsByDateInRange();
-//        // THEN
-//        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
-//        assertEquals(expected, actual);
-
         // GIVEN
-        ArrayList<News> expectedArrayList = new ArrayList<>(List.of());
+        List<News> expected = new ArrayList<>();
 
-        // Simulate ID generation
+        // Simulate now date generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow();
-        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expectedArrayList);
+        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
         // WHEN
-        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getNewsByDateInRange() );
-
+        List<News> actual = newsService.getNewsByDateInRange();
         // THEN
         verify(mockNewsRepo).findNewsByDateInRange(currentDate);
-        assertEquals(expectedArrayList, actualArrayList);
+        assertEquals(expected, actual);
+
+        //        // GIVEN
+        //        ArrayList<News> expectedArrayList = new ArrayList<>(List.of());
+        //
+        //        // Simulate now date generation
+        //        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
+        //
+        //        LocalDate currentDate = mockDateNowService.localDateNow();
+        //        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expectedArrayList);
+        //        // WHEN
+        //        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getNewsByDateInRange() );
+        //
+        //        // THEN
+        //        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
+        //        assertEquals(expectedArrayList, actualArrayList);
     }
 
     @Test
     void getNewsByDateInRange_whenNotEmpty_returnNewsList_1() {
-//        // GIVEN
-//        List<News> expected = List.of(n1);
-//        // Simulate ID generation
-//        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
-//
-//        LocalDate currentDate = mockDateNowService.localDateNow();
-//        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
-//        // WHEN
-//        List<News> actual = newsService.getNewsByDateInRange();
-//        // THEN
-//        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
-//        assertEquals(expected, actual);
-
         // GIVEN
-        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n1));
-        // Simulate ID generation
+        List<News> expected = new ArrayList<>(List.of(n1));
+        // Simulate now date generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
-        LocalDate currentDate = mockDateNowService.localDateNow();
-        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expectedArrayList);
+        LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
+        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
         // WHEN
-        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getNewsByDateInRange() );
+        List<News> actual = newsService.getNewsByDateInRange();
         // THEN
         verify(mockNewsRepo).findNewsByDateInRange(currentDate);
-        assertEquals(expectedArrayList, actualArrayList);
+        assertEquals(expected, actual);
+
+        //        // GIVEN
+        //        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n1));
+        //        // Simulate now date generation
+        //        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
+        //
+        //        LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
+        //        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expectedArrayList);
+        //        // WHEN
+        //        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getNewsByDateInRange() );
+        //        // THEN
+        //        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
+        //        assertEquals(expectedArrayList, actualArrayList);
     }
 
+    // here with sorting in the actual call of newsService.getNewsByDateInRange()
     @Test
     void getNewsByDateInRange_whenNotEmpty_returnNewsList_2() {
-//        // GIVEN
-//        List<News> expected = List.of(n2, n1);
-//
-//        // Simulate ID generation
-//        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
-//
-//        LocalDate currentDate = mockDateNowService.localDateNow();
-//        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(List.of(n1, n2));
-//        // WHEN
-//        List<News> actual = newsService.getNewsByDateInRange();
-//        // THEN
-//        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
-//        assertEquals(expected, actual);
-
         // GIVEN
-        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n2, n1));
+        List<News> expected = new ArrayList<>(List.of(n2, n1));
 
-        // Simulate ID generation
+        // Simulate now date generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
-        LocalDate currentDate = mockDateNowService.localDateNow();
+        LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
         when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn( new ArrayList<>(List.of(n1, n2)) );
         // WHEN
-        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getNewsByDateInRange() );
+        List<News> actual = newsService.getNewsByDateInRange();
         // THEN
         verify(mockNewsRepo).findNewsByDateInRange(currentDate);
-        assertEquals(expectedArrayList, actualArrayList);
+        assertEquals(expected, actual);
+
+        //        // GIVEN
+        //        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n2, n1));
+        //
+        //        // Simulate now date generation
+        //        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
+        //
+        //        LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
+        //        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn( new ArrayList<>(List.of(n1, n2)) );
+        //        // WHEN
+        //        ArrayList<News> actualArrayList = new ArrayList<>( newsService.getNewsByDateInRange() );
+        //        // THEN
+        //        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
+        //        assertEquals(expectedArrayList, actualArrayList);
     }
-
-
 }
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// remark: @RunWith(MockitoJUnitRunner.class) (instead of @ExtendWith(MockitoExtension.class)) is the JUnit 4 approach for initializing Mockito mocks. Since you appear to be using JUnit 5 (given the @BeforeEach annotation), the preferred approach is @ExtendWith(MockitoExtension.class).
+
+//@ExtendWith(MockitoExtension.class)
+//class NewsServiceTest {
+//
+//    @Mock
+//    private NewsRepo newsRepo;
+//
+//    @Mock
+//    private IdService idService;
+//
+//    @Mock
+//    private DateNowService dateNowService;
+//
+//    @InjectMocks
+//    private NewsService newsService;
+//
+//    private News n1, n2;
+//
+//    @BeforeEach
+//    void setUp() {
+//        // Initialize test data
+//        n1 = new News("1",
+//                "Vorführung X fällt aus",
+//                null,
+//                LocalDate.of(2025, 3, 10),
+//                LocalDate.of(2025, 3, 28),
+//                "light");
+//
+//        n2 = new News("2",
+//                "Geburtstagsfilm",
+//                null,
+//                LocalDate.of(2025, 2, 20),
+//                LocalDate.of(2025, 3, 15),
+//                "light");
+//    }
+//
+//    // Test methods will go here
+//}

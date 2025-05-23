@@ -5,6 +5,12 @@ import org.pupille.backend.contact.exceptions.InvalidContactDataException;
 import org.pupille.backend.contact.exceptions.InvalidDateTimeFormatException;
 import org.pupille.backend.contact.exceptions.InvalidEngagementHoursFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.mail.MailParseException;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.MailException; // This is the base class for all Spring Mail exceptions
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -19,16 +25,17 @@ import java.util.Map;
 public class ContactService {
 
     private final JavaMailSender mailSender;
+
     private final String senderEmail = "no-reply@pupille.org";
     private final String recipientEmail = "quy8vuong@gmail.com";
     private final String bccRecipientEmail = "vuqu@gmx.de";
 
     private static final String CELL_STYLE = "padding:4px;border:1px solid #ddd;text-align:left;";
-    private static final String NO_REPLY_TEXT = "<p style=\"font-size: 0.85em; color: #b00; background-color: #f5f5f5; padding: 8px; border-radius: 4px; margin-top: 10px;\">Diese Nachricht wurde automatisch erzeugt. Antworten an no-reply@pupille.org werden nicht bearbeitet.</p>" ;
-    private static final String INTRO_TEXT = "<p>Nachfolgend sind die vom Kontaktformular übermittelten Daten:</p>" ;
+    private static final String NO_REPLY_TEXT = "<p style=\"font-size: 0.85em; color: #b00; background-color: #f5f5f5; padding: 8px; border-radius: 4px; margin-top: 10px;\">Diese Nachricht wurde automatisch erzeugt. Antworten an no-reply@pupille.org werden nicht bearbeitet.</p>";
+    private static final String INTRO_TEXT = "<p>Nachfolgend sind die vom Kontaktformular übermittelten Daten:</p>";
 
     @Autowired
-    public ContactService(JavaMailSender mailSender) {
+    public ContactService(JavaMailSender mailSender) { // Inject MailServic
         this.mailSender = mailSender;
     }
 
@@ -54,29 +61,32 @@ public class ContactService {
         }
     }
 
-    private String escapeHtml(String input) {
-        if (input == null) return "";
-        return input.replace("&", "&amp;")
-                .replace("<", "&lt;")
-                .replace(">", "&gt;")
-                .replace("\"", "&quot;")
-                .replace("'", "&#39;");
-    }
+            // utils functions
+            // ~~~~~~~~~~~~~~~
+            private String escapeHtml(String input) {
+                if (input == null) return "";
+                return input.replace("&", "&amp;")
+                        .replace("<", "&lt;")
+                        .replace(">", "&gt;")
+                        .replace("\"", "&quot;")
+                        .replace("'", "&#39;");
+            }
 
-    private String formatDateTime(String dateTimeStr) {
-        if (dateTimeStr == null || dateTimeStr.isEmpty()) {
-            return null;
-        }
-        try {
-            LocalDateTime ldt = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            return ldt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'"));
-        } catch (DateTimeParseException e) {
-            System.err.println("Error parsing date/time string: " + dateTimeStr + "  Error: " + e.getMessage());
-            throw new InvalidDateTimeFormatException("Invalid date/time format. Please use ISO 8601 format.");
-        }
-    }
+            private String formatDateTime(String dateTimeStr) {
+                if (dateTimeStr == null || dateTimeStr.isEmpty()) {
+                    return null;
+                }
+                try {
+                    LocalDateTime ldt = LocalDateTime.parse(dateTimeStr, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                    return ldt.format(DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm 'Uhr'"));
+                } catch (DateTimeParseException e) {
+                    System.err.println("Error parsing date/time string: " + dateTimeStr + "  Error: " + e.getMessage());
+                    throw new InvalidDateTimeFormatException("Invalid date/time format. Please use ISO 8601 format.");
+                }
+            }
+            // ~~~~~~~~~~~~~~~
 
-    private void handleAOBInquiry(Map<String, Object> payload) {
+    public void handleAOBInquiry(Map<String, Object> payload) {
         final String betreff = escapeHtml((String) payload.get("betreff"));
         final String email = escapeHtml((String) payload.get("email"));
         final String nachricht = escapeHtml((String) payload.get("nachricht"));
@@ -106,12 +116,32 @@ public class ContactService {
             messageHelper.setText(htmlBody.toString(), true);
         };
 
+//        try {
+//            mailSender.send(messagePreparator);
+//        } catch (Exception e) {
+//            System.err.println("Error sending email: " + e.getMessage());
+//            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
+//        }
+
+        // more robust error handling:
         try {
             mailSender.send(messagePreparator);
+        } catch (MailAuthenticationException e) {
+            throw new EmailSendingFailedException("Failed to send message due to authentication issues.", e);
+        } catch (MailParseException e) {
+            throw new EmailSendingFailedException("Failed to send message due to malformed email content.", e);
+        } catch (MailSendException e) {
+            // This exception typically wraps lower-level JavaMail exceptions (e.g., SMTP errors)
+            // You can inspect e.getFailedMessages() if you sent multiple messages
+            throw new EmailSendingFailedException("Failed to send message. There might be a temporary issue with the mail server. Please try again later.", e);
+        } catch (MailException e) {
+            // Catch any other Spring Mail related exceptions
+            throw new EmailSendingFailedException("An unexpected error occurred while sending the email. Please try again later.", e);
         } catch (Exception e) {
-            System.err.println("Error sending email: " + e.getMessage());
-            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
+            // Catch any other unexpected exceptions
+            throw new EmailSendingFailedException("An unexpected error occurred. Please try again later.", e);
         }
+
     }
 
     public void handleKinomitarbeit(Map<String, Object> payload) {
@@ -142,7 +172,7 @@ public class ContactService {
             messageHelper.setTo(recipientEmail);
 //            messageHelper.setCc(email);
             messageHelper.setBcc(bccRecipientEmail);
-            
+
             messageHelper.setSubject("[Kinomitarbeit: Anfrage] " + name);
 
             StringBuilder htmlBody = new StringBuilder();
