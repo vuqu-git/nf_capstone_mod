@@ -2,6 +2,7 @@ package org.pupille.backend.mysql.termin;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -37,5 +38,15 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
                 LocalDateTime endDateSummer,
                 LocalDateTime startDateWinter,
                 LocalDateTime endDateWinter
+        );
+
+        //    +++++++++++++++++++++++++++++
+        //    reminder stuff
+        //    +++++++++++++++++++++++++++++
+
+        @Query("SELECT t FROM Termin t WHERE t.vorstellungsbeginn BETWEEN :startDateTime AND :endDateTime ORDER BY t.vorstellungsbeginn ASC")
+        List<Termin> findTermineByDateRange(
+                @Param("startDateTime") LocalDateTime startDateTime,
+                @Param("endDateTime") LocalDateTime endDateTime
         );
 }

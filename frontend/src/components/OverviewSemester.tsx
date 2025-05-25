@@ -21,7 +21,7 @@ export default function OverviewSemester() {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const getSemesterTermineWithFilmTitles = () => {
-        axios.get<TerminDTOWithFilmDTOOverviewSemester[]>("/api/screenings-semester")
+        axios.get<TerminDTOWithFilmDTOOverviewSemester[]>("/api/screenings/semester")
             .then((response) => {
                 setSemesterTermine(response.data)
             })

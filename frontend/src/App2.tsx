@@ -265,7 +265,7 @@ async function getScreeningDetails(tnr: string) {
 // for OverviewSemester.tsx
 async function getSemesterScreenings(): Promise<TerminDTOWithFilmDTOOverviewArchive[]> {
     try {
-        const response = await fetch(`/api/screenings-semester`);
+        const response = await fetch(`/api/screenings/semester`);
         if (!response.ok) {
             const errorText = await response.text();
             // This throw statement is executed only if the fetch request is successful IN THE SENSE that it returns a response, but that response indicates an error according to the HTTP status code. This means the server received your request and sent back a reply, but the reply said something went wrong (e.g., 404 Not Found, 500 Internal Server Error, etc.).
@@ -294,7 +294,7 @@ async function getSemesterScreenings(): Promise<TerminDTOWithFilmDTOOverviewArch
 // for OverviewArchive.tsx
 async function getArchiveScreenings(): Promise<TerminDTOWithFilmDTOOverviewSemester[]> {
     try {
-        const response = await fetch(`/api/screenings-archive`);
+        const response = await fetch(`/api/screenings/archive`);
         if (!response.ok) {
             const errorText = await response.text();
             throw new Response(`Failed to fetch archive screenings: ${errorText}`, {
