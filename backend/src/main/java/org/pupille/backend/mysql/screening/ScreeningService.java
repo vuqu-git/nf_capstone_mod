@@ -461,7 +461,9 @@ public class ScreeningService {
 
         List<Termin> termineOnTargetDate = terminRepository.findTermineByDateRange(startOfDay, endOfDay);
 
-        return buildTerminDTOWithFilmDTOGalleryList(termineOnTargetDate);
+        return buildTerminDTOWithFilmDTOGalleryList(termineOnTargetDate).stream()
+                .filter(terminDTO -> terminDTO.veroeffentlichen() != null && terminDTO.veroeffentlichen() > 0)
+                .collect(Collectors.toList());
     }
 
     public List<TerminDTOWithFilmDTOGallery> getTermineDaysInPast(int days) {
@@ -474,7 +476,9 @@ public class ScreeningService {
 
         List<Termin> termineOnTargetDate = terminRepository.findTermineByDateRange(startOfDay, endOfDay);
 
-        return buildTerminDTOWithFilmDTOGalleryList(termineOnTargetDate);
+        return buildTerminDTOWithFilmDTOGalleryList(termineOnTargetDate).stream()
+                .filter(terminDTO -> terminDTO.veroeffentlichen() != null && terminDTO.veroeffentlichen() > 0)
+                .collect(Collectors.toList());
     }
 
             // Helper method to avoid code duplication

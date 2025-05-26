@@ -67,7 +67,7 @@ export default function OverviewArchive() {
                                                 {renderHtmlText(termin.titel)}
                                                 <ol style={{ marginBottom: '0rem' }}>
                                                     {termin.films.map(film => (
-                                                        <li key={film.filmId}
+                                                        <li key={film.fnr}
                                                             style={{ fontSize: '0.75em'}}
                                                         >
                                                             {renderHtmlText(film.titel)}

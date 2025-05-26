@@ -1,5 +1,5 @@
 interface FilmDTOOverviewSemester {
-    filmId: number;
+    fnr: number;
     titel?: string | null;
     jahr?: number | null;
     besonderheit?: string | null;

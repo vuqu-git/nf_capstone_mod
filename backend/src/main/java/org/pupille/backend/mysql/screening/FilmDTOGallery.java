@@ -3,7 +3,7 @@ package org.pupille.backend.mysql.screening;
 import org.pupille.backend.mysql.film.Film;
 
 public record FilmDTOGallery(
-        Long filmId,
+        Long fnr,
         String titel,
         String kurztext,
         String besonderheit,

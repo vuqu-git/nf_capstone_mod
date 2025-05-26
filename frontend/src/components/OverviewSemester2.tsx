@@ -81,7 +81,7 @@ export default function OverviewSemester() {
                                             {renderHtmlText(termin.titel)}
                                             <ol className="film-list">
                                                 {termin.mainfilms.map(film => (
-                                                    <li key={film.filmId}>{renderHtmlText(film.titel)}</li>
+                                                    <li key={film.fnr}>{renderHtmlText(film.titel)}</li>
                                                 ))}
                                             </ol>
                                         </Link>

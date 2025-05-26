@@ -79,7 +79,7 @@ export default function OverviewArchive2() {
                                     {renderHtmlText(termin.titel)}
                                     <ol className="multiple-films-list">
                                         {termin.films.map(film => (
-                                            <li key={film.filmId} className="multiple-films-list-item">
+                                            <li key={film.fnr} className="multiple-films-list-item">
                                                 {renderHtmlText(film.titel)}
                                             </li>
                                         ))}

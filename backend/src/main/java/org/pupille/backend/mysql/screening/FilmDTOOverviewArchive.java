@@ -3,7 +3,7 @@ package org.pupille.backend.mysql.screening;
 import org.pupille.backend.mysql.film.Film;
 
 public record FilmDTOOverviewArchive(
-        Long filmId,
+        Long fnr,
         String titel
 ) {
     public FilmDTOOverviewArchive(Film film) {

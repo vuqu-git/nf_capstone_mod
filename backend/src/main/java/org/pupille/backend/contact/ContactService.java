@@ -381,7 +381,64 @@ public class ContactService {
 //    Reminder mails
 //    ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    public void sendPreReminder(String vorstellungsbeginn, String titel, String patenschaft) {
+//    public void sendPreReminder(String vorstellungsbeginn, String titel, String patenschaft) {
+//        if (vorstellungsbeginn == null || vorstellungsbeginn.isEmpty() ||
+//                titel == null || titel.isEmpty() ||
+//                patenschaft == null || patenschaft.isEmpty()) {
+//            throw new InvalidContactDataException("Alle Felder müssen ausgefüllt sein.");
+//        }
+//
+//        LocalDateTime ldtVorstellungsbeginn;
+//        try {
+//            ldtVorstellungsbeginn = LocalDateTime.parse(vorstellungsbeginn, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+//        } catch (DateTimeParseException e) {
+//            throw new InvalidDateTimeFormatException("Ungültiges Datumsformat für vorstellungsbeginn.");
+//        }
+//        String datum = ldtVorstellungsbeginn.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+//        String uhrzeit = ldtVorstellungsbeginn.format(DateTimeFormatter.ofPattern("HH:mm"));
+//
+//        String betreff = "Vorbereitung von " + titel.toUpperCase() + " für den " + datum + " in der Pupille";
+//
+//        StringBuilder htmlBody = new StringBuilder();
+//        htmlBody.append(NO_REPLY_TEXT);
+//        htmlBody.append("<p>Hallo,</p>");
+//        htmlBody.append("<p>in der Pupille läuft in 10 Tagen die Vorstellung von <b>")
+//                .append(titel.toUpperCase())
+//                .append("</b> um <b>")
+//                .append(uhrzeit)
+//                .append(" Uhr</b> für die du die Patenschaft inne hast :)</p>");
+//        htmlBody.append("<p>Dies ist ein automatischer Reminder für folgende vorbereitenden Aufgaben:</p>");
+//        htmlBody.append("<ul>");
+//        htmlBody.append("<li>Liegt eine Terminbestätigung vor?</li>");
+//        htmlBody.append("<li>Biite achte darauf, dass der Kopienversand bzw. Download rechtzeitig initiiert wird!</li>");
+//        htmlBody.append("<li>Sind genügend Personen im Dienstplan eingetragen?</li>");
+//        htmlBody.append("</ul>");
+//
+//        MimeMessagePreparator messagePreparator = mimeMessage -> {
+//            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+//            messageHelper.setFrom(senderEmail);
+//            messageHelper.setTo(patenschaft);
+//            messageHelper.setSubject(betreff);
+//            messageHelper.setText(htmlBody.toString(), true);
+//        };
+//
+//        try {
+//            mailSender.send(messagePreparator);
+//        } catch (MailAuthenticationException e) {
+//            throw new EmailSendingFailedException("Failed to send message due to authentication issues.", e);
+//        } catch (MailParseException e) {
+//            throw new EmailSendingFailedException("Failed to send message due to malformed email content.", e);
+//        } catch (MailSendException e) {
+//            throw new EmailSendingFailedException("Failed to send message. There might be a temporary issue with the mail server. Please try again later.", e);
+//        } catch (MailException e) {
+//            throw new EmailSendingFailedException("An unexpected error occurred while sending the email. Please try again later.", e);
+//        } catch (Exception e) {
+//            throw new EmailSendingFailedException("An unexpected error occurred. Please try again later.", e);
+//        }
+//    }
+
+
+    public void sendReminder(int days, String vorstellungsbeginn, String titel, String patenschaft, boolean isPreReminder) {
         if (vorstellungsbeginn == null || vorstellungsbeginn.isEmpty() ||
                 titel == null || titel.isEmpty() ||
                 patenschaft == null || patenschaft.isEmpty()) {
@@ -397,95 +454,45 @@ public class ContactService {
         String datum = ldtVorstellungsbeginn.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         String uhrzeit = ldtVorstellungsbeginn.format(DateTimeFormatter.ofPattern("HH:mm"));
 
-        String betreff = "Vorbereitung von " + titel.toUpperCase() + " für den " + datum + " in der Pupille";
-
-        StringBuilder htmlBody = new StringBuilder();
-        htmlBody.append(NO_REPLY_TEXT);
-        htmlBody.append("<p>Hallo,</p>");
-        htmlBody.append("<p>in der Pupille läuft in 10 Tagen die Vorstellung von <b>")
-                .append(titel.toUpperCase())
-                .append("</b> um <b>")
-                .append(uhrzeit)
-                .append(" Uhr</b> für die du die Patenschaft inne hast :)</p>");
-        htmlBody.append("<p>Dies ist ein automatischer Reminder für folgende vorbereitenden Aufgaben:</p>");
-        htmlBody.append("<ul>");
-        htmlBody.append("<li>Liegt eine Terminbestätigung vor?</li>");
-        htmlBody.append("<li>Biite achte darauf, dass der Kopienversand bzw. Download rechtzeitig initiiert wird!</li>");
-        htmlBody.append("<li>Sind genügend Personen im Dienstplan eingetragen?</li>");
-        htmlBody.append("</ul>");
-
-        MimeMessagePreparator messagePreparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            messageHelper.setFrom(senderEmail);
-            messageHelper.setTo(patenschaft);
-            messageHelper.setSubject(betreff);
-            messageHelper.setText(htmlBody.toString(), true);
-        };
-
-        try {
-            mailSender.send(messagePreparator);
-        } catch (MailAuthenticationException e) {
-            throw new EmailSendingFailedException("Failed to send message due to authentication issues.", e);
-        } catch (MailParseException e) {
-            throw new EmailSendingFailedException("Failed to send message due to malformed email content.", e);
-        } catch (MailSendException e) {
-            throw new EmailSendingFailedException("Failed to send message. There might be a temporary issue with the mail server. Please try again later.", e);
-        } catch (MailException e) {
-            throw new EmailSendingFailedException("An unexpected error occurred while sending the email. Please try again later.", e);
-        } catch (Exception e) {
-            throw new EmailSendingFailedException("An unexpected error occurred. Please try again later.", e);
-        }
-    }
-
-
-    public void sendReminder(String vorstellungsbeginn, String titel, String patenschaft, boolean isPreReminder) {
-        if (vorstellungsbeginn == null || vorstellungsbeginn.isEmpty() ||
-                titel == null || titel.isEmpty() ||
-                patenschaft == null || patenschaft.isEmpty()) {
-            throw new InvalidContactDataException("Alle Felder müssen ausgefüllt sein.");
-        }
-
-        LocalDateTime ldtVorstellungsbeginn;
-        try {
-            ldtVorstellungsbeginn = LocalDateTime.parse(vorstellungsbeginn, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-        } catch (DateTimeParseException e) {
-            throw new InvalidDateTimeFormatException("Ungültiges Datumsformat für vorstellungsbeginn.");
-        }
-        String datum = ldtVorstellungsbeginn.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        String uhrzeit = ldtVorstellungsbeginn.format(DateTimeFormatter.ofPattern("HH:mm"));
-
-        String betreff = (isPreReminder ? "Vorbereitung von " : "Nachbereitung von ")
-                + titel.toUpperCase() + " für den " + datum + " in der Pupille";
+        String betreff = (isPreReminder ? "Pupille: Vorbereitung von " : "Pupille: Nachbereitung von ")
+                + titel.toUpperCase() + " am " + datum;
 
         StringBuilder htmlBody = new StringBuilder();
         htmlBody.append(NO_REPLY_TEXT);
         if (isPreReminder) {
             htmlBody.append("<p>Hallo,</p>");
-            htmlBody.append("<p>in der Pupille läuft in 10 Tagen die Vorstellung von <b>")
-                    .append(titel.toUpperCase())
-                    .append("</b> um <b>")
+            htmlBody.append("<p>in der Pupille läuft in ")
+                    .append(days)
+                    .append(" Tagen am <b>")
+                    .append(datum)
+                    .append(" um ")
                     .append(uhrzeit)
-                    .append(" Uhr</b> für die du die Patenschaft inne hast :)</p>");
-            htmlBody.append("<p>Dies ist ein automatischer Reminder für folgende vorbereitenden Aufgaben:</p>");
+                    .append(" Uhr</b> die Vorstellung von <b>")
+                    .append(titel.toUpperCase())
+                    .append("</b> für die du die Patenschaft inne hast :)</p>");
+            htmlBody.append("<p>Dies ist ein automatischer Reminder für u.a. folgende vorbereitenden Aufgaben:</p>");
             htmlBody.append("<ul>");
             htmlBody.append("<li>Liegt eine Terminbestätigung vor?</li>");
             htmlBody.append("<li>Bitte achte darauf, dass der Kopienversand bzw. Download rechtzeitig initiiert wird!</li>");
             htmlBody.append("<li>Sind genügend Personen im Dienstplan eingetragen?</li>");
             htmlBody.append("</ul>");
+            htmlBody.append("<p>Freundliche Grüße!</p>");
         } else {
             htmlBody.append("<p>Hallo,</p>");
-            htmlBody.append("<p>in der Pupille lief vor 7 Tagen die Vorstellung von <b>")
+            htmlBody.append("<p>in der Pupille lief vor ")
+                    .append(days)
+                    .append(" Tagen am ")
+                    .append(datum)
+                    .append(" die Vorstellung von <b>")
                     .append(titel.toUpperCase())
-                    .append("</b> um <b>")
-                    .append(uhrzeit)
-                    .append(" Uhr</b> für die du die Patenschaft inne hast :)</p>");
-            htmlBody.append("<p>Dies ist ein automatischer Reminder für folgende Erledigungen im Nachgang:</p>");
+                    .append("</b> für die du die Patenschaft inne hast :)</p>");
+            htmlBody.append("<p>Dies ist ein automatischer Reminder für u.a. folgende Erledigungen im Nachgang:</p>");
             htmlBody.append("<ul>");
-            htmlBody.append("<li>Rückversand der Kopie (wenn ein physischer Datenträger vorliegt)</li>");
+            htmlBody.append("<li>Rückversand der Kopie bzw. Löschung der Filmdateien auf PC und Server</li>");
             htmlBody.append("<li>Spielfilmabrechnung machen und verschicken</li>");
             htmlBody.append("<li>Einzahlung der Einnahmen in die Wege leiten</li>");
-            htmlBody.append("<li>Löschung der Filmdateien auf PC und Server</li>");
             htmlBody.append("</ul>");
+            htmlBody.append("<p>Freundliche Grüße!</p>");
         }
 
         MimeMessagePreparator messagePreparator = mimeMessage -> {

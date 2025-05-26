@@ -27,7 +27,7 @@ package org.pupille.backend.mysql.screening;
 import org.pupille.backend.mysql.film.Film;
 
 public record FilmDTOOverviewSemester(
-        Long filmId,
+        Long fnr,
         String titel,
         Integer jahr,
         String besonderheit,
