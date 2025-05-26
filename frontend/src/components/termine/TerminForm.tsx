@@ -10,9 +10,19 @@ import {Link} from "react-router-dom";
 
 const baseURL = "/api/termine";
 
+// Helper function to get current date in YYYY-MM-DD format
+// for default time setting in form input vorstellungsbeginn
+const getCurrentDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
 const emptyTerminForForm = {
     tnr: 0,
-    termin: '',
+    vorstellungsbeginn: `${getCurrentDate()}T20:15`,
     titel: '',
     text: '',
     kurztext: '',
@@ -86,7 +96,7 @@ export default function TerminForm() {
             getSingleTermin();
 
         } else {
-            // Reset the form for adding a new termin
+            // Reset the form for adding a new termin, including the default time for vorstellungsbeginn
             setSelectedTermin(emptyTerminForForm);
         }
     }, [selectedTerminId]);
