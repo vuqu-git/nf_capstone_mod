@@ -95,13 +95,13 @@ public class ScreeningService {
 //                .toList();
 //    }
 
-    //leere Filmliste, wenn termin.titel present ist
-    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
+    //filter for veroeffentlichen > 0 happen in frontend react component Gallery2.tsx
+    public List<TerminDTOWithFilmDTOGallery> getAllFutureTermineWithFilms() {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
 
-        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+        List<Termin> futureTermine = terminRepository.findAllFutureTermine(now);
 
         List<Long> terminIds = futureTermine.stream()
                 .map(Termin::getTnr)
@@ -407,7 +407,7 @@ public class ScreeningService {
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
 
         // 1. Get all future Termine
-        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+        List<Termin> futureTermine = terminRepository.findAllFutureTermine(now);
 
         // 2. Filter veroeffentlichen > 0
         List<Termin> publishableTermine = futureTermine.stream()

@@ -220,7 +220,7 @@ export default function TerminverknuepfungForm() {
     // const [selectedTerminId, setSelectedTerminId] = useState<number | undefined>(undefined);
 
     // GET all termine
-    const getAllTermine = () => {
+    const getAllSortedTermine = () => {
         setErrorMessage("");
 
         axios.get(`api/termine/allsorted`)
@@ -233,7 +233,7 @@ export default function TerminverknuepfungForm() {
 
     // Fetch all termine for the dropdown selection
     useEffect(() => {
-        getAllTermine();
+        getAllSortedTermine();
     }, []);
 
     const handleTerminSelectionChange = (id: number | undefined) => {

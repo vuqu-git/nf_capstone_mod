@@ -263,7 +263,7 @@ async function getScreeningDetails(tnr: string) {
 
 // #############################
 // for OverviewSemester.tsx
-async function getSemesterScreenings(): Promise<TerminDTOWithFilmDTOOverviewArchive[]> {
+async function getSemesterScreenings(): Promise<TerminDTOWithFilmDTOOverviewSemester[]> {
     try {
         const response = await fetch(`/api/screenings/semester`);
         if (!response.ok) {
@@ -292,7 +292,7 @@ async function getSemesterScreenings(): Promise<TerminDTOWithFilmDTOOverviewArch
 
 // #############################
 // for OverviewArchive.tsx
-async function getArchiveScreenings(): Promise<TerminDTOWithFilmDTOOverviewSemester[]> {
+async function getArchiveScreenings(): Promise<TerminDTOWithFilmDTOOverviewArchive[]> {
     try {
         const response = await fetch(`/api/screenings/archive`);
         if (!response.ok) {

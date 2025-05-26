@@ -13,16 +13,16 @@ public class FilmController {
 
     private final FilmService filmService;
 
-    @GetMapping
-    public List<FilmDTOForm> getAllFilms() {
-        return filmService.getAllFilms();
-    }
+//    @GetMapping
+//    public List<FilmDTOForm> getAllFilms() {
+//        return filmService.getAllFilms();
+//    }
 
-    @GetMapping("/servicesort")
-    public ResponseEntity<List<FilmDTOForm>> getAllFilmsServiceSortedByTitleAsc() {
-        List<FilmDTOForm> films = filmService.getAllFilmsServiceSortedByTitleAsc();
-        return ResponseEntity.ok(films);
-    }
+//    @GetMapping("/servicesort")
+//    public ResponseEntity<List<FilmDTOForm>> getAllFilmsServiceSortedByTitleAsc() {
+//        List<FilmDTOForm> films = filmService.getAllFilmsServiceSortedByTitleAsc();
+//        return ResponseEntity.ok(films);
+//    }
 
     // this one is repo sorted
     @GetMapping("/allsorted")

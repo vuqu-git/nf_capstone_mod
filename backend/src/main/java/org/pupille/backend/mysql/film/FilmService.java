@@ -19,20 +19,20 @@ public class FilmService {
     private final FilmRepository filmRepository;
 
     // Retrieve all films
-    public List<FilmDTOForm> getAllFilms() {
-        List<Film> filme = filmRepository.findAll();
-        return filme.stream()
-                .map(FilmDTOForm::new)
-                .collect(Collectors.toList());
-    }
+//    public List<FilmDTOForm> getAllFilms() {
+//        List<Film> filme = filmRepository.findAll();
+//        return filme.stream()
+//                .map(FilmDTOForm::new)
+//                .collect(Collectors.toList());
+//    }
 
-    // Retrieve all films sorted by title ascending
-    public List<FilmDTOForm> getAllFilmsServiceSortedByTitleAsc() {
-        List<Film> filme = filmRepository.findAll(Sort.by(Sort.Direction.ASC, "titel"));
-        return filme.stream()
-                .map(FilmDTOForm::new)
-                .collect(Collectors.toList());
-    }
+    // Retrieve all films sorted in service method by title ascending
+//    public List<FilmDTOForm> getAllFilmsServiceSortedByTitleAsc() {
+//        List<Film> filme = filmRepository.findAll(Sort.by(Sort.Direction.ASC, "titel"));
+//        return filme.stream()
+//                .map(FilmDTOForm::new)
+//                .collect(Collectors.toList());
+//    }
 
 //    public List<FilmProjectionInterface> getAllFilmsByOrderByTitelAsc() {
 //        return filmRepository.findAllByOrderByTitelAsc();
@@ -53,20 +53,7 @@ public class FilmService {
 
             //    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
             // utils function
-//            public static String extractDirectors(String input) {
-//                if (input == null || input.isEmpty()) {
-//                    return ""; // Handle null or empty input
-//                }
-//
-//                Pattern pattern = Pattern.compile(": (.*?)(?=\\r|$)");
-//                Matcher matcher = pattern.matcher(input);
-//
-//                if (matcher.find()) {
-//                    return matcher.group(1).trim();
-//                } else {
-//                    return "";
-//                }
-//            }
+
             public static String extractDirectors(String stab) {
                 if (stab == null || stab.isEmpty()) return "";
 

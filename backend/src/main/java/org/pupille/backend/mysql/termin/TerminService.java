@@ -23,14 +23,14 @@ public class TerminService {
         this.terminRepository = terminRepository;
     }
 
-    public List<TerminDTOForm> getAllTermine() {
-        List<Termin> termine = terminRepository.findAll();
-        return termine.stream()
-                .map(TerminDTOForm::new)
-                .collect(Collectors.toList());
-    }
+//    public List<TerminDTOForm> getAllTermine() {
+//        List<Termin> termine = terminRepository.findAll();
+//        return termine.stream()
+//                .map(TerminDTOForm::new)
+//                .collect(Collectors.toList());
+//    }
 
-        public List<TerminProjectionSelection> getAllTermineByOrderByVorstellungsbeginnDesc() {
+    public List<TerminProjectionSelection> getAllTermineByOrderByVorstellungsbeginnDesc() {
         return terminRepository.findAllByOrderByVorstellungsbeginnDesc();
     }
 
@@ -67,27 +67,28 @@ public class TerminService {
     }
 
     // ########################################################################
-    // both methods here are just only used for controller for testing purposes
-    public List<TerminDTOForm> getFutureTermine() {
-        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
-        LocalTime fixedTime = LocalTime.of(0, 1);
-        // Combine the current date and the fixed time
-        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
-
-        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
-        return futureTermine.stream()
-                .map(TerminDTOForm::new)
-                .collect(Collectors.toList());
-    }
-
-    // If you need the projected results:
-    public List<TerminProjectionSelection> getFutureTermineProjected() {
-        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
-        LocalTime fixedTime = LocalTime.of(0, 1);
-        // Combine the current date and the fixed time
-        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
-        return terminRepository.findFutureTermineProjected(now);
+//    // both methods here are just only used for controller for testing purposes
+//    public List<TerminDTOForm> getAllFutureTermine() {
+//        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+//        LocalTime fixedTime = LocalTime.of(0, 1);
+//        // Combine the current date and the fixed time
+//        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+//
+//        List<Termin> futureTermine = terminRepository.findAllFutureTermine(now);
+//        return futureTermine.stream()
+//                .map(TerminDTOForm::new)
+//                .collect(Collectors.toList());
+//    }
+//
+//    // If you need the projected results:
+//    public List<TerminProjectionSelection> getAllFutureTermineProjected() {
+//        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+//        LocalTime fixedTime = LocalTime.of(0, 1);
+//        // Combine the current date and the fixed time
+//        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
+//        return terminRepository.findAllFutureTermineProjected(now);
+//    }
     // ########################################################################
-    }
+
 }
 
