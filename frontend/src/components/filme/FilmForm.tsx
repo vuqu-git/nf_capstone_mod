@@ -279,13 +279,16 @@ export default function FilmForm() {
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">
-                    <Form.Label>vollständiger Bilddateiname (müssen unter https://pupille.org/bilder/filmbilder/ abgelegt sein)</Form.Label>
+                    <Form.Label>vollständiger Bilddateiname</Form.Label>
                     <Form.Control
                         type="text"
                         name="bild"
                         value={selectedFilm.bild || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Bilddatei muss  unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="text" className="mt-3">
