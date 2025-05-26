@@ -269,7 +269,7 @@ export default function TerminverknuepfungForm() {
 
                 <TerminSelection
                     termine={allTermine}
-                    selectedTerminId={selectedTV.tnr}
+                    selectedTnr={selectedTV.tnr}
                     onSelectTermin={handleTerminSelectionChange}
                 />
 

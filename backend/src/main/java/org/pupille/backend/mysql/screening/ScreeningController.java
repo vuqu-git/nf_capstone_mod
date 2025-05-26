@@ -23,7 +23,7 @@ public class ScreeningController {
     // for ScreeningDetails react component
     @GetMapping("/screenings/{tnr}")
     public ResponseEntity<TerminDTOFormWithFilmsDTOFormPlus> getTerminWithFilmsPlusForTermin(@PathVariable Long tnr) {
-        TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTerminId(tnr);
+        TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTnr(tnr);
         return ResponseEntity.ok(terminWithFilmsPlus);
     }
 

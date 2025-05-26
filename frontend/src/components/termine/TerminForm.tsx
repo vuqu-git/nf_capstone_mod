@@ -193,7 +193,7 @@ export default function TerminForm() {
 
             <TerminSelection
                 termine={allTermine}
-                selectedTerminId={selectedTerminId}
+                selectedTnr={selectedTerminId}
                 onSelectTermin={handleSelectionChange}
             />
 

@@ -5,11 +5,11 @@ import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSele
 
 interface TerminSelectionProps {
     termine: TerminDTOSelection[];
-    selectedTerminId: number | undefined;
+    selectedTnr: number | undefined;
     onSelectTermin: (id: number | undefined) => void;
 }
 
-export default function TerminSelection({ termine, selectedTerminId, onSelectTermin }: TerminSelectionProps) {
+export default function TerminSelection({ termine, selectedTnr, onSelectTermin }: TerminSelectionProps) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSelectTermin(Number(e.target.value) || undefined);
@@ -20,7 +20,7 @@ export default function TerminSelection({ termine, selectedTerminId, onSelectTer
             <Form.Label htmlFor="termin-selection">Termin selection</Form.Label>
             <Form.Select
                 id="termin-selection" // Add id to connect to the label
-                value={selectedTerminId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
+                value={selectedTnr ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
                 <option value="" selected>Select a Termin to edit (or leave empty to add new)</option>

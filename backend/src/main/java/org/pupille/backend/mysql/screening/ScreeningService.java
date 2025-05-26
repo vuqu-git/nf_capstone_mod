@@ -136,7 +136,7 @@ public class ScreeningService {
 
 
 //    // not required because the list doesn't contain any termin data
-//    public List<FilmDTOForm> getFilmsByTerminId(Long tnr) {
+//    public List<FilmDTOForm> getFilmsByTnr(Long tnr) {
 //        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
 //
 //        return connections.stream()
@@ -149,7 +149,7 @@ public class ScreeningService {
 //    ########################################################
 
 
-    public TerminDTOFormWithFilmsDTOFormPlus getTerminWithFilmsPlusByTerminId(Long tnr) {
+    public TerminDTOFormWithFilmsDTOFormPlus getTerminWithFilmsPlusByTnr(Long tnr) {
         // Fetch Termin
         Termin termin = terminRepository.findById(tnr)
                 .orElseThrow(() -> new NoSuchElementException("Termin not found"));

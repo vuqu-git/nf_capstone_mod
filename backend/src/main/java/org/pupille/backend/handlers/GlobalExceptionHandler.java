@@ -26,7 +26,7 @@
 //        return new CustomErrorMessage(e.getMessage(), Instant.now());
 //    }
 //
-//    // this one is for exception thrown in getTerminWithFilmsPlusByTerminId method in ScreeningService class
+//    // this one is for exception thrown in getTerminWithFilmsPlusByTnr method in ScreeningService class
 //    @ExceptionHandler(NoSuchElementException.class)
 //    @ResponseStatus(HttpStatus.NOT_FOUND)
 //    public CustomErrorMessage handleTerminNotFoundException(NoSuchElementException e) {
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
     }
 
     // --- Exception Handler for Screening Service ---
-    // this one is for exception thrown in getTerminWithFilmsPlusByTerminId method in ScreeningService class
+    // this one is for exception thrown in getTerminWithFilmsPlusByTnr method in ScreeningService class
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public CustomErrorMessage handleTerminNotFoundException(NoSuchElementException e) {
