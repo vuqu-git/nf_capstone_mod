@@ -1,8 +1,4 @@
 import {Link} from "react-router-dom";
-import Login from "./Login.tsx";
-import Logout from "./Logout.tsx";
-import {useEffect, useState} from "react";
-import axios from "axios";
 
 // interface Props {
 //
@@ -11,26 +7,8 @@ import axios from "axios";
 // export default function OverviewArchive({ }: Props) {
 export default function Admin() {
 
-    // const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-    const [fetchedUser, setFetchedUser] = useState<string>();
-
-
-    function getMe() {
-        axios.get("/api/oauthgithub/me")
-            // .then(() => setLoggedIn(true))
-            .then( response => setFetchedUser(response.data))
-            .catch(e => console.error(e));
-    }
-
-    useEffect(getMe, []);
-
     return (
         <>
-            <Login />
-            <Logout />
-            {/*<p>{isLoggedIn && "Eingeloggt!"}</p>*/}
-            <p>{fetchedUser}</p>
-
             <h1>Administratives</h1>
             <section>
                 <h3>News</h3>

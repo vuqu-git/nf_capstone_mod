@@ -37,6 +37,8 @@ import StartPreviewQ from "./components/StartPreviewQ.tsx";
 import PreviewQ from "./components/PreviewQ.tsx";
 import Preview1Parent from "./components/previewNotResponsive/Preview1Parent.tsx";
 import PreviewContainer from './components/preview/PreviewContainer.tsx';
+import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import Login from "./components/Login.tsx";
 
 const router = createBrowserRouter([
     {
@@ -83,40 +85,53 @@ const router = createBrowserRouter([
                         handle: { scrollMode: "pathname" },
                     },
 
+                    // LOGIN
                     {
-                        path: "admin",
-                        element: <Admin />,
+                        path: "login",
+                        element: <Login />,
                         handle: { scrollMode: "pathname" },
                     },
+
+                    // PROTECTED ADMIN ROUTES
                     {
-                        path: "addnews",
-                        element: <AddNews />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "editnews",
-                        element: <EditDeleteNews />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "deletenews",
-                        element: <EditDeleteNews />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "adminfilme",
-                        element: <FilmForm />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "admintermine",
-                        element: <TerminForm />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "admintvennew",
-                        element: <TerminverknuepfungForm />,
-                        handle: { scrollMode: "pathname" },
+                        element: <ProtectedRoute />, // No path, acts as a guard for all children
+                        children: [
+                            {
+                                path: "admin",
+                                element: <Admin />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "addnews",
+                                element: <AddNews />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "editnews",
+                                element: <EditDeleteNews />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "deletenews",
+                                element: <EditDeleteNews />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "adminfilme",
+                                element: <FilmForm />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "admintermine",
+                                element: <TerminForm />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "admintvennew",
+                                element: <TerminverknuepfungForm />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                        ],
                     },
 
                     {
