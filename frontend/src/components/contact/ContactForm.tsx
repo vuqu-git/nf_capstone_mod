@@ -21,10 +21,10 @@ interface IssueConfig {
 }
 
 const issueSelectOptions: IssueConfig[] = [
+    { value: 'aob', label: 'Allgemeine Anfrage' },
     { value: 'eventOhneProjektion', label: 'Veranstaltung im Festsaal ohne Projektion' },
     { value: 'eventMitProjektion', label: 'Veranstaltung im Festsaal mit Projektion' },
     { value: 'kinomitarbeit', label: 'Kinomitarbeit' },
-    { value: 'aob', label: 'Sonstiges' },
 ];
 
 const ContactForm: React.FC = () => {

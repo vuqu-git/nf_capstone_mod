@@ -13,14 +13,15 @@ export default function Login() {
         window.open(host + '/oauth2/authorization/github', '_self')
     }
     return (
-        <div style={{ textAlign: "center", marginTop: 40 }}>
+        <div className="text-center mt-4">
+            <Button onClick={login} variant="success">Login to admin section with Github</Button>
             {/* Display the message if it exists */}
             {message && (
-                <div style={{ color: 'rgb(255, 208, 54)', marginBottom: 20, fontSize: '1.0em' }}>
+                // <div style={{ color: 'rgb(255, 208, 54)', marginTop: 20, fontSize: '1.0em' }}>
+                <div style={{ color: 'crimson', marginTop: 20, fontSize: '1.0em' }}>
                     {message}
                 </div>
             )}
-            <Button onClick={login} variant="success">Login with Github</Button>
         </div>
     );
 }

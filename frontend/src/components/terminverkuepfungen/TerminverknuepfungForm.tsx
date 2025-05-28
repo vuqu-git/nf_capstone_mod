@@ -9,7 +9,7 @@ import FilmSelection from "../filme/FilmSelection.tsx";
 import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import TerminSelection from "../termine/TerminSelection.tsx";
 // import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
-import {Link} from "react-router-dom";
+import AdminNav from "../AdminNav.tsx";
 
 const baseURL = "/api/terminverknuepfung";
 
@@ -246,9 +246,7 @@ export default function TerminverknuepfungForm() {
 
     return (
         <div data-bs-theme="dark">
-            <Link to={`/admin`}>
-                zum Adminbereich
-            </Link>
+            <AdminNav />
 
             <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and existing Termin"}</h3>
 

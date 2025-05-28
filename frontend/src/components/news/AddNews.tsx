@@ -4,8 +4,7 @@ import axios from "axios";
 import NewsForm from "./NewsForm.tsx";
 
 import { preprocessFormData } from '../../utils/preprocessFormData.ts';
-import {Link} from "react-router-dom";
-import * as React from "react";
+import AdminNav from "../AdminNav.tsx";
 
 const baseURL = "/api/news";
 
@@ -46,10 +45,8 @@ export default function AddNews() {
     };
 
     return (
-        <div>
-            <Link to={`/admin`}>
-                zum Adminbereich
-            </Link>
+        <div data-bs-theme="dark">
+            <AdminNav />
 
             <NewsForm
                 newsItem={addingNews}

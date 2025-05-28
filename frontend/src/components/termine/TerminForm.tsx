@@ -6,7 +6,7 @@ import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 
 import { preprocessFormData } from '../../utils/preprocessFormData.ts';
-import {Link} from "react-router-dom";
+import AdminNav from "../AdminNav.tsx";
 
 const baseURL = "/api/termine";
 
@@ -195,9 +195,7 @@ export default function TerminForm() {
 
     return (
         <div data-bs-theme="dark">
-            <Link to={`/admin`}>
-                zum Adminbereich
-            </Link>
+            <AdminNav />
 
             <h3 className="mt-3">{selectedTerminId ? "Edit or delete " : "Add new "} Termin</h3>
 

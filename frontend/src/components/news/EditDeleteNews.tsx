@@ -1,16 +1,14 @@
-import {Link, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import EditNews from './EditNews.tsx';
 import DeleteNews from './DeleteNews.tsx';
-import React from "react";
+import AdminNav from "../AdminNav.tsx";
 
 export default function EditDeleteNews() {
     const location = useLocation();
 
     return (
-        <div className="container mt-4" data-bs-theme="dark">
-            <Link to={`/admin`}>
-                zum Adminbereich
-            </Link>
+        <div data-bs-theme="dark">
+            <AdminNav />
 
             <h4>{location.pathname === '/deletenews' ? 'Delete News Selection' : 'Edit News Selection'}</h4>
             {location.pathname === '/deletenews' ? <DeleteNews /> : <EditNews />}
