@@ -24,7 +24,6 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/admin").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/news/all").authenticated()
                         .requestMatchers(HttpMethod.PUT,"/api/news/all/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/news/all/{id}").authenticated()
