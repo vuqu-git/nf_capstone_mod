@@ -40,6 +40,7 @@ import PreviewContainer from './components/preview/PreviewContainer.tsx';
 import ProtectedRoute from "./components/security/ProtectedRoute.tsx";
 import Login from "./components/security/Login.tsx";
 import {AuthProvider} from "./components/security/AuthContext.tsx";
+import IdentSlide from "./components/IdentSlide.tsx";
 
 // #############################
 // for Gallery.tsx
@@ -291,6 +292,13 @@ const router = createBrowserRouter([
             //     element: <LongPage />,
             // },
         ],
+    },
+
+    // IdentSlide
+    {
+        path: "identslide",
+        element: <IdentSlide />,
+        handle: { scrollMode: "pathname" },
     },
 
     {
