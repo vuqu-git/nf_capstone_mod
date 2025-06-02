@@ -136,7 +136,7 @@ const ContactForm: React.FC = () => {
 
             <h3 className={styles.subsectionTitle}>fernmündlich</h3>
             <p className={styles.formDescription}>I.d.R. nur taggleich vor und nach den Spielterminen erreichbar.</p>
-            <p className={styles.formDescription}><a href="tel:06979828976">Telefon: 069 7982 8976</a></p>
+            <p className={styles.formDescription}>Telefon: <a href="tel:06979828976">069 7982 8976</a></p>
 
             <h3 className={styles.subsectionTitle}>schriftlich</h3>
             {submissionStatus.status === 'success' && (
@@ -153,7 +153,7 @@ const ContactForm: React.FC = () => {
             {submissionStatus.status !== 'success' && (
                 <>
                     <p className={styles.formDescription}>
-                        Für eine schnelle und strukturierte Bearbeitung von Anfragen bitten wir darum, ausschließlich das Kontaktformular auf unserer Webseite zu verwenden.
+                        Für eine schnelle und strukturierte Bearbeitung von Anfragen bitten wir darum, stets das Kontaktformular auf unserer Webseite zu verwenden.
                     </p>
                     <p className={styles.formDescription}>
                         Da das gesamte Kinoteam ehrenamtlich arbeitet, kann die Beantwortung etwas Zeit in Anspruch nehmen – wir bitten um Verständnis und etwas Geduld.
