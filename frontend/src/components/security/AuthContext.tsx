@@ -12,22 +12,20 @@ interface AuthProviderProps {
     children: ReactNode; // ReactNode covers JSX elements, strings, fragments, etc.
 }
 
-
 // --- AuthContext Definition ---
 // Create a context, initialized with null.
-// The type argument <AuthContextType | null> indicates it can be either the defined type or null.
 export const AuthContext = createContext<AuthContextType | null>(null);
+
 
 // --- AuthProvider Component ---
 export function AuthProvider({ children }: AuthProviderProps) {
-    // useState hooks with explicit type arguments
     const [fetchedUser, setFetchedUser] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        axios.get<string>("/api/oauthgithub/me") // Expecting the response data to be a string
+        axios.get<string>("/api/oauthgithub/me")
             .then(response => {
-                setFetchedUser(response.data); // response.data is already string as per axios generic
+                setFetchedUser(response.data);
             })
             .catch(() => {
                 setFetchedUser("anonymousUser");
@@ -41,6 +39,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const authContextValue: AuthContextType = { fetchedUser, loading };
 
     return (
+        // here AuthContext gets its assigned value
         <AuthContext.Provider value={authContextValue}>
             {children}
         </AuthContext.Provider>
@@ -48,11 +47,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 }
 
 // --- Custom Hook for Easy Consumption ---
+// this function is used in Login and ProtectedRoute component
 export function useAuth(): AuthContextType {
     // useContext will return AuthContextType | null. We throw an error if null.
     const context = useContext(AuthContext);
     if (context === null) {
-        throw new Error('useAuth must be used within an AuthProvider');
+        throw new Error('useAuth must be used within an AuthProvider'); // will appear in the user's browser console during runtime if the condition is met
     }
     return context;
 }

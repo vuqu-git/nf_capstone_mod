@@ -40,7 +40,6 @@ import PreviewContainer from './components/preview/PreviewContainer.tsx';
 import ProtectedRoute from "./components/security/ProtectedRoute.tsx";
 import Login from "./components/security/Login.tsx";
 import {AuthProvider} from "./components/security/AuthContext.tsx";
-import IdentSlideParticle from "./components/slides/IdentSlideParticle.tsx";
 import Slides from "./components/slides/Slides.tsx";
 
 // #############################
@@ -299,13 +298,6 @@ const router = createBrowserRouter([
         path: "slides",
         element: <Slides />,
         loader: getGalleryDataWithoutNews, //for preview slides
-        handle: { scrollMode: "pathname" },
-    },
-
-    // IdentSlideParticle
-    {
-        path: "identslide",
-        element: <IdentSlideParticle />,
         handle: { scrollMode: "pathname" },
     },
 

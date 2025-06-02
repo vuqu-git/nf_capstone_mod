@@ -1,16 +1,22 @@
 import { useLoaderData } from "react-router-dom";
 import { useState } from "react";
+
+import {Badge, Stack} from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+
+import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery.ts";
+
+import OverviewAndFormLayout from "../LayoutWrapper/OverviewAndFormLayout.tsx";
+
 import PreviewShow from "../preview/PreviewShow.tsx";
 import Header2 from "../Header2.tsx";
-import {Badge, Stack} from "react-bootstrap";
+
 import PreviewFormWithinSlides from "../preview/PreviewFormWithinSlides.tsx";
-import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery.ts";
-import OverviewAndFormLayout from "../LayoutWrapper/OverviewAndFormLayout.tsx";
 import IdentSlideFaintGradient from "./IdentSlideFaintGradient.tsx";
 import IdentSlideDotGrid from "./IdentSlideDotGrid.tsx";
 import IdentSlideGradient from "./IdentSlideGradient.tsx";
-import Button from "react-bootstrap/Button";
 import IdentSlideChromaticLogo from "./IdentSlideChromaticLogo.tsx";
+
 
 export default function Slides() {
     const [mode, setMode] = useState<"menu" | "identSlideFaintGradient" | 'identSlideBlack' | 'identSlideGradient' | 'identSlideChromaticLogo' | "preview">("menu");
