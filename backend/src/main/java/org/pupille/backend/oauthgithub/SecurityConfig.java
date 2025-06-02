@@ -9,7 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
@@ -18,6 +20,17 @@ public class SecurityConfig {
 
     @Value("${app.url}")
     String appUrl;
+
+    // Inject your custom services
+    private final OAuth2UserService<org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest, org.springframework.security.oauth2.core.user.OAuth2User> customOAuth2UserService;
+    private final AuthenticationFailureHandler customOAuth2AuthenticationFailureHandler; // Inject the new failure handler
+
+    public SecurityConfig(
+            OAuth2UserService<org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest, org.springframework.security.oauth2.core.user.OAuth2User> customOAuth2UserService,
+            AuthenticationFailureHandler customOAuth2AuthenticationFailureHandler) { // Add to constructor
+        this.customOAuth2UserService = customOAuth2UserService;
+        this.customOAuth2AuthenticationFailureHandler = customOAuth2AuthenticationFailureHandler;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -46,12 +59,15 @@ public class SecurityConfig {
                 .sessionManagement(sessions ->
                         sessions.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .logout(l -> l.logoutSuccessUrl(appUrl))
-                .oauth2Login(o -> o.defaultSuccessUrl(appUrl))
+                .oauth2Login(o -> o
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)) // here is the custom service used
+                        .defaultSuccessUrl(appUrl)
+                        .failureHandler(customOAuth2AuthenticationFailureHandler) // here the custom AuthenticationFailureHandler kicks in
+                )
                 .exceptionHandling(e -> e
-                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                        );
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                );
 
         return http.build();
     }
-
 }

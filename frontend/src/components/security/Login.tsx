@@ -18,6 +18,10 @@ export default function Login() {
     // Type assertion for location.state
     const message = (location.state as LocationState)?.message;
 
+    // Access query parameter 'error'
+    const searchParams = new URLSearchParams(location.search);
+    const error = searchParams.get("error");
+
     // Access the authentication state from the custom useAuth hook.
     const { fetchedUser, loading } = useAuth();
 
@@ -40,8 +44,9 @@ export default function Login() {
         }
     }, [fetchedUser, loading, navigate]); // Dependencies for this effect
 
-    // --- Conditional Rendering based on Authentication Status ---
 
+    // --- Conditional Rendering based on Authentication Status ---
+    // ------------------------------------------------------------
     // 1. Show a loading indicator while checking user status via AuthProvider.
     if (loading) {
         return (
@@ -52,7 +57,7 @@ export default function Login() {
     }
 
     // 2. If the user is logged in (fetchedUser is not null/anonymousUser),
-    //    display the redirection message for 3 seconds before navigating.
+    //    display the redirection message for k seconds before navigating.
     if (fetchedUser && fetchedUser !== "anonymousUser") {
         return (
             <Alert data-bs-theme="dark" variant="success" className="text-center">
@@ -61,7 +66,7 @@ export default function Login() {
         );
     }
 
-    // // If the user is logged in (fetchedUser is not null/anonymousUser), immediate redirect to /admin.
+    // // alternative to 2.: If the user is logged in (fetchedUser is not null/anonymousUser), immediate redirect to /admin.
     // if (fetchedUser && fetchedUser !== "anonymousUser") {
     //     return <Navigate to="/admin" replace />;
     // }
@@ -79,6 +84,13 @@ export default function Login() {
             {message && (
                 <Alert data-bs-theme="dark" variant="danger" className="mt-4">
                     {message}
+                </Alert>
+            )}
+
+            {/* Display the error  if it exists */}
+            {error  && (
+                <Alert data-bs-theme="dark" variant="danger" className="mt-4">
+                    {error }
                 </Alert>
             )}
         </div>
