@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import static org.mockito.Mockito.when;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -331,7 +332,10 @@ class NewsControllerIntegrationTest {
         newsTestRepo.save(news2);
         // WHEN
         mockMvc.perform(delete("/api/news/all/" + news1.id())
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        // this line for fetching github username
+                        .with(oidcLogin().userInfoToken(token -> token.claim("login", "github-username")))
+                )
                 // THEN
                 .andExpect(status().isOk());
     }
@@ -344,7 +348,10 @@ class NewsControllerIntegrationTest {
 
         // WHEN
         mockMvc.perform(delete("/api/news/all/" + targetId)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        // this line for fetching github username
+                        .with(oidcLogin().userInfoToken(token -> token.claim("login", "github-username")))
+                )
                 // THEN
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("No news found with the id " + targetId));
@@ -377,6 +384,8 @@ class NewsControllerIntegrationTest {
                                 }
                                 """
                         )
+                        // this line for fetching github username
+                        .with(oidcLogin().userInfoToken(token -> token.claim("login", "github-username")))
                 )
                 // THEN
                 .andExpect(status().isOk())
@@ -422,6 +431,8 @@ class NewsControllerIntegrationTest {
                                 }
                                 """
                         )
+                        // this line for fetching github username
+                        .with(oidcLogin().userInfoToken(token -> token.claim("login", "github-username")))
                 )
                 // THEN
                 .andExpect(status().isOk())
@@ -461,6 +472,8 @@ class NewsControllerIntegrationTest {
                                 }
                                 """
                         )
+                        // this line for fetching github username
+                        .with(oidcLogin().userInfoToken(token -> token.claim("login", "github-username")))
                 )
                 // THEN
                 .andExpect(status().isNotFound())
@@ -495,6 +508,8 @@ class NewsControllerIntegrationTest {
                                 }
                                 """
                         )
+                        // this line for fetching github username
+                        .with(oidcLogin().userInfoToken(token -> token.claim("login", "github-username")))
                 )
                 // THEN
                 .andExpect(status().isBadRequest())

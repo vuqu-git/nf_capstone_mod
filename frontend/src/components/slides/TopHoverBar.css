@@ -1,0 +1,17 @@
+/* Styling for the top hover bar */
+.topHoverBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* REMOVE: height: 44px; */ /* This will now be set by inline style */
+    background-color: red;
+    z-index: 9999;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+}

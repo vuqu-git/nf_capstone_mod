@@ -1,0 +1,128 @@
+.wrapper {
+    margin: auto;
+    overflow: auto;
+
+    /*#########################################################*/
+
+    /*!*summer palette, almost no edges*!*/
+    /*background: linear-gradient(315deg,*/
+    /*#ffe29f 0%,           !* soft sunlight *!*/
+    /*#fcd34d 10%,          !* golden sand *!*/
+    /*#ffc0cb 20%,          !* a softer pink transition *!*/
+    /*#ff9a8b 35%,          !* coral blush *!*/
+    /*#ff6a88 50%,          !* summer sunset pink *!*/
+    /*#a0d4ff 65%,          !* a lighter blue transition *!*/
+    /*#8ec5fc 75%,          !* clear sky blue *!*/
+    /*#4ecdc4 85%,          !* tropical mint *!*/
+    /*#fcb045 95%,          !* warm orange glow *!*/
+    /*#ffe29f 100%          !* back to sunlight for loop *!*/
+    /*);*/
+    /*animation: gradient 90s ease infinite;*/
+    /*background-size: 800% 800%; !* Increased from 400% 400% *!*/
+    /*background-attachment: fixed;*/
+
+
+    /*!*yellow-red*!*/
+    /*background: linear-gradient(0deg, #df4811 3%, #ae3459 38%, #ff9b21 68%, #f8c746 85%, #fcdf91 98%);*/
+    /*animation: gradient 90s ease infinite;*/
+    /*background-size: 800% 800%;*/
+    /*background-attachment: fixed;*/
+
+    /* Sundown palette with 0deg - More Orange */
+    background: linear-gradient(0deg,
+    #2a1c43 0%,             /* Deep twilight/night (bottom) */
+    #4d2958 5%,             /* Hint of deep plum - ends sooner */
+    #8b2f4f 15%,            /* Muted brick red - starts sooner */
+    #ff5e62 40%,            /* Vibrant sunset red - starts earlier */
+    #ff9966 65%,            /* Warm orange */
+    #fce38a 85%,            /* Golden yellow (last light) */
+    #ffe29f 100%            /* Soft sunlight/peach (top of sky) */
+    );
+    animation: gradient 120s ease infinite; /* Slower for gradual effect */
+    background-size: 800% 800%;
+    background-attachment: fixed;
+
+    /*#########################################################*/
+
+    /*added additionally for centering*/
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.wave {
+    background: rgb(255 255 255 / 25%);
+    border-radius: 1000% 1000% 0 0;
+    position: fixed;
+    width: 200%;
+    height: 12em;
+    animation: wave 10s -3s linear infinite;
+    transform: translate3d(0, 0, 0);
+    opacity: 0.8;
+    bottom: 0;
+    left: 0;
+    /*z-index: -1;*/
+    z-index: 1; /* Above background, below topHoverBar */
+}
+
+.wave:nth-of-type(2) {
+    bottom: -1.25em;
+    animation: wave 18s linear reverse infinite;
+    opacity: 0.8;
+}
+
+.wave:nth-of-type(3) {
+    bottom: -2.5em;
+    animation: wave 20s -1s reverse infinite;
+    opacity: 0.9;
+}
+
+@keyframes wave {
+    2% {
+        transform: translateX(1);
+    }
+
+    25% {
+        transform: translateX(-25%);
+    }
+
+    50% {
+        transform: translateX(-50%);
+    }
+
+    75% {
+        transform: translateX(-25%);
+    }
+
+    100% {
+        transform: translateX(1);
+    }
+}
+
+.logo {
+    width: 80vw;
+    max-width: 1100px;
+    height: auto;
+}
+
+.logo svg {
+    /* Ensure the SVG itself fills the container */
+    width: 100%;
+    height: 100%;
+
+    /*fill: purple;*/
+    filter: invert(99%); /* 100% white */
+}

@@ -1,12 +1,17 @@
 import {
-    Outlet,
+    Outlet, useOutlet,
 } from "react-router-dom";
 
 import {Col, Container, Row} from "react-bootstrap";
 import BackToTopButton from "../BackToTopButton.tsx";
+import {ReactNode} from "react";
 
-export default function OverviewAndFormLayout() {
+interface Props {
+    children: ReactNode;
+}
 
+export default function OverviewAndFormLayout({ children }: Props) {
+    const outlet = useOutlet();
     return (
         <div>
             <Container
@@ -21,7 +26,8 @@ export default function OverviewAndFormLayout() {
 
                         {/*<Col md={12} lg={8} xl={7} className="px-0 px-sm-3">*/}
                         {/*This approach ensures the column has no left/right padding on screens smaller than 576px, but regains standard padding on larger screens*/}
-                        <Outlet />
+                        {/*<Outlet />*/}
+                        {outlet || children}
                     </Col>
                 </Row>
                 <BackToTopButton
