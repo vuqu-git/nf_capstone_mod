@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
 
 //@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@Import(org.pupille.backend.TestMailConfig.class)
@@ -47,9 +48,9 @@ class TerminControllerIntegrationTest {
     @Autowired
     private TerminRepository terminRepository;
 
-    // this one is a unit test
+    // !!!!!!!!!! this one is a unit test !!!!!!!!!!
     @Test
-    void testCreateAndRetrieveTermin() {
+    void unitTestCreateAndRetrieveTermin() {
         // Arrange: Create a new Termin entity
         Termin termin = new Termin();
         termin.setVorstellungsbeginn(LocalDateTime.now());
@@ -81,10 +82,14 @@ class TerminControllerIntegrationTest {
         termin.setVeroeffentlichen((short) 1);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/termine")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(termin)))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(termin)))
+                        .content(objectMapper.writeValueAsString(termin))
                             // ObjectMapper: This is a core class from the Jackson library, which Spring Boot uses by default for JSON serialization and deserialization.
                             // writeValueAsString(Object value): This method takes a Java object (termin in this case) and serializes it into a JSON string.
+                        // this line for fetching github username
+                        .with(oidcLogin().userInfoToken(token -> token.claim("login", "github-username"))))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.tnr").exists())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.titel").value("Test Termin"))

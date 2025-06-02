@@ -1,5 +1,5 @@
 interface FilmDTOOverviewArchive {
-    filmId: number;
+    fnr: number;
     titel?: string | null;
 }
 

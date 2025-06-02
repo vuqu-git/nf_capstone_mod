@@ -1,0 +1,105 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    /*--size: 20px;*/
+    --size: 14px;
+}
+
+.wrapper {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    /*background: hsl(0 0% 6%);*/
+    background: #333232;
+}
+
+.el {
+    background: conic-gradient(from 180deg at 50% 70%,hsla(0,0%,98%,1) 0deg,#eec32d 72.0000010728836deg,#ec4b4b 144.0000021457672deg,#709ab9 216.00000858306885deg,#4dffbf 288.0000042915344deg,hsla(0,0%,98%,1) 1turn);
+    width: 100%;
+    height: 100%;
+    mask:
+            radial-gradient(circle at 50% 50%, white 2px, transparent 2.5px) 50% 50% / var(--size) var(--size),
+            url("/noise-mask.png") 256px 50% / 256px 256px;
+    mask-composite: intersect;
+    animation: flicker 20s infinite linear;
+
+    position: absolute;
+    /*top: 0;*/
+    /*left: 0;*/
+    /*z-index: 0;*/
+}
+
+/*here are the colors more vibrant but not good distributed over the screen*/
+/*.el {*/
+/*    background: conic-gradient(*/
+/*            from 180deg at 50% 70%,*/
+/*            #ff9000 0deg,      !* Orange *!*/
+/*            #ff5100 40deg,     !* Deep Orange *!*/
+/*            #ff1a00 90deg,     !* Red - longer segment *!*/
+/*            #ff005d 150deg,    !* Pinkish Red *!*/
+/*            #d900ff 180deg,    !* Purple *!*/
+/*            #005eff 210deg,    !* Blue *!*/
+/*            #00fca8 240deg,    !* Aqua Green *!*/
+/*            #00ff6c 270deg,    !* Green *!*/
+/*            #ffd600 320deg,    !* Yellow - short segment *!*/
+/*            #ff9000 360deg     !* Loop back to Orange *!*/
+/*    );*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    mask:*/
+/*            radial-gradient(circle at 50% 50%, white 2px, transparent 2.5px) 50% 50% / var(--size) var(--size),*/
+/*            url("/noise-mask.png") 256px 50% / 256px 256px;*/
+/*    mask-composite: intersect;*/
+/*    animation: flicker 20s infinite linear;*/
+/*    position: absolute;*/
+
+/*    filter:*/
+/*            brightness(2.5)*/
+/*            contrast(2.2)*/
+/*            saturate(2.5)*/
+/*            drop-shadow(0 0 12px #fff)*/
+/*            drop-shadow(0 0 24px #ff1a00)*/
+/*            drop-shadow(0 0 36px #ff005d)*/
+/*            drop-shadow(0 0 36px #005eff);*/
+/*}*/
+
+
+.h1Text {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    margin: 0;
+    font-size: clamp(6rem, 8vw + 1rem, 14rem);
+    font-family: "Geist", sans-serif;
+    font-weight: 140;
+    color: hsl(0 0% 2%);
+    mix-blend-mode: soft-light;
+    /*   -webkit-text-stroke: 2px hsl(0 0% 100% / 0.95); */
+    filter: drop-shadow(0 0 2px white);
+    text-shadow: 2px 2px white;
+}
+
+@keyframes flicker {
+    to {
+        mask-position: 50% 50%, 0 50%;
+    }
+}
+
+.logo {
+    width: 80vw;
+    max-width: 1100px;
+    height: auto;
+}
+
+/* Target SVG elements directly within the .logo div */
+.logo svg {
+    /* Ensure the SVG itself fills the container */
+    width: 100%;
+    height: 100%;
+
+    /*fill: white; */
+    filter: invert(80%); /* 100% white */
+}

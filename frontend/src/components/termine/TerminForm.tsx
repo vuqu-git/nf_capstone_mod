@@ -6,13 +6,23 @@ import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 
 import { preprocessFormData } from '../../utils/preprocessFormData.ts';
-import {Link} from "react-router-dom";
+import AdminNav from "../AdminNav.tsx";
 
 const baseURL = "/api/termine";
 
+// Helper function to get current date in YYYY-MM-DD format
+// for default time setting in form input vorstellungsbeginn
+const getCurrentDate = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
 const emptyTerminForForm = {
     tnr: 0,
-    termin: '',
+    vorstellungsbeginn: `${getCurrentDate()}T20:15`,
     titel: '',
     text: '',
     kurztext: '',
@@ -40,7 +50,7 @@ export default function TerminForm() {
     const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made manually by the user
 
     // GET all termine
-    const getAllTermine = () => {
+    const getAllSortedTermine = () => {
         // setIsLoading(true);
         setErrorMessage("");
 
@@ -55,7 +65,7 @@ export default function TerminForm() {
 
     // Fetch all termine for the dropdown selection
     useEffect(() => {
-        getAllTermine();
+        getAllSortedTermine();
     }, []);
 
     // Fetch the selected termin details only if we are editing or deleting
@@ -86,7 +96,7 @@ export default function TerminForm() {
             getSingleTermin();
 
         } else {
-            // Reset the form for adding a new termin
+            // Reset the form for adding a new termin, including the default time for vorstellungsbeginn
             setSelectedTermin(emptyTerminForForm);
         }
     }, [selectedTerminId]);
@@ -108,7 +118,7 @@ export default function TerminForm() {
                 .then(() => {
                     setSuccessMessage("Termin updated successfully!");
 
-                    getAllTermine();
+                    getAllSortedTermine();
                     setSelectedTerminId(undefined); // Reset the selection
                     setSelectedTermin(emptyTerminForForm); // Reset the form
                 })
@@ -128,7 +138,7 @@ export default function TerminForm() {
                 .then(() => {
                     setSuccessMessage("Termin saved successfully!");
 
-                    getAllTermine();
+                    getAllSortedTermine();
                     // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
                     setSelectedTermin(emptyTerminForForm); // Reset the form
                 })
@@ -151,7 +161,7 @@ export default function TerminForm() {
                 .then(() => {
                     setSuccessMessage("Termin deleted successfully!");
 
-                    getAllTermine();
+                    getAllSortedTermine();
                     setConfirmDeleteOpen(false);
 
                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -185,15 +195,13 @@ export default function TerminForm() {
 
     return (
         <div data-bs-theme="dark">
-            <Link to={`/admin`}>
-                zum Adminbereich
-            </Link>
+            <AdminNav />
 
             <h3 className="mt-3">{selectedTerminId ? "Edit or delete " : "Add new "} Termin</h3>
 
             <TerminSelection
                 termine={allTermine}
-                selectedTerminId={selectedTerminId}
+                selectedTnr={selectedTerminId}
                 onSelectTermin={handleSelectionChange}
             />
 
@@ -260,13 +268,16 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">
-                    <Form.Label>vollständiger Bilddateiname (müssen unter https://pupille.org/bilder/filmbilder/ abgelegt sein)</Form.Label>
+                    <Form.Label>vollständiger Bilddateiname</Form.Label>
                     <Form.Control
                         type="text"
                         name="bild"
                         value={selectedTermin.bild || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Bilddatei muss  unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="startReservierung" className="mt-3">
@@ -317,6 +328,9 @@ export default function TerminForm() {
                         value={selectedTermin.veroeffentlichen || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Zahl größer 0 to publish; leer lassen oder 0 to hide
+                    </Form.Text>
                 </Form.Group>
 
                 <Button variant={selectedTerminId ? "success" : "primary"} type="submit" className="mt-4">

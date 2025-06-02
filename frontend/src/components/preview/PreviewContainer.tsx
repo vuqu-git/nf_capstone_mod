@@ -1,7 +1,7 @@
 import {useLoaderData} from "react-router-dom";
 import {useState} from "react";
 import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery.ts";
-import PreviewForm from "./PreviewForm.tsx";
+import PreviewFormWithinContainer from "./PreviewFormWithinContainer.tsx";
 import PreviewShow from "./PreviewShow.tsx";
 
 const PreviewContainer: React.FC = () => {
@@ -14,7 +14,7 @@ const PreviewContainer: React.FC = () => {
     return (
         <div>
             {!showPreview ? (
-                <PreviewForm
+                <PreviewFormWithinContainer
                     semesterTermine={semesterTermine}
 
                     selectedTnrs={selectedTnrs}

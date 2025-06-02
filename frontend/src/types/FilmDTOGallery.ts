@@ -1,5 +1,5 @@
 interface FilmDTOGallery {
-    filmId: number;
+    fnr: number;
     titel?: string | null;
     kurztext?: string | null;
     besonderheit?: string | null;

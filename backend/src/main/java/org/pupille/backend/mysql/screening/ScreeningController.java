@@ -16,25 +16,25 @@ public class ScreeningController {
 
     // for Gallery react component
     @GetMapping("/screenings")
-    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
-        return screeningService.getFutureTermineWithFilms();
+    public List<TerminDTOWithFilmDTOGallery> getAllFutureTermineWithFilms() {
+        return screeningService.getAllFutureTermineWithFilms();
     }
 
     // for ScreeningDetails react component
     @GetMapping("/screenings/{tnr}")
     public ResponseEntity<TerminDTOFormWithFilmsDTOFormPlus> getTerminWithFilmsPlusForTermin(@PathVariable Long tnr) {
-        TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTerminId(tnr);
+        TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTnr(tnr);
         return ResponseEntity.ok(terminWithFilmsPlus);
     }
 
     // for OverviewArchive react component
-    @GetMapping("/screenings-archive")
+    @GetMapping("/screenings/archive")
     public List<TerminDTOWithFilmDTOOverviewArchive> getArchiveScreenings() {
         return screeningService.getPastTermineWithFilms();
     }
 
     // for SemesterArchive react component
-    @GetMapping("/screenings-semester")
+    @GetMapping("/screenings/semester")
     public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreenings() {
         return screeningService.getTermineByCurrentSemester();
     }
@@ -53,7 +53,21 @@ public class ScreeningController {
         return screeningService.getFutureTermineWithFilmsForSlideshow(next);
     }
 
+//    +++++++++++++++++++++++++++++
+//    reminder stuff
+//    +++++++++++++++++++++++++++++
 
+    // For screenings exactly N days in the future
+    @GetMapping("/screenings/future/{days}")
+    public List<TerminDTOWithFilmDTOGallery> getScreeningsDaysInFuture(@PathVariable int days) {
+        return screeningService.getTermineDaysInFuture(days);
+    }
+
+    // For screenings exactly N days in the past
+    @GetMapping("/screenings/past/{days}")
+    public List<TerminDTOWithFilmDTOGallery> getScreeningsDaysInPast(@PathVariable int days) {
+        return screeningService.getTermineDaysInPast(days);
+    }
 
 
 }

@@ -9,7 +9,7 @@ import FilmSelection from "../filme/FilmSelection.tsx";
 import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import TerminSelection from "../termine/TerminSelection.tsx";
 // import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
-import {Link} from "react-router-dom";
+import AdminNav from "../AdminNav.tsx";
 
 const baseURL = "/api/terminverknuepfung";
 
@@ -220,7 +220,7 @@ export default function TerminverknuepfungForm() {
     // const [selectedTerminId, setSelectedTerminId] = useState<number | undefined>(undefined);
 
     // GET all termine
-    const getAllTermine = () => {
+    const getAllSortedTermine = () => {
         setErrorMessage("");
 
         axios.get(`api/termine/allsorted`)
@@ -233,7 +233,7 @@ export default function TerminverknuepfungForm() {
 
     // Fetch all termine for the dropdown selection
     useEffect(() => {
-        getAllTermine();
+        getAllSortedTermine();
     }, []);
 
     const handleTerminSelectionChange = (id: number | undefined) => {
@@ -246,9 +246,7 @@ export default function TerminverknuepfungForm() {
 
     return (
         <div data-bs-theme="dark">
-            <Link to={`/admin`}>
-                zum Adminbereich
-            </Link>
+            <AdminNav />
 
             <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and existing Termin"}</h3>
 
@@ -269,7 +267,7 @@ export default function TerminverknuepfungForm() {
 
                 <TerminSelection
                     termine={allTermine}
-                    selectedTerminId={selectedTV.tnr}
+                    selectedTnr={selectedTV.tnr}
                     onSelectTermin={handleTerminSelectionChange}
                 />
 

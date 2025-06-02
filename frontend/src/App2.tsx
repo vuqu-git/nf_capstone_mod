@@ -37,168 +37,11 @@ import StartPreviewQ from "./components/StartPreviewQ.tsx";
 import PreviewQ from "./components/PreviewQ.tsx";
 import Preview1Parent from "./components/previewNotResponsive/Preview1Parent.tsx";
 import PreviewContainer from './components/preview/PreviewContainer.tsx';
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <BaseLayout />,
-        children: [
-            {
-                element: <ScreeningLayout />, // No path, acts as a layout wrapper
-                children: [
-                    {
-                        index: true,
-                        loader: getGalleryData,
-                        element: <Gallery2 />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "details/:tnr",
-                        element: <ScreeningDetails />,
-                        // no usage of loader here, because the data is fetched within ScreeningDetails
-                        // loader: ({ params }) => getScreeningDetails(params.tnr),
-                        handle: { scrollMode: "pathname" } // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
-                    },
-                ],
-            },
-
-            {
-                element: <OverviewAndFormLayout />, // No path, acts as a layout wrapper
-                children: [
-                    {
-                        path: "semester",
-                        loader: getSemesterScreenings,
-                        element: <OverviewSemester2 />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "archive",
-                        loader: getArchiveScreenings,
-                        element: <OverviewArchive2 />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "kontakt",
-                        element: <ContactForm />,
-                        handle: { scrollMode: "pathname" },
-                    },
-
-                    {
-                        path: "admin",
-                        element: <Admin />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "addnews",
-                        element: <AddNews />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "editnews",
-                        element: <EditDeleteNews />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "deletenews",
-                        element: <EditDeleteNews />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "adminfilme",
-                        element: <FilmForm />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "admintermine",
-                        element: <TerminForm />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "admintvennew",
-                        element: <TerminverknuepfungForm />,
-                        handle: { scrollMode: "pathname" },
-                    },
-
-                    {
-                        path: "previewq",
-                        loader: getGalleryDataWithoutNews,
-                        element: <PreviewQ />,
-                        handle: { scrollMode: "pathname" },
-                    }
-                ],
-            },
-
-            {
-                element: <TextLayout />, // No path, acts as a layout wrapper
-                children: [
-                    {
-                        path: "kinobesuch",
-                        element: <Kinobesuch />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "contentnotes",
-                        element: <ContentNotes />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "kinoprojektion",
-                        element: <ProjektionAufLeinwand />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "impressum",
-                        element: <Impressum />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                ],
-            },
-
-
-            // {
-            //     path: "link-to-hash",
-            //     loader: getArrayLoader,
-            //     element: <LongPage />,
-            // },
-        ],
-    },
-
-    {
-        path: "slideshow",
-        element: <Slideshow />,
-        handle: { scrollMode: "pathname" },
-    },
-
-    // 1st approach
-    {
-        path: "startpreviewq",
-        element: <StartPreviewQ />,
-        handle: { scrollMode: "pathname" },
-    },
-    // 2nd approach
-    {
-        path: "previewparent",
-        loader: getGalleryDataWithoutNews,
-        element: <Preview1Parent />,
-        handle: { scrollMode: "pathname" },
-    },
-    // 3rd approach
-    {
-        path: "preview",
-        loader: getGalleryDataWithoutNews,
-        element: <PreviewContainer />,
-        handle: { scrollMode: "pathname" },
-    }
-]);
-
-if (import.meta.hot) {
-    import.meta.hot.dispose(() => router.dispose());
-}
-
-export default function App2() {
-    return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
-}
-
+import ProtectedRoute from "./components/security/ProtectedRoute.tsx";
+import Login from "./components/security/Login.tsx";
+import {AuthProvider} from "./components/security/AuthContext.tsx";
+import IdentSlideParticle from "./components/slides/IdentSlideParticle.tsx";
+import Slides from "./components/slides/Slides.tsx";
 
 // #############################
 // for Gallery.tsx
@@ -263,9 +106,9 @@ async function getScreeningDetails(tnr: string) {
 
 // #############################
 // for OverviewSemester.tsx
-async function getSemesterScreenings(): Promise<TerminDTOWithFilmDTOOverviewArchive[]> {
+async function getSemesterScreenings(): Promise<TerminDTOWithFilmDTOOverviewSemester[]> {
     try {
-        const response = await fetch(`/api/screenings-semester`);
+        const response = await fetch(`/api/screenings/semester`);
         if (!response.ok) {
             const errorText = await response.text();
             // This throw statement is executed only if the fetch request is successful IN THE SENSE that it returns a response, but that response indicates an error according to the HTTP status code. This means the server received your request and sent back a reply, but the reply said something went wrong (e.g., 404 Not Found, 500 Internal Server Error, etc.).
@@ -292,9 +135,9 @@ async function getSemesterScreenings(): Promise<TerminDTOWithFilmDTOOverviewArch
 
 // #############################
 // for OverviewArchive.tsx
-async function getArchiveScreenings(): Promise<TerminDTOWithFilmDTOOverviewSemester[]> {
+async function getArchiveScreenings(): Promise<TerminDTOWithFilmDTOOverviewArchive[]> {
     try {
-        const response = await fetch(`/api/screenings-archive`);
+        const response = await fetch(`/api/screenings/archive`);
         if (!response.ok) {
             const errorText = await response.text();
             throw new Response(`Failed to fetch archive screenings: ${errorText}`, {
@@ -306,4 +149,198 @@ async function getArchiveScreenings(): Promise<TerminDTOWithFilmDTOOverviewSemes
         console.error("Error fetching semester screenings:", error);
         throw new Error("Failed to fetch archive screenings due to a network or unexpected error");
     }
+}
+
+
+const router = createBrowserRouter([
+    {
+        path: "/",
+        element: (
+            // Wrap the main application content with AuthProvider
+            <AuthProvider>
+                <BaseLayout />
+            </AuthProvider>
+        ),
+        children: [
+            {
+                element: <ScreeningLayout />, // No path, acts as a layout wrapper
+                children: [
+                    {
+                        index: true,
+                        loader: getGalleryData,
+                        element: <Gallery2 />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "details/:tnr",
+                        element: <ScreeningDetails />,
+                        // no usage of loader here, because the data is fetched within ScreeningDetails
+                        // loader: ({ params }) => getScreeningDetails(params.tnr),
+                        handle: { scrollMode: "pathname" } // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
+                    },
+                ],
+            },
+
+            {
+                element: <OverviewAndFormLayout />, // No path, just acts as a layout wrapper
+                children: [
+                    {
+                        path: "semester",
+                        loader: getSemesterScreenings,
+                        element: <OverviewSemester2 />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "archive",
+                        loader: getArchiveScreenings,
+                        element: <OverviewArchive2 />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "kontakt",
+                        element: <ContactForm />,
+                        handle: { scrollMode: "pathname" },
+                    },
+
+                    // LOGIN, Login component which consumes AuthContext
+                    {
+                        path: "login",
+                        element: <Login />,
+                        handle: { scrollMode: "pathname" },
+                    },
+
+                    // PROTECTED ADMIN ROUTES, ProtectedRoute component which consumes AuthContext
+                    {
+                        element: <ProtectedRoute />, // No path, just acts as a guard for all children
+                        children: [
+                            {
+                                path: "admin",
+                                element: <Admin />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "addnews",
+                                element: <AddNews />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "editnews",
+                                element: <EditDeleteNews />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "deletenews",
+                                element: <EditDeleteNews />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "adminfilme",
+                                element: <FilmForm />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "admintermine",
+                                element: <TerminForm />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "admintvennew",
+                                element: <TerminverknuepfungForm />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                        ],
+                    },
+
+                    {
+                        path: "previewq",
+                        loader: getGalleryDataWithoutNews,
+                        element: <PreviewQ />,
+                        handle: { scrollMode: "pathname" },
+                    }
+                ],
+            },
+
+            {
+                element: <TextLayout />, // No path, just acts as a layout wrapper
+                children: [
+                    {
+                        path: "kinobesuch",
+                        element: <Kinobesuch />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "contentnotes",
+                        element: <ContentNotes />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "kinoprojektion",
+                        element: <ProjektionAufLeinwand />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                    {
+                        path: "impressum",
+                        element: <Impressum />,
+                        handle: { scrollMode: "pathname" },
+                    },
+                ],
+            },
+
+
+            // {
+            //     path: "link-to-hash",
+            //     loader: getArrayLoader,
+            //     element: <LongPage />,
+            // },
+        ],
+    },
+
+    {
+        path: "slides",
+        element: <Slides />,
+        loader: getGalleryDataWithoutNews, //for preview slides
+        handle: { scrollMode: "pathname" },
+    },
+
+    // IdentSlideParticle
+    {
+        path: "identslide",
+        element: <IdentSlideParticle />,
+        handle: { scrollMode: "pathname" },
+    },
+
+    {
+        path: "slideshow",
+        element: <Slideshow />,
+        handle: { scrollMode: "pathname" },
+    },
+
+    // 1st approach
+    {
+        path: "startpreviewq",
+        element: <StartPreviewQ />,
+        handle: { scrollMode: "pathname" },
+    },
+    // 2nd approach
+    {
+        path: "previewparent",
+        loader: getGalleryDataWithoutNews,
+        element: <Preview1Parent />,
+        handle: { scrollMode: "pathname" },
+    },
+    // 3rd approach
+    {
+        path: "preview",
+        loader: getGalleryDataWithoutNews,
+        element: <PreviewContainer />,
+        handle: { scrollMode: "pathname" },
+    }
+]);
+
+if (import.meta.hot) {
+    import.meta.hot.dispose(() => router.dispose());
+}
+
+export default function App2() {
+    return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
 }

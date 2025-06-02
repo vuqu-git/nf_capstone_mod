@@ -20,7 +20,7 @@ export default function OverviewArchive() {
 
     const getArchiveTermineWithFilmTitles = () => {
 
-        axios.get<TerminDTOWithFilmDTOOverviewArchive[]>("/api/screenings-archive")
+        axios.get<TerminDTOWithFilmDTOOverviewArchive[]>("/api/screenings/archive")
             .then((response) => {
                 setArchiveTermine(response.data)
             })
@@ -67,7 +67,7 @@ export default function OverviewArchive() {
                                                 {renderHtmlText(termin.titel)}
                                                 <ol style={{ marginBottom: '0rem' }}>
                                                     {termin.films.map(film => (
-                                                        <li key={film.filmId}
+                                                        <li key={film.fnr}
                                                             style={{ fontSize: '0.75em'}}
                                                         >
                                                             {renderHtmlText(film.titel)}

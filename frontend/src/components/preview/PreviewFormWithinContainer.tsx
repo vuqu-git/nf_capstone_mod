@@ -16,7 +16,7 @@ interface Props {
     setShowPreview: (newShowPreview: boolean) => void;
 }
 
-const PreviewForm: React.FC<Props> = ({
+const PreviewFormWithinContainer: React.FC<Props> = ({
                                                semesterTermine,
                                                selectedTnrs,
                                                setSelectedTnrs,
@@ -146,4 +146,4 @@ const PreviewForm: React.FC<Props> = ({
     );
 };
 
-export default PreviewForm;
+export default PreviewFormWithinContainer;

@@ -21,7 +21,7 @@ export default function OverviewSemester() {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const getSemesterTermineWithFilmTitles = () => {
-        axios.get<TerminDTOWithFilmDTOOverviewSemester[]>("/api/screenings-semester")
+        axios.get<TerminDTOWithFilmDTOOverviewSemester[]>("/api/screenings/semester")
             .then((response) => {
                 setSemesterTermine(response.data)
             })
@@ -74,11 +74,11 @@ export default function OverviewSemester() {
                                                     to={`/details/${termin.tnr}`}
                                                     className="custom-link"
                                                 >
-                                                    {renderHtmlText(termin.films[0]?.titel) ?? ""}
+                                                    {renderHtmlText(termin.mainfilms[0]?.titel) ?? ""}
                                                 </Link>
-                                                {termin.films[0]?.besonderheit && (
+                                                {termin.mainfilms[0]?.besonderheit && (
                                                     <p style={{ fontSize: '0.75em', marginBottom: '0' }}>
-                                                        {renderHtmlText(termin.films[0]?.besonderheit) ?? ""}
+                                                        {renderHtmlText(termin.mainfilms[0]?.besonderheit) ?? ""}
                                                     </p>
                                                 )}
                                             </>
@@ -89,8 +89,8 @@ export default function OverviewSemester() {
                                             >
                                                 {renderHtmlText(termin.titel)}
                                                 <ol style={{ marginBottom: '0' }}>
-                                                    {termin.films.map(film => (
-                                                        <li key={film.filmId}>{renderHtmlText(film.titel)}</li>
+                                                    {termin.mainfilms.map(film => (
+                                                        <li key={film.fnr}>{renderHtmlText(film.titel)}</li>
                                                     ))}
                                                 </ol>
                                             </Link>

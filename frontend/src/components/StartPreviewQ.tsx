@@ -19,7 +19,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "veroeffentlichen": 1,
         "mainfilms": [
             {
-                "filmId": 1259,
+                "fnr": 1259,
                 "titel": "Komponiertes Kino &ndash; Werkschau Johannes Kreidler",
                 "kurztext": "In dem Filmen des Komponisten Johannes Kreidler wird das Komponieren zu einer multimedialen Arbeit mit Klang als Bild.",
                 "besonderheit": "In Anwesenheit von Johannes Kreidler. Eine Kooperation mit der Frankfurter Gesellschaft f&uuml;r Neue Musik und dem Institut f&uuml;r Musikwissenschaft.",
@@ -41,7 +41,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "veroeffentlichen": 1,
         "mainfilms": [
             {
-                "filmId": 1260,
+                "fnr": 1260,
                 "titel": "A Killer Romance",
                 "kurztext": "Ein Collegeprofessor, der als Undercoverkiller arbeitet, verstrickt sich in ein gef&auml;hrliches Spiel aus L&uuml;gen und Begierde, als er sich in eine Auftraggeberin verliebt.",
                 "besonderheit": null,
@@ -63,7 +63,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "veroeffentlichen": 1,
         "mainfilms": [
             {
-                "filmId": 1261,
+                "fnr": 1261,
                 "titel": "Ich bin ein Elefant, Madame",
                 "kurztext": "Peter Zadek inszeniert die Schule als Miniatur der Gesellschaft, in der die 68er f&uuml;r Umschwung und Unruhe sorgen. Voller anarchistischer Momente bringt der Film diesen Geist auf die Leinwand.",
                 "besonderheit": null,
@@ -85,7 +85,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "veroeffentlichen": 1,
         "mainfilms": [
             {
-                "filmId": 1262,
+                "fnr": 1262,
                 "titel": "Der Schatz",
                 "kurztext": "Zwei Filme &uuml;ber schatzsuchende V&auml;ter: eine lakonische Kom&ouml;die aus der rum&auml;nischen Nouvelle Vague, in der drei M&auml;nner aneinandergeraten und ein explosiver, englischer Kindergeburtstag.",
                 "besonderheit": null,
@@ -107,7 +107,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "veroeffentlichen": 1,
         "mainfilms": [
             {
-                "filmId": 1263,
+                "fnr": 1263,
                 "titel": "Hazy Life",
                 "kurztext": "Das Japanische Filmfestival Nippon Connection wird 25 und kehrt am 29. Mai in die Pupille zur&uuml;ck, wo das Festival die ersten Jahre stattgefunden hat! Wir feiern das Jubil&auml;um mit drei Filmen der allerersten Festivalausgabe: Nobuhiro Yamashitas Hazy Life (1999), Toshiaki Toyodas Pornostar (1998) und Tetsuro Takeuchis Wild Zero (1999).",
                 "besonderheit": "Im Rahmen von Nippon Connection Filmfestival. In Anwesenheit von Nobuhiro Yamashita. Tickets gibt es ab dem 3. Mai auf der Festivalwebseite: NipponConnection.com",
@@ -129,7 +129,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "veroeffentlichen": 1,
         "mainfilms": [
             {
-                "filmId": 1264,
+                "fnr": 1264,
                 "titel": "Pornostar",
                 "kurztext": null,
                 "besonderheit": "Im Rahmen von Nippon Connection Filmfestival. In Anwesenheit von Toshiaki Toyoda. Tickets gibt es ab dem 3. Mai auf der Festivalwebseite: NipponConnection.com",
@@ -151,7 +151,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "veroeffentlichen": 1,
         "mainfilms": [
             {
-                "filmId": 1265,
+                "fnr": 1265,
                 "titel": "Wild Zero",
                 "kurztext": null,
                 "besonderheit": "Im Rahmen von Nippon Connection Filmfestival. Tickets gibt es ab dem 3. Mai auf der Festivalwebseite: NipponConnection.com",
@@ -173,7 +173,7 @@ const initialSlides: TerminDTOWithFilmDTOGallery[] = [
         "veroeffentlichen": 1,
         "mainfilms": [
             {
-                "filmId": 1266,
+                "fnr": 1266,
                 "titel": "Einfach mal was Sch&ouml;nes",
                 "kurztext": "Karla, kurz vor ihrem 40. Geburtstag, hat einen gro&szlig;en Wunsch: ein eigenes Kind. Da der passende Mann fehlt, beschlie&szlig;t sie, ihren Kinderwunsch allein in die Hand zu nehmen, doch ihre chaotische Familie und eine ungeplante Liebschaft wirbeln ihre Pl&auml;ne durcheinander.",
                 "besonderheit": null,

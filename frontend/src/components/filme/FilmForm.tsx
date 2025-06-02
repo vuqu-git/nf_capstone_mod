@@ -6,7 +6,7 @@ import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {preprocessFormData} from "../../utils/preprocessFormData.ts";
 import {copyToClipboard} from "../../utils/copyToClipboard.ts";
-import {Link} from "react-router-dom";
+import AdminNav from "../AdminNav.tsx";
 
 const baseURL = "/api/filme";
 
@@ -177,11 +177,11 @@ export default function FilmForm() {
 
     // Handle film form field changes
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const { name, type } = e.target;
 
         setSelectedFilm((prevData: Film) => ({
             ...prevData,
-            [name]: value,
+            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
         }));
     };
 
@@ -228,9 +228,7 @@ export default function FilmForm() {
 
     return (
         <div data-bs-theme="dark">
-            <Link to={`/admin`}>
-                zum Adminbereich
-            </Link>
+            <AdminNav />
 
             <h3 className="mt-3">{selectedFilmId ? "Edit or delete " : "Add new "} Film</h3>
 
@@ -279,13 +277,16 @@ export default function FilmForm() {
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">
-                    <Form.Label>vollständiger Bilddateiname (müssen unter https://pupille.org/bilder/filmbilder/ abgelegt sein)</Form.Label>
+                    <Form.Label>vollständiger Bilddateiname</Form.Label>
                     <Form.Control
                         type="text"
                         name="bild"
                         value={selectedFilm.bild || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Bilddatei muss  unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="text" className="mt-3">

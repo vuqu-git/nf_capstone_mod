@@ -95,13 +95,13 @@ public class ScreeningService {
 //                .toList();
 //    }
 
-    //leere Filmliste, wenn termin.titel present ist
-    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
+    //filter for veroeffentlichen > 0 happen in frontend react component Gallery2.tsx
+    public List<TerminDTOWithFilmDTOGallery> getAllFutureTermineWithFilms() {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
 
-        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+        List<Termin> futureTermine = terminRepository.findAllFutureTermine(now);
 
         List<Long> terminIds = futureTermine.stream()
                 .map(Termin::getTnr)
@@ -136,7 +136,7 @@ public class ScreeningService {
 
 
 //    // not required because the list doesn't contain any termin data
-//    public List<FilmDTOForm> getFilmsByTerminId(Long tnr) {
+//    public List<FilmDTOForm> getFilmsByTnr(Long tnr) {
 //        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
 //
 //        return connections.stream()
@@ -149,7 +149,7 @@ public class ScreeningService {
 //    ########################################################
 
 
-    public TerminDTOFormWithFilmsDTOFormPlus getTerminWithFilmsPlusByTerminId(Long tnr) {
+    public TerminDTOFormWithFilmsDTOFormPlus getTerminWithFilmsPlusByTnr(Long tnr) {
         // Fetch Termin
         Termin termin = terminRepository.findById(tnr)
                 .orElseThrow(() -> new NoSuchElementException("Termin not found"));
@@ -407,7 +407,7 @@ public class ScreeningService {
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
 
         // 1. Get all future Termine
-        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
+        List<Termin> futureTermine = terminRepository.findAllFutureTermine(now);
 
         // 2. Filter veroeffentlichen > 0
         List<Termin> publishableTermine = futureTermine.stream()
@@ -447,7 +447,71 @@ public class ScreeningService {
                 .collect(Collectors.toList());
     }
 
+//    +++++++++++++++++++++++++++++
+//    reminder stuff
+//    +++++++++++++++++++++++++++++
 
+    public List<TerminDTOWithFilmDTOGallery> getTermineDaysInFuture(int days) {
+        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+        LocalDate targetDate = currentDate.plusDays(days);
 
+        // Start and end of the target day
+        LocalDateTime startOfDay = targetDate.atStartOfDay();
+        LocalDateTime endOfDay = targetDate.atTime(23, 59, 59);
+
+        List<Termin> termineOnTargetDate = terminRepository.findTermineByDateRange(startOfDay, endOfDay);
+
+        return buildTerminDTOWithFilmDTOGalleryList(termineOnTargetDate).stream()
+                .filter(terminDTO -> terminDTO.veroeffentlichen() != null && terminDTO.veroeffentlichen() > 0)
+                .collect(Collectors.toList());
+    }
+
+    public List<TerminDTOWithFilmDTOGallery> getTermineDaysInPast(int days) {
+        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
+        LocalDate targetDate = currentDate.minusDays(days);
+
+        // Start and end of the target day
+        LocalDateTime startOfDay = targetDate.atStartOfDay();
+        LocalDateTime endOfDay = targetDate.atTime(23, 59, 59);
+
+        List<Termin> termineOnTargetDate = terminRepository.findTermineByDateRange(startOfDay, endOfDay);
+
+        return buildTerminDTOWithFilmDTOGalleryList(termineOnTargetDate).stream()
+                .filter(terminDTO -> terminDTO.veroeffentlichen() != null && terminDTO.veroeffentlichen() > 0)
+                .collect(Collectors.toList());
+    }
+
+            // Helper method to avoid code duplication
+            private List<TerminDTOWithFilmDTOGallery> buildTerminDTOWithFilmDTOGalleryList(List<Termin> termine) {
+                List<Long> terminIds = termine.stream()
+                        .map(Termin::getTnr)
+                        .toList();
+
+                List<Terminverknuepfung> connections = terminverknuepfungRepository
+                        .findWithFilmsByTerminIds(terminIds);
+
+                return termine.stream()
+                        .map(termin -> {
+                            // Check if titel exists (not null/empty)
+                            if (termin.getTitel() != null && !termin.getTitel().isBlank()) {
+                                return new TerminDTOWithFilmDTOGallery(
+                                        termin,
+                                        List.of() // Empty films list when titel is present
+                                );
+                            } else {
+                                // Include films only when titel is absent
+                                List<Film> films = connections.stream()
+                                        .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+                                        .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
+                                        .map(Terminverknuepfung::getFilm)
+                                        .toList();
+                                return new TerminDTOWithFilmDTOGallery(
+                                        termin,
+                                        films
+                                );
+                            }
+                        })
+                        .toList();
+            }
 
 }

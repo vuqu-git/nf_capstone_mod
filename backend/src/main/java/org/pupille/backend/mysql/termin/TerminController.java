@@ -19,10 +19,10 @@ public class TerminController {
         this.terminService = terminService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<TerminDTOForm>> getAllTermine() {
-        return new ResponseEntity<>(terminService.getAllTermine(), HttpStatus.OK);
-    }
+//    @GetMapping
+//    public ResponseEntity<List<TerminDTOForm>> getAllTermine() {
+//        return new ResponseEntity<>(terminService.getAllTermine(), HttpStatus.OK);
+//    }
 
     @GetMapping("/allsorted")
     public ResponseEntity<List<TerminProjectionSelection>> getAllTermineByOrderByVorstellungsbeginnDesc() {
@@ -54,19 +54,19 @@ public class TerminController {
     }
 
 //    ###########################################################
-//  Just for testing purposes
-    @GetMapping("/futurea")
-    public ResponseEntity<List<TerminDTOForm>> getFutureTermineAsEntities() {
-        List<TerminDTOForm> futureTermine = terminService.getFutureTermine();
-        return ResponseEntity.ok(futureTermine);
-    }
-
-//  Just for testing purposes
-    @GetMapping("/futurep")
-    public ResponseEntity<List<TerminProjectionSelection>> getFutureTermineAsProjections() {
-        List<TerminProjectionSelection> futureTermine = terminService.getFutureTermineProjected();
-        return ResponseEntity.ok(futureTermine);
-    }
+////  Just for testing purposes
+//    @GetMapping("/futurea")
+//    public ResponseEntity<List<TerminDTOForm>> getFutureTermineAsEntities() {
+//        List<TerminDTOForm> futureTermine = terminService.getAllFutureTermine();
+//        return ResponseEntity.ok(futureTermine);
+//    }
+//
+////  Just for testing purposes
+//    @GetMapping("/futurep")
+//    public ResponseEntity<List<TerminProjectionSelection>> getFutureTermineAsProjections() {
+//        List<TerminProjectionSelection> futureTermine = terminService.getAllFutureTermineProjected();
+//        return ResponseEntity.ok(futureTermine);
+//    }
 //    ###########################################################
 
     @ExceptionHandler(RuntimeException.class)
