@@ -14,9 +14,6 @@ import './Gallery.css';
 export default function Gallery() {
 
     const {
-        isLoadingAllNews,
-        allNews,
-        error,
         setError,
     } = useAllNews(false);
 
@@ -213,6 +210,8 @@ export default function Gallery() {
                                                     jahr={undefined}
                                                     besonderheit={termin.besonderheit ? termin.besonderheit : null}
                                                     filmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+                                                    laufzeit={undefined}
+                                                    regie={undefined}
 
                                                     tnr={termin.tnr} // for navigation to certain route
                                                 />
@@ -241,6 +240,8 @@ export default function Gallery() {
                                                     jahr={termin.mainfilms[0]?.jahr}
                                                     besonderheit={termin.mainfilms[0]?.besonderheit ? termin.mainfilms[0]?.besonderheit : null}
                                                     filmFormat={termin.mainfilms[0]?.format ? termin.mainfilms[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+                                                    laufzeit={undefined}
+                                                    regie={undefined}
 
                                                     tnr={termin.tnr} // for navigation to certain route
                                                 />

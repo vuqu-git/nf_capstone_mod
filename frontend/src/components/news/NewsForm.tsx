@@ -4,7 +4,6 @@ import { News } from "../../types/News.ts";
 import * as React from "react";
 import axios from "axios";
 import {copyToClipboard} from "../../utils/copyToClipboard.ts";
-import {Link} from "react-router-dom";
 
 interface Props {
     newsItem: News; // this is need for prefilled form in case of edit

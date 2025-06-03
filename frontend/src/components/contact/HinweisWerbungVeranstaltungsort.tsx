@@ -1,6 +1,3 @@
-import {Badge} from "react-bootstrap";
-import React from "react";
-
 const HinweisWerbungVeranstaltungsort = () => {
     return (
         <>

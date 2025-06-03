@@ -48,8 +48,6 @@ function App() {
                                 <Route path="/admintermine" element={<TerminForm />} />
                                 <Route path="/admintvennew" element={<TerminverknuepfungForm />} />
 
-                                <Route path="/dtpicker" element={<DTpicker />} />
-
                                 <Route path="/details/:tnr" element={<ScreeningDetails />} />
                                 <Route path="/details" element={<ScreeningDetails />} />
 

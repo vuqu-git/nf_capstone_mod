@@ -1,6 +1,6 @@
 
 import React, {useEffect, useState} from "react";
-import axios from "axios";
+// import axios from "axios";
 import TerminDTOWithFilmDTOSlideshow from "../../types/TerminDTOWithFilmDTOSlideshow.ts";
 import styles from "./Slideshow.module.css";
 import { renderHtmlText } from "../../utils/renderHtmlText.tsx";

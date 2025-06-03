@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
+// import axios from "axios";
 import styles from "./PreviewQ.module.css";
 import {formatDateTime} from "../utils/formatDateTime.ts";
 import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
