@@ -1,14 +1,14 @@
 package org.pupille.backend;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class FrontendSPAController {
 
-    @RequestMapping(value = {
-            "/{path:[^\\.]*}",           // Matches paths without file extensions
-            "/{path:^(?!api).*}/**"      // Matches any path that doesn't start with 'api'
+    @GetMapping(value = {
+            "/",
+            "/{path:^(?!api|static|assets).*}/**"
     })
     public String forward() {
         return "forward:/index.html";
