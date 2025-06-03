@@ -42,7 +42,7 @@ export default function ScreeningDetails() {
 
                 vorstellungsbeginnIso8601={screeningDetails.termin.vorstellungsbeginn}
 
-                screeningSonderfarbe={1}
+                screeningSonderfarbe={undefined}
 
                 programmtitel={screeningDetails.termin.titel} // d.h. der titel in der SQL-Tabelle Termin
                 programmtext={screeningDetails.termin.text} // d.h. der text in der SQL-Tabelle Termin

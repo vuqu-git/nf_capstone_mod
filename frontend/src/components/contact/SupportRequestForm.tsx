@@ -1,5 +1,5 @@
 // SupportRequestForm.tsx
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 
 interface SupportRequestFormData {
     ticketId: string;

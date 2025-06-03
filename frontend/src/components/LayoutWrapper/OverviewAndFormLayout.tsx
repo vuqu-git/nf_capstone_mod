@@ -1,5 +1,5 @@
 import {
-    Outlet, useOutlet,
+    useOutlet,
 } from "react-router-dom";
 
 import {Col, Container, Row} from "react-bootstrap";

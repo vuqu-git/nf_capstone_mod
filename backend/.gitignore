@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# when integrating the frontend into the backend under src/main/resources
+/src/main/resources/static/

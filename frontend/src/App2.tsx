@@ -93,15 +93,15 @@ async function getGalleryDataWithoutNews(): Promise<TerminDTOWithFilmDTOGallery[
 }
 
 // #############################
-// only for test purposes
-async function getScreeningDetails(tnr: string) {
-    const response = await fetch(`/api/screenings/${tnr}`);
-
-    if (!response.ok) throw new Error("Details not found");
-
-    // While response.json() is the standard way to handle JSON APIs, your loader function can indeed return any JavaScript object (or any JavaScript value, for that matter).
-    return response.json();
-}
+// // only for test purposes
+// async function getScreeningDetails(tnr: string) {
+//     const response = await fetch(`/api/screenings/${tnr}`);
+//
+//     if (!response.ok) throw new Error("Details not found");
+//
+//     // While response.json() is the standard way to handle JSON APIs, your loader function can indeed return any JavaScript object (or any JavaScript value, for that matter).
+//     return response.json();
+// }
 
 // #############################
 // for OverviewSemester.tsx
@@ -334,5 +334,6 @@ if (import.meta.hot) {
 }
 
 export default function App2() {
-    return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+    // return <RouterProvider router={router} fallbackElement={<p>Loading...</p>} />;
+    return <RouterProvider router={router} />;
 }

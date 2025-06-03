@@ -1,5 +1,5 @@
 // SalesInquiryForm.tsx
-import React, { useState, FormEvent, ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 
 interface SalesInquiryFormData {
     company: string;

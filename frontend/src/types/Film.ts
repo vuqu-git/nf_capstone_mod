@@ -22,7 +22,7 @@ export type Film = {
     contentNote?: string,
     regie?: string,
     patenschaft?: string,
-
+    trailer?:string,
 
 }
 

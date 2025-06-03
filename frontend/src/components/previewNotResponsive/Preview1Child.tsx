@@ -78,7 +78,6 @@ const Preview1Child: React.FC<Preview1ChildProps> = ({ selectedSemesterTermine, 
                         filmFormat={undefined} // for filmFormat treatment with undefined (instead of null)
                         laufzeit={undefined} // for filmFormat treatment with undefined (instead of null)
                         regie={undefined} // for regie treatment with undefined (instead of null)
-                        setShowPreview={setShowPreview}
                     />
                 ) : (
                     termin.mainfilms?.length > 0 && (
@@ -96,7 +95,6 @@ const Preview1Child: React.FC<Preview1ChildProps> = ({ selectedSemesterTermine, 
                                 filmFormat={termin.mainfilms[0]?.format ?? undefined}
                                 laufzeit={termin.mainfilms[0]?.laufzeit ?? undefined}
                                 regie={undefined} // for regie treatment with undefined (instead of null)
-                                setShowPreview={setShowPreview}
                             />
                         </>
                     )
