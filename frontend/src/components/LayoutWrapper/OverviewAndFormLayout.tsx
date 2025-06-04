@@ -7,7 +7,7 @@ import BackToTopButton from "../BackToTopButton.tsx";
 import {ReactNode} from "react";
 
 interface Props {
-    children: ReactNode;
+    children?: ReactNode; // make children optional, then the component can work with either outlet or children, and you won’t get the error when React Router renders it as a layout wrapper.
 }
 
 export default function OverviewAndFormLayout({ children }: Props) {
