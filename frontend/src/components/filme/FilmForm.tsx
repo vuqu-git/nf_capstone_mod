@@ -7,6 +7,8 @@ import axios from "axios";
 import {preprocessFormData} from "../../utils/preprocessFormData.ts";
 import {copyToClipboard} from "../../utils/copyToClipboard.ts";
 import AdminNav from "../AdminNav.tsx";
+import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
+import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 
 const baseURL = "/api/filme";
 
@@ -36,6 +38,9 @@ export default function FilmForm() {
     const [allFilms, setAllFilms] = useState<FilmDTOSelection[]>([]); // All films fetched from the server
     const [selectedFilmId, setSelectedFilmId] = useState<number | undefined>(undefined); // Selected film for editing or deleting
     const [selectedFilm, setSelectedFilm] = useState<Film>(emptyFilmForForm); // Film data for the form
+
+    const [termineOfSelectedFilmId, setTermineOfSelectedFilmId] = useState<TerminDTOSelection[]>([]); // list of the corresponding termine of selectedFilmId
+
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
@@ -89,8 +94,24 @@ export default function FilmForm() {
                     })
                     .finally(() => setIsGetLoading(false));
             };
-
             getSingleFilm();
+
+            // *****************************************************************************
+            // GET corresponding termine (as TerminDTOSelection[]) of the selected single film
+            const getTermineOfSingleFilm = () => {
+
+                setIsGetLoading(true);
+                setErrorMessage("");
+
+                axios.get(`/api/terminverknuepfung/gettermine/${selectedFilmId}`)
+                    .then((response) => setTermineOfSelectedFilmId(response.data))
+                    .catch((error) => {
+                        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                        setErrorMessage(errorMessage);
+                    })
+                    .finally(() => setIsGetLoading(false));
+            };
+            getTermineOfSingleFilm();
 
         } else {
             // Reset the form for adding a new film
@@ -241,6 +262,26 @@ export default function FilmForm() {
             <div style={{ minHeight: '30px' }}>
                 {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading film details... Please wait!</div>}
             </div>
+
+            {selectedFilmId && (
+                <Form.Group controlId="termineDisplay"
+                            className="mt-3"
+                            style={{
+                                opacity: 0.4,
+                            }}
+                >
+                    <Form.Label>{termineOfSelectedFilmId.length > 1 ? "Termine" : "Termin"} zum ausgewählten Film:</Form.Label>
+                    <Form.Control
+                        as="textarea"
+                        rows={termineOfSelectedFilmId.length}
+                        value={
+                            termineOfSelectedFilmId.map(t => formatDateInTerminSelectOption(t.vorstellungsbeginn) + " | #" + t.tnr).join("\n")
+                        }
+                        readOnly
+
+                    />
+                </Form.Group>
+            )}
 
             <Form onSubmit={handleSubmit}>
 

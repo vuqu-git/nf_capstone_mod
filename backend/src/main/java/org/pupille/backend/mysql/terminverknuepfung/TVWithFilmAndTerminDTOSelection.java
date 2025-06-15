@@ -10,7 +10,7 @@ package org.pupille.backend.mysql.terminverknuepfung;
 ////        FilmDTOSelection film,
 ////        TerminProjectionSelection termin
 ////) {
-////    // this part moved to the service method getAllTVwithFilmAndTermin
+////    // this part moved to the service method getAllTVWithFilmAndTermin
 //////    public TVwithFilmAndTerminDTOSelection(Terminverknuepfung tv) {
 //////        this(
 //////                tv.getTnr(),
