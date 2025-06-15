@@ -23,7 +23,7 @@ export default function TerminSelection({ termine, selectedTnr, onSelectTermin }
                 value={selectedTnr ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
-                <option value="" selected>Select a Termin to edit (or leave empty to add new)</option>
+                <option value="">Select a Termin to edit (or leave empty to add new)</option>
                 {termine.map((t: TerminDTOSelection) => (
                     <option key={t.tnr} value={t.tnr}>
                         {`${formatDateInTerminSelectOption(t.vorstellungsbeginn)} | ${t.titel} | #${t.tnr}`}
