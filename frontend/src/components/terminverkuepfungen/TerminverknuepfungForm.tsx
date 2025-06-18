@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {preprocessFormData} from "../../utils/preprocessFormData.ts";
-import {TVWithFilmAndTerminDTOSelection} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
+import {ReiheDTOForm} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
 import TerminverknuepfungSelection from "./TerminverknuepfungSelection.tsx";
 import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import FilmSelection from "../filme/FilmSelection.tsx";
@@ -24,10 +24,10 @@ const emptyTVForForm = {
 }
 
 export default function TerminverknuepfungForm() {
-    const [allTVs, setAllTVs] = useState<TVWithFilmAndTerminDTOSelection[]>([]); // All Termine fetched from the server
+    const [allTVs, setAllTVs] = useState<ReiheDTOForm[]>([]); // All Termine fetched from the server
 
     const [selectedTVId, setSelectedTVId] = useState<string | undefined>(undefined); // Selected TVId (as concatenated string) for editing or deleting
-    const [selectedTV, setSelectedTV] = useState<TVWithFilmAndTerminDTOSelection>(emptyTVForForm); // Termin data for the form
+    const [selectedTV, setSelectedTV] = useState<ReiheDTOForm>(emptyTVForForm); // Termin data for the form
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
@@ -101,7 +101,7 @@ export default function TerminverknuepfungForm() {
         setSuccessMessage("");
         setIsLoading(true);
 
-        // Check if we're adding or editing a termin
+        // Check if we're adding or editing a terminverknuepfung
         if (selectedTVId) {
             // Editing an existing termin (PUT request)
 
@@ -173,7 +173,7 @@ export default function TerminverknuepfungForm() {
     // Handle form field changes, with extra distinguishing between checked and value
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, type } = e.target;
-        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
+        setSelectedTV((prevData: ReiheDTOForm) => ({
             ...prevData,
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
         }));
@@ -207,7 +207,7 @@ export default function TerminverknuepfungForm() {
     }, []);
 
     const handleFilmSelectionChange = (id: number | undefined) => {
-        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
+        setSelectedTV((prevData: ReiheDTOForm) => ({
             ...prevData,
             fnr: id,
         }));
@@ -237,7 +237,7 @@ export default function TerminverknuepfungForm() {
     }, []);
 
     const handleTerminSelectionChange = (id: number | undefined) => {
-        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
+        setSelectedTV((prevData: ReiheDTOForm) => ({
             ...prevData,
             tnr: id,
         }));

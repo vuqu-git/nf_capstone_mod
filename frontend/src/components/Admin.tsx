@@ -59,7 +59,18 @@ export default function Admin() {
                 <h3>Terminverknüpfungen</h3>
                 <ul className="list-unstyled">
                     <li>
-                        <Link to="/admintvennew" className="btn btn-secondary mb-2">
+                        <Link to="/admintven" className="btn btn-secondary mb-2">
+                            Add, Edit, Delete
+                        </Link>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Reihen</h3>
+                <ul className="list-unstyled">
+                    <li>
+                        <Link to="/adminreihen" className="btn btn-secondary mb-2">
                             Add, Edit, Delete
                         </Link>
                     </li>

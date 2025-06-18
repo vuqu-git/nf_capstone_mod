@@ -1,9 +1,9 @@
 import { Form } from "react-bootstrap";
 import React from "react";
-import {TVWithFilmAndTerminDTOSelection} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
+import {ReiheDTOForm} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
 
 interface TVSelectionProps {
-    tvenFT: TVWithFilmAndTerminDTOSelection[];
+    tvenFT: ReiheDTOForm[];
     selectedTVId: string | undefined;
     onSelectTV: (id: string | undefined) => void;
 }
@@ -23,7 +23,7 @@ export default function TerminverknuepfungSelection({ tvenFT, selectedTVId, onSe
                 onChange={handleSelectChange}
             >
                 <option value="">Select a Terminverknuepfung to edit (or leave unselected to add a new Terminverknuepfung)</option>
-                {tvenFT.map((tvFT: TVWithFilmAndTerminDTOSelection) => (
+                {tvenFT.map((tvFT: ReiheDTOForm) => (
                     <option key={`${tvFT.tnr},${tvFT.fnr}`} value={`${tvFT.tnr},${tvFT.fnr}`}>
                         tnr : fnr | #{tvFT.tnr} : #{tvFT.fnr} | {tvFT.termin.vorstellungsbeginn?.slice(0,-3)} : {tvFT.film.titel} ({tvFT.film.directors}, {tvFT.film.jahr})
                     </option>
