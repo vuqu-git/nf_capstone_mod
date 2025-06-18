@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {preprocessFormData} from "../../utils/preprocessFormData.ts";
-import {ReiheDTOForm} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
+import {TVWithFilmAndTerminDTOSelection} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
 import TerminverknuepfungSelection from "./TerminverknuepfungSelection.tsx";
 import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import FilmSelection from "../filme/FilmSelection.tsx";
@@ -24,10 +24,10 @@ const emptyTVForForm = {
 }
 
 export default function TerminverknuepfungForm() {
-    const [allTVs, setAllTVs] = useState<ReiheDTOForm[]>([]); // All Termine fetched from the server
+    const [allTVs, setAllTVs] = useState<TVWithFilmAndTerminDTOSelection[]>([]); // All Termine fetched from the server
 
     const [selectedTVId, setSelectedTVId] = useState<string | undefined>(undefined); // Selected TVId (as concatenated string) for editing or deleting
-    const [selectedTV, setSelectedTV] = useState<ReiheDTOForm>(emptyTVForForm); // Termin data for the form
+    const [selectedTV, setSelectedTV] = useState<TVWithFilmAndTerminDTOSelection>(emptyTVForForm); // Termin data for the form
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
@@ -38,7 +38,7 @@ export default function TerminverknuepfungForm() {
 
     const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made manually by the user
 
-    // GET all termine
+    // GET all terminverknuepfung (with film and termin information)
     const getAllTVs = () => {
         // setIsLoading(true);
         setErrorMessage("");
@@ -52,12 +52,12 @@ export default function TerminverknuepfungForm() {
         // .finally(() => setIsLoading(false));
     };
 
-    // Fetch all termine for the dropdown selection
+    // Fetch all terminverknuepfungen for the dropdown selection
     useEffect(() => {
         getAllTVs();
     }, []);
 
-    // Fetch the selected termin details only if we are editing or deleting
+    // Fetch the selected terminverknuepfung details only if we are editing or deleting
     useEffect(() => {
 
         if (selectionChanged) {
@@ -67,7 +67,7 @@ export default function TerminverknuepfungForm() {
         }
 
         if (selectedTVId) {
-            // GET single termin (details)
+            // GET single terminverknuepfung (details)
             const getSingleTV = () => {
 
                 setIsGetLoading(true);
@@ -87,7 +87,7 @@ export default function TerminverknuepfungForm() {
             getSingleTV();
 
         } else {
-            // Reset the form for adding a new termin
+            // Reset the form for adding a new terminverknuepfung
             setSelectedTV(emptyTVForForm);
         }
     }, [selectedTVId]);
@@ -103,7 +103,7 @@ export default function TerminverknuepfungForm() {
 
         // Check if we're adding or editing a terminverknuepfung
         if (selectedTVId) {
-            // Editing an existing termin (PUT request)
+            // Editing an existing terminverknuepfung (PUT request)
 
             const [tnr, fnr] = selectedTVId.split(',');
 
@@ -129,7 +129,7 @@ export default function TerminverknuepfungForm() {
                     setSuccessMessage("terminverknuepfung saved successfully!");
 
                     getAllTVs();
-                    // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
+                    // setSelectedTVId(undefined); // Reset the selection, not required for POST because selection is unchanged
                     setSelectedTV(emptyTVForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -141,7 +141,7 @@ export default function TerminverknuepfungForm() {
         }
     };
 
-    // Handle termin deletion
+    // Handle terminverknuepfung deletion
     const handleDelete = () => {
         setErrorMessage("");
         setSuccessMessage("");
@@ -173,7 +173,7 @@ export default function TerminverknuepfungForm() {
     // Handle form field changes, with extra distinguishing between checked and value
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, type } = e.target;
-        setSelectedTV((prevData: ReiheDTOForm) => ({
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
             ...prevData,
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
         }));
@@ -207,7 +207,7 @@ export default function TerminverknuepfungForm() {
     }, []);
 
     const handleFilmSelectionChange = (id: number | undefined) => {
-        setSelectedTV((prevData: ReiheDTOForm) => ({
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
             ...prevData,
             fnr: id,
         }));
@@ -237,7 +237,7 @@ export default function TerminverknuepfungForm() {
     }, []);
 
     const handleTerminSelectionChange = (id: number | undefined) => {
-        setSelectedTV((prevData: ReiheDTOForm) => ({
+        setSelectedTV((prevData: TVWithFilmAndTerminDTOSelection) => ({
             ...prevData,
             tnr: id,
         }));
@@ -251,7 +251,7 @@ export default function TerminverknuepfungForm() {
             <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and existing Termin"}</h3>
 
             <TerminverknuepfungSelection
-                tvenFT={allTVs}
+                tvenWithFilmAndTermin={allTVs}
                 selectedTVId={selectedTVId}
                 onSelectTV={handleTVSelectionChange}
             />
