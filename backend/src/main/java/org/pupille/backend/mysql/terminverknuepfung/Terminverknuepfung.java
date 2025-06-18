@@ -1,5 +1,6 @@
 package org.pupille.backend.mysql.terminverknuepfung;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -57,11 +58,13 @@ public class Terminverknuepfung implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("fnr") // Maps composite key component
     @JoinColumn(name = "fnr", insertable = false, updatable = false)
+    @JsonManagedReference
     private Film film;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("tnr")  // Maps composite key component
     @JoinColumn(name = "tnr", insertable = false, updatable = false)
+    @JsonManagedReference
     private Termin termin;
     // ############################################
 }

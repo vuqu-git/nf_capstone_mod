@@ -1,5 +1,6 @@
 package org.pupille.backend.mysql.film;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -27,7 +28,9 @@ public class Film {
     @Column(columnDefinition = "TEXT")
     private String kurztext;
 
+    @Column(columnDefinition = "TEXT")
     private String besonderheit;
+
     private String land;
     private Integer jahr; // Maps to `jahr`
 
@@ -85,6 +88,7 @@ public class Film {
     // ############################################
     // relationship (extension of the entity model)
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Terminverknuepfung> terminConnections = new ArrayList<>();
     // ############################################
 }
