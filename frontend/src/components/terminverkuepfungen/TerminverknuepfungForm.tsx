@@ -254,6 +254,7 @@ export default function TerminverknuepfungForm() {
                 tvenWithFilmAndTermin={allTVs}
                 selectedTVId={selectedTVId}
                 onSelectTV={handleTVSelectionChange}
+                textForDefaultOption={undefined}
             />
 
             <div style={{ minHeight: '30px' }}>
@@ -269,6 +270,7 @@ export default function TerminverknuepfungForm() {
                     termine={allTermine}
                     selectedTnr={selectedTV.tnr}
                     onSelectTermin={handleTerminSelectionChange}
+                    textForDefaultOption={"Select a Termin for the creation of a Terminverknuepfung"}
                 />
 
                 {/*<Form.Label htmlFor="termin-selection" className="mt-3">Termin selection</Form.Label>*/}
@@ -293,6 +295,7 @@ export default function TerminverknuepfungForm() {
                     films={allFilms}
                     selectedFilmId={selectedTV.fnr}
                     onSelectFilm={handleFilmSelectionChange}
+                    textForDefaultOption={"Select a Film for the creation of a Terminverknuepfung"}
                 />
 
                 {/*<Form.Label htmlFor="film-selection" className="mt-3">Film selection</Form.Label>*/}

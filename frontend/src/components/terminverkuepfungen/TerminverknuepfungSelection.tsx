@@ -6,9 +6,15 @@ interface TVSelectionProps {
     tvenWithFilmAndTermin: TVWithFilmAndTerminDTOSelection[];
     selectedTVId: string | undefined;
     onSelectTV: (id: string | undefined) => void;
+    textForDefaultOption: string | undefined;
 }
 
-export default function TerminverknuepfungSelection({ tvenWithFilmAndTermin, selectedTVId, onSelectTV }: TVSelectionProps) {
+export default function TerminverknuepfungSelection({
+                                                        tvenWithFilmAndTermin,
+                                                        selectedTVId,
+                                                        onSelectTV,
+                                                        textForDefaultOption="Select a Terminverknuepfung to edit (or leave unselected to add a new Terminverknuepfung)",
+}: TVSelectionProps) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSelectTV(e.target.value || undefined);
@@ -22,7 +28,7 @@ export default function TerminverknuepfungSelection({ tvenWithFilmAndTermin, sel
                 value={selectedTVId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
-                <option value="">Select a Terminverknuepfung to edit (or leave unselected to add a new Terminverknuepfung)</option>
+                <option value="">{textForDefaultOption}</option>
                 {tvenWithFilmAndTermin.map((tvFT: TVWithFilmAndTerminDTOSelection) => (
                     <option key={`${tvFT.tnr},${tvFT.fnr}`} value={`${tvFT.tnr},${tvFT.fnr}`}>
                         tnr : fnr | #{tvFT.tnr} : #{tvFT.fnr} | {tvFT.termin.vorstellungsbeginn?.slice(0,-3)} : {tvFT.film.titel} ({tvFT.film.directors}, {tvFT.film.jahr})

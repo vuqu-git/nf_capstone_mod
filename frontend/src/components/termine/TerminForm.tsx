@@ -222,6 +222,7 @@ export default function TerminForm() {
                 termine={allTermine}
                 selectedTnr={selectedTerminId}
                 onSelectTermin={handleSelectionChange}
+                textForDefaultOption={undefined}
             />
 
             <div style={{ minHeight: '30px' }}>

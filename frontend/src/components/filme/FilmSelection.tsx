@@ -7,9 +7,15 @@ interface FilmSelectionProps {
     films: FilmDTOSelection[];
     selectedFilmId: number | undefined;
     onSelectFilm: (id: number  | undefined) => void;
+    textForDefaultOption: string | undefined;
 }
 
-export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: FilmSelectionProps) {
+export default function FilmSelection({
+                                          films,
+                                          selectedFilmId,
+                                          onSelectFilm,
+                                          textForDefaultOption = "Select a film to edit (or leave empty to add new)",
+                                      }: Readonly<FilmSelectionProps>) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSelectFilm(Number(e.target.value) || undefined);
@@ -23,7 +29,7 @@ export default function FilmSelection({ films, selectedFilmId, onSelectFilm }: F
                 value={selectedFilmId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
-                <option value="">Select a film to edit (or leave empty to add new)</option>
+                <option value="">{textForDefaultOption}</option>
                 {films.map((film) => (
                         <option key={film.fnr} value={film.fnr}>
                             {`${formatFilmDetailsInFilmSelectOption(film.titel, film.stab, film.jahr)} | #${film.fnr}`}

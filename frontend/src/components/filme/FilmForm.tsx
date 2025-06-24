@@ -257,6 +257,7 @@ export default function FilmForm() {
                 films={allFilms}
                 selectedFilmId={selectedFilmId}
                 onSelectFilm={handleSelectionChange}
+                textForDefaultOption={undefined}
             />
 
             <div style={{ minHeight: '30px' }}>

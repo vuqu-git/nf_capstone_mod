@@ -7,9 +7,15 @@ interface TerminSelectionProps {
     termine: TerminDTOSelection[];
     selectedTnr: number | undefined;
     onSelectTermin: (id: number | undefined) => void;
+    textForDefaultOption: string | undefined;
 }
 
-export default function TerminSelection({ termine, selectedTnr, onSelectTermin }: TerminSelectionProps) {
+export default function TerminSelection({
+                                            termine,
+                                            selectedTnr,
+                                            onSelectTermin,
+                                            textForDefaultOption  = "Select a Termin to edit (or leave empty to add new)",
+                                        }: Readonly<TerminSelectionProps>) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSelectTermin(Number(e.target.value) || undefined);
@@ -23,7 +29,7 @@ export default function TerminSelection({ termine, selectedTnr, onSelectTermin }
                 value={selectedTnr ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
-                <option value="">Select a Termin to edit (or leave empty to add new)</option>
+                <option value="">{textForDefaultOption}</option>
                 {termine.map((t: TerminDTOSelection) => (
                     <option key={t.tnr} value={t.tnr}>
                         {`${formatDateInTerminSelectOption(t.vorstellungsbeginn)} | ${t.titel} | #${t.tnr}`}
