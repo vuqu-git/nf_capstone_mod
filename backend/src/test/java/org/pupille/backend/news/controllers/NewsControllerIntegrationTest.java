@@ -130,6 +130,8 @@ class NewsControllerIntegrationTest {
     }
 
     @Test
+    // only mark tests as dirty if they modify the Spring context or global/static state, not just for regular data changes
+    //      better manual delete with repo's deleteAll() and @BeforeEach
     @DirtiesContext
     void getAllNews_whenFound_returnNews() throws Exception {
         // GIVEN
@@ -310,6 +312,9 @@ class NewsControllerIntegrationTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("No news found with the id " + targetId));
     }
+
+
+    // to do: from here in: add additional tests to assert/check if objects in the test repo are really deleted/added/changes => d.f. day21RecapTodoBackend, TodoControllerIntegrationTest class
 
     @Test
     @DirtiesContext
