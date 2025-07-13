@@ -52,6 +52,7 @@ class NewsControllerIntegrationTest {
     NewsRepo newsTestRepo;
 
     // ######################################
+    // even in integration tests still some things need to be mocked because there are methods containing randomness UUID.randomUUID() (c.f. randomId in NewsService) or the current date LocalDate.now() (cf localDateNow() in NewsService)
     // the following @MockitoBean annotation:
     //      It tells Spring Boot to create a mock instance of DateNowService.
     //      It replaces the real DateNowService bean in the application context with this mock.
@@ -198,7 +199,7 @@ class NewsControllerIntegrationTest {
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
 
-        // !!!!! these 2 lines doesn't work:
+        // !!!!! these 2 lines doesn't work (wrong syntax, cf unit tests for usage of when for mocking):
         // when(mock(NewsRepo.class).findNewsByDateInRange( LocalDate.of(2025, 5, 12) )).thenReturn( List.of(news2) );
         // when(mock(DateNowService.class).localDateNow()).thenReturn(LocalDate.of(2025, 5, 28));
         // Here, you're creating a new mock object inside the when() call with mock(DateNowService.class). This is problematic because:
