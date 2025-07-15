@@ -305,6 +305,9 @@ export default function TerminForm() {
                         value={selectedTermin.besonderheit || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Hier keine Hinweise auf Reihen eintragen. Diese werden automatisch auf der Detailseite angezeigt.
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">
