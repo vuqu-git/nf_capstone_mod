@@ -30,6 +30,12 @@ public class TerminController {
         return ResponseEntity.ok(termine);
     }
 
+    @GetMapping("/allwithmainfilms")
+    public ResponseEntity<List<TerminDTOWithMainFilme>> getAllTermineWithMainfilmsByOrderByVorstellungsbeginnDesc() {
+        List<TerminDTOWithMainFilme> termineWithMainfilme = terminService.getAllTermineWithMainfilmeByOrderByVorstellungsbeginnDesc();
+        return ResponseEntity.ok(termineWithMainfilme);
+    }
+
     @GetMapping("/{tnr}")
     public ResponseEntity<TerminDTOForm> getTerminById(@PathVariable Long tnr) {
         Optional<TerminDTOForm> terminDTOForm = terminService.getTerminById(tnr);

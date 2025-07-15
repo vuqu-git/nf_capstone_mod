@@ -1,6 +1,6 @@
 package org.pupille.backend.mysql.film;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -88,7 +88,7 @@ public class Film {
     // ############################################
     // relationship (extension of the entity model)
     @OneToMany(mappedBy = "film", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference("TV-Film-Ref")
     private List<Terminverknuepfung> terminConnections = new ArrayList<>();
     // ############################################
 }

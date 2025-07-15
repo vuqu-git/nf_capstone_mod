@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Setter
 @NoArgsConstructor // Needed for JSON deserialization if you were sending TerminDTOs in requests
 @AllArgsConstructor // Useful for manual construction if needed
-public class TerminDTOWithFilme {
+public class TerminDTOWithMainFilme {
     private Long tnr;
     private LocalDateTime vorstellungsbeginn;
     private String titel;
@@ -46,9 +46,9 @@ public class TerminDTOWithFilme {
 //                .orElse(null); // Set to null if no film connection or film is null
 //    }
 
-    private Set<FilmDTOSelection> films; // a Set of FilmDTOSelection
+    private Set<FilmDTOSelection> films; // a Set of FilmDTOSelection, no vorfilms included!
 
-    public TerminDTOWithFilme(Termin termin) {
+    public TerminDTOWithMainFilme(Termin termin) {
         this.tnr = termin.getTnr();
         this.vorstellungsbeginn = termin.getVorstellungsbeginn();
         this.titel = termin.getTitel();
@@ -60,6 +60,7 @@ public class TerminDTOWithFilme {
 
         // Map each Terminverknuepfung to its associated Film, then to FilmDTOSelection
         this.films = connections.stream()
+                .filter(connection -> connection.getVorfilm() == null || !connection.getVorfilm()) // Exclude vorfilms
                 .map(Terminverknuepfung::getFilm) // Get the Film entity
                 .filter(java.util.Objects::nonNull) // Ensure film is not null (e.g., if lazy loading failed, though @EntityGraph should prevent this)
                 .map(FilmDTOSelection::new)       // Map Film entity to FilmDTOSelection DTO

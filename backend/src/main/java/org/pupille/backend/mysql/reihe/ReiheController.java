@@ -5,13 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/reihe")
 public class ReiheController {
-
-    @Autowired
-    private ReiheRepository reiheRepository;
 
     @Autowired
     private ReiheService reiheService;
@@ -28,7 +26,7 @@ public class ReiheController {
 
     @GetMapping("/{rnr}")
     public ResponseEntity<ReiheDTOForFormWithTermineAndFilme> getReiheById(@PathVariable Long rnr) {
-        return ResponseEntity.ok(new ReiheDTOForFormWithTermineAndFilme( reiheService.getReiheById(rnr) ));
+        return ResponseEntity.ok(reiheService.getReiheDTOForFormById(rnr));
     }
 
     @PostMapping
@@ -48,12 +46,33 @@ public class ReiheController {
     }
 
     // #####################################################################
+    // --- Get a list of Reihen (with Termine & Films) for a given Tnr ---
+    @GetMapping("/from-termin/{tnr}")
+    public ResponseEntity<List<ReiheDTOForFormWithTermineAndFilme>> getReihenByTerminId(@PathVariable Long tnr) {
+        return ResponseEntity.ok(reiheService.getReihenDTOsByTerminId(tnr));
+    }
+
+    // #####################################################################
     // --- Add Termin to Reihe ---
-    @PostMapping("/{rnr}/termine/{tnr}")
+    @PostMapping("/{rnr}/termin/{tnr}")
     public ResponseEntity<Reihe> addTerminToReihe(
             @PathVariable Long rnr,
             @PathVariable Long tnr) {
         Reihe updated = reiheService.addTerminToReihe(rnr, tnr);
         return ResponseEntity.ok(updated);
+    }
+
+    // --- Delete Termin from Reihe ---
+    @DeleteMapping("/{rnr}/termin/{tnr}")
+    public ResponseEntity<Void> removeTerminFromReihe(
+            @PathVariable Long rnr,
+            @PathVariable Long tnr) {
+        try {
+            reiheService.removeTerminFromReihe(rnr, tnr);
+            return ResponseEntity.noContent().build(); // 204 No Content for successful deletion
+        } catch (NoSuchElementException e) {
+            // This catches "Reihe not found", "Termin not found", or "Connection not found"
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        }
     }
 }
