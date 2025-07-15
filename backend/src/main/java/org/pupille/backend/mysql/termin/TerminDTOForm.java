@@ -22,7 +22,7 @@ public class TerminDTOForm {
     private Integer sonderfarbeTitel;
     private Integer sonderfarbe;
     private Short veroeffentlichen;
-    // Note: filmConnections are intentionally excluded
+    // Note: filmConnections are intentionally excluded, also reihen
 
     public TerminDTOForm(Termin termin) {
         this.tnr = termin.getTnr();

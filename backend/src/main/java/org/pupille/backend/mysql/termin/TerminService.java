@@ -34,6 +34,10 @@ public class TerminService {
         return terminRepository.findAllByOrderByVorstellungsbeginnDesc();
     }
 
+    public List<TerminDTOWithMainFilme> getAllTermineWithMainfilmeByOrderByVorstellungsbeginnDesc() {
+        return terminRepository.findWithMainfilmeAllByOrderByVorstellungsbeginnDesc();
+    }
+
     public Optional<TerminDTOForm> getTerminById(Long tnr) {
         return Optional.of( new TerminDTOForm(terminRepository.findById(tnr).get()) );
     }

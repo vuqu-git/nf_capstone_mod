@@ -1,5 +1,7 @@
 package org.pupille.backend.mysql.terminverknuepfung;
 
+import org.pupille.backend.mysql.termin.Termin;
+import org.pupille.backend.mysql.termin.TerminProjectionSelection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,6 +23,21 @@ public interface TerminverknuepfungRepository extends JpaRepository<Terminverknu
 
     @Query("SELECT tv FROM Terminverknuepfung tv JOIN FETCH tv.film WHERE tv.tnr = :tnr")
     List<Terminverknuepfung> findWithFilmsByTnr(@Param("tnr") Long tnr);
+
+    // method for fetching list of termine when giving fnr
+    // contains query logic to return TerminProjectionSelection objects
+
+    @Query("""
+                SELECT 
+                    t.tnr AS tnr,
+                    t.vorstellungsbeginn AS vorstellungsbeginn,
+                    t.titel AS titel
+                FROM Termin t
+                JOIN t.filmConnections tv
+                WHERE tv.film.fnr = :fnr
+                ORDER BY t.vorstellungsbeginn DESC
+            """)
+    List<TerminProjectionSelection> findTermineByFilmFnr(@Param("fnr") Long fnr);
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

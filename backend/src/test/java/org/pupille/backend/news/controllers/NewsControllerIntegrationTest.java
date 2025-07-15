@@ -1,5 +1,7 @@
 package org.pupille.backend.news.controllers;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.pupille.backend.news.models.News;
 import org.pupille.backend.news.repositories.NewsRepo;
@@ -18,6 +20,9 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import static org.mockito.Mockito.when;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
@@ -52,6 +57,7 @@ class NewsControllerIntegrationTest {
     NewsRepo newsTestRepo;
 
     // ######################################
+    // even in integration tests still some things need to be mocked because there are methods containing randomness UUID.randomUUID() (c.f. randomId in NewsService) or the current date LocalDate.now() (cf localDateNow() in NewsService)
     // the following @MockitoBean annotation:
     //      It tells Spring Boot to create a mock instance of DateNowService.
     //      It replaces the real DateNowService bean in the application context with this mock.
@@ -114,6 +120,11 @@ class NewsControllerIntegrationTest {
             //    When you need to throw an exception from IdService to test error handling in MyService without changing IdService's production code.
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+    @BeforeEach
+    void repoTabulaRasa() {
+        newsTestRepo.deleteAll();
+    }
+
     @Test
     void getAllNews_whenEmpty_returnEmptyList() throws Exception {
         // GIVEN
@@ -130,7 +141,9 @@ class NewsControllerIntegrationTest {
     }
 
     @Test
-    @DirtiesContext
+    // only mark tests as dirty if they modify the Spring context or global/static state, not just for regular data changes
+    //      better manual delete with repo's deleteAll() and @BeforeEach
+    //@DirtiesContext
     void getAllNews_whenFound_returnNews() throws Exception {
         // GIVEN
         News news1 = new News("1",
@@ -177,7 +190,7 @@ class NewsControllerIntegrationTest {
     }
 
     @Test
-    @DirtiesContext
+    //@DirtiesContext
     void getValidNews_whenFound_returnNews() throws Exception {
         // GIVEN
         News news1 = new News("1",
@@ -196,7 +209,7 @@ class NewsControllerIntegrationTest {
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
 
-        // !!!!! these 2 lines doesn't work:
+        // !!!!! these 2 lines doesn't work (wrong syntax, cf unit tests for usage of when for mocking):
         // when(mock(NewsRepo.class).findNewsByDateInRange( LocalDate.of(2025, 5, 12) )).thenReturn( List.of(news2) );
         // when(mock(DateNowService.class).localDateNow()).thenReturn(LocalDate.of(2025, 5, 28));
         // Here, you're creating a new mock object inside the when() call with mock(DateNowService.class). This is problematic because:
@@ -227,7 +240,7 @@ class NewsControllerIntegrationTest {
     }
 
     @Test
-    @DirtiesContext
+    //@DirtiesContext
     void getValidNews_whenNotFound_returnEmpty() throws Exception {
         // GIVEN
         News news1 = new News("1",
@@ -260,7 +273,7 @@ class NewsControllerIntegrationTest {
     }
 
     @Test
-    @DirtiesContext
+    //@DirtiesContext
     void getNewsItem_whenFound_returnNews() throws Exception {
         // GIVEN
         News news1 = new News("1",
@@ -311,8 +324,11 @@ class NewsControllerIntegrationTest {
                 .andExpect(jsonPath("$.message").value("No news found with the id " + targetId));
     }
 
+
+    // from here on for best practice: add additional tests to assert/check if objects in the test repo are really deleted/added/changes
+
     @Test
-    @DirtiesContext
+    //@DirtiesContext
     void deleteNewsItem_whenFound_removesNews() throws Exception {
         // GIVEN
         News news1 = new News("1",
@@ -338,6 +354,15 @@ class NewsControllerIntegrationTest {
                 )
                 // THEN
                 .andExpect(status().isOk());
+
+        // testing on the repo
+        // ~~~~~~~~~~~~~~~~~~~
+        // if changes were really made (persistent)
+        Assertions.assertFalse( newsTestRepo.existsById(news1.id()) );
+
+        // no other data was amended
+        Assertions.assertTrue( newsTestRepo.existsById(news2.id()) );
+        Assertions.assertEquals(1, newsTestRepo.count() );
     }
 
     @Test
@@ -355,10 +380,18 @@ class NewsControllerIntegrationTest {
                 // THEN
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("No news found with the id " + targetId));
+
+        // testing on the repo
+        // ~~~~~~~~~~~~~~~~~~~
+        Assertions.assertFalse( newsTestRepo.existsById(targetId) );
+
+        // no other data was amended
+        Assertions.assertEquals(0, newsTestRepo.count() );
+        // Assertions.assertTrue(newsTestRepo.findAll().isEmpty());
     }
 
     @Test
-    @DirtiesContext
+//    @DirtiesContext
     void addNewsItem() throws Exception {
         // GIVEN
         News news1 = new News("1",
@@ -401,10 +434,18 @@ class NewsControllerIntegrationTest {
                 
                 """))
                 .andExpect(jsonPath("$.id").isNotEmpty());
+
+        // testing on the repo
+        // ~~~~~~~~~~~~~~~~~~~
+        // old data record is still there and unchanged
+        News old = newsTestRepo.findById("1").orElseThrow(NoSuchElementException::new);
+        Assertions.assertEquals(news1, old);
+
+        Assertions.assertEquals(2, newsTestRepo.count());
     }
 
     @Test
-    @DirtiesContext
+    //@DirtiesContext
     void updateMovie_whenFound_returnMovie() throws Exception {
         // GIVEN
         News news1 = new News("1",
@@ -448,6 +489,15 @@ class NewsControllerIntegrationTest {
                     }
                 
                 """));
+
+        // testing on the repo
+        // ~~~~~~~~~~~~~~~~~~~
+        Assertions.assertTrue(newsTestRepo.existsById("1"));
+
+        News updated = newsTestRepo.findById("1").orElseThrow(NoSuchElementException::new);
+        Assertions.assertEquals("Action double feature coming soon!", updated.text());
+        Assertions.assertEquals(LocalDate.parse("2025-04-20"), updated.startDate());
+        Assertions.assertEquals(LocalDate.parse("2025-05-15"), updated.endDate());
     }
 
     @Test
@@ -478,6 +528,10 @@ class NewsControllerIntegrationTest {
                 // THEN
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.message").value("No news found with the id " + targetId));
+
+        // testing on the repo
+        // ~~~~~~~~~~~~~~~~~~~
+        Assertions.assertTrue(newsTestRepo.findAll().isEmpty());
     }
 
     @Test

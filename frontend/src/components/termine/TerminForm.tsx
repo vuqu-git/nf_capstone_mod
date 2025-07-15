@@ -7,6 +7,7 @@ import axios from "axios";
 
 import { preprocessFormData } from '../../utils/preprocessFormData.ts';
 import AdminNav from "../AdminNav.tsx";
+import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 
 const baseURL = "/api/termine";
 
@@ -39,6 +40,8 @@ export default function TerminForm() {
     const [allTermine, setAllTermine] = useState<TerminDTOSelection[]>([]); // All Termine fetched from the server
     const [selectedTerminId, setSelectedTerminId] = useState<number | undefined>(undefined); // Selected Termin for editing or deleting
     const [selectedTermin, setSelectedTermin] = useState<Termin>(emptyTerminForForm); // Termin data for the form
+
+    const [filmsOfSelectedTerminId, setFilmsOfSelectedTerminId] = useState<FilmDTOSelection[]>([]); // list of the corresponding films of selectedTerminId
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
@@ -92,8 +95,24 @@ export default function TerminForm() {
                     })
                     .finally(() => setIsGetLoading(false));
             };
-
             getSingleTermin();
+
+            // *****************************************************************************
+            // GET corresponding films (as FilmDTOSelection[]) of the selected single termin
+            const getFilmsOfSingleTermin = () => {
+
+                setIsGetLoading(true);
+                setErrorMessage("");
+
+                axios.get(`/api/terminverknuepfung/getfilme/${selectedTerminId}`)
+                    .then((response) => setFilmsOfSelectedTerminId(response.data))
+                    .catch((error) => {
+                        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                        setErrorMessage(errorMessage);
+                    })
+                    .finally(() => setIsGetLoading(false));
+            };
+            getFilmsOfSingleTermin();
 
         } else {
             // Reset the form for adding a new termin, including the default time for vorstellungsbeginn
@@ -203,11 +222,32 @@ export default function TerminForm() {
                 termine={allTermine}
                 selectedTnr={selectedTerminId}
                 onSelectTermin={handleSelectionChange}
+                textForDefaultOption={undefined}
             />
 
             <div style={{ minHeight: '30px' }}>
                 {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading Termin details... Please wait!</div>}
             </div>
+
+            {selectedTerminId && (
+                <Form.Group controlId="filmsDisplay"
+                            className="mt-3"
+                            style={{
+                                opacity: 0.4,
+                            }}
+                >
+                    <Form.Label>{filmsOfSelectedTerminId.length > 1 ? "Filme" : "Film"} zum ausgewählten Termin:</Form.Label>
+                    <Form.Control
+                        as="textarea"
+                        rows={filmsOfSelectedTerminId.length}
+                        value={
+                            filmsOfSelectedTerminId.map(f => f.titel + " | #" + f.fnr).join("\n")
+                        }
+                        readOnly
+
+                    />
+                </Form.Group>
+            )}
 
             <Form onSubmit={handleSubmit}>
 
@@ -265,6 +305,9 @@ export default function TerminForm() {
                         value={selectedTermin.besonderheit || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Hier keine Hinweise auf Reihen eintragen. Diese werden automatisch auf der Detailseite angezeigt.
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">

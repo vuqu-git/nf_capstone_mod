@@ -2,8 +2,10 @@ package org.pupille.backend.mysql.terminverknuepfung;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.pupille.backend.mysql.film.Film;
+import org.pupille.backend.mysql.film.FilmDTOSelection;
 import org.pupille.backend.mysql.film.FilmRepository;
 import org.pupille.backend.mysql.termin.Termin;
+import org.pupille.backend.mysql.termin.TerminProjectionSelection;
 import org.pupille.backend.mysql.termin.TerminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -145,7 +148,7 @@ public class TerminverknuepfungService {
 
     //    #############################################################
 
-    public List<TVWithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
+    public List<TVWithFilmAndTerminDTOSelection> getAllTVWithFilmAndTermin() {
         return terminverknuepfungRepository.findAllWithFilmAndTermin()
                 .stream()
                 .map(TVWithFilmAndTerminDTOSelection::new)
@@ -153,7 +156,7 @@ public class TerminverknuepfungService {
     }
 
 //    // some processing on the Film data using the extractDirectors(film.getStab()) method i.e. the FilmDTOSelection contains a specifically processed version of the film's directors.
-//    public List<TVwithFilmAndTerminDTOSelection> getAllTVwithFilmAndTermin() {
+//    public List<TVwithFilmAndTerminDTOSelection> getAllTVWithFilmAndTermin() {
 //        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllWithFilmAndTermin();
 //
 //        return terminverknuepfungen.stream()
@@ -189,7 +192,7 @@ public class TerminverknuepfungService {
 //    }
 
 
-    public TVWithFilmAndTerminDTOSelection getTVwithFilmAndTerminbyTnrAndFnr(Long tnr, Long fnr) {
+    public TVWithFilmAndTerminDTOSelection getTVWithFilmAndTerminByTnrAndFnr(Long tnr, Long fnr) {
         return terminverknuepfungRepository.findWithFilmAndTerminByTnrAndFnr(tnr, fnr)
                 .map(TVWithFilmAndTerminDTOSelection::new)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -199,10 +202,34 @@ public class TerminverknuepfungService {
     }
 
 
-    public List<TVWithFilmAndTerminDTOSelection> getAllTVwithFilmAndTerminSortedByTermin() {
+    public List<TVWithFilmAndTerminDTOSelection> getAllTVWithFilmAndTerminSortedByTermin() {
         return terminverknuepfungRepository.findAllWithFilmAndTerminOrderByTerminDesc()
                 .stream()
                 .map(TVWithFilmAndTerminDTOSelection::new)
                 .collect(Collectors.toList());
     }
+
+    // ---------------------------------------------------------------------------------------------
+    // two methods for fetching list of filme (termine) when giving tnr (fnr)
+    // the first one: getFilmlistByTnr uses a simple repo method and a constructor to create FilmDTOSelection objects
+    // the second one: getTerminlistByFnr contains logic in the repo method to return TerminProjectionSelection objects
+    public List<FilmDTOSelection> getFilmlistByTnr(Long tnr) {
+        List<Terminverknuepfung> fnrList = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
+        List<FilmDTOSelection> filmList = new ArrayList<>();
+
+        for (Terminverknuepfung tv : fnrList) {
+            // Assuming Terminverknuepfung has a method getFilm() or similar
+            Film film = tv.getFilm();
+
+            // Now create a FilmDTOSelection from the Film object
+            FilmDTOSelection filmDto = new FilmDTOSelection(film);
+            filmList.add(filmDto);
+        }
+        return filmList;
+    }
+
+    public List<TerminProjectionSelection> getTerminlistByFnr(Long fnr) {
+        return terminverknuepfungRepository.findTermineByFilmFnr(fnr);
+    }
+    // ---------------------------------------------------------------------------------------------
 }

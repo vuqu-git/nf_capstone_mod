@@ -38,7 +38,7 @@ export default function TerminverknuepfungForm() {
 
     const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made manually by the user
 
-    // GET all termine
+    // GET all terminverknuepfung (with film and termin information)
     const getAllTVs = () => {
         // setIsLoading(true);
         setErrorMessage("");
@@ -52,12 +52,12 @@ export default function TerminverknuepfungForm() {
         // .finally(() => setIsLoading(false));
     };
 
-    // Fetch all termine for the dropdown selection
+    // Fetch all terminverknuepfungen for the dropdown selection
     useEffect(() => {
         getAllTVs();
     }, []);
 
-    // Fetch the selected termin details only if we are editing or deleting
+    // Fetch the selected terminverknuepfung details only if we are editing or deleting
     useEffect(() => {
 
         if (selectionChanged) {
@@ -67,7 +67,7 @@ export default function TerminverknuepfungForm() {
         }
 
         if (selectedTVId) {
-            // GET single termin (details)
+            // GET single terminverknuepfung (details)
             const getSingleTV = () => {
 
                 setIsGetLoading(true);
@@ -87,7 +87,7 @@ export default function TerminverknuepfungForm() {
             getSingleTV();
 
         } else {
-            // Reset the form for adding a new termin
+            // Reset the form for adding a new terminverknuepfung
             setSelectedTV(emptyTVForForm);
         }
     }, [selectedTVId]);
@@ -101,9 +101,9 @@ export default function TerminverknuepfungForm() {
         setSuccessMessage("");
         setIsLoading(true);
 
-        // Check if we're adding or editing a termin
+        // Check if we're adding or editing a terminverknuepfung
         if (selectedTVId) {
-            // Editing an existing termin (PUT request)
+            // Editing an existing terminverknuepfung (PUT request)
 
             const [tnr, fnr] = selectedTVId.split(',');
 
@@ -129,7 +129,7 @@ export default function TerminverknuepfungForm() {
                     setSuccessMessage("terminverknuepfung saved successfully!");
 
                     getAllTVs();
-                    // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
+                    // setSelectedTVId(undefined); // Reset the selection, not required for POST because selection is unchanged
                     setSelectedTV(emptyTVForForm); // Reset the form
                 })
                 .catch((error) => {
@@ -141,7 +141,7 @@ export default function TerminverknuepfungForm() {
         }
     };
 
-    // Handle termin deletion
+    // Handle terminverknuepfung deletion
     const handleDelete = () => {
         setErrorMessage("");
         setSuccessMessage("");
@@ -251,9 +251,10 @@ export default function TerminverknuepfungForm() {
             <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and existing Termin"}</h3>
 
             <TerminverknuepfungSelection
-                tvenFT={allTVs}
+                tvenWithFilmAndTermin={allTVs}
                 selectedTVId={selectedTVId}
                 onSelectTV={handleTVSelectionChange}
+                textForDefaultOption={undefined}
             />
 
             <div style={{ minHeight: '30px' }}>
@@ -269,6 +270,7 @@ export default function TerminverknuepfungForm() {
                     termine={allTermine}
                     selectedTnr={selectedTV.tnr}
                     onSelectTermin={handleTerminSelectionChange}
+                    textForDefaultOption={"Select a Termin for the creation of a Terminverknuepfung"}
                 />
 
                 {/*<Form.Label htmlFor="termin-selection" className="mt-3">Termin selection</Form.Label>*/}
@@ -293,6 +295,7 @@ export default function TerminverknuepfungForm() {
                     films={allFilms}
                     selectedFilmId={selectedTV.fnr}
                     onSelectFilm={handleFilmSelectionChange}
+                    textForDefaultOption={"Select a Film for the creation of a Terminverknuepfung"}
                 />
 
                 {/*<Form.Label htmlFor="film-selection" className="mt-3">Film selection</Form.Label>*/}

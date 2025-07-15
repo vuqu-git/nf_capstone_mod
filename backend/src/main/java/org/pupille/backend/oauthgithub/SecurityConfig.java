@@ -49,6 +49,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,"/api/termine/{id}").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/termine/{id}").authenticated()
 
+                        .requestMatchers(HttpMethod.POST,"/api/reihe").authenticated()
+                        .requestMatchers(HttpMethod.PUT,"/api/reihe/{id}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE,"/api/reihe/{id}").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/api/reihe/{rnr}/termin/{tnr}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE,"/api/reihe/{rnr}/termin/{tnr}").authenticated()
+
                         .requestMatchers(HttpMethod.POST,"/api/terminverknuepfung/link-film-termin").authenticated()
                         .requestMatchers(HttpMethod.PUT,"/api/terminverknuepfung/{tnr}/{fnr}").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/terminverknuepfung/{tnr}/{fnr}").authenticated()

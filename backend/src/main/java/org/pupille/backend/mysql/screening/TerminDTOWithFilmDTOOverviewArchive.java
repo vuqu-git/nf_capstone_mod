@@ -10,7 +10,7 @@ public record TerminDTOWithFilmDTOOverviewArchive(
         Long tnr,
         LocalDateTime vorstellungsbeginn,
         String titel,
-        List<FilmDTOOverviewArchive> films
+        List<FilmDTOOverviewArchive> films // one usage in the screening service method getPastTermineWithFilms, ensures they are mainfilms
 ) {
     public TerminDTOWithFilmDTOOverviewArchive(Termin termin, List<Film> films) {
         this(

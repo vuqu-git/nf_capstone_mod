@@ -1,5 +1,7 @@
 package org.pupille.backend.mysql.terminverknuepfung;
 
+import org.pupille.backend.mysql.film.FilmDTOSelection;
+import org.pupille.backend.mysql.termin.TerminProjectionSelection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,8 +83,8 @@ public class TerminverknuepfungController {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     @GetMapping()
-    public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getTVwithFilmAndTermin() {
-        List<TVWithFilmAndTerminDTOSelection> result = terminverknuepfungService.getAllTVwithFilmAndTermin();
+    public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getTVWithFilmAndTermin() {
+        List<TVWithFilmAndTerminDTOSelection> result = terminverknuepfungService.getAllTVWithFilmAndTermin();
         return ResponseEntity.ok(result);
     }
 
@@ -91,14 +93,26 @@ public class TerminverknuepfungController {
             @PathVariable Long tnr,
             @PathVariable Long fnr
     ) {
-        return ResponseEntity.ok(terminverknuepfungService.getTVwithFilmAndTerminbyTnrAndFnr(tnr, fnr));
+        return ResponseEntity.ok(terminverknuepfungService.getTVWithFilmAndTerminByTnrAndFnr(tnr, fnr));
     }
 
     @GetMapping("/terminsorted")
     public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getAllTVSortedByTermin() {
         return ResponseEntity.ok(
-                terminverknuepfungService.getAllTVwithFilmAndTerminSortedByTermin()
+                terminverknuepfungService.getAllTVWithFilmAndTerminSortedByTermin()
         );
     }
 
+    // two methods for fetching list of filme (termine) when giving tnr (fnr)
+    @GetMapping("gettermine/{fnr}")
+    public ResponseEntity<List<TerminProjectionSelection>> getTermineByFnr(@PathVariable Long fnr) {
+        return ResponseEntity.ok(terminverknuepfungService.getTerminlistByFnr(fnr));
+    }
+
+    @GetMapping("getfilme/{tnr}")
+    public ResponseEntity<List<FilmDTOSelection>> getFilmeByTnr(
+            @PathVariable Long tnr
+    ) {
+        return ResponseEntity.ok(terminverknuepfungService.getFilmlistByTnr(tnr));
+    }
 }

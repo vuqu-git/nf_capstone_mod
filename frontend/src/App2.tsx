@@ -41,6 +41,7 @@ import ProtectedRoute from "./components/security/ProtectedRoute.tsx";
 import Login from "./components/security/Login.tsx";
 import {AuthProvider} from "./components/security/AuthContext.tsx";
 import Slides from "./components/slides/Slides.tsx";
+import ReiheForm from "./components/reihen/ReiheForm.tsx";
 
 // #############################
 // for Gallery.tsx
@@ -243,8 +244,13 @@ const router = createBrowserRouter([
                                 handle: { scrollMode: "pathname" },
                             },
                             {
-                                path: "admintvennew",
+                                path: "admintven",
                                 element: <TerminverknuepfungForm />,
+                                handle: { scrollMode: "pathname" },
+                            },
+                            {
+                                path: "adminreihen",
+                                element: <ReiheForm />,
                                 handle: { scrollMode: "pathname" },
                             },
                         ],

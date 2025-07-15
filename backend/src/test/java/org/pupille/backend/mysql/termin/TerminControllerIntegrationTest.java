@@ -82,9 +82,8 @@ class TerminControllerIntegrationTest {
         termin.setVeroeffentlichen((short) 1);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/termine")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(termin)))
-                        .contentType(MediaType.APPLICATION_JSON)
+//                        .contentType(MediaType.APPLICATION_JSON) // this somehow doesn't work in the GitHub Actions CI environment
+                        .contentType("application/json")
                         .content(objectMapper.writeValueAsString(termin))
                             // ObjectMapper: This is a core class from the Jackson library, which Spring Boot uses by default for JSON serialization and deserialization.
                             // writeValueAsString(Object value): This method takes a Java object (termin in this case) and serializes it into a JSON string.

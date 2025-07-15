@@ -157,7 +157,7 @@ class NewsServiceTest {
         // GIVEN
         News expected = n2;
         String id = "2";
-        // Simulate ID generation
+        // Mock ID generation
         when(mockIdService.randomId()).thenReturn(id);
 
         when(mockNewsRepo.save(n2)).thenReturn(expected);
@@ -179,7 +179,7 @@ class NewsServiceTest {
     @Test
     void saveNewsInvalidNews_A() {
         // GIVEN
-        // Simulate ID generation if necessary, but actually not required
+        // Mock ID generation if necessary, but actually not required
 //        String id = "2";
 //        when(mockIdService.randomId()).thenReturn(id);
 
@@ -196,7 +196,7 @@ class NewsServiceTest {
     void saveNewsInvalidNews_B() {
         // same test as saveNewsInvalidNews_A but written differently
 
-        // Simulate ID generation if necessary, but actually not required
+        // Mock ID generation if necessary, but actually not required
 //        String id = "2";
 //        when(mockIdService.randomId()).thenReturn(id);
 
@@ -324,7 +324,7 @@ class NewsServiceTest {
         // GIVEN
         List<News> expected = new ArrayList<>();
 
-        // Simulate now date generation
+        // Mock now date generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow();
@@ -338,7 +338,7 @@ class NewsServiceTest {
         //        // GIVEN
         //        ArrayList<News> expectedArrayList = new ArrayList<>(List.of());
         //
-        //        // Simulate now date generation
+        //        // Mock now date generation
         //        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
         //
         //        LocalDate currentDate = mockDateNowService.localDateNow();
@@ -355,7 +355,7 @@ class NewsServiceTest {
     void getNewsByDateInRange_whenNotEmpty_returnNewsList_1() {
         // GIVEN
         List<News> expected = new ArrayList<>(List.of(n1));
-        // Simulate now date generation
+        // Mock now date generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
@@ -368,7 +368,7 @@ class NewsServiceTest {
 
         //        // GIVEN
         //        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n1));
-        //        // Simulate now date generation
+        //        // Mock now date generation
         //        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
         //
         //        LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
@@ -386,7 +386,7 @@ class NewsServiceTest {
         // GIVEN
         List<News> expected = new ArrayList<>(List.of(n2, n1));
 
-        // Simulate now date generation
+        // Mock now date generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
@@ -400,7 +400,7 @@ class NewsServiceTest {
         //        // GIVEN
         //        ArrayList<News> expectedArrayList = new ArrayList<>(List.of(n2, n1));
         //
-        //        // Simulate now date generation
+        //        // Mock now date generation
         //        when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
         //
         //        LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
