@@ -7,6 +7,9 @@ import TerminFilmDetailsListing from "./TerminFilmDetailsCardFilmListing.tsx";
 import {createICSFileName} from "../../utils/createICSFileName.ts";
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import {createDateAndTimeForAddToCalendarButton} from "../../utils/createDateAndTimeForAddToCalendarButton.ts";
+import ReiheDTOForFormWithTermineAndFilme from "../../types/ReiheDTOForFormWithTermineAndFilme.ts";
+import {formatDateTime} from "../../utils/formatDateTime.ts";
+import {Link} from "react-router-dom";
 
 interface Props {
     tnr: string | undefined;
@@ -28,6 +31,8 @@ interface Props {
     vorfilms: FilmDTOFormPlus[];
 
     terminGesamtlaufzeit: number;
+
+    reihen: ReiheDTOForFormWithTermineAndFilme[];
 }
 
 export default function TerminFilmDetailsCard({
@@ -49,7 +54,9 @@ export default function TerminFilmDetailsCard({
                                                   vorfilms,
 
                                                   terminGesamtlaufzeit,
-                                              }: Props) {
+
+                                                  reihen,
+                                              }: Readonly<Props>) {
 
     const calenderTitle = programmtitel ? programmtitel : mainfilms[0].film.titel ?? "Film in der Pupille";
     const icsFileName = createICSFileName(calenderTitle, vorstellungsbeginnIso8601);
@@ -60,6 +67,7 @@ export default function TerminFilmDetailsCard({
             className="terminFilm-card"
         >
             <Card.Body>
+
                 <Card.Header
                     as="h4"
                     className="terminFilm-card-header"
@@ -114,6 +122,48 @@ export default function TerminFilmDetailsCard({
                     </Card.Text>
                 )}
 
+                {/*#########################################*/}
+                {/*###### Listing of Reihe(-elements) ######*/}
+                {reihen.length > 0 && (
+                    <article className="program-text" style={{marginBottom: '1.5rem'}}>
+                        {/*<div style={{color: '#9ac7fa'}}>{reihen.length == 1 ? "In der Filmreihe" : "In den Filmreihen"}</div>*/}
+                        <div style={{color: '#9ac7fa'}}>
+                            Diese Vorstellung { new Date() > new Date(calenderDateObj.startDate) ? " lief" : "läuft"}
+                            {reihen.length == 1 ? " in der Filmreihe" : " in den Filmreihen"}
+                        </div>
+                        {reihen.map((reihe: ReiheDTOForFormWithTermineAndFilme, i) => (
+                            <div key={reihe.rnr} className="">
+                                <div style={{paddingLeft: '1rem'}}><em>{reihe.titel}</em> zusammen mit</div>
+                                {reihe.termine && (
+                                    <ul className="">
+                                        {[...reihe.termine]
+                                            .filter(termin => termin.tnr?.toString() !== tnr)
+                                            .map((termin, j) => (
+
+                                                <li key={termin.tnr}>
+                                                    <Link to={`/details/${termin.tnr}`} className="custom-link">
+                                                    {/*{formatDateTime(termin.vorstellungsbeginn, false, true)?.date}: {" "}*/}
+                                                    {termin.films && termin.films.length > 0
+                                                        ? termin.films.map((film, k) => (
+                                                            <span key={film.fnr}>
+                                                                <em>
+                                                                {renderHtmlText(film.titel)}
+                                                                </em>
+                                                                {k < termin.films.length - 1 ? ", " : ""}
+                                                            </span>
+                                                        ))
+                                                        : "Kein Filmtitel vorhanden"}
+                                                    {" "}({formatDateTime(termin.vorstellungsbeginn, false, true)?.date})
+                                                    </Link>
+                                                </li>
+                                            ))
+                                        }
+                                    </ul>
+                                )}
+                            </div>
+                        ))}
+                    </article>
+                )}
                 {/*###############################################*/}
 
                 {mainfilms.map((filmPlusObj, index) => {

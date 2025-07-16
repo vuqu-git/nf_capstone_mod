@@ -6,9 +6,15 @@ interface ReiheSelectionProps {
     reihen: ReiheDTOSelection[];
     selectedReiheId: number | undefined;
     onSelectReihe: (id: number | undefined) => void;
+    textForDefaultOption: string | undefined;
 }
 
-export default function ReiheSelection({ reihen, selectedReiheId, onSelectReihe }: ReiheSelectionProps) {
+export default function ReiheSelection({
+                                           reihen,
+                                           selectedReiheId,
+                                           onSelectReihe,
+                                           textForDefaultOption  = "Select a Reihe to edit (or leave unselected to add a new Reihe)",
+                                       }: Readonly<ReiheSelectionProps>) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSelectReihe(Number(e.target.value) || undefined);
@@ -22,7 +28,7 @@ export default function ReiheSelection({ reihen, selectedReiheId, onSelectReihe 
                 value={selectedReiheId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
-                <option value="">Select a Reihe to edit (or leave unselected to add a new Reihe)</option>
+                <option value="">{textForDefaultOption}</option>
                 {reihen.map((reihe: ReiheDTOSelection) => (
                     <option key={reihe.rnr} value={reihe.rnr}>
                         {`${reihe.titel} | #${reihe.rnr}`}

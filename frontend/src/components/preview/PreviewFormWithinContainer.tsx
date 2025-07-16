@@ -113,7 +113,7 @@ const PreviewFormWithinContainer: React.FC<Props> = ({
                                         Alle Vorführungstermine
                                     </option>
                                     <option key="all_except_first" value="all_except_first">
-                                        Alle Vorführungstermine ohne den nächsten
+                                        Alle Vorführungstermine ohne den nächsten Termin in der Liste hier unten
                                     </option>
                                     {semesterTermine.map((termin) => (
                                         <option key={termin.tnr} value={termin.tnr}>
@@ -130,7 +130,7 @@ const PreviewFormWithinContainer: React.FC<Props> = ({
                                 Preview starten
                             </Button>
                         </Form>
-                        <Badge bg="danger" className="mt-3">Hinweis:</Badge>
+                        <Badge bg="danger" className="mt-3">How to exit preview mode:</Badge>
                         <p>Cursor zum oberen Bildrand bewegen, um während der Preview zu dieser Auswahl zurückzukehren</p>
                         {/*-------------------------------------------------------------------*/}
                         {/*-------------------------------------------------------------------*/}
