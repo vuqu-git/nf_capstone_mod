@@ -39,7 +39,7 @@ export default function TerminFilmGalleryCard({
                                                   laufzeit,
                                                   regie,
                                                   tnr,
-                                              }: Props) {
+                                              }: Readonly<Props>) {
     const navigate = useNavigate();
 
     const handleClick = () => {

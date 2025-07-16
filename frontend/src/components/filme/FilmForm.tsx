@@ -371,6 +371,9 @@ export default function FilmForm() {
                         value={selectedFilm.besonderheit || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Hier nur Besonderheiten, die sich auf den Film beziehen. In den meisten Fällen ist das Feld "Besonderheit" im Termin/Terminformular zu befüllen!
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="land" className="mt-3">

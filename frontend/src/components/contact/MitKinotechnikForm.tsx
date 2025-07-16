@@ -229,7 +229,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     htmlFor="istGemietetBeiAsta"
                     className={errorMissingConfirmationMessage && !formData.istGemietetBeiAsta ? styles.errorRedLabel : ''}
                 >
-                    Ich bestätige, dass für den oben genannten Zeitraum der Festsaal beim AStA bereits reserviert bzw. gemietet wurde.
+                    Ich bestätige, dass der Festsaal beim AStA für den oben genannten Veranstaltungszeitraum bereits reserviert bzw. gemietet wurde.
                 </label>
             </div>
 

@@ -5,8 +5,9 @@ import {preprocessFormData} from "../../utils/preprocessFormData.ts";
 import ReiheSelection from "./ReiheSelection.tsx";
 import AdminNav from "../AdminNav.tsx";
 import ReiheDTOForFormWithTermineAndFilme from "../../types/ReiheDTOForFormWithTermineAndFilme.ts";
-import Reihe from "../../types/Reihe.ts";
 import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
+import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
+import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 
 const baseURL = "/api/reihe";
 
@@ -22,20 +23,22 @@ export default function ReiheForm() {
     const [allReihen, setAllReihen] = useState<ReiheDTOSelection[]>([]); // All Reihen fetched from the server
 
     const [selectedReiheId, setSelectedReiheId] = useState<number | undefined>(undefined); // Selected TVId (as concatenated string) for editing or deleting
-    const [selectedReihe, setSelectedReihe] = useState<Reihe>(emptyReiheForForm); // Reihe data for the form
+    const [selectedReihe, setSelectedReihe] = useState<ReiheDTOForFormWithTermineAndFilme>(emptyReiheForForm); // Reihe data for the form
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
 
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); // for POST, PUT
-    const [isGetLoading, setIsGetLoading] = useState(false); // for GET
+
+    const [isLoadingAllReihen, setIsLoadingAllReihen] = useState(false); // Get all Reihen
+    const [isGetLoading, setIsGetLoading] = useState(false); // for GET a specific Reihe
+    const [isLoading, setIsLoading] = useState(false); // for POST, PUT of one Reihe
 
     const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made manually by the user
 
     // GET all Reihen
     const getAllReihen = () => {
-        // setIsLoading(true);
+        setIsLoadingAllReihen(true);
         setErrorMessage("");
 
         axios.get(`${baseURL}/all`)
@@ -44,7 +47,7 @@ export default function ReiheForm() {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
                 setErrorMessage(errorMessage);
             })
-        // .finally(() => setIsLoading(false));
+        .finally(() => setIsLoadingAllReihen(false));
     };
 
     // Fetch all Reihen for the dropdown selection
@@ -165,7 +168,7 @@ export default function ReiheForm() {
     // Handle Reihe form field changes
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setSelectedReihe((prevData: Reihe) => ({
+        setSelectedReihe((prevData: ReiheDTOForFormWithTermineAndFilme) => ({
             ...prevData,
             [name]: value,
         }));
@@ -187,31 +190,44 @@ export default function ReiheForm() {
                 reihen={allReihen}
                 selectedReiheId={selectedReiheId}
                 onSelectReihe={handleSelectionChange}
+                textForDefaultOption={undefined}
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading Reihe details... Please wait!</div>}
+                {isLoadingAllReihen && <div className="text-warning mb-3">&#x1f504; Loading all Reihe entries... Please wait!</div>}
+                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading details of selected Reihe... Please wait!</div>}
             </div>
 
-            {/*{selectedReiheId && (*/}
-            {/*    <Form.Group controlId="filmsDisplay"*/}
-            {/*                className="mt-3"*/}
-            {/*                style={{*/}
-            {/*                    opacity: 0.4,*/}
-            {/*                }}*/}
-            {/*    >*/}
-            {/*        <Form.Label>{filmsOfSelectedTerminId.length > 1 ? "Filme" : "Film"} zum ausgewählten Termin:</Form.Label>*/}
-            {/*        <Form.Control*/}
-            {/*            as="textarea"*/}
-            {/*            rows={filmsOfSelectedTerminId.length}*/}
-            {/*            value={*/}
-            {/*                filmsOfSelectedTerminId.map(f => f.titel + " | #" + f.fnr).join("\n")*/}
-            {/*            }*/}
-            {/*            readOnly*/}
-
-            {/*        />*/}
-            {/*    </Form.Group>*/}
-            {/*)}*/}
+            {selectedReiheId && (
+                <div className="mt-3"
+                     style={{
+                         opacity: 0.4,
+                     }}
+                >
+                    <p className="mb-0">currently corresponding screenings (Termine with each Film(e)) of the above selected Reihe:</p>
+                    <ul>
+                        {selectedReihe.termine && selectedReihe.termine.length > 0 ? (
+                            selectedReihe.termine.map(t => (
+                                <li key={t.tnr}>
+                                    {formatDateInTerminSelectOption(t.vorstellungsbeginn)} | tnr: #{t.tnr} | {t.titel ?? "---"}
+                                    {/* Nested sub-list for mainfilms */}
+                                    {t.films && t.films.length > 0 && (
+                                        <ul>
+                                            {t.films.map(f => (
+                                                <li key={f.fnr}>
+                                                    {renderHtmlText(f.titel)}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </li>
+                            ))
+                        ) : (
+                            <li>[none]</li> // Display "none" as a list item
+                        )}
+                    </ul>
+                </div>
+            )}
 
             <Form onSubmit={handleSubmit}>
 
@@ -231,7 +247,7 @@ export default function ReiheForm() {
                     <Form.Label>Text</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={6}
+                        rows={4}
                         name="text"
                         value={selectedReihe.text || ""}
                         onChange={handleFormChange}
@@ -275,9 +291,11 @@ export default function ReiheForm() {
                     </Button>
                 </div>
             )}
+
             {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedReiheId ? "updating " : "saving "} Reihe entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
             {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
+
         </div>
     );
 }
