@@ -14,7 +14,7 @@ public record TerminDTOWithFilmDTOSlideshow(
         String kurztext,
         String besonderheit,
         String bild,
-        Integer sonderfarbe,
+        String sonderfarbe,
         Short veroeffentlichen,
         List<FilmDTOForm> mainfilms
 ) {

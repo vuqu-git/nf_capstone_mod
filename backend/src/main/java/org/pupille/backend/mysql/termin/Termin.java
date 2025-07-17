@@ -55,7 +55,7 @@ public class Termin {
     @Column(name = "sonderfarbe_titel")
     private Integer sonderfarbeTitel;
 
-    private Integer sonderfarbe;
+    private String sonderfarbe;
 
     private Short veroeffentlichen;
 

@@ -9,19 +9,20 @@ interface Props {
     screeningTime: string | null;
     screeningSonderfarbe: string;
 
-    bild: string | null;
+    bild: string | null; // could refer to the entire programm or main feature
     offsetImageInGallery: number | undefined;
 
-    titel: string | null;
-    kurztext: string | null;
-    jahr: number | undefined;
-    besonderheit: string | null;
+    titel: string | null; // could refer to the entire programm or main feature
+    kurztext: string | null; // could refer to the entire programm or main feature
 
-    filmFormat: string | undefined;
-    laufzeit: number | undefined;
-    regie: string | undefined;
+    hauptfilmJahr: number | undefined;
+    hauptfilmbesonderheit: string | undefined;
+    hauptfilmFormat: string | undefined;
+    hauptfilmLaufzeit: number | undefined;
+    hauptfilmRegie: string | undefined;
 
     tnr: number;
+    terminBesonderheit: string | undefined;
 }
 
 export default function TerminFilmGalleryCard({
@@ -33,12 +34,13 @@ export default function TerminFilmGalleryCard({
                                                   offsetImageInGallery,
                                                   titel,
                                                   kurztext,
-                                                  jahr,
-                                                  besonderheit,
-                                                  filmFormat,
-                                                  laufzeit,
-                                                  regie,
+                                                  hauptfilmJahr,
+                                                  hauptfilmbesonderheit, // inhaltliche Besonderheit des main features
+                                                  hauptfilmFormat,
+                                                  hauptfilmLaufzeit,
+                                                  hauptfilmRegie,
                                                   tnr,
+                                                  terminBesonderheit, // bezieht sich auf Ort & Zeit des Termins
                                               }: Readonly<Props>) {
     const navigate = useNavigate();
 
@@ -61,13 +63,13 @@ export default function TerminFilmGalleryCard({
                         src={`https://www.pupille.org/bilder/filmbilder/${bild}`}
                         {...(offsetImageInGallery && { style: { objectPosition: `center ${offsetImageInGallery}%` } })}
                     />
-                    {/*empty tag for stringer gradient effect*/}
+                    {/*empty tag for stronger gradient effect*/}
                     <div className="gradient-overlay"></div>
 
                     <div className="gradient-overlay">
                         <Card.Text className="overlay-analog-date">
-                            {filmFormat?.includes("mm") && (
-                                <span className="analog-box">{filmFormat}</span>
+                            {hauptfilmFormat?.includes("mm") && (
+                                <span className="analog-box">{hauptfilmFormat}</span>
                             )}
                             <span className="overlay-time">
                                 {screeningWeekday || screeningDate || screeningTime ? (
@@ -86,9 +88,9 @@ export default function TerminFilmGalleryCard({
                             </Card.Title>
                         )}
 
-                        {(regie || jahr || laufzeit) && (
+                        {(hauptfilmRegie || hauptfilmJahr || hauptfilmLaufzeit) && (
                             <Card.Text className="filminfo-and-stab-gallery">
-                                {[regie, jahr, laufzeit !== undefined ? laufzeit + " Min." : undefined]
+                                {[hauptfilmRegie, hauptfilmJahr, hauptfilmLaufzeit !== undefined ? hauptfilmLaufzeit + " Min." : undefined]
                                     .filter(Boolean)
                                     .join(', ')}
                             </Card.Text>
@@ -104,9 +106,20 @@ export default function TerminFilmGalleryCard({
                     </Card.Text>
                 )}
 
-                {besonderheit && (
-                    <Card.Text className="card-besonderheit" style={{ borderTop: kurztext ? undefined : 'none' }}>
-                        {renderHtmlText(besonderheit)}
+                {hauptfilmbesonderheit && (
+                    <Card.Text style={{ borderTop: kurztext ? undefined : 'none' }}>
+                        <span className="card-filmBesonderheit">
+                            {renderHtmlText(hauptfilmbesonderheit)}
+                        </span>
+                    </Card.Text>
+                    // <Card.Text className="card-filmBesonderheit" style={{ borderTop: kurztext ? undefined : 'none' }}>
+                    //     {renderHtmlText(hauptfilmbesonderheit)}
+                    // </Card.Text>
+                )}
+
+                {terminBesonderheit && (
+                    <Card.Text className="card-terminBesonderheit">
+                        {renderHtmlText(terminBesonderheit)}
                     </Card.Text>
                 )}
             </Card.Body>

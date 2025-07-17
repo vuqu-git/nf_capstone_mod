@@ -31,7 +31,7 @@ export default function ErrorBoundary() {
         <div className="container mt-5 text-center">
             <h1>Unbekannter Fehler</h1>
             <p>{(error as Error)?.message || "Etwas ist schiefgelaufen."}</p>
-            <Link to="/" className="btn btn-primary">Zurück zur Startseite</Link>
+            <Link to="/" className="btn btn-secondary">Zurück zur Startseite</Link>
         </div>
     );
 }

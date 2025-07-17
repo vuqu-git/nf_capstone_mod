@@ -20,7 +20,7 @@ public class TerminDTOForm {
     private LocalDate startReservierung;
     private String linkReservierung;
     private Integer sonderfarbeTitel;
-    private Integer sonderfarbe;
+    private String sonderfarbe;
     private Short veroeffentlichen;
     // Note: filmConnections are intentionally excluded, also reihen
 

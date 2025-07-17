@@ -35,7 +35,7 @@ public class FilmDTOForm {
 
     private String bild;
     private Integer sonderfarbeTitel;
-    private Integer sonderfarbe;
+    private String sonderfarbe;
 
 
     // Constructor to initialize FilmDTOForm from Film entity

@@ -78,7 +78,7 @@ class TerminControllerIntegrationTest {
         termin.setStartReservierung(LocalDate.now());
         termin.setLinkReservierung("http://test.com");
         termin.setSonderfarbeTitel(1);
-        termin.setSonderfarbe(2);
+        termin.setSonderfarbe("pupille-glow");
         termin.setVeroeffentlichen((short) 1);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/termine")

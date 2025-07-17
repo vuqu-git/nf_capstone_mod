@@ -58,13 +58,13 @@ export default function TerminFilmDetailsCard({
                                                   reihen,
                                               }: Readonly<Props>) {
 
-    const calenderTitle = programmtitel ? programmtitel : mainfilms[0].film.titel ?? "Film in der Pupille";
+    const calenderTitle = programmtitel ?? (mainfilms[0].film.titel ?? "Film in der Pupille");
     const icsFileName = createICSFileName(calenderTitle, vorstellungsbeginnIso8601);
     const calenderDateObj = createDateAndTimeForAddToCalendarButton(vorstellungsbeginnIso8601, terminGesamtlaufzeit);
 
     return (
         <Card
-            className="terminFilm-card"
+            className={`terminFilm-card ${screeningSonderfarbe}`}
         >
             <Card.Body>
 
@@ -117,7 +117,7 @@ export default function TerminFilmDetailsCard({
                 )}
 
                 {programmbesonderheit && (
-                    <Card.Text className="program-text">
+                    <Card.Text className="program-besonderheit">
                         {renderHtmlText(programmbesonderheit)}
                     </Card.Text>
                 )}
@@ -146,9 +146,7 @@ export default function TerminFilmDetailsCard({
                                                     {termin.films && termin.films.length > 0
                                                         ? termin.films.map((film, k) => (
                                                             <span key={film.fnr}>
-                                                                <em>
                                                                 {renderHtmlText(film.titel)}
-                                                                </em>
                                                                 {k < termin.films.length - 1 ? ", " : ""}
                                                             </span>
                                                         ))

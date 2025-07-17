@@ -81,11 +81,11 @@
     box-shadow: 0px 0px 120px -55px rgba(75, 0, 130, 0.6);
 }
 
-/* Violet Glow */
-.violet-glow {
+/* Pink Glow */
+.pink-glow {
     box-shadow: 0px 0px 150px -45px rgba(238, 130, 238, 0.6);
 }
-.violet-glow:hover {
+.pink-glow:hover {
     box-shadow: 0px 0px 120px -55px rgba(238, 130, 238, 0.6);
 }
 
@@ -238,12 +238,20 @@
 
 .card-kurztext {
     color: #cfd6e1;
+    margin-bottom: 0.75rem;
 }
 
-.card-besonderheit {
+.card-filmBesonderheit {
+    color: #cfd6e1;
+    border-top: 1px dotted #606060;
+    padding: 0.25rem 0em;
+    /*text-align: right;*/
+}
+
+.card-terminBesonderheit {
+    color: #cfd6e1;
     border-top: 2px dotted #FFD036;
     padding: 0.3rem 0em;
-    color: #cfd6e1;
     text-align: right;
 }
 

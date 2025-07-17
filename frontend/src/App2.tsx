@@ -195,7 +195,7 @@ const router = createBrowserRouter([
                 <BaseLayout />
             </AuthProvider>
         ),
-        errorElement: <ErrorBoundary />,    // top-level error boundary
+        // errorElement: <ErrorBoundary />,    // top-level error boundary
                                             // When an error occurs in this route or any of its children (unless they have their own errorElement), the ErrorBoundary component is rendered in place of the element, but STILL WITHIN the layout hierarchy.
                                             // => if an error occurs in root / or any of its children, <ErrorBoundary /> will be rendered inside <BaseLayout />, so it inherits your app’s header, footer, and styling.
         children: [

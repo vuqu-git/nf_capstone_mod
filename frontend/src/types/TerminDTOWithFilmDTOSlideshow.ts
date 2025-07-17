@@ -8,7 +8,7 @@ interface TerminDTOWithFilmDTOSlideshow {
     kurztext?: string | null;
     besonderheit?: string| null;
     bild?: string| null;
-    sonderfarbe?: number | null;
+    sonderfarbe?: string | null;
     veroeffentlichen?: number | null;
     mainfilms: FilmDTOForm[];
 }
