@@ -265,13 +265,16 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="titel" className="mt-3">
-                    <Form.Label>Titel</Form.Label>
+                    <Form.Label>Titel (für ein ganzes Programm bestehend aus mehreren Langfilmen bspw. Double-Feature-Abend)</Form.Label>
                     <Form.Control
                         type="text"
                         name="titel"
                         value={selectedTermin.titel || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        <span className="text-danger">Wichtig:</span> Feld leerlassen, wenn es <b>kein</b> Programm(-termin) (mit mehreren Langfilmen), sondern ein "Standard"-Termin (mit 1 Langfilm + optionalen Vorfilm) ist!
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="text" className="mt-3">
@@ -283,10 +286,13 @@ export default function TerminForm() {
                         value={selectedTermin.text || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Feld leerlassen, wenn es <b>kein</b> Programm(-termin) (mit mehreren Langfilmen), sondern ein "Standard"-Termin (mit 1 Langfilm + optionalen Vorfilm) ist!
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="kurztext" className="mt-3">
-                    <Form.Label>Kurztext</Form.Label>
+                    <Form.Label>Kurztext (= kurze Variante vom Text oben)</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={3}
@@ -294,10 +300,13 @@ export default function TerminForm() {
                         value={selectedTermin.kurztext || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Erscheint nur in Gallery; Feld vorgesehen für <b>Inhaltliches bzgl. des (ganzen Termin umfassenden) Filmprogramms</b> (alle (Lang-)Filme des Termins); nicht Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="besonderheit" className="mt-3">
-                    <Form.Label>Besonderheit</Form.Label>
+                    <Form.Label><u>Termin</u>besonderheit</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={2}
@@ -306,12 +315,12 @@ export default function TerminForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Hier keine Hinweise auf Reihen eintragen. Diese werden automatisch auf der Detailseite angezeigt.
+                        Erscheint in Gallery und Detailseite; Eintrag bezieht sich auf den <b>Termin</b> (bspw. Filmeinführung, Filmgespräch, besondere Zeit, abweichender Ort) ; nicht Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite
                     </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">
-                    <Form.Label>vollständiger Bilddateiname</Form.Label>
+                    <Form.Label>vollständiger Bilddateiname (Bild repräsentiert das ganze Filmprogramm)</Form.Label>
                     <Form.Control
                         type="text"
                         name="bild"
@@ -320,6 +329,8 @@ export default function TerminForm() {
                     />
                     <Form.Text className="text-muted">
                         Bilddatei muss  unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
+                        <br/>
+                        <span className="text-danger">Wichtig:</span> Wenn 'Titel' oben befüllt wurde, muss hier ein Bild angegeben werden, für die korrekte Darstellung in der Gallery.
                     </Form.Text>
                 </Form.Group>
 
@@ -354,13 +365,16 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="sonderfarbe" className="mt-3">
-                    <Form.Label>Sonderfarbe</Form.Label>
+                    <Form.Label>Sonderfarbe (für Glow-Effekt in der Gallery)</Form.Label>
                     <Form.Control
-                        type="number"
+                        type="text"
                         name="sonderfarbe"
                         value={selectedTermin.sonderfarbe || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        zulässige Werte: pupille-glow (default; Feld kann daher leer gelassen werden), teal-glow, red-glow, orange-glow, yellow-glow, green-glow, blue-glow, indigo-glow, pink-glow
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="veroeffentlichen" className="mt-3">

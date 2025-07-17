@@ -59,7 +59,7 @@ public class Film {
 
     private Integer sonderfarbeTitel; // Maps to `sonderfarbe_titel`
 
-    private Integer sonderfarbe;
+    private String sonderfarbe;
 
     public enum Fsk {
         _0("0"),

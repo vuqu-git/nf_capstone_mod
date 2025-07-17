@@ -207,11 +207,11 @@ export default function Gallery() {
                                                     offsetImageInGallery={undefined} // // instead of undefined, insert a number from 0 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
                                                     titel={termin.titel}
                                                     kurztext={termin.kurztext ? termin.kurztext : null}
-                                                    jahr={undefined}
-                                                    besonderheit={termin.besonderheit ? termin.besonderheit : null}
-                                                    filmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
-                                                    laufzeit={undefined}
-                                                    regie={undefined}
+                                                    hauptfilmJahr={undefined}
+                                                    hauptfilmbesonderheit={termin.besonderheit ? termin.besonderheit : null}
+                                                    hauptfilmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+                                                    hauptfilmLaufzeit={undefined}
+                                                    hauptfilmRegie={undefined}
 
                                                     tnr={termin.tnr} // for navigation to certain route
                                                 />
@@ -237,11 +237,11 @@ export default function Gallery() {
                                                     offsetImageInGallery={undefined} // instead of undefined, insert a number from 1 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
                                                     titel={termin.mainfilms[0]?.titel ? termin.mainfilms[0]?.titel : null}
                                                     kurztext={termin.mainfilms[0]?.kurztext ? termin.mainfilms[0]?.kurztext : null}
-                                                    jahr={termin.mainfilms[0]?.jahr}
-                                                    besonderheit={termin.mainfilms[0]?.besonderheit ? termin.mainfilms[0]?.besonderheit : null}
-                                                    filmFormat={termin.mainfilms[0]?.format ? termin.mainfilms[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
-                                                    laufzeit={undefined}
-                                                    regie={undefined}
+                                                    hauptfilmJahr={termin.mainfilms[0]?.jahr}
+                                                    hauptfilmbesonderheit={termin.mainfilms[0]?.besonderheit ? termin.mainfilms[0]?.besonderheit : null}
+                                                    hauptfilmFormat={termin.mainfilms[0]?.format ? termin.mainfilms[0]?.format : undefined}  // for filmFormat treatment with undefined (instead of null) to have this prop be optional
+                                                    hauptfilmLaufzeit={undefined}
+                                                    hauptfilmRegie={undefined}
 
                                                     tnr={termin.tnr} // for navigation to certain route
                                                 />

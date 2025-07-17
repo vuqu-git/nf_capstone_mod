@@ -352,7 +352,7 @@ export default function FilmForm() {
                 </Button>
 
                 <Form.Group controlId="kurztext" className="mt-3">
-                    <Form.Label>Kurztext</Form.Label>
+                    <Form.Label>Kurztext (= kurze Variante vom Text oben)</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={3}
@@ -360,6 +360,9 @@ export default function FilmForm() {
                         value={selectedFilm.kurztext || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Erscheint nur in Gallery, wenn es der Hauptfilm in einem "Standard"-Termin (mit 1 Langfilm + optionalen Vorfilm); Feld vorgesehen für <b>Inhaltliches bzgl. des Hauptfilms; idR keine Eintragung für Vorfilm</b>
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="besonderheit" className="mt-3">
@@ -372,7 +375,7 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Hier nur Besonderheiten, die sich auf den Film beziehen. In den meisten Fällen ist das Feld "Besonderheit" im Termin/Terminformular zu befüllen!
+                        Erscheint in Gallery (wenn ist Hauptfilm) und Detailseite; Eintrag bezieht sich auf Besonderheit des <b>Films</b> (bspw. Erwähnung Director's Cut); kein Feld für Ort oder Zeit des Spieltermins); nicht Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite
                     </Form.Text>
                 </Form.Group>
 
@@ -486,15 +489,16 @@ export default function FilmForm() {
                 </Form.Group>
 
                 <Form.Group controlId="sonderfarbe" className="mt-3">
-                    <Form.Label>
-                        Sonderfarbe (pupille-glow, turquoise-glow, red-glow, orange-glow, yellow-glow, green-glow, blue-glow, indigo-glow, pink-glow)
-                    </Form.Label>
+                    <Form.Label>Sonderfarbe (für Glow-Effekt in der Gallery)</Form.Label>
                     <Form.Control
-                        type="number"
+                        type="text"
                         name="sonderfarbe"
                         value={selectedFilm.sonderfarbe || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        zulässige Werte: pupille-glow (default; Feld kann daher leer gelassen werden), teal-glow, red-glow, orange-glow, yellow-glow, green-glow, blue-glow, indigo-glow, pink-glow
+                    </Form.Text>
                 </Form.Group>
 
                 <Button variant={selectedFilmId ? "success" : "primary"} type="submit" className="mt-4">

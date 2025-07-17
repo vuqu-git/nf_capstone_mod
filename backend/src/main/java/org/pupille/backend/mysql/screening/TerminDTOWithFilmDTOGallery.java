@@ -13,7 +13,7 @@ public record TerminDTOWithFilmDTOGallery(
         String kurztext,
         String besonderheit,
         String bild,
-        Integer sonderfarbe,
+        String sonderfarbe,
         Short veroeffentlichen,
         List<FilmDTOGallery> mainfilms
 ) {

@@ -9,7 +9,7 @@ interface Termin {
     startReservierung?: string | null; // LocalDate will likely be represented as an ISO 8601 string in JSON (YYYY-MM-DD)
     linkReservierung?: string | null;
     sonderfarbeTitel?: number | null;
-    sonderfarbe?: number | null;
+    sonderfarbe?: string | null;
     veroeffentlichen?: number | null;
 }
 

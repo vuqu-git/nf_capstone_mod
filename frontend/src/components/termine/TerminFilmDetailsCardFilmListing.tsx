@@ -19,7 +19,7 @@ export default function TerminFilmDetailsListing({
                                                   f,
                                                   numberOfF,
                                                   fType,
-                                              }: Props) {
+                                              }: Readonly<Props>) {
 
     const structuredStab = f.stab ? structureStabString(f.stab) : null;
 

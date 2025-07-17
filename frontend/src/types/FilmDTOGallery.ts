@@ -8,6 +8,7 @@ interface FilmDTOGallery {
     format?: string | null;
     laufzeit?: number | null;
     regie?: string | null;
+    sonderfarbe?: string | null;
 }
 
 export default FilmDTOGallery;
