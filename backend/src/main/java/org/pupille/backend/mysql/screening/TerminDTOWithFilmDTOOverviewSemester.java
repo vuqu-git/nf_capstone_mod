@@ -10,6 +10,7 @@ public record TerminDTOWithFilmDTOOverviewSemester(
         Long tnr,
         LocalDateTime vorstellungsbeginn,
         String titel,
+        String terminBesonderheit,
         List<FilmDTOOverviewSemester> mainfilms,
         Integer terminGesamtlaufzeit
 ) {
@@ -18,6 +19,7 @@ public record TerminDTOWithFilmDTOOverviewSemester(
                 termin.getTnr(),
                 termin.getVorstellungsbeginn(),
                 termin.getTitel(),
+                termin.getBesonderheit(),
 
                 films.stream()
                         .map(FilmDTOOverviewSemester::new)

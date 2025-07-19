@@ -17,19 +17,23 @@ const emptyFilmForForm = {
     titel: '',
     originaltitel: '',
     originaltitelAnzeigen: undefined,
+    bild: '',
+    offsetImageInGallery: '',
     text: '',
     kurztext: '',
     besonderheit: '',
+    contentNote: '',
+    trailer: '',
     land: '',
     jahr: undefined,
-    farbe: '',
     laufzeit: undefined,
     sprache: '',
     untertitel: '',
+    farbe: '',
     format: '',
     fsk: undefined,
+    regie: '',
     stab: '',
-    bild: '',
     sonderfarbeTitel: undefined,
     sonderfarbe: undefined,
 }
@@ -148,6 +152,7 @@ export default function FilmForm() {
         } else {
 
             // ###################################################
+            // ignoring fnr when posting via this form
             const { fnr, ...filmInFormWithoutFnr } = selectedFilm;
             // ###################################################
 
@@ -331,6 +336,21 @@ export default function FilmForm() {
                     </Form.Text>
                 </Form.Group>
 
+                <Form.Group controlId="offsetImageInGallery" className="mt-3">
+                    <Form.Label>Offset für Bildanzeige in der Gallery </Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="offsetImageInGallery"
+                        value={selectedFilm.offsetImageInGallery || ""}
+                        onChange={handleFormChange}
+                    />
+                    <Form.Text className="text-muted">
+                        Werte: center (=default; Feld bitte leer lassen), top, bottom, Ganzzahlen in % oder px bspw. 10%, 20px, -30px
+                        <br/> Erläuterung [0%, 100%]: 50% = (vertically) center; {"value>50%"} pushes the image up and {"value<50%"} pushes it down
+                        <br/> Erläuterung: bottom, negative Pixelzahlen → viel vom unteren Bildausschnitt sehen; top, positive Pixelzahlen → viel vom oberen Bildausschnitt sehen
+                    </Form.Text>
+                </Form.Group>
+
                 <Form.Group controlId="text" className="mt-3">
                     <Form.Label>Text</Form.Label>
                     <Form.Control
@@ -361,7 +381,7 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Erscheint nur in Gallery, wenn es der Hauptfilm in einem "Standard"-Termin (mit 1 Langfilm + optionalen Vorfilm); Feld vorgesehen für <b>Inhaltliches bzgl. des Hauptfilms; idR keine Eintragung für Vorfilm</b>
+                        Erscheint nur in Gallery, wenn es der Hauptfilm in einem "Standard"-Termin (mit 1 Langfilm + optionale Vorfilme); Feld vorgesehen für <b>Inhaltliches bzgl. des Hauptfilms; idR keine Eintragung für Vorfilme</b>
                     </Form.Text>
                 </Form.Group>
 
@@ -375,8 +395,35 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Erscheint in Gallery (wenn ist Hauptfilm) und Detailseite; Eintrag bezieht sich auf Besonderheit des <b>Films</b> (bspw. Erwähnung Director's Cut); kein Feld für Ort oder Zeit des Spieltermins); nicht Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite
+                        Erscheint in Gallery (wenn es der Hauptfilm ist) und Detailseite; Eintrag bezieht sich auf Besonderheit des <b>Films</b> (bspw. Erwähnung Director's Cut, Farbstich der analogen Kopie);
+                        <br/>
+                        keine Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite, kein Feld für Kooperation, Filmfestival, Gäste (Einführung/Gespräch), Publikumswunsch, besondere Startzeit, abweichender Ort → Feld 'Besonderheit' im Termin-Formular verwenden
                     </Form.Text>
+                </Form.Group>
+
+                <Form.Group controlId="contentNote" className="mt-3">
+                    <Form.Label>Content Note</Form.Label>
+                    <Form.Control
+                        as="textarea"
+                        rows={4}
+                        name="contentNote"
+                        value={selectedFilm.contentNote || ""}
+                        onChange={handleFormChange}
+                    />
+                    <Form.Text className="text-muted">
+                        Formulierung, die genauso angezeigt werden soll.
+                    </Form.Text>
+                </Form.Group>
+
+                <Form.Group controlId="trailer" className="mt-3">
+                    <Form.Label>Trailer</Form.Label>
+                    <Form.Control
+                        as="textarea"
+                        rows={5}
+                        name="trailer"
+                        value={selectedFilm.trailer || ""}
+                        onChange={handleFormChange}
+                    />
                 </Form.Group>
 
                 <Form.Group controlId="land" className="mt-3">
@@ -467,6 +514,19 @@ export default function FilmForm() {
                     </Form.Control>
                 </Form.Group>
 
+                <Form.Group controlId="regie" className="mt-3">
+                    <Form.Label>Regie</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="regie"
+                        value={selectedFilm.regie || ""}
+                        onChange={handleFormChange}
+                    />
+                    <Form.Text className="text-muted">
+                        Für Anzeige in der Gallery, Semesterübersicht und im Adminbereich. Unten im Feld "Stab & Besetzung" bitte die Regie ebenfalls eintragen.
+                    </Form.Text>
+                </Form.Group>
+
                 <Form.Group controlId="stab" className="mt-3">
                     <Form.Label>Stab & Besetzung</Form.Label>
                     <Form.Control
@@ -497,7 +557,7 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        zulässige Werte: pupille-glow (default; Feld kann daher leer gelassen werden), teal-glow, red-glow, orange-glow, yellow-glow, green-glow, blue-glow, indigo-glow, pink-glow
+                        zulässige Werte: pupille-glow (=default; Feld bitte leer lassen), teal-glow, red-glow, orange-glow, yellow-glow, green-glow, blue-glow, indigo-glow, pink-glow
                     </Form.Text>
                 </Form.Group>
 

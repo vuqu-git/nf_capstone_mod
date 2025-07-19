@@ -20,6 +20,7 @@ export default function Gallery2() {
         .filter(termin => termin.veroeffentlichen !== null && termin.veroeffentlichen !== 0);
 
     // for testing semester break
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~
     // const visibleScreenings = [];
 
     return (
@@ -45,57 +46,56 @@ export default function Gallery2() {
 
                             const screeningDateObj = formatDateTime(termin.vorstellungsbeginn, false, true);
 
-                            const screeningCardProps = {
+                            const jointTerminFilmGalleryCardPropValuesAsObj = {
                                 screeningWeekday: screeningDateObj?.weekday ?? "",
                                 screeningDate: screeningDateObj?.date ?? "",
                                 screeningTime: screeningDateObj?.time ?? "",
-                                offsetImageInGallery: undefined, // instead of undefined, insert a number from 0 to 100. 50 is default i.e. vertically centered, value>50 pushes the image up and value<50 pushes down
-                                tnr: termin.tnr
+                                tnr: termin.tnr,
+                                terminBesonderheit: termin.besonderheit ?? undefined
                             };
 
                             return (
                                 <article key={termin.tnr} className="gallery-article-padding">
                                     {/*for programms of (multiple) films*/}
                                     {/***********************************/}
-                                    {termin.titel ? (
+                                    {termin.titel ? ( // current implementation: when there is no titel of termin, the list of mainfilms is empty! (to avoid unnecessary data traffic)
                                         <TerminFilmGalleryCard
-                                            {...screeningCardProps} // tnr and offsetImageInGallery are included in this object
-                                            // screeningSonderfarbe="red-glow"
                                             screeningSonderfarbe={termin.sonderfarbe ?? "pupille-glow"}
                                             bild={termin.bild ?? null}
+                                            // bild={termin.bild ?? (termin.mainfilms[0]?.bild ?? null)} // i.e. if Programmbild is not present then take the Bild of the 1st mainfeature (when to the termin corresponding mainfeature exist)
+                                            offsetImageInGallery={undefined} // // this prop expects undefined or a % number from 0% to 100%. 50% is default i.e. vertically centered, value>50% pushes the image up and value<50% pushes down
                                             titel={termin.titel}
                                             kurztext={termin.kurztext ?? null}
-                                            hauptfilmJahr={undefined}
-                                            // hauptfilmbesonderheit={termin.besonderheit ?? null}
-                                                    hauptfilmbesonderheit={undefined}
-                                            hauptfilmFormat={undefined} // for filmFormat treatment with undefined (instead of null) to have this prop be optional
-                                            hauptfilmLaufzeit={undefined}
-                                            hauptfilmRegie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
 
-                                            // terminBesonderheit={undefined}
-                                                    terminBesonderheit={termin.besonderheit ?? undefined}
+                                            hauptfilmFormat={undefined} // treatment with undefined (instead of null) here to have this prop be optional
+                                            hauptfilmRegie={undefined} // treatment with undefined (instead of null) here to have this prop be optional
+                                            hauptfilmJahr={undefined}
+                                            hauptfilmLaufzeit={undefined}
+                                            hauptfilmbesonderheit={undefined}
+
+                                            {...jointTerminFilmGalleryCardPropValuesAsObj} // the rest of the props are spread here
                                         />
                                     ) : (
-                                        // this condition also holds true für Programmtermine, but this condition rather ensured that mainfilms[0] exist
+                                        // this condition also holds true für Programmtermine, but it rather ensures that mainfilms[0] exist
                                         termin.mainfilms?.length > 0 && (
                                             <>
                                                 {/*screening consists of 1 main film + shorts possibly*/}
                                                 {/*****************************************************/}
                                                 <TerminFilmGalleryCard
-                                                    {...screeningCardProps}
-                                                    // screeningSonderfarbe="pupille-glow"
                                                     screeningSonderfarbe={termin.mainfilms[0]?.sonderfarbe ?? "pupille-glow"}
                                                     bild={termin.mainfilms[0]?.bild ?? null}
-                                                    // titel={termin.mainfilms[0]?.titel ?? null}
+                                                    offsetImageInGallery={termin.mainfilms[0]?.offsetImageInGallery ?? undefined}
+
                                                     titel={termin.mainfilms[0]?.titel ?? null}
                                                     kurztext={termin.mainfilms[0]?.kurztext ?? null}
-                                                    hauptfilmJahr={termin.mainfilms[0]?.jahr}
-                                                    hauptfilmbesonderheit={termin.mainfilms[0]?.besonderheit ?? undefined}
-                                                    hauptfilmFormat={termin.mainfilms[0]?.format ?? undefined} // concise: filmFormat={termin.films[0]?.format ?? undefined}
-                                                    hauptfilmLaufzeit={termin.mainfilms[0]?.laufzeit ?? undefined}
-                                                    hauptfilmRegie={undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
 
-                                                    terminBesonderheit={termin.besonderheit ?? undefined}
+                                                    hauptfilmFormat={termin.mainfilms[0]?.format ?? undefined} // concise: filmFormat={termin.films[0]?.format ?? undefined}
+                                                    hauptfilmRegie={termin.mainfilms[0]?.regie ?? undefined} // for regie treatment with undefined (instead of null) to have this prop be optional
+                                                    hauptfilmJahr={termin.mainfilms[0]?.jahr}
+                                                    hauptfilmLaufzeit={termin.mainfilms[0]?.laufzeit ?? undefined}
+                                                    hauptfilmbesonderheit={termin.mainfilms[0]?.besonderheit ?? undefined}
+
+                                                    {...jointTerminFilmGalleryCardPropValuesAsObj} // the rest of the props are spread here
                                                 />
                                             </>
                                         )

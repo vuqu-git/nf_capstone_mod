@@ -57,6 +57,8 @@ public class Film {
 
     private String bild;
 
+    private String offsetImageInGallery;
+
     private Integer sonderfarbeTitel; // Maps to `sonderfarbe_titel`
 
     private String sonderfarbe;
@@ -84,6 +86,14 @@ public class Film {
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     }
+
+    private String regie;
+
+    @Column(columnDefinition = "TEXT")
+    private String contentNote;
+
+    @Column(columnDefinition = "TEXT")
+    private String trailer;
 
     // ############################################
     // relationship (extension of the entity model)

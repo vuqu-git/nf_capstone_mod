@@ -66,26 +66,27 @@ export default function OverviewSemester() {
                                                         termin.mainfilms[0]?.regie,
                                                         termin.mainfilms[0]?.jahr,
                                                         termin.mainfilms[0]?.laufzeit !== undefined ? termin.mainfilms[0]?.laufzeit + " Min." : undefined
-                                                    ].filter(Boolean).join(', ')}
+                                                    ].filter(Boolean).join(' | ')}
                                                 </p>
                                             }
-
-                                            {termin.mainfilms[0]?.besonderheit && (
-                                                <p className="besonderheit">
-                                                    {renderHtmlText(termin.mainfilms[0]?.besonderheit) ?? ""}
-                                                </p>
-                                            )}
                                         </>
                                     ) : (
-                                        <Link to={`/details/${termin.tnr}`} className="custom-link">
-                                            {renderHtmlText(termin.titel)}
-                                            <ol className="film-list">
-                                                {termin.mainfilms.map(film => (
-                                                    <li key={film.fnr}>{renderHtmlText(film.titel)}</li>
-                                                ))}
-                                            </ol>
-                                        </Link>
+                                            <Link to={`/details/${termin.tnr}`} className="custom-link">
+                                                {renderHtmlText(termin.titel)}
+                                                <ol className="film-list">
+                                                    {termin.mainfilms.map(film => (
+                                                        <li key={film.fnr}>{renderHtmlText(film.titel)}</li>
+                                                    ))}
+                                                </ol>
+                                            </Link>
                                     )}
+
+                                    {termin.terminBesonderheit && (
+                                        <p className="besonderheit">
+                                            {renderHtmlText(termin.terminBesonderheit) ?? ""}
+                                        </p>
+                                    )}
+
                                 </div>
                             </div>
                         );

@@ -4,6 +4,6 @@ export interface TVWithFilmAndTerminDTOSelection {
     vorfilm?: boolean | null;
     rang?: number | null;
 
-    film: {titel?: string | null, jahr?: number | null, directors?: string | null}
+    film: {titel?: string | null, jahr?: number | null, regie?: string | null}
     termin: {vorstellungsbeginn?: string, titel?: string | null}
 }

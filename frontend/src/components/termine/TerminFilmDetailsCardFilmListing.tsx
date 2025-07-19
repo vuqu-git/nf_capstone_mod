@@ -21,7 +21,7 @@ export default function TerminFilmDetailsListing({
                                                   fType,
                                               }: Readonly<Props>) {
 
-    const structuredStab = f.stab ? structureStabString(f.stab) : null;
+    const structuredStabObj = f.stab ? structureStabString(f.stab) : null;
 
     return (
         <div>
@@ -55,6 +55,17 @@ export default function TerminFilmDetailsListing({
                     </Card.Text>
                 )}
 
+                {/****** besonderheit ******/}
+                {/*******------------*******/}
+                {
+                    f.besonderheit &&
+                    <Card.Text
+                        className="film-besonderheit"
+                    >
+                        {renderHtmlText(f.besonderheit)}
+                    </Card.Text>
+                }
+
                 {/****** content note ******/}
                 {/*******------------*******/}
                 { f.contentNote && (
@@ -70,14 +81,14 @@ export default function TerminFilmDetailsListing({
                     </Accordion>
                 )}
 
-                {/****** besonderheit ******/}
-                {/*******------------*******/}
+                {/****** trailer ******/}
+                {/*******-------*******/}
                 {
-                    f.besonderheit &&
+                    f.trailer &&
                     <Card.Text
-                        className="film-besonderheit"
+                        className="film-text style-video-in-card iframe"
                     >
-                        {renderHtmlText(f.besonderheit)}
+                        {renderHtmlText(f.trailer)}
                     </Card.Text>
                 }
 
@@ -101,11 +112,11 @@ export default function TerminFilmDetailsListing({
 
                 {/****** stab & besetzung ******/}
                 {/*******----------------*******/}
-                {structuredStab && (
+                {structuredStabObj && (
                     <div className="section-block"> {/* This will be the last .section-block */}
                         <Card.Title as="h6" className="filminfo-and-stab-details">Stab und Besetzung:</Card.Title>
                         <div className="table-block">
-                            {structuredStab.map(row => (
+                            {structuredStabObj.map(row => (
                                 <div className="row" key={row.abbrev}>
                                     <div className="label">{renderHtmlText(row.abbrev)}</div>
                                     <div className="value">{renderHtmlText(row.entry)}</div>

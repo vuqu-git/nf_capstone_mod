@@ -1,6 +1,6 @@
 package org.pupille.backend.mysql.screening;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,33 +8,33 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/screenings")
+@RequiredArgsConstructor
 public class ScreeningController {
 
-    @Autowired
-    private ScreeningService screeningService;
+    private final ScreeningService screeningService;
 
     // for Gallery react component
-    @GetMapping("/screenings")
+    @GetMapping()
     public List<TerminDTOWithFilmDTOGallery> getAllFutureTermineWithFilms() {
         return screeningService.getAllFutureTermineWithFilms();
     }
 
     // for ScreeningDetails react component
-    @GetMapping("/screenings/{tnr}")
+    @GetMapping("/{tnr}")
     public ResponseEntity<TerminDTOFormWithFilmsDTOFormPlus> getTerminWithFilmsPlusForTermin(@PathVariable Long tnr) {
         TerminDTOFormWithFilmsDTOFormPlus terminWithFilmsPlus = screeningService.getTerminWithFilmsPlusByTnr(tnr);
         return ResponseEntity.ok(terminWithFilmsPlus);
     }
 
     // for OverviewArchive react component
-    @GetMapping("/screenings/archive")
+    @GetMapping("/archive")
     public List<TerminDTOWithFilmDTOOverviewArchive> getArchiveScreenings() {
         return screeningService.getPastTermineWithFilms();
     }
 
     // for SemesterArchive react component
-    @GetMapping("/screenings/semester")
+    @GetMapping("/semester")
     public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreenings() {
         return screeningService.getTermineByCurrentSemester();
     }
@@ -46,7 +46,7 @@ public class ScreeningController {
 //        return termineWithFilms;
 //    }
 
-    @GetMapping("/screenings/slideshow")
+    @GetMapping("/slideshow")
     public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsForSlideshow(
             @RequestParam(value = "next", required = false) Optional<Integer> next
     ) {
@@ -58,13 +58,13 @@ public class ScreeningController {
 //    +++++++++++++++++++++++++++++
 
     // For screenings exactly N days in the future
-    @GetMapping("/screenings/future/{days}")
+    @GetMapping("/future/{days}")
     public List<TerminDTOWithFilmDTOGallery> getScreeningsDaysInFuture(@PathVariable int days) {
         return screeningService.getTermineDaysInFuture(days);
     }
 
     // For screenings exactly N days in the past
-    @GetMapping("/screenings/past/{days}")
+    @GetMapping("/past/{days}")
     public List<TerminDTOWithFilmDTOGallery> getScreeningsDaysInPast(@PathVariable int days) {
         return screeningService.getTermineDaysInPast(days);
     }

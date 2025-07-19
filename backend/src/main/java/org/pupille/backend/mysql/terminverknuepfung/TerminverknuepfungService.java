@@ -155,42 +155,6 @@ public class TerminverknuepfungService {
                 .collect(Collectors.toList());
     }
 
-//    // some processing on the Film data using the extractDirectors(film.getStab()) method i.e. the FilmDTOSelection contains a specifically processed version of the film's directors.
-//    public List<TVwithFilmAndTerminDTOSelection> getAllTVWithFilmAndTermin() {
-//        List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllWithFilmAndTermin();
-//
-//        return terminverknuepfungen.stream()
-//                .map(tv -> {
-//                    Film film = tv.getFilm();
-//                    Termin termin = tv.getTermin();
-//
-//                    // Create processed FilmDTOSelection
-//                    FilmDTOSelection filmDTO = new FilmDTOSelection(
-//                            film.getFnr(),
-//                            film.getTitel(),
-//                            film.getJahr(),
-//                            extractDirectors(film.getStab())  // Apply processing
-//                    );
-//
-//                    // Create Termin projection
-//                    TerminProjectionSelection terminProjection = new TerminProjectionSelection() {
-//                        @Override public Long getTnr() { return termin.getTnr(); }
-//                        @Override public LocalDateTime getTermin() { return termin.getTermin(); }
-//                        @Override public String getTitel() { return termin.getTitel(); }
-//                    };
-//
-//                    return new TVwithFilmAndTerminDTOSelection(
-//                            tv.getTnr(),
-//                            tv.getFnr(),
-//                            tv.getVorfilm(),
-//                            tv.getRang(),
-//                            filmDTO,
-//                            terminProjection
-//                    );
-//                })
-//                .collect(Collectors.toList());
-//    }
-
 
     public TVWithFilmAndTerminDTOSelection getTVWithFilmAndTerminByTnrAndFnr(Long tnr, Long fnr) {
         return terminverknuepfungRepository.findWithFilmAndTerminByTnrAndFnr(tnr, fnr)

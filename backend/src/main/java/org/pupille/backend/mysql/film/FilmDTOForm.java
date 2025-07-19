@@ -1,5 +1,6 @@
 package org.pupille.backend.mysql.film;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,6 +38,10 @@ public class FilmDTOForm {
     private Integer sonderfarbeTitel;
     private String sonderfarbe;
 
+    private String regie;
+    private String contentNote;
+    private String trailer;
+
 
     // Constructor to initialize FilmDTOForm from Film entity
     public FilmDTOForm(Film film) {
@@ -63,5 +68,9 @@ public class FilmDTOForm {
         this.bild = film.getBild();
         this.sonderfarbeTitel = film.getSonderfarbeTitel();
         this.sonderfarbe = film.getSonderfarbe();
+
+        this.regie = film.getRegie();
+        this.contentNote = film.getContentNote();
+        this.trailer = film.getTrailer();
     }
 }

@@ -8,10 +8,14 @@ public record FilmDTOGallery(
         String kurztext,
         String besonderheit,
         String bild,
-        Integer jahr,
+        String offsetImageInGallery,
+
         String format,
+
+        String regie,
+        Integer jahr,
         Integer laufzeit,
-        // placeholder for String regie
+
         String sonderfarbe
 ) {
     public FilmDTOGallery(Film film) {
@@ -21,10 +25,11 @@ public record FilmDTOGallery(
                 film != null ? film.getKurztext() : null,
                 film != null ? film.getBesonderheit() : null,
                 film != null ? film.getBild() : null,
-                film != null ? film.getJahr() : null,
+                film != null ? film.getOffsetImageInGallery() : null,
                 film != null ? film.getFormat() : null,
+                film != null ? film.getRegie() : null,
+                film != null ? film.getJahr() : null,
                 film != null ? film.getLaufzeit() : null,
-
                 film != null ? film.getSonderfarbe() : null
         );
     }
