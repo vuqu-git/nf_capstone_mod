@@ -35,6 +35,7 @@ const emptyTerminForForm = {
     sonderfarbeTitel: undefined,
     sonderfarbe: '',
     veroeffentlichen: 0,
+    patenschaft: '',
 }
 
 export default function TerminForm() {
@@ -287,8 +288,21 @@ export default function TerminForm() {
                     />
                 </Form.Group>
 
+                <Form.Group controlId="patenschaft" className="mt-3">
+                    <Form.Label>Patenschaft (Mailadresse)</Form.Label>
+                    <Form.Control
+                        type="email"
+                        name="patenschaft"
+                        value={selectedTermin.patenschaft || ""}
+                        onChange={handleFormChange}
+                    />
+                    <Form.Text className="text-muted">
+                        Höchstens 1 Email-Adresse eintragen
+                    </Form.Text>
+                </Form.Group>
+
                 <Form.Group controlId="titel" className="mt-3">
-                    <Form.Label>Titel (für ein ganzes Programm bestehend aus mehreren Langfilmen bspw. Double-Feature-Abend)</Form.Label>
+                    <Form.Label>Titel (für den ganzen Termin)</Form.Label>
                     <Form.Control
                         type="text"
                         name="titel"
