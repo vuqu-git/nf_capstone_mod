@@ -8,6 +8,7 @@ import axios from "axios";
 import { preprocessFormData } from '../../utils/preprocessFormData.ts';
 import AdminNav from "../AdminNav.tsx";
 import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
+import styles from "../contact/Forms.module.css";
 
 const baseURL = "/api/termine";
 
@@ -32,7 +33,7 @@ const emptyTerminForForm = {
     startReservierung: '',
     linkReservierung: '',
     sonderfarbeTitel: undefined,
-    sonderfarbe: undefined,
+    sonderfarbe: '',
     veroeffentlichen: 0,
 }
 
@@ -51,6 +52,8 @@ export default function TerminForm() {
     const [isGetLoading, setIsGetLoading] = useState(false); // for GET
 
     const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made manually by the user
+
+    const [errorMissingBildWhenGivenTitel, setErrorMissingBildWhenGivenTitel] = useState<string | null>(null);
 
     // GET all termine
     const getAllSortedTermine = () => {
@@ -120,53 +123,66 @@ export default function TerminForm() {
         }
     }, [selectedTerminId]);
 
-
     // Handle the form submission (PUT or POST)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        setErrorMessage("");
-        setSuccessMessage("");
-        setIsLoading(true);
+        // check on condition between titel and bild
+        if (!!selectedTermin.titel === !!selectedTermin.bild) {
+            // double negation returns true if the value is truthy, false if falsy.
 
-        // Check if we're adding or editing a termin
-        if (selectedTerminId) {
-            // Editing an existing termin (PUT request)
+            setErrorMessage("");
+            setSuccessMessage("");
+            setIsLoading(true);
 
-            axios.put(`${baseURL}/${selectedTerminId}`, preprocessFormData(selectedTermin))
-                .then(() => {
-                    setSuccessMessage("Termin updated successfully!");
+            // Check if we're adding or editing a termin
+            if (selectedTerminId) {
+                // Editing an existing termin (PUT request)
 
-                    getAllSortedTermine();
-                    setSelectedTerminId(undefined); // Reset the selection
-                    setSelectedTermin(emptyTerminForForm); // Reset the form
-                })
-                .catch((error) => {
-                    const errorMessage = error instanceof Error ? error.message : "Update failed";
-                    setErrorMessage(errorMessage);
-                })
-                .finally(() => setIsLoading(false));
+                axios.put(`${baseURL}/${selectedTerminId}`, preprocessFormData(selectedTermin))
+                    .then(() => {
+                        setSuccessMessage("Termin updated successfully!");
+
+                        getAllSortedTermine();
+                        setSelectedTerminId(undefined); // Reset the selection
+                        setSelectedTermin(emptyTerminForForm); // Reset the form
+                    })
+                    .catch((error) => {
+                        const errorMessage = error instanceof Error ? error.message : "Update failed";
+                        setErrorMessage(errorMessage);
+                    })
+                    .finally(() => setIsLoading(false));
+            } else {
+
+                // ####################################################
+                // ignoring tnr when posting via this form
+                const {tnr, ...terminInFormWithoutFnr} = selectedTermin;
+                // ####################################################
+
+                // axios.post(`${baseURL}`, selectedTermin)
+                axios.post(`${baseURL}`, preprocessFormData(terminInFormWithoutFnr))
+                    .then(() => {
+                        setSuccessMessage("Termin saved successfully!");
+
+                        getAllSortedTermine();
+                        // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
+                        setSelectedTermin(emptyTerminForForm); // Reset the form
+                    })
+                    .catch((error) => {
+                        const errorMessage = error instanceof Error ? error.message : "Saving failed";
+                        setErrorMessage(errorMessage);
+                    })
+                    .finally(() => setIsLoading(false));
+            }
+
+            setErrorMissingBildWhenGivenTitel(null);
+
         } else {
-
-            // ###################################################
-            const { tnr, ...terminInFormWithoutFnr } = selectedTermin;
-            // ###################################################
-
-            // axios.post(`${baseURL}`, selectedTermin)
-            axios.post(`${baseURL}`, preprocessFormData(terminInFormWithoutFnr))
-                .then(() => {
-                    setSuccessMessage("Termin saved successfully!");
-
-                    getAllSortedTermine();
-                    // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
-                    setSelectedTermin(emptyTerminForForm); // Reset the form
-                })
-                .catch((error) => {
-                    const errorMessage = error instanceof Error ? error.message : "Saving failed";
-                    setErrorMessage(errorMessage);
-                })
-                .finally(() => setIsLoading(false));
-
+            if (selectedTermin.titel) {
+                setErrorMissingBildWhenGivenTitel("Bitte gebe eine Bilddatei an! Die Angabe der Bilddatei ist verpflichtend, wenn ein Titel gewählt wurde.");
+            } else {
+                setErrorMissingBildWhenGivenTitel("Bitte lösche die Eingabe der Bilddatei! Die Bilddatei-Nennung ist nur dann nötig, wenn ein Titel gewählt wurde.");
+            }
         }
     };
 
@@ -204,6 +220,13 @@ export default function TerminForm() {
             ...prevData,
             [name]: value,
         }));
+
+        // check for condition on titel and bild
+        if (!!selectedTermin.titel === !!selectedTermin.bild) {
+            // double negation returns true if the value is truthy, false if falsy.
+            setErrorMissingBildWhenGivenTitel(null); // Clear the error message
+        }
+
     };
 
     // Handle selection changes
@@ -273,7 +296,9 @@ export default function TerminForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        <span className="text-danger">Wichtig:</span> Feld leerlassen, wenn es <b>kein</b> Programm(-termin) (mit mehreren Langfilmen), sondern ein "Standard"-Termin (mit 1 Langfilm + optionalen Vorfilm) ist!
+                        <span className="text-danger">Wichtig:</span> Feld leerlassen, wenn es <b>kein</b> Programm(-termin) (mit mehreren Langfilmen), sondern ein "Standard"-Termin (mit 1 Langfilm + optionale Vorfilme) ist!
+                        <br/>
+                        Wenn Eintragung hier erfolgt, muss unten ein Bild angegeben werden (für die korrekte Darstellung in der Gallery).
                     </Form.Text>
                 </Form.Group>
 
@@ -287,7 +312,7 @@ export default function TerminForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Feld leerlassen, wenn es <b>kein</b> Programm(-termin) (mit mehreren Langfilmen), sondern ein "Standard"-Termin (mit 1 Langfilm + optionalen Vorfilm) ist!
+                        Feld leerlassen, wenn es <b>kein</b> Programm(-termin) (mit mehreren Langfilmen), sondern ein "Standard"-Termin (mit 1 Langfilm + optionale Vorfilme) ist!
                     </Form.Text>
                 </Form.Group>
 
@@ -315,12 +340,12 @@ export default function TerminForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Erscheint in Gallery und Detailseite; Eintrag bezieht sich auf den <b>Termin</b> (bspw. Filmeinführung, Filmgespräch, besondere Zeit, abweichender Ort) ; nicht Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite
+                        Erscheint in Gallery und Detailseite; Eintrag bezieht sich auf den <b>Termin</b> (bspw. Kooperation, Filmfestival, Gäste (Einführung/Gespräch), Publikumswunsch, besondere Startzeit, abweichender Ort); keine Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite
                     </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">
-                    <Form.Label>vollständiger Bilddateiname (Bild repräsentiert das ganze Filmprogramm)</Form.Label>
+                    <Form.Label className={errorMissingBildWhenGivenTitel ? "text-danger" : ""}>vollständiger Bildname mit Dateiendung (Bild repräsentiert das ganze Filmprogramm)**</Form.Label>
                     <Form.Control
                         type="text"
                         name="bild"
@@ -330,7 +355,7 @@ export default function TerminForm() {
                     <Form.Text className="text-muted">
                         Bilddatei muss  unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
                         <br/>
-                        <span className="text-danger">Wichtig:</span> Wenn 'Titel' oben befüllt wurde, muss hier ein Bild angegeben werden, für die korrekte Darstellung in der Gallery.
+                        <span className="text-danger">Wichtig:</span> Dieses Feld nur befüllen, wenn oben ein Titel angegeben wurde.
                     </Form.Text>
                 </Form.Group>
 
@@ -390,16 +415,26 @@ export default function TerminForm() {
                     </Form.Text>
                 </Form.Group>
 
-                <Button variant={selectedTerminId ? "success" : "primary"} type="submit" className="mt-4">
+                <p>
+                    <div><sub className={styles.formSubtext}>*Pflichtfeld</sub></div>
+                    <div><sub className={styles.formSubtext}>**bedingtes Pflichtfeld</sub></div>
+                </p>
+
+                <Button variant={selectedTerminId ? "success" : "primary"} type="submit" className="mt-2">
                     {selectedTerminId ? "Update " : "Add "} termin entry
                 </Button>
+
             </Form>
+
+            {errorMissingBildWhenGivenTitel && (
+                <div className="text-danger mt-2">{errorMissingBildWhenGivenTitel}</div>
+            )}
 
             {selectedTerminId && !confirmDeleteOpen && (
                 <Button
                     variant="danger"
                     type="submit"
-                    className="mt-4"
+                    className="mt-3"
                     onClick={() => setConfirmDeleteOpen(true)}
                 >
                     Delete termin entry
@@ -417,6 +452,7 @@ export default function TerminForm() {
                     </Button>
                 </div>
             )}
+
             {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedTerminId ? "updating " : "saving "} termin entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
             {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}

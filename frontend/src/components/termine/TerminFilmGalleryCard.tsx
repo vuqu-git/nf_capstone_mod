@@ -10,16 +10,16 @@ interface Props {
     screeningSonderfarbe: string;
 
     bild: string | null; // could refer to the entire programm or main feature
-    offsetImageInGallery: number | undefined;
+    offsetImageInGallery: string | undefined;
 
     titel: string | null; // could refer to the entire programm or main feature
     kurztext: string | null; // could refer to the entire programm or main feature
 
-    hauptfilmJahr: number | undefined;
-    hauptfilmbesonderheit: string | undefined;
     hauptfilmFormat: string | undefined;
-    hauptfilmLaufzeit: number | undefined;
     hauptfilmRegie: string | undefined;
+    hauptfilmJahr: number | undefined;
+    hauptfilmLaufzeit: number | undefined;
+    hauptfilmbesonderheit: string | undefined;
 
     tnr: number;
     terminBesonderheit: string | undefined;
@@ -34,13 +34,13 @@ export default function TerminFilmGalleryCard({
                                                   offsetImageInGallery,
                                                   titel,
                                                   kurztext,
-                                                  hauptfilmJahr,
-                                                  hauptfilmbesonderheit, // inhaltliche Besonderheit des main features
                                                   hauptfilmFormat,
-                                                  hauptfilmLaufzeit,
                                                   hauptfilmRegie,
+                                                  hauptfilmJahr,
+                                                  hauptfilmLaufzeit,
+                                                  hauptfilmbesonderheit, // inhaltliche Besonderheit des main features
                                                   tnr,
-                                                  terminBesonderheit, // bezieht sich auf Ort & Zeit des Termins
+                                                  terminBesonderheit, // bezieht sich auf Koop, Festival, Gäste, Ort & Zeit etc. des Termins(!)
                                               }: Readonly<Props>) {
     const navigate = useNavigate();
 
@@ -61,8 +61,27 @@ export default function TerminFilmGalleryCard({
                     <Card.Img
                         variant="top"
                         src={`https://www.pupille.org/bilder/filmbilder/${bild}`}
-                        {...(offsetImageInGallery && { style: { objectPosition: `center ${offsetImageInGallery}%` } })}
+
+                        // 0) always pass a style prop
+                        style={{ objectPosition: `center ${offsetImageInGallery ?? "center"}` }}
+
+                        // Conditionally set style if offsetImageInGallery prop exists
+                        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        // these 2 alternatives of conditionally passing style DOESN'T work somehow :(
+                        // 1) Conditional spread skips the entire prop including presence/removal, which can cause React or your UI library to act differently during reconciliation.
+                        //      Conditional spreading with {...(condition && { prop: value })} is a neat way to pass a prop only when the condition is truthy.
+                        // {...(offsetImageInGallery && { style: { objectPosition: `center ${offsetImageInGallery}%` } })}
+
+                        // 2) React treats style={undefined} as omitted, which is safer than adding/removing style prop.
+                        //      i.e. when style is undefined, React does not render the style attribute on the DOM element at all, effectively omitting it.
+                        //      If you pass an empty object {}, React will render style="", which still adds the attribute but empty.
+                        // style={
+                        //     offsetImageInGallery !== undefined
+                        //         ? { objectPosition: `center ${offsetImageInGallery}%` }
+                        //         : undefined
+                        // }
                     />
+
                     {/*empty tag for stronger gradient effect*/}
                     <div className="gradient-overlay"></div>
 
@@ -92,7 +111,7 @@ export default function TerminFilmGalleryCard({
                             <Card.Text className="filminfo-and-stab-gallery">
                                 {[hauptfilmRegie, hauptfilmJahr, hauptfilmLaufzeit !== undefined ? hauptfilmLaufzeit + " Min." : undefined]
                                     .filter(Boolean)
-                                    .join(', ')}
+                                    .join(' | ')}
                             </Card.Text>
                         )}
                     </div>
@@ -112,9 +131,6 @@ export default function TerminFilmGalleryCard({
                             {renderHtmlText(hauptfilmbesonderheit)}
                         </span>
                     </Card.Text>
-                    // <Card.Text className="card-filmBesonderheit" style={{ borderTop: kurztext ? undefined : 'none' }}>
-                    //     {renderHtmlText(hauptfilmbesonderheit)}
-                    // </Card.Text>
                 )}
 
                 {terminBesonderheit && (

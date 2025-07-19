@@ -5,9 +5,12 @@ interface FilmDTOGallery {
     besonderheit?: string | null;
     jahr?: number;
     bild?: string | null;
+    offsetImageInGallery?: string; // i.e. string | undefined
+
     format?: string | null;
-    laufzeit?: number | null;
     regie?: string | null;
+
+    laufzeit?: number | null;
     sonderfarbe?: string | null;
 }
 

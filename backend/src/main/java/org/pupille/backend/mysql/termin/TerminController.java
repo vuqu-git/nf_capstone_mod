@@ -1,6 +1,6 @@
 package org.pupille.backend.mysql.termin;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +10,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/termine")
+@RequiredArgsConstructor
 public class TerminController {
 
     private final TerminService terminService;
-
-    @Autowired
-    public TerminController(TerminService terminService) {
-        this.terminService = terminService;
-    }
 
 //    @GetMapping
 //    public ResponseEntity<List<TerminDTOForm>> getAllTermine() {

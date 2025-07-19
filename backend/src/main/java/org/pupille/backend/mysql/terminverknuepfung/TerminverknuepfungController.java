@@ -1,5 +1,6 @@
 package org.pupille.backend.mysql.terminverknuepfung;
 
+import lombok.RequiredArgsConstructor;
 import org.pupille.backend.mysql.film.FilmDTOSelection;
 import org.pupille.backend.mysql.termin.TerminProjectionSelection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/terminverknuepfung")
+@RequiredArgsConstructor
 public class TerminverknuepfungController {
 
     private final TerminverknuepfungService terminverknuepfungService;
-
-    @Autowired
-    public TerminverknuepfungController(TerminverknuepfungService terminverknuepfungService) {
-        this.terminverknuepfungService = terminverknuepfungService;
-    }
 
     @GetMapping("/plain/all")
     public ResponseEntity<List<TerminverknuepfungDTOSelection>> getAllTerminverknuepfung() {
@@ -88,7 +85,7 @@ public class TerminverknuepfungController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{tnr}/{fnr}")
+    @GetMapping("/{tnr}/{fnr}") // used in TerminverknuepfungForm.tsx
     public ResponseEntity<TVWithFilmAndTerminDTOSelection> getTVbyIds(
             @PathVariable Long tnr,
             @PathVariable Long fnr
@@ -96,7 +93,7 @@ public class TerminverknuepfungController {
         return ResponseEntity.ok(terminverknuepfungService.getTVWithFilmAndTerminByTnrAndFnr(tnr, fnr));
     }
 
-    @GetMapping("/terminsorted")
+    @GetMapping("/terminsorted") // used in TerminverknuepfungForm.tsx
     public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getAllTVSortedByTermin() {
         return ResponseEntity.ok(
                 terminverknuepfungService.getAllTVWithFilmAndTerminSortedByTermin()
@@ -104,12 +101,12 @@ public class TerminverknuepfungController {
     }
 
     // two methods for fetching list of filme (termine) when giving tnr (fnr)
-    @GetMapping("gettermine/{fnr}")
+    @GetMapping("gettermine/{fnr}") // used in FilmForm.tsx
     public ResponseEntity<List<TerminProjectionSelection>> getTermineByFnr(@PathVariable Long fnr) {
         return ResponseEntity.ok(terminverknuepfungService.getTerminlistByFnr(fnr));
     }
 
-    @GetMapping("getfilme/{tnr}")
+    @GetMapping("getfilme/{tnr}") // used in TerminForm.tsx
     public ResponseEntity<List<FilmDTOSelection>> getFilmeByTnr(
             @PathVariable Long tnr
     ) {

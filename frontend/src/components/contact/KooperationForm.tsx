@@ -15,7 +15,6 @@ export interface KooperationFormData {
     terminpraeferenz: string;
     nachricht: string;
     zusammenarbeit: string;
-
 }
 
 interface KooperationFormProps {

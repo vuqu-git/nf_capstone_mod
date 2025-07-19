@@ -116,9 +116,10 @@ export default function ReiheForm() {
                 .finally(() => setIsLoading(false));
         } else {
 
-            // ###################################################
+            // #####################################################
+            // ignoring rnr when posting via this form
             const { rnr, ...reiheInFormWithoutRnr } = selectedReihe;
-            // ###################################################
+            // #####################################################
 
             // axios.post(`${baseURL}`, selectedReihe)
             axios.post(`${baseURL}`, preprocessFormData(reiheInFormWithoutRnr))

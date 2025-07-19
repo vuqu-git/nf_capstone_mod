@@ -137,16 +137,22 @@
     width: 100%;
     height: 100%;
     object-fit: cover; /* Cover the container while maintaining aspect ratio */
-    object-position: center center; /* Center the image within the container ==> this one is overwritten by inline style*/
+    object-position: center center; /* Center the image within the container ==> this one is overwritten by inline style, hence style here can be omitted*/
 }
-            /*Explanation*/
+            /*Explanation for offsetImageInGallery*/
             /*To control vertical positioning, you can modify the object-position property.*/
             /*It accepts two values: the horizontal position and the vertical position.*/
 
             /*object-position: center top;: Aligns the top of the image with the center of the container's width.*/
             /*object-position: center bottom;: Aligns the bottom of the image with the center of the container's width.*/
+
+            /*object-position: center 50%;: Positions the image centered vertically (50% ie center) and centered horizontally.*/
+            /*object-position: center k%;: k in [50%, 100%] pushes the image up based on the center position; centered horizontally.*/
+            /*object-position: center k%;: k in [0%, 50%] pushes the image down based on the center position; centered horizontally.*/
+
             /*object-position: center 10%;: Positions the image 10% from the top (vertically) and centered horizontally.*/
             /*object-position: center -10%;: Positions the image 10% from the bottom (vertically) and centered horizontally.*/
+
             /*object-position: center 20px;: Positions the image 20 pixels from the top (vertically) and centered horizontally.*/
             /*object-position: center -30px;: Positions the image 30 pixels from the bottom (vertically) and centered horizontally.*/
 

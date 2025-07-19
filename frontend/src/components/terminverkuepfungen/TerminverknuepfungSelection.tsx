@@ -14,7 +14,7 @@ export default function TerminverknuepfungSelection({
                                                         selectedTVId,
                                                         onSelectTV,
                                                         textForDefaultOption="Select a Terminverknuepfung to edit (or leave unselected to add a new Terminverknuepfung)",
-}: TVSelectionProps) {
+}: Readonly<TVSelectionProps>) {
 
     const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         onSelectTV(e.target.value || undefined);
@@ -31,7 +31,7 @@ export default function TerminverknuepfungSelection({
                 <option value="">{textForDefaultOption}</option>
                 {tvenWithFilmAndTermin.map((tvFT: TVWithFilmAndTerminDTOSelection) => (
                     <option key={`${tvFT.tnr},${tvFT.fnr}`} value={`${tvFT.tnr},${tvFT.fnr}`}>
-                        tnr : fnr | #{tvFT.tnr} : #{tvFT.fnr} | {tvFT.termin.vorstellungsbeginn?.slice(0,-3)} : {tvFT.film.titel} ({tvFT.film.directors}, {tvFT.film.jahr})
+                        tnr : fnr | #{tvFT.tnr} : #{tvFT.fnr} | {tvFT.termin.vorstellungsbeginn?.slice(0,-3)} : {tvFT.film.titel} ({tvFT.film.regie}, {tvFT.film.jahr})
                     </option>
                 ))}
             </Form.Select>

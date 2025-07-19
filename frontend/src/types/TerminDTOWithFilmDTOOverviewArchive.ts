@@ -5,7 +5,6 @@ interface TerminDTOWithFilmDTOOverviewArchive{
     tnr: number;
     vorstellungsbeginn?: string;
     titel?: string | null;
-
     films: FilmDTOOverviewArchive[];
 }
 

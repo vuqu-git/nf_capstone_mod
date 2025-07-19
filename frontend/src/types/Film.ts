@@ -16,14 +16,12 @@ export type Film = {
     fsk?: '_0' | '_6' | '_12' | '_16' | '_18' | 'UNGEPRUEFT' | null, // Or just optional
     stab?: string | null,
     bild?: string | null,
+    offsetImageInGallery?: string;
     sonderfarbeTitel?: number | null,
     sonderfarbe?: string | null,
-    // to be implemented
-    contentNote?: string,
     regie?: string,
-    // patenschaft?: string, // in Termin entity
+    contentNote?: string,
     trailer?:string,
-
 }
 
 // Explanation of Nullability in TypeScript:

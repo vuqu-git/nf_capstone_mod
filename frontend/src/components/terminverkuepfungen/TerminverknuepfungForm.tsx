@@ -19,7 +19,7 @@ const emptyTVForForm = {
     vorfilm: undefined,
     rang: undefined,
 
-    film: {titel: '', jahr: undefined, directors: ""},
+    film: {titel: '', jahr: undefined, regie: ""},
     termin: {vorstellungsbeginn: "", titel: ""},
 }
 
@@ -108,7 +108,6 @@ export default function TerminverknuepfungForm() {
             const [tnr, fnr] = selectedTVId.split(',');
 
             axios.put(`${baseURL}/${tnr}/${fnr}`, preprocessFormData(selectedTV))
-            // axios.put(`${baseURL}/${selectedTV.tnr}/${selectedTV.fnr}`, preprocessFormData(selectedTV))
                 .then(() => {
                     setSuccessMessage("terminverknuepfung updated successfully!");
 
@@ -121,9 +120,8 @@ export default function TerminverknuepfungForm() {
                     setErrorMessage(errorMessage);
                 })
                 .finally(() => setIsLoading(false));
+
         } else {
-
-
             axios.post(`${baseURL}/link-film-termin`, preprocessFormData(selectedTV))
                 .then(() => {
                     setSuccessMessage("terminverknuepfung saved successfully!");
@@ -137,7 +135,6 @@ export default function TerminverknuepfungForm() {
                     setErrorMessage(errorMessage);
                 })
                 .finally(() => setIsLoading(false));
-
         }
     };
 

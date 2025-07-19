@@ -32,7 +32,7 @@ export default function FilmSelection({
                 <option value="">{textForDefaultOption}</option>
                 {films.map((film) => (
                         <option key={film.fnr} value={film.fnr}>
-                            {`${formatFilmDetailsInFilmSelectOption(film.titel, film.stab, film.jahr)} | #${film.fnr}`}
+                            {`${formatFilmDetailsInFilmSelectOption(film.titel, film.regie, film.jahr)} | #${film.fnr}`}
                         </option>
                 ))}
             </Form.Select>

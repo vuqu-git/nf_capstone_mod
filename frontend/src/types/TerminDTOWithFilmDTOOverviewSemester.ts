@@ -6,7 +6,7 @@ interface TerminDTOWithFilmDTOOverviewSemester{
     tnr: number;
     vorstellungsbeginn?: string;
     titel?: string | null;
-
+    terminBesonderheit?: string | null;
     mainfilms: FilmDTOOverviewSemester[];
     terminGesamtlaufzeit: number;
 }
