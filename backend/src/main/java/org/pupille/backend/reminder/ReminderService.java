@@ -14,19 +14,19 @@ import java.util.List;
 @Service
 public class ReminderService {
 
+//    // service method using rest client):
+//    // ''''''''''''''''''''''''''''''''''
 //    private final RestClient restClient;
 //    private final ContactService contactService;
-//    private final ScreeningService screeningService;
 //
-//    public ReminderService(RestClient.Builder restClient, ContactService contactService, ScreeningService screeningService) {
+//    public ReminderService(RestClient.Builder restClient, ContactService contactService) {
 //        this.restClient = restClient
 //                .baseUrl("http://localhost:8080") // <--- Add your API's base URL here
 //                .build();
 //
 //        this.contactService = contactService;
-//        this.screeningService = screeningService;
 //    }
-
+//
 //    @Scheduled(cron = "45 23 1 * * *", zone = "Europe/Berlin")
 //    public void scheduledReminder() {
 //
@@ -101,6 +101,8 @@ public class ReminderService {
 //        }
 //    }
 
+    // service methods using ScreeningService directly):
+    // '''''''''''''''''''''''''''''''''''''''''''''''''
     private final ContactService contactService;
     private final ScreeningService screeningService;
 
