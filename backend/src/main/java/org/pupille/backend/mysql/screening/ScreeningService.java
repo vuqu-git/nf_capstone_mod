@@ -448,10 +448,10 @@ public class ScreeningService {
     }
 
 //    +++++++++++++++++++++++++++++
-//    reminder stuff
+//    mail reminder stuff
 //    +++++++++++++++++++++++++++++
 
-    public List<TerminDTOWithFilmDTOGallery> getTermineDaysInFuture(int days) {
+    public List<TerminDTOWithFilmDTOMailReminder> getTermineDaysInFuture(int days) {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalDate targetDate = currentDate.plusDays(days);
 
@@ -461,12 +461,12 @@ public class ScreeningService {
 
         List<Termin> termineOnTargetDate = terminRepository.findTermineByDateRange(startOfDay, endOfDay);
 
-        return buildTerminDTOWithFilmDTOGalleryList(termineOnTargetDate).stream()
+        return buildTerminDTOWithFilmDTOMailReminderList(termineOnTargetDate).stream()
                 .filter(terminDTO -> terminDTO.veroeffentlichen() != null && terminDTO.veroeffentlichen() > 0)
                 .collect(Collectors.toList());
     }
 
-    public List<TerminDTOWithFilmDTOGallery> getTermineDaysInPast(int days) {
+    public List<TerminDTOWithFilmDTOMailReminder> getTermineDaysInPast(int days) {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalDate targetDate = currentDate.minusDays(days);
 
@@ -476,13 +476,13 @@ public class ScreeningService {
 
         List<Termin> termineOnTargetDate = terminRepository.findTermineByDateRange(startOfDay, endOfDay);
 
-        return buildTerminDTOWithFilmDTOGalleryList(termineOnTargetDate).stream()
-                .filter(terminDTO -> terminDTO.veroeffentlichen() != null && terminDTO.veroeffentlichen() > 0)
+        return buildTerminDTOWithFilmDTOMailReminderList(termineOnTargetDate).stream()
+                .filter(terminDTO -> terminDTO.veroeffentlichen() != null && terminDTO.veroeffentlichen() > 0) // only keep termine, which are veröffentlicht
                 .collect(Collectors.toList());
     }
 
             // Helper method to avoid code duplication
-            private List<TerminDTOWithFilmDTOGallery> buildTerminDTOWithFilmDTOGalleryList(List<Termin> termine) {
+            private List<TerminDTOWithFilmDTOMailReminder> buildTerminDTOWithFilmDTOMailReminderList(List<Termin> termine) {
                 List<Long> terminIds = termine.stream()
                         .map(Termin::getTnr)
                         .toList();
@@ -494,9 +494,9 @@ public class ScreeningService {
                         .map(termin -> {
                             // Check if titel exists (not null/empty)
                             if (termin.getTitel() != null && !termin.getTitel().isBlank()) {
-                                return new TerminDTOWithFilmDTOGallery(
+                                return new TerminDTOWithFilmDTOMailReminder(
                                         termin,
-                                        List.of() // Empty films list when titel is present
+                                        List.of() // Empty films list (mainfilms) when titel is present
                                 );
                             } else {
                                 // Include films only when titel is absent
@@ -505,7 +505,7 @@ public class ScreeningService {
                                         .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
                                         .map(Terminverknuepfung::getFilm)
                                         .toList();
-                                return new TerminDTOWithFilmDTOGallery(
+                                return new TerminDTOWithFilmDTOMailReminder(
                                         termin,
                                         films
                                 );

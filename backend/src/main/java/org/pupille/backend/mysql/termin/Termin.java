@@ -59,6 +59,8 @@ public class Termin {
 
     private Short veroeffentlichen;
 
+    private String patenschaft;
+
     // ############################################
     // relationships (extension of the entity model)
 

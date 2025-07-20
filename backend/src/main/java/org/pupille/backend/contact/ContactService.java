@@ -488,7 +488,7 @@ public class ContactService {
                     .append("</b> für die du die Patenschaft inne hast :)</p>");
             htmlBody.append("<p>Dies ist ein automatischer Reminder für u.a. folgende Erledigungen im Nachgang:</p>");
             htmlBody.append("<ul>");
-            htmlBody.append("<li>Rückversand der Kopie bzw. Löschung der Filmdateien auf PC und Server</li>");
+            htmlBody.append("<li>Rückversand der Kopie vorbereiten bzw. Löschung der Filmdateien auf PC und Server durchführen</li>");
             htmlBody.append("<li>Spielfilmabrechnung machen und verschicken</li>");
             htmlBody.append("<li>Einzahlung der Einnahmen in die Wege leiten</li>");
             htmlBody.append("</ul>");

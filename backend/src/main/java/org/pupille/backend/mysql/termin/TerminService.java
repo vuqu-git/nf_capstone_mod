@@ -61,6 +61,7 @@ public class TerminService {
                     termin.setSonderfarbeTitel(terminDetails.getSonderfarbeTitel());
                     termin.setSonderfarbe(terminDetails.getSonderfarbe());
                     termin.setVeroeffentlichen(terminDetails.getVeroeffentlichen());
+                    termin.setPatenschaft(terminDetails.getPatenschaft());
                     return new TerminDTOForm(terminRepository.save(termin));
                 })
                 .orElseThrow(() -> new RuntimeException("Termin not found"));

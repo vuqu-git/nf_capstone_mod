@@ -46,7 +46,7 @@ export default function ReiheverknuepfungForm() {
         setIsLoadingAllReihen(true);
         setErrorMessage("");
 
-        axios.get(`${baseURL}/all`)
+        axios.get(`${baseURL}`)
             .then((response) => setAllReihen(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -64,7 +64,7 @@ export default function ReiheverknuepfungForm() {
     const getAllSortedTermine = () => {
         setErrorMessage("");
 
-        axios.get(`api/termine/allwithmainfilms`)
+        axios.get(`api/termine/withmainfilms`)
             .then((response) => setAllTermineWithMainfilme(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";

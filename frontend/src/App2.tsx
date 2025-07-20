@@ -58,7 +58,7 @@ async function getGalleryData(): Promise<GalleryData> {
         // Fetch both endpoints concurrently
         const [response1, response2] = await Promise.all([
             axios.get<TerminDTOWithFilmDTOGallery[]>("/api/screenings"),
-            axios.get<News[]>("/api/news")
+            axios.get<News[]>("/api/news/valid")
         ]);
 
         return {

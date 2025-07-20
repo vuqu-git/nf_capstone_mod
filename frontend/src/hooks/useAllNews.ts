@@ -17,7 +17,7 @@ export const useAllNews = (shouldFetchDetails: boolean = true) => {
         setIsLoading(true);
         setError("");
 
-        axios.get(`${baseURL}/all`)
+        axios.get(`${baseURL}`)
             .then((response) => setAllNews(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";

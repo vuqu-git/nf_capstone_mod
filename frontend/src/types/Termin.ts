@@ -11,6 +11,7 @@ interface Termin {
     sonderfarbeTitel?: number | null;
     sonderfarbe?: string | null;
     veroeffentlichen?: number | null;
+    patenschaft?: string | null;
 }
 
 export default Termin;

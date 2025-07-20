@@ -22,34 +22,34 @@ public class NewsController {
     //        this.newsService = newsService;
     //    }
 
-    @GetMapping("/all")
+    @GetMapping()
     public List<News> getAllNews()
     {
         return newsService.getAllNews();
     }
 
-    @GetMapping
+    @GetMapping("/valid")
     public List<News> getValidNews()
     {
         return newsService.getNewsByDateInRange();
     }
 
-    @GetMapping("/all/{id}")
+    @GetMapping("/{id}")
     public News getNewsItem(@PathVariable String id) {
         return newsService.getNewsById(id);
     }
 
-    @DeleteMapping("/all/{id}")
+    @DeleteMapping("/{id}")
     public void deleteNewsItem(@PathVariable String id) {
         newsService.deleteNews(id);
     }
 
-    @PostMapping("/all")
+    @PostMapping()
     public News addNewsItem(@RequestBody News news) {
         return newsService.saveNews(news);
     }
 
-    @PutMapping("/all/{id}")
+    @PutMapping("/{id}")
     // with fine-grained exception handling because IllegalArgumentException in movieService.updateTodo is specific
     // alternatively:
     //      inside newsService.updateNews the NewsUpdateException is thrown

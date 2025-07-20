@@ -20,13 +20,13 @@ public class TerminController {
 //        return new ResponseEntity<>(terminService.getAllTermine(), HttpStatus.OK);
 //    }
 
-    @GetMapping("/allsorted")
+    @GetMapping()
     public ResponseEntity<List<TerminProjectionSelection>> getAllTermineByOrderByVorstellungsbeginnDesc() {
         List<TerminProjectionSelection> termine = terminService.getAllTermineByOrderByVorstellungsbeginnDesc();
         return ResponseEntity.ok(termine);
     }
 
-    @GetMapping("/allwithmainfilms")
+    @GetMapping("/withmainfilms")
     public ResponseEntity<List<TerminDTOWithMainFilme>> getAllTermineWithMainfilmsByOrderByVorstellungsbeginnDesc() {
         List<TerminDTOWithMainFilme> termineWithMainfilme = terminService.getAllTermineWithMainfilmeByOrderByVorstellungsbeginnDesc();
         return ResponseEntity.ok(termineWithMainfilme);
