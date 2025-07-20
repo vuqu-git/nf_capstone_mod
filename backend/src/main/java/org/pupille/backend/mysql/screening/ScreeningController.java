@@ -57,17 +57,16 @@ public class ScreeningController {
 //    mail reminder stuff
 //    +++++++++++++++++++++++++++++
 
-    // For screenings exactly N days in the future
-    @GetMapping("/future/{days}")
-    public List<TerminDTOWithFilmDTOMailReminder> getScreeningsDaysInFuture(@PathVariable int days) {
-        return screeningService.getTermineDaysInFuture(days);
-    }
-
-    // For screenings exactly N days in the past
-    @GetMapping("/past/{days}")
-    public List<TerminDTOWithFilmDTOMailReminder> getScreeningsDaysInPast(@PathVariable int days) {
-        return screeningService.getTermineDaysInPast(days);
-    }
-
+//    // For screenings exactly N days in the future
+//    @GetMapping("/future/{days}")
+//    public List<TerminDTOWithFilmDTOMailReminder> getScreeningsDaysInFuture(@PathVariable int days) {
+//        return screeningService.getTermineDaysInFuture(days);
+//    }
+//
+//    // For screenings exactly N days in the past
+//    @GetMapping("/past/{days}")
+//    public List<TerminDTOWithFilmDTOMailReminder> getScreeningsDaysInPast(@PathVariable int days) {
+//        return screeningService.getTermineDaysInPast(days);
+//    }
 
 }
