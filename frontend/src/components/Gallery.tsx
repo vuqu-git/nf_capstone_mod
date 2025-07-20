@@ -25,7 +25,7 @@ export default function Gallery() {
     const getValidNews = () => {
         setIsLoadingNews(true);
 
-        axios.get("/api/news")
+        axios.get("/api/news/valid")
             .then((response) => {
                 setValidNews(response.data)
             })

@@ -29,7 +29,7 @@ export default function EditNews() {
         setError("");
         setSuccessMessage("");
 
-        axios.put(`${baseURL}/all/${updatingId}`, preprocessFormData(newsInForm))
+        axios.put(`${baseURL}/${updatingId}`, preprocessFormData(newsInForm))
             .then(() => {
                 setSuccessMessage("News updated successfully!");
                 setSelectedId("");

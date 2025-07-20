@@ -190,7 +190,7 @@ export default function TerminverknuepfungForm() {
     const getAllFilms = () => {
         setErrorMessage("");
 
-        axios.get(`api/filme/allsorted`)
+        axios.get(`api/filme`)
             .then((response) => setAllFilms(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -220,7 +220,7 @@ export default function TerminverknuepfungForm() {
     const getAllSortedTermine = () => {
         setErrorMessage("");
 
-        axios.get(`api/termine/allsorted`)
+        axios.get(`api/termine`)
             .then((response) => setAllTermine(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";

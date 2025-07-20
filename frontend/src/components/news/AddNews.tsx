@@ -29,7 +29,7 @@ export default function AddNews() {
         setError("");
         setSuccessMessage("");
 
-        axios.post(`${baseURL}/all`, preprocessFormData(newsInForm))
+        axios.post(`${baseURL}`, preprocessFormData(newsInForm))
             .then(() => {
                 setSuccessMessage("News added successfully!");
                 setAddingNews(emptyNewsForForm);

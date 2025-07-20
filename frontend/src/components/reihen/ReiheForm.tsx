@@ -41,7 +41,7 @@ export default function ReiheForm() {
         setIsLoadingAllReihen(true);
         setErrorMessage("");
 
-        axios.get(`${baseURL}/all`)
+        axios.get(`${baseURL}`)
             .then((response) => setAllReihen(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";

@@ -61,7 +61,7 @@ export default function TerminForm() {
         // setIsLoading(true);
         setErrorMessage("");
 
-        axios.get(`${baseURL}/allsorted`)
+        axios.get(`${baseURL}`)
             .then((response) => setAllTermine(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";

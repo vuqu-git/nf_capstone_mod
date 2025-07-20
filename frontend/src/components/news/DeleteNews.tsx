@@ -25,7 +25,7 @@ export default function DeleteNews() {
         setError("");
         setSuccessMessage("");
 
-        axios.delete(`${baseURL}/all/${deletingId}`)
+        axios.delete(`${baseURL}/${deletingId}`)
             .then(() => {
                 setSuccessMessage("News deleted successfully!");
                 setSelectedId("");

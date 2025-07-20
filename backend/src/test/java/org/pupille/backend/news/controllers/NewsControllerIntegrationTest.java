@@ -131,7 +131,7 @@ class NewsControllerIntegrationTest {
         // i.e. empty newsTestRepo
 
         // WHEN
-        mockMvc.perform(get("/api/news/all")
+        mockMvc.perform(get("/api/news")
                         .contentType(MediaType.APPLICATION_JSON))
                 // THEN
                 .andExpect(status().isOk())
@@ -162,7 +162,7 @@ class NewsControllerIntegrationTest {
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
         // WHEN
-        mockMvc.perform(get("/api/news/all")
+        mockMvc.perform(get("/api/news")
                         .contentType(MediaType.APPLICATION_JSON))
                 // THEN
                 .andExpect(status().isOk())
@@ -220,7 +220,7 @@ class NewsControllerIntegrationTest {
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 5, 28));
 
         // WHEN
-        mockMvc.perform(get("/api/news")
+        mockMvc.perform(get("/api/news/valid")
                         .contentType(MediaType.APPLICATION_JSON))
                 // THEN
                 .andExpect(status().isOk())
@@ -262,7 +262,7 @@ class NewsControllerIntegrationTest {
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 28));
 
         // WHEN
-        mockMvc.perform(get("/api/news")
+        mockMvc.perform(get("/api/news/valid")
                         .contentType(MediaType.APPLICATION_JSON))
                 // THEN
                 .andExpect(status().isOk())
@@ -292,7 +292,7 @@ class NewsControllerIntegrationTest {
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
         // WHEN
-        mockMvc.perform(get("/api/news/all/1")
+        mockMvc.perform(get("/api/news/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 // THEN
                 .andExpect(status().isOk())
@@ -317,7 +317,7 @@ class NewsControllerIntegrationTest {
         // i.e. empty newsTestRepo
 
         // WHEN
-        mockMvc.perform(get("/api/news/all/" + targetId)
+        mockMvc.perform(get("/api/news/" + targetId)
                         .contentType(MediaType.APPLICATION_JSON))
                 // THEN
                 .andExpect(status().isNotFound())
@@ -347,7 +347,7 @@ class NewsControllerIntegrationTest {
         newsTestRepo.save(news1);
         newsTestRepo.save(news2);
         // WHEN
-        mockMvc.perform(delete("/api/news/all/" + news1.id())
+        mockMvc.perform(delete("/api/news/" + news1.id())
                         .contentType(MediaType.APPLICATION_JSON)
                         // this line for fetching github username
                         .with(oidcLogin().userInfoToken(token -> token.claim("login", "github-username")))
@@ -372,7 +372,7 @@ class NewsControllerIntegrationTest {
         // i.e. empty newsTestRepo
 
         // WHEN
-        mockMvc.perform(delete("/api/news/all/" + targetId)
+        mockMvc.perform(delete("/api/news/" + targetId)
                         .contentType(MediaType.APPLICATION_JSON)
                         // this line for fetching github username
                         .with(oidcLogin().userInfoToken(token -> token.claim("login", "github-username")))
@@ -403,7 +403,7 @@ class NewsControllerIntegrationTest {
 
         newsTestRepo.save(news1);
         // WHEN
-        mockMvc.perform(post("/api/news/all")
+        mockMvc.perform(post("/api/news")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 """
@@ -457,7 +457,7 @@ class NewsControllerIntegrationTest {
 
         newsTestRepo.save(news1);
         // WHEN
-        mockMvc.perform(put("/api/news/all/" + news1.id())
+        mockMvc.perform(put("/api/news/" + news1.id())
                         .contentType(MediaType.APPLICATION_JSON)
                         // the following json needs to have all the fields of a java News object
                         .content(
@@ -507,7 +507,7 @@ class NewsControllerIntegrationTest {
         // newsTestRepo is empty
 
         // WHEN
-        mockMvc.perform(put("/api/news/all/" + targetId)
+        mockMvc.perform(put("/api/news/" + targetId)
                         .contentType(MediaType.APPLICATION_JSON)
                         // the following json needs to have all the fields of a java News object
                         .content(
@@ -547,7 +547,7 @@ class NewsControllerIntegrationTest {
         newsTestRepo.save(news1);
 
         // WHEN
-        mockMvc.perform(put("/api/news/all/" + news1.id())
+        mockMvc.perform(put("/api/news/" + news1.id())
                         .contentType(MediaType.APPLICATION_JSON)
                         // the following json needs to have all the fields of a java News object
                         .content(

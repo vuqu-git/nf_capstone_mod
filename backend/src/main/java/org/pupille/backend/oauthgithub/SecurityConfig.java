@@ -37,9 +37,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST,"/api/news/all").authenticated()
-                        .requestMatchers(HttpMethod.PUT,"/api/news/all/{id}").authenticated()
-                        .requestMatchers(HttpMethod.DELETE,"/api/news/all/{id}").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/api/news").authenticated()
+                        .requestMatchers(HttpMethod.PUT,"/api/news/{id}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE,"/api/news/{id}").authenticated()
 
                         .requestMatchers(HttpMethod.POST,"/api/filme").authenticated()
                         .requestMatchers(HttpMethod.PUT,"/api/filme/{id}").authenticated()
