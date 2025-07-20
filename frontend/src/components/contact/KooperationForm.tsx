@@ -1,6 +1,9 @@
 import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import styles from './Forms.module.css';
 import {Badge} from "react-bootstrap";
+import DatenschutzCheck from "../other/DatenschutzCheck.tsx";
+
+// caller of this component: EventMitProjektion.tsx
 
 export interface KooperationFormData {
     betreff: string;
@@ -15,6 +18,8 @@ export interface KooperationFormData {
     terminpraeferenz: string;
     nachricht: string;
     zusammenarbeit: string;
+
+    privacy: boolean;
 }
 
 interface KooperationFormProps {
@@ -53,7 +58,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
         <form className={styles.formContainer} onSubmit={handleLocalSubmit}>
             <Badge bg="warning" text="dark">Hinweis:</Badge>
             <p className={styles.formDescription}>
-                Der Einsendeschluss für Kooperationsanfragen ist der 31. Januar (für das Sommersemester) sowie der 31. Juli (für das Wintersemester). {momentaneAnfrageFuerSemester}
+                Der Einsendeschluss für Kooperationsanfragen ist der 31. Januar (für das Sommersemester) sowie der 31. Juli (für das Wintersemester). <b>{momentaneAnfrageFuerSemester}</b>
             </p>
             <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="betreff">Betreff*:</label>
@@ -157,7 +162,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
-                    style={{ height: '300px' }}
+                    style={{ height: '175px' }}
                 />
             </div>
 
@@ -167,7 +172,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     id="terminpraeferenz"
                     name="terminpraeferenz"
                     value={formData.terminpraeferenz || ''}
-                    placeholder="Spieltage sind Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
+                    placeholder="Spieltage sind i.d.R. Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
@@ -185,9 +190,15 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
-                    style={{ height: '150px' }}
+                    style={{ height: '100px' }}
                 />
             </div>
+
+            <DatenschutzCheck
+                onInputChange={onInputChange}
+                formData={formData as KooperationFormData}
+                messageType={undefined}
+            />
 
             <button
                 type="submit"

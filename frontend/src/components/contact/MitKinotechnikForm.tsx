@@ -1,6 +1,9 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import styles from './Forms.module.css';
 import {useDateRangeValidation} from "../../hooks/useDateRangeValidation.ts";
+import DatenschutzCheck from "../other/DatenschutzCheck.tsx";
+
+// caller of this component: EventMitProjektion.tsx
 
 export interface MitKinotechnikFormData {
     betreff: string;
@@ -20,6 +23,7 @@ export interface MitKinotechnikFormData {
     format: 'DCP' | 'Blu-ray' | 'DVD' | 'Datei auf PC' | '35mm' | '16mm' | 'noch unbekannt';
     anzMikrofone: number;
 
+    privacy: boolean
 }
 
 interface MitKinotechnikFormProps {
@@ -122,7 +126,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
-                    style={{ height: '300px' }}
+                    style={{ height: '175px' }}
                 />
             </div>
 
@@ -211,10 +215,14 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     className={styles.datetimeInput}
                 />
 
-                <div style={{ minHeight: '1.5em' }}>
+                {/*Fehlermeldung für Datenvalidierung (space reserved)*/}
+                {/*<div style={{ minHeight: '1.5em' }}>*/}
+                <div>
                     {dateRangeError && <p className={styles.statusError + " m-0"}>{dateRangeError}</p>}
                 </div>
             </div>
+
+            <p >Weitere alternative Veranstaltungszeiträume (mit Datum & Uhrzeit) können Nachrichtenfeld oben genannt werden.</p>
 
             <div className={styles.formFieldCheckbox}>
                 <input
@@ -249,6 +257,12 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     Hiermit bestätige ich, dass bei Werbemaßnahmen der "Festsaal im Studierendenhaus" als Veranstaltungsort genannt wird und <b>nicht</b> Pupille-Kino, da die Pupille nicht der Veranstalter ist.
                 </label>
             </div>
+
+            <DatenschutzCheck
+                onInputChange={onInputChange}
+                formData={formData as MitKinotechnikFormData}
+                messageType={undefined}
+            />
 
             <button
                 type="submit"

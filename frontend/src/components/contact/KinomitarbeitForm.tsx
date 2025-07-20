@@ -1,11 +1,15 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import styles from './Forms.module.css';
+import DatenschutzCheck from "../other/DatenschutzCheck.tsx";
+
+// caller of this component: ContactForm.tsx
 
 export interface KinomitarbeitFormData {
     name: string;
     email: string;
     nachricht: string;
     stundenEngagement: number;
+    privacy: boolean
 }
 
 interface KinomitarbeitFormProps {
@@ -79,12 +83,18 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                 />
             </div>
 
+            <DatenschutzCheck
+                onInputChange={onInputChange}
+                formData={formData as KinomitarbeitFormData}
+                messageType={undefined}
+            />
+
             <button
                 type="submit"
                 className={styles.submitButton}
                 disabled={submissionStatus.status === 'sending'}
             >
-                Nachricht senden
+                Anfrage senden
             </button>
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 

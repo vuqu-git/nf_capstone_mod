@@ -60,6 +60,16 @@ const ContactForm: React.FC = () => {
         );
     };
 
+    const handleChangeWithCheckbox = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+        const isCheckbox = type === "checkbox";
+
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: isCheckbox ? (e as ChangeEvent<HTMLInputElement>).target.checked : value,
+        }));
+    };
+
     const handleGlobalSubmit = async (
         event: FormEvent,
         explicitIssue?: string, // optional parameter
@@ -101,7 +111,7 @@ const ContactForm: React.FC = () => {
                     <AOBForm
                         onSubmit={handleGlobalSubmit}
                         submissionStatus={submissionStatus}
-                        onInputChange={handleChange}
+                        onInputChange={handleChangeWithCheckbox}
                         formData={formData as AOBFormData}
                     />
                 );

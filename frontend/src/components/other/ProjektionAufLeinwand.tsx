@@ -25,7 +25,7 @@ export default function ProjektionAufLeinwand() {
                         </Card.Text>
                         <Badge bg="success">Hinweis:</Badge>
                         <Card.Text>
-                            Das Technik-Team des AStA verleiht Technik (bspw. Boxen, Beamer, Mikrofone) für Veranstaltungen und erklärt bei Bedarf den Aufbau.
+                            Das <a href="https://asta-frankfurt.de/angebote/studierendenhaus/raeume-nutzen-mieten" target="_blank" rel="noopener noreferrer">Technik-Team</a> des AStA verleiht Technik (bspw. Boxen, Beamer, Mikrofone) für Veranstaltungen und erklärt bei Bedarf den Aufbau.
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -52,8 +52,8 @@ export default function ProjektionAufLeinwand() {
                 Bevor Ihr uns kontaktiert, bitte klärt immer <b>selber vorher</b>
             </p>
             <ul>
-                <li>die Mietung und Verfügbarkeit des Festsaals mit dem  <a href="https://asta-frankfurt.de/kontakt" target="_blank">AStA</a> (je nach Projekt bzw. Veranstaltung
-                    kann die Nutzung auch kostenlos sein, siehe <a href="https://asta-frankfurt.de/angebote/studierendenhaus/raeume-nutzen-mieten" target="_blank">Preisliste</a>)
+                <li>die Mietung und Verfügbarkeit des Festsaals mit dem  <a href="https://asta-frankfurt.de/kontakt" target="_blank" rel="noopener noreferrer">AStA</a> (je nach Projekt bzw. Veranstaltung
+                    kann die Nutzung auch kostenlos sein, siehe <a href="https://asta-frankfurt.de/angebote/studierendenhaus/raeume-nutzen-mieten" target="_blank" rel="noopener noreferrer">Preisliste</a>)
                 </li>
                 <li>und im Fall einer öffentlichen Filmvorführung die Lizenz mit dem Rechteinhaber des Films.</li>
             </ul>
