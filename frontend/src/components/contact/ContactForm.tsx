@@ -51,6 +51,7 @@ const ContactForm: React.FC = () => {
         setFormData({});
     };
 
+    // this is the "standard" handler for changes in input fields for text and numbers
     const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
         setFormData((prevData) => ({
@@ -95,12 +96,14 @@ const ContactForm: React.FC = () => {
                 setSubmissionStatus({ status: 'success' });
                 setFormData({});
             } else {
-                const errorData = await response.json();
-                setSubmissionStatus({ status: 'error', message: errorData.message  || 'Something went wrong.' });
+                // const errorData = await response.json();
+                // setSubmissionStatus({ status: 'error', message: errorData.message  || 'Something went wrong.' });
+
+                setSubmissionStatus({ status: 'error', message: 'Serverfehler: Etwas lief schief :( Bitte sende deine Nachricht an info@pupille.org' });
             }
         } catch (error) {
             console.error('Error sending message:', error);
-            setSubmissionStatus({ status: 'error', message: 'Network error. Please try again.' });
+            setSubmissionStatus({ status: 'error', message: 'Netzwerkfehler :( Bitte sende deine Nachricht an info@pupille.org' });
         }
     };
 
@@ -120,7 +123,7 @@ const ContactForm: React.FC = () => {
                     <KinomitarbeitForm
                         onSubmit={handleGlobalSubmit}
                         submissionStatus={submissionStatus}
-                        onInputChange={handleChange}
+                        onInputChange={handleChangeWithCheckbox}
                         formData={formData as KinomitarbeitFormData}
                     />
                 );
@@ -154,11 +157,6 @@ const ContactForm: React.FC = () => {
                     &#x2705; Vielen Dank! Die Nachricht wurde gesendet.
                     <br/>
                     Eine Kopie wurde an deine angegebene Mail-Adresse geschickt.
-                </div>
-            )}
-            {submissionStatus.status === 'error' && submissionStatus.message && (
-                <div className={styles.statusError} role="alert">
-                    {submissionStatus.message}
                 </div>
             )}
 
@@ -196,6 +194,13 @@ const ContactForm: React.FC = () => {
                     {renderForm()}
                 </>
             )}
+            {/*Fehlermeldung*/}
+            {submissionStatus.status === 'error' && submissionStatus.message && (
+                <div className={styles.statusError} role="alert">
+                    {submissionStatus.message}
+                </div>
+            )}
+
         </div>
     );
 };
