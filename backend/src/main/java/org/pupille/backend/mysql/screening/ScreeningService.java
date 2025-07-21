@@ -96,7 +96,7 @@ public class ScreeningService {
 //    }
 
     //filter for veroeffentlichen > 0 happen in frontend react component Gallery2.tsx
-    public List<TerminDTOWithFilmDTOGallery> getAllFutureTermineWithFilms() {
+    public List<TerminDTOWithFilmAndReiheDTOGallery> getAllFutureTermineWithFilms() {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
@@ -114,9 +114,10 @@ public class ScreeningService {
                 .map(termin -> {
                     // Check if titel exists (not null/empty)
                     if (termin.getTitel() != null && !termin.getTitel().isBlank()) {
-                        return new TerminDTOWithFilmDTOGallery(
+                        return new TerminDTOWithFilmAndReiheDTOGallery(
                                 termin,
-                                List.of() // Empty films list when titel is present
+                                List.of(), // Empty films list when titel is present
+                                termin.getReihen()
                         );
                     } else {
                         // Include films only when titel is absent
@@ -125,9 +126,10 @@ public class ScreeningService {
                                 .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
                                 .map(Terminverknuepfung::getFilm)
                                 .toList();
-                        return new TerminDTOWithFilmDTOGallery(
+                        return new TerminDTOWithFilmAndReiheDTOGallery(
                                 termin,
-                                films
+                                films,
+                                termin.getReihen()
                         );
                     }
                 })

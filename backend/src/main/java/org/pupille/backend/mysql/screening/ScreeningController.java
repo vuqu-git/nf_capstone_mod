@@ -16,7 +16,7 @@ public class ScreeningController {
 
     // for Gallery react component
     @GetMapping()
-    public List<TerminDTOWithFilmDTOGallery> getAllFutureTermineWithFilms() {
+    public List<TerminDTOWithFilmAndReiheDTOGallery> getAllFutureTermineWithFilms() {
         return screeningService.getAllFutureTermineWithFilms();
     }
 
