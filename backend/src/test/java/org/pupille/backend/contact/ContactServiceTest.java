@@ -83,12 +83,12 @@ public class ContactServiceTest {
         Address[] to = mimeMessage.getRecipients(RecipientType.TO);
         assertNotNull(to);
         assertEquals(1, to.length);
-        assertEquals("quy8vuong@gmail.com", ((InternetAddress) to[0]).getAddress());
+        assertEquals("test@example.com", ((InternetAddress) to[0]).getAddress());
 
         Address[] bcc = mimeMessage.getRecipients(RecipientType.BCC);
         assertNotNull(bcc);
         assertEquals(1, bcc.length);
-        assertEquals("vuqu@gmx.de", ((InternetAddress) bcc[0]).getAddress());
+        assertEquals("quy8vuong@gmail.com", ((InternetAddress) bcc[0]).getAddress());
 
 //        // dies funzt nicht, aber Lösung ist komplex...
 //        String content = (String) mimeMessage.getContent();
@@ -121,7 +121,7 @@ public class ContactServiceTest {
                 contactService.handleAOBInquiry(payload)
         );
 
-        assertTrue(thrown.getMessage().contains("Failed to send message. There might be a temporary issue with the mail server. Please try again later or disable your VPN or sent a message to info@pupille.org"));
+        assertTrue(thrown.getMessage().contains("⛔ Failed to send message. There might be a temporary issue with the mail server. Please try again later or disable your VPN or send a message to info@pupille.org instead."));
         // You can also verify the cause if needed: assertTrue(thrown.getCause() instanceof MailSendException);
     }
 
