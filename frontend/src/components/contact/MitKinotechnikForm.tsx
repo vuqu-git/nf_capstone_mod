@@ -1,6 +1,9 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import styles from './Forms.module.css';
 import {useDateRangeValidation} from "../../hooks/useDateRangeValidation.ts";
+import DatenschutzCheck from "../other/DatenschutzCheck.tsx";
+
+// caller of this component: EventMitProjektion.tsx
 
 export interface MitKinotechnikFormData {
     betreff: string;
@@ -20,16 +23,20 @@ export interface MitKinotechnikFormData {
     format: 'DCP' | 'Blu-ray' | 'DVD' | 'Datei auf PC' | '35mm' | '16mm' | 'noch unbekannt';
     anzMikrofone: number;
 
+    istEinverstandenMitDatennutzung: boolean
 }
 
 interface MitKinotechnikFormProps {
     onSubFormSubmit: (event: FormEvent, data: MitKinotechnikFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
+    submissionStatusWithMessage: {
+        status: 'idle' | 'sending' | 'success' | 'error';
+        nachricht?: string
+    };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
     formData: MitKinotechnikFormData;
 }
 
-const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit, submissionStatus, onInputChange, formData }) => {
+const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
     const [errorMissingConfirmationMessage, setErrorMissingConfirmationMessage] = useState<string | null>(null);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -122,7 +129,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
-                    style={{ height: '300px' }}
+                    style={{ height: '175px' }}
                 />
             </div>
 
@@ -211,10 +218,14 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     className={styles.datetimeInput}
                 />
 
-                <div style={{ minHeight: '1.5em' }}>
+                {/*Fehlermeldung für Datenvalidierung (space reserved)*/}
+                {/*<div style={{ minHeight: '1.5em' }}>*/}
+                <div>
                     {dateRangeError && <p className={styles.statusError + " m-0"}>{dateRangeError}</p>}
                 </div>
             </div>
+
+            <p >Weitere alternative Veranstaltungszeiträume (mit Datum & Uhrzeit) können Nachrichtenfeld oben genannt werden.</p>
 
             <div className={styles.formFieldCheckbox}>
                 <input
@@ -224,6 +235,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     checked={formData.istGemietetBeiAsta || false}
                     onChange={handleInputChange}
                     className={styles.checkboxInput}
+                    required
                 />
                 <label
                     htmlFor="istGemietetBeiAsta"
@@ -241,6 +253,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     checked={formData.wurdeGelesenHinweisEventlocation || false}
                     onChange={handleInputChange}
                     className={styles.checkboxInput}
+                    required
                 />
                 <label
                     htmlFor="wurdeGelesenHinweisEventlocation"
@@ -250,10 +263,16 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 </label>
             </div>
 
+            <DatenschutzCheck
+                onInputChange={onInputChange}
+                formData={formData as MitKinotechnikFormData}
+                messageType={undefined}
+            />
+
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatus.status === 'sending' || !!dateRangeError}
+                disabled={submissionStatusWithMessage.status === 'sending' || !!dateRangeError}
             >
                 Anfrage senden
             </button>
@@ -264,7 +283,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 <p className={styles.errorOrangeLabel}>{errorMissingConfirmationMessage}</p>
             )}
 
-            {submissionStatus.status === 'sending' && (
+            {submissionStatusWithMessage.status === 'sending' && (
                 <p className={`${styles.statusMessage} ${styles.statusSending}`}>&#x2709; Sende Nachricht...</p>
             )}
         </form>

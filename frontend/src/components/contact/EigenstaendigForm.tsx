@@ -3,24 +3,30 @@ import styles from './Forms.module.css';
 import {Badge} from "react-bootstrap";
 import HinweisWerbungVeranstaltungsort from "./HinweisWerbungVeranstaltungsort.tsx";
 import {useDateRangeValidation} from "../../hooks/useDateRangeValidation.ts";
+import DatenschutzCheck from "../other/DatenschutzCheck.tsx";
+
+// caller of this component: EventMitProjektion.tsx
 
 export interface EigenstaendigFormData {
     betreff: string;
     ansprechperson: string;
     email: string;
-
     veranstaltungsbeginn: string; // Will hold ISO 8601 date and time
     veranstaltungsende: string;   // Will hold ISO 8601 date and time
+    istEinverstandenMitDatennutzung: boolean;
 }
 
 interface EigenstaendigFormProps {
     onSubFormSubmit: (event: FormEvent, data: EigenstaendigFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
+    submissionStatusWithMessage: {
+        status: 'idle' | 'sending' | 'success' | 'error';
+        nachricht?: string
+    };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     formData: EigenstaendigFormData;
 }
 
-const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, submissionStatus, onInputChange, formData }) => {
+const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
 
     const handleLocalSubmit = (event: FormEvent) => {
         event.preventDefault();
@@ -36,7 +42,8 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
         <form className={styles.formContainer} onSubmit={handleLocalSubmit}>
             <p className={styles.formDescription}>
                 Der Schlüssel zum Ausrollen der Leinwand liegt bei der Pforte des Studierendenhauses.
-                Wir bitten hier um kurze Benachrichtigung zu eurer Nutzung.
+                {/*Wir bitten hier um kurze Benachrichtigung zu eurer Nutzung.*/}
+                Ihr könnt gerne eine kurze Benachrichtigung zu eurer Nutzung hinterlassen.
             </p>
             <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="betreff">Betreff*:</label>
@@ -47,17 +54,17 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
                     value={formData.betreff ?? ''}
                     onChange={onInputChange}
                     className={styles.textInput}
+                    required
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson*:</label>
+                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson:</label>
                 <input
                     type="text"
                     id="ansprechperson"
                     name="ansprechperson"
                     value={formData.ansprechperson || ''}
                     onChange={onInputChange}
-                    required
                     className={styles.textInput}
                 />
             </div>
@@ -109,16 +116,22 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
             </Badge>
             <HinweisWerbungVeranstaltungsort />
 
+            <DatenschutzCheck
+                onInputChange={onInputChange}
+                formData={formData as EigenstaendigFormData}
+                messageType="der Nachricht"
+            />
+
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatus.status === 'sending' || !!dateRangeError}
+                disabled={submissionStatusWithMessage.status === 'sending' || !!dateRangeError}
             >
                 Mitteilung senden
             </button>
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
-            {submissionStatus.status === 'sending' &&
+            {submissionStatusWithMessage.status === 'sending' &&
                 <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
             }
         </form>

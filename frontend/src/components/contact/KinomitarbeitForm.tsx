@@ -1,21 +1,28 @@
 import React, { ChangeEvent, FormEvent } from 'react';
 import styles from './Forms.module.css';
+import DatenschutzCheck from "../other/DatenschutzCheck.tsx";
+
+// caller of this component: ContactForm.tsx
 
 export interface KinomitarbeitFormData {
     name: string;
     email: string;
     nachricht: string;
     stundenEngagement: number;
+    istEinverstandenMitDatennutzung: boolean
 }
 
 interface KinomitarbeitFormProps {
     onSubmit: (event: FormEvent, issue?: string, data?: KinomitarbeitFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
+    submissionStatusWithMessage: {
+        status: 'idle' | 'sending' | 'success' | 'error';
+        nachricht?: string
+    };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     formData: KinomitarbeitFormData;
 }
 
-const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
+const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
 
     const handleLocalSubmit = (event: FormEvent) => {
         // Prevent the child form's default submission
@@ -71,7 +78,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                     type="number"
                     id="stundenEngagement"
                     name="stundenEngagement"
-                    value={formData.stundenEngagement !== undefined ? formData.stundenEngagement : 0}
+                    value={formData.stundenEngagement ?? 0}
                     onChange={onInputChange}
                     min="0"
                     step="0.5"
@@ -79,16 +86,22 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                 />
             </div>
 
+            <DatenschutzCheck
+                onInputChange={onInputChange}
+                formData={formData as KinomitarbeitFormData}
+                messageType={undefined}
+            />
+
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatus.status === 'sending'}
+                disabled={submissionStatusWithMessage.status === 'sending'}
             >
-                Nachricht senden
+                Anfrage senden
             </button>
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
-            {submissionStatus.status === 'sending' &&
+            {submissionStatusWithMessage.status === 'sending' &&
                 <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
             }
         </form>

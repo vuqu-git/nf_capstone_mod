@@ -1,21 +1,28 @@
 import React, { ChangeEvent, FormEvent } from 'react'; // Import FormEvent
 import styles from './Forms.module.css';
+import DatenschutzCheck from "../other/DatenschutzCheck.tsx";
+
+// caller of this component: ContactForm.tsx
 
 export interface AOBFormData {
     betreff: string;
     name: string;
     email: string;
     nachricht: string;
+    istEinverstandenMitDatennutzung: boolean,
 }
 
 interface AOBFormProps {
     onSubmit: (event: FormEvent, issue?: string, data?: AOBFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
+    submissionStatusWithMessage: {
+        status: 'idle' | 'sending' | 'success' | 'error';
+        message?: string
+    };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     formData: AOBFormData;
 }
 
-const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
+const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
 
     const handleLocalSubmit = (event: FormEvent) => {
         // Prevent the child form's default submission
@@ -40,6 +47,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     className={styles.textInput}
                 />
             </div>
+
             <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="name">Name:</label>
                 <input
@@ -51,6 +59,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     className={styles.textInput}
                 />
             </div>
+
             <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="email">Email*:</label>
                 <input
@@ -63,6 +72,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     className={styles.emailInput}
                 />
             </div>
+
             <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="nachricht">Nachricht*:</label>
                 <textarea
@@ -75,16 +85,23 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     style={{ height: '300px' }}
                 />
             </div>
+
+            <DatenschutzCheck
+                onInputChange={onInputChange}
+                formData={formData as AOBFormData}
+                messageType="der Nachricht"
+            />
+
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatus.status === 'sending'}
+                disabled={submissionStatusWithMessage.status === 'sending'}
             >
-                Nachricht senden
+                Anfrage senden
             </button>
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
-            {submissionStatus.status === 'sending' &&
+            {submissionStatusWithMessage.status === 'sending' &&
                 <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
             }
         </form>

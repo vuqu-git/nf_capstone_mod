@@ -57,7 +57,7 @@ export default function Impressum() {
                 verwenden.
             </p>
 
-            <section>
+            <section id="datenschutzerklaerung">
                 <h3>Datenschutzerklärung</h3>
 
                 <p>Diese Datenschutzerklärung klärt Sie über die Art, den Umfang und Zweck der Verarbeitung von
