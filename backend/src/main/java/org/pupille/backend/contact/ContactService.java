@@ -4,7 +4,6 @@ import org.pupille.backend.contact.exceptions.EmailSendingFailedException;
 import org.pupille.backend.contact.exceptions.InvalidContactDataException;
 import org.pupille.backend.contact.exceptions.InvalidDateTimeFormatException;
 import org.pupille.backend.contact.exceptions.InvalidEngagementHoursFormatException;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailParseException;
@@ -23,23 +22,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+// better: modularize this class by adding EmailBuilder and EmailSender classes
+
 @Service
 public class ContactService {
 
     private final JavaMailSender mailSender;
 
+    public ContactService(JavaMailSender mailSender) { // Inject MailService
+        this.mailSender = mailSender;
+    }
+
+
     private final String senderEmail = "no-reply@pupille.org";
-    private final String recipientEmail = "quy8vuong@gmail.com"; // here: info@pupille.org in production
-    private final String bccRecipientEmail = "vuqu@gmx.de";
+    private final String bccRecipientEmail = "quy8vuong@gmail.com"; // here: info@pupille.org in production
 
     private static final String CELL_STYLE = "padding:4px;border:1px solid #ddd;text-align:left;";
     private static final String NO_REPLY_TEXT = "<p style=\"font-size: 0.85em; color: #b00; background-color: #f5f5f5; padding: 8px; border-radius: 4px; margin-top: 10px;\">Diese Nachricht wurde automatisch erzeugt. Antworten an no-reply@pupille.org werden nicht bearbeitet.</p>";
     private static final String INTRO_TEXT = "<p>Nachfolgend sind die vom Kontaktformular übermittelten Daten:</p>";
 
-    @Autowired
-    public ContactService(JavaMailSender mailSender) { // Inject MailService
-        this.mailSender = mailSender;
-    }
 
     public void handleContact(String issue, Map<String, Object> payload) {
         switch (issue.toLowerCase()) {
@@ -130,7 +131,7 @@ public class ContactService {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setFrom(senderEmail);
             helper.setTo(email);
-            helper.setBcc(recipientEmail);
+            helper.setBcc(bccRecipientEmail);
 
             helper.setSubject("[Sonstige Anfrage] " + betreff);
 
@@ -141,8 +142,8 @@ public class ContactService {
                     .append(tableRow("Betreff", betreff))
                     .append(tableRow("Name", name))
                     .append(tableRow("Email", email))
-                    .append(tableRow("Message", nachricht))
-                    .append(tableRow("Privacy Policy Accepted", istEinverstanden ? "Yes" : "No"))
+                    .append(tableRow("Nachricht", nachricht))
+                    .append(tableRow("Datenschutzerklärung gelesen + akzeptiert", istEinverstanden ? "Ja" : "Nein"))
                     .append("</table>");
 
             helper.setText(htmlBody.toString(), true);
@@ -218,7 +219,7 @@ public class ContactService {
             // Send to staff, CC to user (optional), BCC if needed
             helper.setFrom(senderEmail);
             helper.setTo(email);
-            helper.setBcc(recipientEmail);
+            helper.setBcc(bccRecipientEmail);
 
             helper.setSubject("[Kinomitarbeit: Anfrage] " + name);
 
@@ -229,9 +230,9 @@ public class ContactService {
                     .append("<table style=\"border-collapse:collapse;width:100%;\">")
                     .append(tableRow("Name", name))
                     .append(tableRow("Email", email))
-                    .append(tableRow("Message", nachricht))
-                    .append(tableRow("Estimated Commitment (h/month)", String.format("%.1f", finalStundenEngagement)))
-                    .append(tableRow("Privacy Policy Accepted", istEinverstanden ? "Yes" : "No"))
+                    .append(tableRow("Nachricht", nachricht))
+                    .append(tableRow("Geschätztes Engagement (Stunden/Monat)", String.format("%.1f", finalStundenEngagement)))
+                    .append(tableRow("Datenschutzerklärung gelesen + akzeptiert", istEinverstanden ? "Ja" : "Nein"))
                     .append("</table>");
 
             helper.setText(htmlBody.toString(), true);
@@ -285,7 +286,7 @@ public class ContactService {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setFrom(senderEmail);
             helper.setTo(email);
-            helper.setBcc(recipientEmail);
+            helper.setBcc(bccRecipientEmail);
 
             helper.setSubject("[Eigenständige Nutzung Festsaal/Leinwand] " + betreff);
 
@@ -299,7 +300,7 @@ public class ContactService {
                     .append(tableRow("Email", email))
                     .append(tableRow("Veranstaltungsbeginn", formattedVeranstaltungsbeginn))
                     .append(tableRow("Veranstaltungsende", formattedVeranstaltungsende))
-                    .append(tableRow("Datenschutzerklärung akzeptiert", istEinverstandenMitDatennutzung ? "Ja" : "Nein"))
+                    .append(tableRow("Datenschutzerklärung gelesen + akzeptiert", istEinverstandenMitDatennutzung ? "Ja" : "Nein"))
                     .append("</table>");
 
             helper.setText(html.toString(), true);
@@ -385,7 +386,7 @@ public class ContactService {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setFrom(senderEmail);
             helper.setTo(email);
-            helper.setBcc(recipientEmail);
+            helper.setBcc(bccRecipientEmail);
 
             helper.setSubject("[Kinotechnik: Anfrage] " + betreff);
 
@@ -406,8 +407,8 @@ public class ContactService {
                     .append(tableRow("Veranstaltungsbeginn", veranstaltungsbeginn))
                     .append(tableRow("Veranstaltungsende", veranstaltungsende))
                     .append(tableRow("Festsaal beim AStA bereits gemietet", istGemietetBeiAsta ? "Ja" : "Nein"))
-                    .append(tableRow("Hinweis zur Veranstaltungsortnennung gelesen wurdeGelesenHinweisEventlocation", wurdeGelesenHinweisEventlocation ? "Ja" : "Nein"))
-                    .append(tableRow("Datenschutzerklärung gelesen", istEinverstandenMitDatennutzung ? "Ja" : "Nein"))
+                    .append(tableRow("Hinweis zum Veranstaltungsort bei Werbung gelesen", wurdeGelesenHinweisEventlocation ? "Ja" : "Nein"))
+                    .append(tableRow("Datenschutzerklärung gelesen + akzeptiert", istEinverstandenMitDatennutzung ? "Ja" : "Nein"))
                     .append("</table>");
 
             helper.setText(htmlBody.toString(), true);
@@ -466,7 +467,7 @@ public class ContactService {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
             helper.setFrom(senderEmail);
             helper.setTo(email);
-            helper.setBcc(recipientEmail);
+            helper.setBcc(bccRecipientEmail);
 
             helper.setSubject("[Kooperationsanfrage] " + betreff);
 
@@ -484,8 +485,8 @@ public class ContactService {
                     .append(tableRow("Abspielformat", format))
                     .append(tableRow("Terminpräferenzen", terminpraeferenz))
                     .append(tableRow("Nachricht", nachricht))
-                    .append(tableRow("Vorstellungen zur Zusammenarbeit", zusammenarbeit))
-                    .append(tableRow("Datenschutzerklärung akzeptiert", istEinverstandenMitDatennutzung ? "Ja" : "Nein"))
+                    .append(tableRow("Überlegungen zur Zusammenarbeit", zusammenarbeit))
+                    .append(tableRow("Datenschutzerklärung gelesen + akzeptiert", istEinverstandenMitDatennutzung ? "Ja" : "Nein"))
                     .append("</table>");
 
             helper.setText(htmlBody.toString(), true);

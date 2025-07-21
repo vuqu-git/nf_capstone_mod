@@ -75,7 +75,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                     type="number"
                     id="stundenEngagement"
                     name="stundenEngagement"
-                    value={formData.stundenEngagement !== undefined ? formData.stundenEngagement : 0}
+                    value={formData.stundenEngagement ?? 0}
                     onChange={onInputChange}
                     min="0"
                     step="0.5"
