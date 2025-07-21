@@ -152,6 +152,8 @@ const ContactForm: React.FC = () => {
             {submissionStatus.status === 'success' && (
                 <div className={styles.statusSuccess} role="alert">
                     &#x2705; Vielen Dank! Die Nachricht wurde gesendet.
+                    <br/>
+                    Eine Kopie wurde an deine angegebene Mail-Adresse geschickt.
                 </div>
             )}
             {submissionStatus.status === 'error' && submissionStatus.message && (
@@ -160,6 +162,8 @@ const ContactForm: React.FC = () => {
                 </div>
             )}
 
+            {/* Only show main selection and form if not success */}
+            {/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
             {submissionStatus.status !== 'success' && (
                 <>
                     <p className={styles.formDescription}>
@@ -168,13 +172,7 @@ const ContactForm: React.FC = () => {
                     <p className={styles.formDescription}>
                         Da das gesamte Kinoteam ehrenamtlich arbeitet, kann die Beantwortung etwas Zeit in Anspruch nehmen – wir bitten um Verständnis und etwas Geduld.
                     </p>
-                </>
-            )}
 
-            {/* Only show main selection and form if not success */}
-            {/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
-            {submissionStatus.status !== 'success' && (
-                <>
                     <div className={styles.formField}>
                         <label htmlFor="issue" className={`${styles.formLabel} visually-hidden`}>
                             Anliegen auswählen

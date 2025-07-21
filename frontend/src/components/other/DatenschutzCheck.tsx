@@ -20,13 +20,13 @@ const DatenschutzCheck: React.FC<Props> = ({ onInputChange, formData, messageTyp
         <div className={styles.formFieldCheckbox}>
             <input
                 type="checkbox"
-                id="privacy"
-                name="privacy"
-                checked={formData.privacy}
+                id="istEinverstandenMitDatennutzung"
+                name="istEinverstandenMitDatennutzung"
+                checked={formData.istEinverstandenMitDatennutzung}
                 onChange={onInputChange}
                 required
             />
-            <label htmlFor="privacy">
+            <label htmlFor="istEinverstandenMitDatennutzung">
                 Ich habe die{" "}
                 {/*<a className="custom-link" href="/impressum" target="_blank" rel="noopener noreferrer">*/}
                 <a href="/impressum#datenschutzerklaerung" target="_blank" rel="noopener noreferrer">

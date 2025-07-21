@@ -13,7 +13,7 @@ export interface EigenstaendigFormData {
     email: string;
     veranstaltungsbeginn: string; // Will hold ISO 8601 date and time
     veranstaltungsende: string;   // Will hold ISO 8601 date and time
-    privacy: boolean;
+    istEinverstandenMitDatennutzung: boolean;
 }
 
 interface EigenstaendigFormProps {

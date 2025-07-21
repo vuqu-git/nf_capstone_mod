@@ -9,7 +9,7 @@ export interface KinomitarbeitFormData {
     email: string;
     nachricht: string;
     stundenEngagement: number;
-    privacy: boolean
+    istEinverstandenMitDatennutzung: boolean
 }
 
 interface KinomitarbeitFormProps {

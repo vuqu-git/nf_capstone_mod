@@ -23,7 +23,7 @@ export interface MitKinotechnikFormData {
     format: 'DCP' | 'Blu-ray' | 'DVD' | 'Datei auf PC' | '35mm' | '16mm' | 'noch unbekannt';
     anzMikrofone: number;
 
-    privacy: boolean
+    istEinverstandenMitDatennutzung: boolean
 }
 
 interface MitKinotechnikFormProps {
@@ -232,6 +232,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     checked={formData.istGemietetBeiAsta || false}
                     onChange={handleInputChange}
                     className={styles.checkboxInput}
+                    required
                 />
                 <label
                     htmlFor="istGemietetBeiAsta"
@@ -249,6 +250,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     checked={formData.wurdeGelesenHinweisEventlocation || false}
                     onChange={handleInputChange}
                     className={styles.checkboxInput}
+                    required
                 />
                 <label
                     htmlFor="wurdeGelesenHinweisEventlocation"

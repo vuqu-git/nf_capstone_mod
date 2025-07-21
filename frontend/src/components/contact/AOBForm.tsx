@@ -9,7 +9,7 @@ export interface AOBFormData {
     name: string;
     email: string;
     nachricht: string;
-    privacy: boolean,
+    istEinverstandenMitDatennutzung: boolean,
 }
 
 interface AOBFormProps {
@@ -82,25 +82,6 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
                     style={{ height: '300px' }}
                 />
             </div>
-
-            {/*<div className={styles.formFieldCheckbox}>*/}
-            {/*    <input*/}
-            {/*        type="checkbox"*/}
-            {/*        id="privacy"*/}
-            {/*        name="privacy"*/}
-            {/*        checked={formData.privacy}*/}
-            {/*        onChange={onInputChange}*/}
-            {/*        required*/}
-            {/*    />*/}
-            {/*    <label htmlFor="privacy">*/}
-            {/*        Ich habe die{" "}*/}
-            {/*        /!*<a className="custom-link" href="/impressum" target="_blank" rel="noopener noreferrer">*!/*/}
-            {/*        <a href="/impressum#datenschutzerklaerung" target="_blank" rel="noopener noreferrer">*/}
-            {/*            Datenschutzerklärung*/}
-            {/*        </a>{" "}*/}
-            {/*        gelesen und bin mit der Nutzung meiner Daten zur Bearbeitung der Anfrage einverstanden.*/}
-            {/*    </label>*/}
-            {/*</div>*/}
 
             <DatenschutzCheck
                 onInputChange={onInputChange}

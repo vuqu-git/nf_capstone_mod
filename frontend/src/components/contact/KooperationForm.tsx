@@ -19,7 +19,7 @@ export interface KooperationFormData {
     nachricht: string;
     zusammenarbeit: string;
 
-    privacy: boolean;
+    istEinverstandenMitDatennutzung: boolean;
 }
 
 interface KooperationFormProps {

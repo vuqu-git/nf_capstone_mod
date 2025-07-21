@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -27,7 +29,7 @@ public class ContactService {
     private final JavaMailSender mailSender;
 
     private final String senderEmail = "no-reply@pupille.org";
-    private final String recipientEmail = "quy8vuong@gmail.com";
+    private final String recipientEmail = "quy8vuong@gmail.com"; // here: info@pupille.org in production
     private final String bccRecipientEmail = "vuqu@gmx.de";
 
     private static final String CELL_STYLE = "padding:4px;border:1px solid #ddd;text-align:left;";
@@ -61,15 +63,16 @@ public class ContactService {
         }
     }
 
-            // utils functions
-            // ~~~~~~~~~~~~~~~
+            // utils functions to embellish HTML mail
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             private String escapeHtml(String input) {
                 if (input == null) return "";
                 return input.replace("&", "&amp;")
                         .replace("<", "&lt;")
                         .replace(">", "&gt;")
                         .replace("\"", "&quot;")
-                        .replace("'", "&#39;");
+                        .replace("'", "&#39;")
+                        .replace("\n", "<br/>");  // New line
             }
 
             private String formatDateTime(String dateTimeStr) {
@@ -84,46 +87,69 @@ public class ContactService {
                     throw new InvalidDateTimeFormatException("Invalid date/time format. Please use ISO 8601 format.");
                 }
             }
+
+            private String tableRow(String label, String value) {
+                if (value == null) value = "";
+                return "<tr><th style=\"" + CELL_STYLE + "\">" + label + "</th><td style=\"" + CELL_STYLE + "\">" + value + "</td></tr>";
+            }
             // ~~~~~~~~~~~~~~~
 
-    public void handleAOBInquiry(Map<String, Object> payload) {
-        final String betreff = escapeHtml((String) payload.get("betreff"));
-        final String email = escapeHtml((String) payload.get("email"));
-        final String nachricht = escapeHtml((String) payload.get("nachricht"));
+    // Java 10 and later, var is a local variable type inference keyword.
+    // It lets you declare a local variable without explicitly specifying its type.
+    //  Instead, the compiler infers the type from the right-hand side of the assignment.
 
-        if (email == null || nachricht == null || email.isEmpty() || nachricht.isEmpty()) {
-            throw new InvalidContactDataException("Please fill in all fields for general inquiry.");
+    public void handleAOBInquiry(Map<String, Object> payload) {
+        // Extract and sanitize all fields
+        var betreff = escapeHtml((String) payload.get("betreff"));
+        var name = escapeHtml((String) payload.get("name"));
+        var email = escapeHtml((String) payload.get("email"));
+        var nachricht = escapeHtml((String) payload.get("nachricht"));
+
+        var istEinverstandenObj = (Boolean) payload.get("istEinverstandenMitDatennutzung");
+        var istEinverstanden = istEinverstandenObj != null && istEinverstandenObj;
+
+        // Collect required fields (match frontend required attributes)
+        Map<String, String> requiredFields = Map.of(
+                "betreff", betreff,
+                "email", email,
+                "nachricht", nachricht
+        );
+        List<String> missingFields = requiredFields.entrySet().stream()
+                .filter(e -> e.getValue() == null || e.getValue().isEmpty())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        if (!missingFields.isEmpty()) {
+            throw new InvalidContactDataException(
+                    "Please fill in all required fields. Missing: " + String.join(", ", missingFields)
+            );
         }
 
+        // --- Construct email HTML body ---
         MimeMessagePreparator messagePreparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            messageHelper.setFrom(senderEmail);
-            messageHelper.setTo(recipientEmail);
-//            messageHelper.setCc(email);
-            messageHelper.setBcc(bccRecipientEmail);
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setFrom(senderEmail);
+            helper.setTo(email);
+            helper.setBcc(recipientEmail);
 
-            messageHelper.setSubject("[Sonstige Anfrage] " + (betreff != null ? betreff : (email != null ? email : "")));
+            helper.setSubject("[Sonstige Anfrage] " + betreff);
 
-            StringBuilder htmlBody = new StringBuilder();
-            htmlBody.append(NO_REPLY_TEXT);
-            htmlBody.append(INTRO_TEXT);
-            htmlBody.append("<table style=\"border-collapse:collapse;width:100%;\">");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Betreff</th><td style=\"").append(CELL_STYLE).append("\">").append(betreff).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Email</th><td style=\"").append(CELL_STYLE).append("\">").append(email).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Nachricht</th><td style=\"").append(CELL_STYLE).append("\">").append(nachricht).append("</td></tr>");
-            htmlBody.append("</table>");
+            StringBuilder htmlBody = new StringBuilder()
+                    .append(NO_REPLY_TEXT)
+                    .append(INTRO_TEXT)
+                    .append("<table style=\"border-collapse:collapse;width:100%;\">")
+                    .append(tableRow("Betreff", betreff))
+                    .append(tableRow("Name", name))
+                    .append(tableRow("Email", email))
+                    .append(tableRow("Message", nachricht))
+                    .append(tableRow("Privacy Policy Accepted", istEinverstanden ? "Yes" : "No"))
+                    .append("</table>");
 
-            messageHelper.setText(htmlBody.toString(), true);
+            helper.setText(htmlBody.toString(), true);
         };
 
-//        try {
-//            mailSender.send(messagePreparator);
-//        } catch (Exception e) {
-//            System.err.println("Error sending email: " + e.getMessage());
-//            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
-//        }
-
-        // more robust error handling:
+        // --- Robust email sending with detailed error handling ---
+        // see package exceptions
         try {
             mailSender.send(messagePreparator);
         } catch (MailAuthenticationException e) {
@@ -141,99 +167,145 @@ public class ContactService {
             // Catch any other unexpected exceptions
             throw new EmailSendingFailedException("An unexpected error occurred. Please try again later.", e);
         }
-
     }
 
-    public void handleKinomitarbeit(Map<String, Object> payload) {
-        final String name = escapeHtml((String) payload.get("name"));
-        final String email = escapeHtml((String) payload.get("email"));
-        final String nachricht = escapeHtml((String) payload.get("nachricht"));
-        final String stundenEngagementStr = escapeHtml((String) payload.get("stundenEngagement"));
-        double stundenEngagement = 0.0;
 
+    public void handleKinomitarbeit(Map<String, Object> payload) {
+        // Extract and sanitize fields
+        var name = escapeHtml((String) payload.get("name"));
+        var email = escapeHtml((String) payload.get("email"));
+        var nachricht = escapeHtml((String) payload.get("nachricht"));
+        var stundenEngagementStr = escapeHtml((String) payload.get("stundenEngagement"));
+
+        var istEinverstandenObj = (Boolean) payload.get("istEinverstandenMitDatennutzung");
+        var istEinverstanden = istEinverstandenObj != null && istEinverstandenObj;
+
+        // --- Parse double with null-safe default and validation ---
+        double stundenEngagement = 0.0;
         if (stundenEngagementStr != null && !stundenEngagementStr.isEmpty()) {
             try {
                 stundenEngagement = Double.parseDouble(stundenEngagementStr);
-            } catch (NumberFormatException e) {
-                System.err.println("Error parsing stundenEngagement: " + stundenEngagementStr);
-                throw new InvalidEngagementHoursFormatException("Invalid value for stundenEngagement. Please enter a valid number.");
+                if (stundenEngagement < 0) {
+                    throw new InvalidEngagementHoursFormatException("Number of hours must be greater than or equal to 0.");
+                }
+            } catch (NumberFormatException ex) {
+                // You could log "Invalid value: " + stundenEngagementStr here if helpful
+                throw new InvalidEngagementHoursFormatException("Invalid value for engagement hours. Please enter a valid number.");
             }
         }
 
-        final double finalStundenEngagement = stundenEngagement; // Make it effectively final
+        // --- Validate required fields ---
+        Map<String, String> requiredFields = Map.of(
+                "name", name,
+                "email", email,
+                "nachricht", nachricht
+        );
+        List<String> missingFields = requiredFields.entrySet().stream()
+                .filter(e -> e.getValue() == null || e.getValue().isEmpty())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
-        if (name == null || email == null || nachricht == null || name.isEmpty() || email.isEmpty() || nachricht.isEmpty()) {
-            throw new InvalidContactDataException("Please fill in all required fields for Kinomitarbeit.");
+        if (!missingFields.isEmpty()) {
+            throw new InvalidContactDataException(
+                    "Please fill in all required fields. Missing: " + String.join(", ", missingFields)
+            );
         }
 
+        // --- Construct email HTML body ---
+        double finalStundenEngagement = stundenEngagement;
         MimeMessagePreparator messagePreparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            messageHelper.setFrom(senderEmail);
-            messageHelper.setTo(recipientEmail);
-//            messageHelper.setCc(email);
-            messageHelper.setBcc(bccRecipientEmail);
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            // Send to staff, CC to user (optional), BCC if needed
+            helper.setFrom(senderEmail);
+            helper.setTo(email);
+            helper.setBcc(recipientEmail);
 
-            messageHelper.setSubject("[Kinomitarbeit: Anfrage] " + name);
+            helper.setSubject("[Kinomitarbeit: Anfrage] " + name);
 
-            StringBuilder htmlBody = new StringBuilder();
-            htmlBody.append(NO_REPLY_TEXT);
-            htmlBody.append(INTRO_TEXT);
-            htmlBody.append("<table style=\"border-collapse:collapse;width:100%;\">")
-                    .append("<tr><th style=\"").append(CELL_STYLE).append("\">Name</th><td style=\"").append(CELL_STYLE).append("\">").append(name).append("</td></tr>")
-                    .append("<tr><th style=\"").append(CELL_STYLE).append("\">Email</th><td style=\"").append(CELL_STYLE).append("\">").append(email).append("</td></tr>")
-                    .append("<tr><th style=\"").append(CELL_STYLE).append("\">Nachricht</th><td style=\"").append(CELL_STYLE).append("\">").append(nachricht).append("</td></tr>")
-                    .append("<tr><th style=\"").append(CELL_STYLE).append("\">Geschätztes Engagement (Std./Monat)</th><td style=\"").append(CELL_STYLE).append("\">").append(String.format("%.1f", finalStundenEngagement)).append("</td></tr>")
+            // --- Build HTML table ---
+            StringBuilder htmlBody = new StringBuilder()
+                    .append(NO_REPLY_TEXT)
+                    .append(INTRO_TEXT)
+                    .append("<table style=\"border-collapse:collapse;width:100%;\">")
+                    .append(tableRow("Name", name))
+                    .append(tableRow("Email", email))
+                    .append(tableRow("Message", nachricht))
+                    .append(tableRow("Estimated Commitment (h/month)", String.format("%.1f", finalStundenEngagement)))
+                    .append(tableRow("Privacy Policy Accepted", istEinverstanden ? "Yes" : "No"))
                     .append("</table>");
-            messageHelper.setText(htmlBody.toString(), true);
+
+            helper.setText(htmlBody.toString(), true);
         };
 
+        // --- Send email ---
         try {
             mailSender.send(messagePreparator);
         } catch (Exception e) {
             System.err.println("Error sending email: " + e.getMessage());
-            throw new EmailSendingFailedException("Error sending email.", e);
+            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
         }
     }
 
-    public void handleEigenstaendig(Map<String, Object> payload) {
-        final String betreff = escapeHtml((String) payload.get("betreff"));
-        final String ansprechperson = escapeHtml((String) payload.get("ansprechperson"));
-        final String email = escapeHtml((String) payload.get("email"));
-        final String veranstaltungsbeginnStr = escapeHtml((String) payload.get("veranstaltungsbeginn"));
-        final String veranstaltungsendeStr = escapeHtml((String) payload.get("veranstaltungsende"));
 
-        if (betreff == null || ansprechperson == null || email == null || veranstaltungsbeginnStr == null || veranstaltungsendeStr == null ||
-                betreff.isEmpty() || ansprechperson.isEmpty() || email.isEmpty() || veranstaltungsbeginnStr.isEmpty() || veranstaltungsendeStr.isEmpty()) {
-            throw new InvalidContactDataException("Please fill in all required fields for Eigenständig.");
+    public void handleEigenstaendig(Map<String, Object> payload) {
+        // Extract and sanitize all fields
+        var betreff = escapeHtml((String) payload.get("betreff"));
+        var ansprechperson = escapeHtml((String) payload.get("ansprechperson"));
+        var email = escapeHtml((String) payload.get("email"));
+        var veranstaltungsbeginnStr = escapeHtml((String) payload.get("veranstaltungsbeginn"));
+        var veranstaltungsendeStr = escapeHtml((String) payload.get("veranstaltungsende"));
+
+        var istEinverstandenMitDatennutzungObj = (Boolean) payload.get("istEinverstandenMitDatennutzung");
+        var istEinverstandenMitDatennutzung = istEinverstandenMitDatennutzungObj != null && istEinverstandenMitDatennutzungObj;
+
+        // --- Validate required fields ---
+        Map<String, String> requiredFields = Map.of(
+                "betreff", betreff,
+                "email", email,
+                "veranstaltungsbeginn", veranstaltungsbeginnStr,
+                "veranstaltungsende", veranstaltungsendeStr
+        );
+        List<String> missingFields = requiredFields.entrySet().stream()
+                .filter(e -> e.getValue() == null || e.getValue().isEmpty())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        if (!missingFields.isEmpty()) {
+            throw new InvalidContactDataException(
+                    "Please fill in all required fields. Missing: " + String.join(", ", missingFields)
+            );
         }
 
-        final String formattedVeranstaltungsbeginn = formatDateTime(veranstaltungsbeginnStr);
-        final String formattedVeranstaltungsende = formatDateTime(veranstaltungsendeStr);
+        // Format date/time for display; will show original string if parsing fails
+        String formattedVeranstaltungsbeginn = formatDateTime(veranstaltungsbeginnStr);
+        String formattedVeranstaltungsende = formatDateTime(veranstaltungsendeStr);
 
-
+        // --- Construct email HTML body ---
         MimeMessagePreparator messagePreparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            messageHelper.setFrom(senderEmail);
-            messageHelper.setTo(recipientEmail);
-//            messageHelper.setCc(email);
-            messageHelper.setBcc(bccRecipientEmail);
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setFrom(senderEmail);
+            helper.setTo(email);
+            helper.setBcc(recipientEmail);
 
-            messageHelper.setSubject("[Eigenständige Nutzung Festsaal/Leinwand] " + betreff);
+            helper.setSubject("[Eigenständige Nutzung Festsaal/Leinwand] " + betreff);
 
-            StringBuilder htmlBody = new StringBuilder();
-            htmlBody.append(NO_REPLY_TEXT);
-            htmlBody.append(INTRO_TEXT);
-            htmlBody.append("<table style=\"border-collapse:collapse;width:100%;\">");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Betreff</th><td style=\"").append(CELL_STYLE).append("\">").append(betreff).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Ansprechperson</th><td style=\"").append(CELL_STYLE).append("\">").append(ansprechperson).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Email</th><td style=\"").append(CELL_STYLE).append("\">").append(email).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Veranstaltungsbeginn</th><td style=\"").append(CELL_STYLE).append("\">").append(formattedVeranstaltungsbeginn).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Veranstaltungsende</th><td style=\"").append(CELL_STYLE).append("\">").append(formattedVeranstaltungsende).append("</td></tr>");
-            htmlBody.append("</table>");
+            // --- Build HTML table ---
+            var html = new StringBuilder()
+                    .append(NO_REPLY_TEXT)
+                    .append(INTRO_TEXT)
+                    .append("<table style=\"border-collapse:collapse;width:100%;\">")
+                    .append(tableRow("Betreff", betreff))
+                    .append(tableRow("Ansprechperson", ansprechperson))
+                    .append(tableRow("Email", email))
+                    .append(tableRow("Veranstaltungsbeginn", formattedVeranstaltungsbeginn))
+                    .append(tableRow("Veranstaltungsende", formattedVeranstaltungsende))
+                    .append(tableRow("Datenschutzerklärung akzeptiert", istEinverstandenMitDatennutzung ? "Ja" : "Nein"))
+                    .append("</table>");
 
-            messageHelper.setText(htmlBody.toString(), true);
+            helper.setText(html.toString(), true);
         };
 
+        // --- Send email ---
         try {
             mailSender.send(messagePreparator);
         } catch (Exception e) {
@@ -243,18 +315,30 @@ public class ContactService {
     }
 
     public void handleMitKinotechnik(Map<String, Object> payload) {
-        final String betreff = escapeHtml((String) payload.get("betreff"));
-        final String ansprechperson = escapeHtml((String) payload.get("ansprechperson"));
-        final String email = escapeHtml((String) payload.get("email"));
-        final String telefon = escapeHtml((String) payload.get("telefon"));
-        final String nachricht = escapeHtml((String) payload.get("nachricht"));
-        final String projektionsinhalt = escapeHtml((String) payload.get("projektionsinhalt"));
-        final String verleih = escapeHtml((String) payload.get("verleih"));
-        final String format = escapeHtml((String) payload.get("format"));
+        // Extract and sanitize all fields
+        var betreff = escapeHtml((String) payload.get("betreff"));
+        var ansprechperson = escapeHtml((String) payload.get("ansprechperson"));
+        var email = escapeHtml((String) payload.get("email"));
+        var telefon = escapeHtml((String) payload.get("telefon"));
+        var nachricht = escapeHtml((String) payload.get("nachricht"));
+        var projektionsinhalt = escapeHtml((String) payload.get("projektionsinhalt"));
+        var verleih = escapeHtml((String) payload.get("verleih"));
+        var format = escapeHtml((String) payload.get("format"));
+        var veranstaltungsbeginnStr = escapeHtml((String) payload.get("veranstaltungsbeginn"));
+        var veranstaltungsendeStr = escapeHtml((String) payload.get("veranstaltungsende"));
 
-        final int anzMikrofone;
-        Object anzMikrofoneObj = payload.get("anzMikrofone");
+        var istGemietetBeiAstaObj = (Boolean) payload.get("istGemietetBeiAsta");
+        var wurdeGelesenHinweisEventlocationObj = (Boolean) payload.get("wurdeGelesenHinweisEventlocation");
+        var istEinverstandenMitDatennutzungObj = (Boolean) payload.get("istEinverstandenMitDatennutzung");
 
+        // Boolean flags
+        var istGemietetBeiAsta = istGemietetBeiAstaObj != null && istGemietetBeiAstaObj;
+        var wurdeGelesenHinweisEventlocation = wurdeGelesenHinweisEventlocationObj != null && wurdeGelesenHinweisEventlocationObj;
+        var istEinverstandenMitDatennutzung = istEinverstandenMitDatennutzungObj != null && istEinverstandenMitDatennutzungObj;
+
+        // Number of microphones (optional field, default 0)
+        int anzMikrofone = 0;
+        var anzMikrofoneObj = payload.get("anzMikrofone");
         if (anzMikrofoneObj instanceof Number) {
             anzMikrofone = ((Number) anzMikrofoneObj).intValue();
         } else if (anzMikrofoneObj instanceof String) {
@@ -263,59 +347,73 @@ public class ContactService {
             } catch (NumberFormatException e) {
                 throw new InvalidContactDataException("Invalid value for 'anzMikrofone'.");
             }
-        } else {
-            anzMikrofone = 0;
-        }
-        final int finalAnzMikrofone = anzMikrofone;
-
-
-        final String veranstaltungsbeginnStr = escapeHtml((String) payload.get("veranstaltungsbeginn"));
-        final String veranstaltungsendeStr = escapeHtml((String) payload.get("veranstaltungsende"));
-        final Boolean istGemietetBeiAstaObj = (Boolean) payload.get("istGemietetBeiAsta");
-        final boolean istGemietetBeiAsta = istGemietetBeiAstaObj != null ? istGemietetBeiAstaObj : false;
-        final Boolean wurdeGelesenHinweisEventlocationObj = (Boolean) payload.get("wurdeGelesenHinweisEventlocation");
-        final boolean wurdeGelesenHinweisEventlocation = wurdeGelesenHinweisEventlocationObj != null ? wurdeGelesenHinweisEventlocationObj : false;
-
-
-        if (betreff == null || ansprechperson == null || email == null || nachricht == null || projektionsinhalt == null || format == null || veranstaltungsbeginnStr == null || veranstaltungsendeStr == null ||
-                betreff.isEmpty() || ansprechperson.isEmpty() || email.isEmpty() || nachricht.isEmpty() || projektionsinhalt.isEmpty() || format.isEmpty() || veranstaltungsbeginnStr.isEmpty() || veranstaltungsendeStr.isEmpty()) {
-            throw new InvalidContactDataException("Please fill in all required fields.");
         }
 
-        final String formattedVeranstaltungsbeginn = formatDateTime(veranstaltungsbeginnStr);
-        final String formattedVeranstaltungsende = formatDateTime(veranstaltungsendeStr);
+        if (anzMikrofone < 0) {
+            throw new InvalidContactDataException("'anzMikrofone' must be greater than or equal to 0.");
+        }
 
+        // --- Validate required fields ---
+        Map<String, String> requiredFields = Map.of(
+                "betreff", betreff,
+                "ansprechperson", ansprechperson,
+                "email", email,
+                "nachricht", nachricht,
+                "projektionsinhalt", projektionsinhalt,
+                "format", format,
+                "veranstaltungsbeginn", veranstaltungsbeginnStr,
+                "veranstaltungsende", veranstaltungsendeStr
+        );
+        List<String> missingFields = requiredFields.entrySet().stream()
+                .filter(e -> e.getValue() == null || e.getValue().isEmpty())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        if (!missingFields.isEmpty()) {
+            throw new InvalidContactDataException(
+                    "Please fill in all required fields. Missing: " + String.join(", ", missingFields)
+            );
+        }
+
+        // Format date/time for display; will show original string if parsing fails
+        String veranstaltungsbeginn = formatDateTime(veranstaltungsbeginnStr);
+        String veranstaltungsende = formatDateTime(veranstaltungsendeStr);
+
+        // --- Construct email HTML body ---
+        int finalAnzMikrofone = anzMikrofone;
         MimeMessagePreparator messagePreparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            messageHelper.setFrom(senderEmail);
-            messageHelper.setTo(recipientEmail);
-//            messageHelper.setCc(email);
-            messageHelper.setBcc(bccRecipientEmail);
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setFrom(senderEmail);
+            helper.setTo(email);
+            helper.setBcc(recipientEmail);
 
-            messageHelper.setSubject("[Kinotechnik: Anfrage] " + betreff);
+            helper.setSubject("[Kinotechnik: Anfrage] " + betreff);
 
+            // --- Build HTML table ---
             StringBuilder htmlBody = new StringBuilder();
-            htmlBody.append(NO_REPLY_TEXT);
-            htmlBody.append(INTRO_TEXT);
-            htmlBody.append("<table style=\"border-collapse:collapse;width:100%;\">");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Betreff</th><td style=\"").append(CELL_STYLE).append("\">").append(betreff).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Ansprechperson</th><td style=\"").append(CELL_STYLE).append("\">").append(ansprechperson).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Email</th><td style=\"").append(CELL_STYLE).append("\">").append(email).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Telefon</th><td style=\"").append(CELL_STYLE).append("\">").append(telefon).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Nachricht</th><td style=\"").append(CELL_STYLE).append("\">").append(nachricht).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Projektionsinhalt</th><td style=\"").append(CELL_STYLE).append("\">").append(projektionsinhalt).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Verleiher/Rechteinhaber</th><td style=\"").append(CELL_STYLE).append("\">").append(verleih).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Abspielformat</th><td style=\"").append(CELL_STYLE).append("\">").append(format).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Anzahl benötigter Mikrofone</th><td style=\"").append(CELL_STYLE).append("\">").append(finalAnzMikrofone).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Veranstaltungsbeginn</th><td style=\"").append(CELL_STYLE).append("\">").append(formattedVeranstaltungsbeginn).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Veranstaltungsende</th><td style=\"").append(CELL_STYLE).append("\">").append(formattedVeranstaltungsende).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Festsaal bereits beim AStA gemietet</th><td style=\"").append(CELL_STYLE).append("\">").append(istGemietetBeiAsta ? "Ja" : "Nein").append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Hinweis zum Veranstaltungsort bei Werbung gelesen</th><td style=\"").append(CELL_STYLE).append("\">").append(wurdeGelesenHinweisEventlocation ? "Ja" : "Nein").append("</td></tr>");
-            htmlBody.append("</table>");
+            htmlBody.append(NO_REPLY_TEXT)
+                    .append(INTRO_TEXT)
+                    .append("<table style=\"border-collapse:collapse;width:100%;\">")
+                    .append(tableRow("Betreff", betreff))
+                    .append(tableRow("Ansprechperson", ansprechperson))
+                    .append(tableRow("Email", email))
+                    .append(tableRow("Telefon", telefon))
+                    .append(tableRow("Nachricht", nachricht))
+                    .append(tableRow("Projektionsinhalt", projektionsinhalt))
+                    .append(tableRow("Verleiher/Rechteinhaber", verleih))
+                    .append(tableRow("Abspielformat", format))
+                    .append(tableRow("Anzahl benötigter Mikrofone", String.valueOf(finalAnzMikrofone)))
+                    .append(tableRow("Veranstaltungsbeginn", veranstaltungsbeginn))
+                    .append(tableRow("Veranstaltungsende", veranstaltungsende))
+                    .append(tableRow("Festsaal beim AStA bereits gemietet", istGemietetBeiAsta ? "Ja" : "Nein"))
+                    .append(tableRow("Hinweis zur Veranstaltungsortnennung gelesen wurdeGelesenHinweisEventlocation", wurdeGelesenHinweisEventlocation ? "Ja" : "Nein"))
+                    .append(tableRow("Datenschutzerklärung gelesen", istEinverstandenMitDatennutzung ? "Ja" : "Nein"))
+                    .append("</table>");
 
-            messageHelper.setText(htmlBody.toString(), true);
+            helper.setText(htmlBody.toString(), true);
         };
 
+        // --- Send email ---
         try {
             mailSender.send(messagePreparator);
         } catch (Exception e) {
@@ -325,50 +423,75 @@ public class ContactService {
     }
 
     public void handleKooperation(Map<String, Object> payload) {
-        final String betreff = escapeHtml((String) payload.get("betreff"));
-        final String ansprechperson = escapeHtml((String) payload.get("ansprechperson"));
-        final String email = escapeHtml((String) payload.get("email"));
-        final String telefon = escapeHtml((String) payload.get("telefon"));
-        final String filmtitel = escapeHtml((String) payload.get("filmtitel"));
-        final String verleih = escapeHtml((String) payload.get("verleih"));
-        final String format = escapeHtml((String) payload.get("format"));
-        final String terminpraeferenz = escapeHtml((String) payload.get("terminpraeferenz"));
-        final String nachricht = escapeHtml((String) payload.get("nachricht"));
-        final String zusammenarbeit = escapeHtml((String) payload.get("zusammenarbeit"));
+        // Extract and sanitize all fields
+        var betreff = escapeHtml((String) payload.get("betreff"));
+        var ansprechperson = escapeHtml((String) payload.get("ansprechperson"));
+        var email = escapeHtml((String) payload.get("email"));
+        var telefon = escapeHtml((String) payload.get("telefon"));
+        var filmtitel = escapeHtml((String) payload.get("filmtitel"));
+        var verleih = escapeHtml((String) payload.get("verleih"));
+        var format = escapeHtml((String) payload.get("format"));
+        var terminpraeferenz = escapeHtml((String) payload.get("terminpraeferenz"));
+        var nachricht = escapeHtml((String) payload.get("nachricht"));
+        var zusammenarbeit = escapeHtml((String) payload.get("zusammenarbeit"));
 
-        if (betreff == null || ansprechperson == null || email == null || filmtitel == null || verleih == null || format == null || terminpraeferenz == null || nachricht == null || zusammenarbeit == null ||
-                betreff.isEmpty() || ansprechperson.isEmpty() || email.isEmpty() || filmtitel.isEmpty() || verleih.isEmpty() || format.isEmpty() || terminpraeferenz.isEmpty() || nachricht.isEmpty() || zusammenarbeit.isEmpty()) {
-            throw new InvalidContactDataException("Please fill in all required fields for Kooperation.");
+        var istEinverstandenMitDatennutzungObj = (Boolean) payload.get("istEinverstandenMitDatennutzung");
+        var istEinverstandenMitDatennutzung = istEinverstandenMitDatennutzungObj != null && istEinverstandenMitDatennutzungObj;
+
+        // --- Validate required fields ---
+        Map<String, String> requiredFields = Map.of(
+                "betreff", betreff,
+                "ansprechperson", ansprechperson,
+                "email", email,
+                "filmtitel", filmtitel,
+                "verleih", verleih,
+                "format", format,
+                "terminpraeferenz", terminpraeferenz,
+                "nachricht", nachricht,
+                "zusammenarbeit", zusammenarbeit
+        );
+        List<String> missingFields = requiredFields.entrySet().stream()
+                .filter(e -> e.getValue() == null || e.getValue().isEmpty())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        if (!missingFields.isEmpty()) {
+            throw new InvalidContactDataException(
+                    "Please fill in all required fields. Missing: " + String.join(", ", missingFields)
+            );
         }
 
+        // --- Construct email HTML body ---
         MimeMessagePreparator messagePreparator = mimeMessage -> {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            messageHelper.setFrom(senderEmail);
-            messageHelper.setTo(recipientEmail);
-//            messageHelper.setCc(email);
-            messageHelper.setBcc(bccRecipientEmail);
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            helper.setFrom(senderEmail);
+            helper.setTo(email);
+            helper.setBcc(recipientEmail);
 
-            messageHelper.setSubject("[Kooperationsanfrage] " + betreff);
+            helper.setSubject("[Kooperationsanfrage] " + betreff);
 
-            StringBuilder htmlBody = new StringBuilder();
-            htmlBody.append(NO_REPLY_TEXT);
-            htmlBody.append(INTRO_TEXT);
-            htmlBody.append("<table style=\"border-collapse:collapse;width:100%;\">");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Betreff</th><td style=\"").append(CELL_STYLE).append("\">").append(betreff).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Ansprechperson</th><td style=\"").append(CELL_STYLE).append("\">").append(ansprechperson).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Email</th><td style=\"").append(CELL_STYLE).append("\">").append(email).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Telefon</th><td style=\"").append(CELL_STYLE).append("\">").append(telefon).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Filmtitel</th><td style=\"").append(CELL_STYLE).append("\">").append(filmtitel).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Verleih/Rechteinhaber</th><td style=\"").append(CELL_STYLE).append("\">").append(verleih).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Abspielformat</th><td style=\"").append(CELL_STYLE).append("\">").append(format).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Terminpräferenzen</th><td style=\"").append(CELL_STYLE).append("\">").append(terminpraeferenz).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Nachricht</th><td style=\"").append(CELL_STYLE).append("\">").append(nachricht).append("</td></tr>");
-            htmlBody.append("<tr><th style=\"").append(CELL_STYLE).append("\">Vorstellungen zur Zusammenarbeit</th><td style=\"").append(CELL_STYLE).append("\">").append(zusammenarbeit).append("</td></tr>");
-            htmlBody.append("</table>");
+            // --- Build HTML table ---
+            var htmlBody = new StringBuilder()
+                    .append(NO_REPLY_TEXT)
+                    .append(INTRO_TEXT)
+                    .append("<table style=\"border-collapse:collapse;width:100%;\">")
+                    .append(tableRow("Betreff", betreff))
+                    .append(tableRow("Ansprechperson", ansprechperson))
+                    .append(tableRow("Email", email))
+                    .append(tableRow("Telefon", telefon))
+                    .append(tableRow("Filmtitel", filmtitel))
+                    .append(tableRow("Verleiher/Rechteinhaber", verleih))
+                    .append(tableRow("Abspielformat", format))
+                    .append(tableRow("Terminpräferenzen", terminpraeferenz))
+                    .append(tableRow("Nachricht", nachricht))
+                    .append(tableRow("Vorstellungen zur Zusammenarbeit", zusammenarbeit))
+                    .append(tableRow("Datenschutzerklärung akzeptiert", istEinverstandenMitDatennutzung ? "Ja" : "Nein"))
+                    .append("</table>");
 
-            messageHelper.setText(htmlBody.toString(), true);
+            helper.setText(htmlBody.toString(), true);
         };
 
+        // --- Send email ---
         try {
             mailSender.send(messagePreparator);
         } catch (Exception e) {
@@ -380,63 +503,6 @@ public class ContactService {
 //    ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //    Reminder mails
 //    ++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-//    public void sendPreReminder(String vorstellungsbeginn, String titel, String patenschaft) {
-//        if (vorstellungsbeginn == null || vorstellungsbeginn.isEmpty() ||
-//                titel == null || titel.isEmpty() ||
-//                patenschaft == null || patenschaft.isEmpty()) {
-//            throw new InvalidContactDataException("Alle Felder müssen ausgefüllt sein.");
-//        }
-//
-//        LocalDateTime ldtVorstellungsbeginn;
-//        try {
-//            ldtVorstellungsbeginn = LocalDateTime.parse(vorstellungsbeginn, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-//        } catch (DateTimeParseException e) {
-//            throw new InvalidDateTimeFormatException("Ungültiges Datumsformat für vorstellungsbeginn.");
-//        }
-//        String datum = ldtVorstellungsbeginn.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-//        String uhrzeit = ldtVorstellungsbeginn.format(DateTimeFormatter.ofPattern("HH:mm"));
-//
-//        String betreff = "Vorbereitung von " + titel.toUpperCase() + " für den " + datum + " in der Pupille";
-//
-//        StringBuilder htmlBody = new StringBuilder();
-//        htmlBody.append(NO_REPLY_TEXT);
-//        htmlBody.append("<p>Hallo,</p>");
-//        htmlBody.append("<p>in der Pupille läuft in 10 Tagen die Vorstellung von <b>")
-//                .append(titel.toUpperCase())
-//                .append("</b> um <b>")
-//                .append(uhrzeit)
-//                .append(" Uhr</b> für die du die Patenschaft inne hast :)</p>");
-//        htmlBody.append("<p>Dies ist ein automatischer Reminder für folgende vorbereitenden Aufgaben:</p>");
-//        htmlBody.append("<ul>");
-//        htmlBody.append("<li>Liegt eine Terminbestätigung vor?</li>");
-//        htmlBody.append("<li>Biite achte darauf, dass der Kopienversand bzw. Download rechtzeitig initiiert wird!</li>");
-//        htmlBody.append("<li>Sind genügend Personen im Dienstplan eingetragen?</li>");
-//        htmlBody.append("</ul>");
-//
-//        MimeMessagePreparator messagePreparator = mimeMessage -> {
-//            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-//            messageHelper.setFrom(senderEmail);
-//            messageHelper.setTo(patenschaft);
-//            messageHelper.setSubject(betreff);
-//            messageHelper.setText(htmlBody.toString(), true);
-//        };
-//
-//        try {
-//            mailSender.send(messagePreparator);
-//        } catch (MailAuthenticationException e) {
-//            throw new EmailSendingFailedException("Failed to send message due to authentication issues.", e);
-//        } catch (MailParseException e) {
-//            throw new EmailSendingFailedException("Failed to send message due to malformed email content.", e);
-//        } catch (MailSendException e) {
-//            throw new EmailSendingFailedException("Failed to send message. There might be a temporary issue with the mail server. Please try again later.", e);
-//        } catch (MailException e) {
-//            throw new EmailSendingFailedException("An unexpected error occurred while sending the email. Please try again later.", e);
-//        } catch (Exception e) {
-//            throw new EmailSendingFailedException("An unexpected error occurred. Please try again later.", e);
-//        }
-//    }
-
 
     public void sendReminder(int days, String vorstellungsbeginn, String titel, String patenschaft, boolean isPreReminder) {
         if (vorstellungsbeginn == null || vorstellungsbeginn.isEmpty() ||
