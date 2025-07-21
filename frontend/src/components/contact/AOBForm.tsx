@@ -14,12 +14,15 @@ export interface AOBFormData {
 
 interface AOBFormProps {
     onSubmit: (event: FormEvent, issue?: string, data?: AOBFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
+    submissionStatusWithMessage: {
+        status: 'idle' | 'sending' | 'success' | 'error';
+        message?: string
+    };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     formData: AOBFormData;
 }
 
-const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
+const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
 
     const handleLocalSubmit = (event: FormEvent) => {
         // Prevent the child form's default submission
@@ -92,13 +95,13 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatus, onInputCh
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatus.status === 'sending'}
+                disabled={submissionStatusWithMessage.status === 'sending'}
             >
                 Anfrage senden
             </button>
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
-            {submissionStatus.status === 'sending' &&
+            {submissionStatusWithMessage.status === 'sending' &&
                 <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
             }
         </form>

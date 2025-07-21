@@ -14,12 +14,15 @@ export interface KinomitarbeitFormData {
 
 interface KinomitarbeitFormProps {
     onSubmit: (event: FormEvent, issue?: string, data?: KinomitarbeitFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
+    submissionStatusWithMessage: {
+        status: 'idle' | 'sending' | 'success' | 'error';
+        nachricht?: string
+    };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     formData: KinomitarbeitFormData;
 }
 
-const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submissionStatus, onInputChange, formData }) => {
+const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
 
     const handleLocalSubmit = (event: FormEvent) => {
         // Prevent the child form's default submission
@@ -92,13 +95,13 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatus.status === 'sending'}
+                disabled={submissionStatusWithMessage.status === 'sending'}
             >
                 Anfrage senden
             </button>
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
-            {submissionStatus.status === 'sending' &&
+            {submissionStatusWithMessage.status === 'sending' &&
                 <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
             }
         </form>

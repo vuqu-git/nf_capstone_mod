@@ -24,12 +24,15 @@ export interface KooperationFormData {
 
 interface KooperationFormProps {
     onSubFormSubmit: (event: FormEvent, data: KooperationFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
+    submissionStatusWithMessage: {
+        status: 'idle' | 'sending' | 'success' | 'error';
+        nachricht?: string
+    };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
     formData: KooperationFormData;
 }
 
-const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, submissionStatus, onInputChange, formData }) => {
+const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
 
     const [terminPraeferenzLabel, setTerminPraeferenzLabel] = useState('');
     const [momentaneAnfrageFuerSemester, setMomentaneAnfrageFuerSemester] = useState('');
@@ -203,13 +206,13 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatus.status === 'sending'}
+                disabled={submissionStatusWithMessage.status === 'sending'}
             >
                 Anfrage senden
             </button>
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
-            {submissionStatus.status === 'sending' &&
+            {submissionStatusWithMessage.status === 'sending' &&
                 <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
             }
         </form>

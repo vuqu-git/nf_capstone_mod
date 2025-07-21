@@ -28,12 +28,15 @@ export interface MitKinotechnikFormData {
 
 interface MitKinotechnikFormProps {
     onSubFormSubmit: (event: FormEvent, data: MitKinotechnikFormData) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; nachricht?: string | null };
+    submissionStatusWithMessage: {
+        status: 'idle' | 'sending' | 'success' | 'error';
+        nachricht?: string
+    };
     onInputChange: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
     formData: MitKinotechnikFormData;
 }
 
-const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit, submissionStatus, onInputChange, formData }) => {
+const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
     const [errorMissingConfirmationMessage, setErrorMissingConfirmationMessage] = useState<string | null>(null);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -269,7 +272,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatus.status === 'sending' || !!dateRangeError}
+                disabled={submissionStatusWithMessage.status === 'sending' || !!dateRangeError}
             >
                 Anfrage senden
             </button>
@@ -280,7 +283,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 <p className={styles.errorOrangeLabel}>{errorMissingConfirmationMessage}</p>
             )}
 
-            {submissionStatus.status === 'sending' && (
+            {submissionStatusWithMessage.status === 'sending' && (
                 <p className={`${styles.statusMessage} ${styles.statusSending}`}>&#x2709; Sende Nachricht...</p>
             )}
         </form>

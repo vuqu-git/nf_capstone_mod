@@ -9,10 +9,12 @@ import KinomitarbeitForm, { KinomitarbeitFormData } from "./KinomitarbeitForm.ts
 import {EigenstaendigFormData} from "./EigenstaendigForm.tsx";
 import {MitKinotechnikFormData} from "./MitKinotechnikForm.tsx";
 import {KooperationFormData} from "./KooperationForm.tsx";
+import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 
-interface SubmissionStatus {
+// type for object, which combines status and message information (comparable to formData that contains all form fields)
+interface SubmissionStatusWithMessageType {
     status: 'idle' | 'sending' | 'success' | 'error';
-    message?: string | null;
+    message?: string;
 }
 
 interface IssueConfig {
@@ -28,23 +30,23 @@ const issueSelectOptions: IssueConfig[] = [
 ];
 
 const ContactForm: React.FC = () => {
-    // selectedIssueSelection here manages only the options aob, kinomitarbeit, eventOhneProjektion and eventMitProjektion (see issueSelectOptions interface)
+    // selectedIssueSelection here manages only the 4 options aob, kinomitarbeit, eventOhneProjektion and eventMitProjektion (see issueSelectOptions interface)
     const [selectedIssueSelection, setSelectedIssueSelection] = useState<string>('');
 
     // formData management only for AOBForm and KinomitarbeitForm; for the subforms c.f. EventMitProjektion and the subFormData management there
     const [formData, setFormData] = useState<AOBFormData | KinomitarbeitFormData>({});
 
-    const [submissionStatus, setSubmissionStatus] = useState<SubmissionStatus>({ status: 'idle' });
+    const [submissionStatusWithMessage, setSubmissionStatusWithMessage] = useState<SubmissionStatusWithMessageType>({ status: 'idle' });
 
     // Reset state after a successful submission, but keep the success message
     useEffect(() => {
-        if (submissionStatus.status === 'success') {
+        if (submissionStatusWithMessage.status === 'success') {
             setSelectedIssueSelection('');
             setFormData({});
             // Optionally reset status after a timeout if you want to hide the message after a while:
-            // setTimeout(() => setSubmissionStatus({ status: 'idle' }), 5000);
+            setTimeout(() => setSubmissionStatusWithMessage({ status: 'idle', message: undefined }), 8000); // i.e. 8 seconds
         }
-    }, [submissionStatus.status]);
+    }, [submissionStatusWithMessage.status]);
 
     const handleIssueSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
         setSelectedIssueSelection(event.target.value);
@@ -77,7 +79,7 @@ const ContactForm: React.FC = () => {
         explicitData?: AOBFormData | KinomitarbeitFormData | EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData // optional parameter
     ) => {
         event.preventDefault(); //maybe remove this because in the (grand) child's handleLocalSubmit event.preventDefault() is already called
-        setSubmissionStatus({ status: 'sending' });
+        setSubmissionStatusWithMessage({ status: 'sending' });
 
         // Use explicit parameters if provided, otherwise use state values
         const issueToUse = explicitIssue || selectedIssueSelection;
@@ -93,17 +95,27 @@ const ContactForm: React.FC = () => {
             });
 
             if (response.ok) {
-                setSubmissionStatus({ status: 'success' });
+                setSubmissionStatusWithMessage({
+                    status: 'success',
+                    message: `&#x2705; Vielen Dank! Die Nachricht wurde gesendet.
+                            <br/>
+                            Eine Kopie wurde an deine angegebene Mail-Adresse geschickt.`
+                });
+
                 setFormData({});
             } else {
-                // const errorData = await response.json();
-                // setSubmissionStatus({ status: 'error', message: errorData.message  || 'Something went wrong.' });
+                // use error message from response
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                const errorData = await response.json();
+                setSubmissionStatusWithMessage({ status: 'error', message: errorData.message  || 'Something went wrong. Please send a message to info@pupille.org' });
 
-                setSubmissionStatus({ status: 'error', message: 'Serverfehler: Etwas lief schief :( Bitte sende deine Nachricht an info@pupille.org' });
+                // use standard error message
+                // ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                // setSubmissionStatusWithMessage({ status: 'error', message: 'Serverfehler: Etwas lief schief :( Bitte sende deine Nachricht an info@pupille.org' });
             }
         } catch (error) {
             console.error('Error sending message:', error);
-            setSubmissionStatus({ status: 'error', message: 'Netzwerkfehler :( Bitte sende deine Nachricht an info@pupille.org' });
+            setSubmissionStatusWithMessage({ status: 'error', message: 'Netzwerkfehler :( Bitte sende deine Nachricht an info@pupille.org' });
         }
     };
 
@@ -113,7 +125,7 @@ const ContactForm: React.FC = () => {
                 return (
                     <AOBForm
                         onSubmit={handleGlobalSubmit}
-                        submissionStatus={submissionStatus}
+                        submissionStatusWithMessage={submissionStatusWithMessage}
                         onInputChange={handleChangeWithCheckbox}
                         formData={formData as AOBFormData}
                     />
@@ -122,7 +134,7 @@ const ContactForm: React.FC = () => {
                 return (
                     <KinomitarbeitForm
                         onSubmit={handleGlobalSubmit}
-                        submissionStatus={submissionStatus}
+                        submissionStatusWithMessage={submissionStatusWithMessage}
                         onInputChange={handleChangeWithCheckbox}
                         formData={formData as KinomitarbeitFormData}
                     />
@@ -131,7 +143,7 @@ const ContactForm: React.FC = () => {
                 return (
                     <EventMitProjektion
                         onSubmit={handleGlobalSubmit} // The callback will now receive the issue from the subselection
-                        submissionStatus={submissionStatus}
+                        submissionStatusWithMessage={submissionStatusWithMessage}
                     />
                 );
             case 'eventOhneProjektion':
@@ -152,17 +164,19 @@ const ContactForm: React.FC = () => {
             <p className={styles.formDescription}>Telefon: <a href="tel:06979828976">069 7982 8976</a></p>
 
             <h3 className={styles.subsectionTitle}>schriftlich</h3>
-            {submissionStatus.status === 'success' && (
+
+            {/* Only show success message if submission was successful */}
+            {/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+            {submissionStatusWithMessage.status === 'success' && (
+                                                   // role-Attribut: Teil von WAI-ARIA (Accessible Rich Internet Applications); wird verwendet, um semantische Informationen über ein Element hinzuzufügen
                 <div className={styles.statusSuccess} role="alert">
-                    &#x2705; Vielen Dank! Die Nachricht wurde gesendet.
-                    <br/>
-                    Eine Kopie wurde an deine angegebene Mail-Adresse geschickt.
+                    {renderHtmlText( submissionStatusWithMessage.message )}
                 </div>
             )}
 
-            {/* Only show main selection and form if not success */}
-            {/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
-            {submissionStatus.status !== 'success' && (
+            {/* Only show main selection+form if submission is everything else but 'success' */}
+            {/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+            {submissionStatusWithMessage.status !== 'success' && (
                 <>
                     <p className={styles.formDescription}>
                         Für eine schnelle und strukturierte Bearbeitung von Anfragen bitten wir darum, stets das Kontaktformular auf unserer Webseite zu verwenden.
@@ -195,9 +209,9 @@ const ContactForm: React.FC = () => {
                 </>
             )}
             {/*Fehlermeldung*/}
-            {submissionStatus.status === 'error' && submissionStatus.message && (
+            {submissionStatusWithMessage.status === 'error' && submissionStatusWithMessage.message && (
                 <div className={styles.statusError} role="alert">
-                    {submissionStatus.message}
+                    {submissionStatusWithMessage.message}
                 </div>
             )}
 

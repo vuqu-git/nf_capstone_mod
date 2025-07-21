@@ -154,19 +154,19 @@ public class ContactService {
         try {
             mailSender.send(messagePreparator);
         } catch (MailAuthenticationException e) {
-            throw new EmailSendingFailedException("Failed to send message due to authentication issues.", e);
+            throw new EmailSendingFailedException("⛔ Failed to send message due to authentication issues. Please send a message to info@pupille.org instead.", e);
         } catch (MailParseException e) {
-            throw new EmailSendingFailedException("Failed to send message due to malformed email content.", e);
+            throw new EmailSendingFailedException("⛔ Failed to send message due to malformed email content. Please send a message to info@pupille.org instead.", e);
         } catch (MailSendException e) {
             // This exception typically wraps lower-level JavaMail exceptions (e.g., SMTP errors)
             // You can inspect e.getFailedMessages() if you sent multiple messages
-            throw new EmailSendingFailedException("Failed to send message. There might be a temporary issue with the mail server. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ Failed to send message. There might be a temporary issue with the mail server. Please try again later or disable your VPN or send a message to info@pupille.org instead.", e);
         } catch (MailException e) {
             // Catch any other Spring Mail related exceptions
-            throw new EmailSendingFailedException("An unexpected error occurred while sending the email. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred while sending the email. Please try again later or send a message to info@pupille.org instead.", e);
         } catch (Exception e) {
             // Catch any other unexpected exceptions
-            throw new EmailSendingFailedException("An unexpected error occurred. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred. Please try again later or send a message to info@pupille.org instead.", e);
         }
     }
 
@@ -241,9 +241,16 @@ public class ContactService {
         // --- Send email ---
         try {
             mailSender.send(messagePreparator);
+        } catch (MailAuthenticationException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message due to authentication issues. Please send a message to info@pupille.org instead.", e);
+        } catch (MailParseException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message due to malformed email content. Please send a message to info@pupille.org instead.", e);
+        } catch (MailSendException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message. There might be a temporary issue with the mail server. Please try again later or disable your VPN or send a message to info@pupille.org instead.", e);
+        } catch (MailException e) {
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred while sending the email. Please try again later or send a message to info@pupille.org instead.", e);
         } catch (Exception e) {
-            System.err.println("Error sending email: " + e.getMessage());
-            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred. Please try again later or send a message to info@pupille.org instead.", e);
         }
     }
 
@@ -309,9 +316,16 @@ public class ContactService {
         // --- Send email ---
         try {
             mailSender.send(messagePreparator);
+        } catch (MailAuthenticationException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message due to authentication issues. Please send a message to info@pupille.org instead.", e);
+        } catch (MailParseException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message due to malformed email content. Please send a message to info@pupille.org instead.", e);
+        } catch (MailSendException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message. There might be a temporary issue with the mail server. Please try again later or disable your VPN or send a message to info@pupille.org instead.", e);
+        } catch (MailException e) {
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred while sending the email. Please try again later or send a message to info@pupille.org instead.", e);
         } catch (Exception e) {
-            System.err.println("Error sending email: " + e.getMessage());
-            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred. Please try again later or send a message to info@pupille.org instead.", e);
         }
     }
 
@@ -417,9 +431,16 @@ public class ContactService {
         // --- Send email ---
         try {
             mailSender.send(messagePreparator);
+        } catch (MailAuthenticationException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message due to authentication issues. Please send a message to info@pupille.org instead.", e);
+        } catch (MailParseException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message due to malformed email content. Please send a message to info@pupille.org instead.", e);
+        } catch (MailSendException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message. There might be a temporary issue with the mail server. Please try again later or disable your VPN or send a message to info@pupille.org instead.", e);
+        } catch (MailException e) {
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred while sending the email. Please try again later or send a message to info@pupille.org instead.", e);
         } catch (Exception e) {
-            System.err.println("Error sending email: " + e.getMessage());
-            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred. Please try again later or send a message to info@pupille.org instead.", e);
         }
     }
 
@@ -495,9 +516,16 @@ public class ContactService {
         // --- Send email ---
         try {
             mailSender.send(messagePreparator);
+        } catch (MailAuthenticationException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message due to authentication issues. Please send a message to info@pupille.org instead.", e);
+        } catch (MailParseException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message due to malformed email content. Please send a message to info@pupille.org instead.", e);
+        } catch (MailSendException e) {
+            throw new EmailSendingFailedException("⛔ Failed to send message. There might be a temporary issue with the mail server. Please try again later or disable your VPN or send a message to info@pupille.org instead.", e);
+        } catch (MailException e) {
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred while sending the email. Please try again later or send a message to info@pupille.org instead.", e);
         } catch (Exception e) {
-            System.err.println("Error sending email: " + e.getMessage());
-            throw new EmailSendingFailedException("Failed to send message. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred. Please try again later or send a message to info@pupille.org instead.", e);
         }
     }
 
@@ -573,15 +601,15 @@ public class ContactService {
         try {
             mailSender.send(messagePreparator);
         } catch (MailAuthenticationException e) {
-            throw new EmailSendingFailedException("Failed to send message due to authentication issues.", e);
+            throw new EmailSendingFailedException("⛔ Failed to send message due to authentication issues. Please send a message to info@pupille.org instead.", e);
         } catch (MailParseException e) {
-            throw new EmailSendingFailedException("Failed to send message due to malformed email content.", e);
+            throw new EmailSendingFailedException("⛔ Failed to send message due to malformed email content. Please send a message to info@pupille.org instead.", e);
         } catch (MailSendException e) {
-            throw new EmailSendingFailedException("Failed to send message. There might be a temporary issue with the mail server. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ Failed to send message. There might be a temporary issue with the mail server. Please try again later or disable your VPN or send a message to info@pupille.org instead.", e);
         } catch (MailException e) {
-            throw new EmailSendingFailedException("An unexpected error occurred while sending the email. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred while sending the email. Please try again later or send a message to info@pupille.org instead.", e);
         } catch (Exception e) {
-            throw new EmailSendingFailedException("An unexpected error occurred. Please try again later.", e);
+            throw new EmailSendingFailedException("⛔ An unexpected error occurred. Please try again later or send a message to info@pupille.org instead.", e);
         }
     }
 

@@ -11,7 +11,10 @@ interface EventMitProjektionProps {
         issue: string,
         data: EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData
     ) => void;
-    submissionStatus: { status: 'idle' | 'sending' | 'success' | 'error'; message?: string | null };
+    submissionStatusWithMessage: {
+        status: 'idle' | 'sending' | 'success' | 'error';
+        message?: string
+    };
 }
 
 interface SubSelectionConfig {
@@ -25,7 +28,7 @@ const subSelectionOptions: SubSelectionConfig[] = [
     { value: 'kooperation', label: '➂ gemeinsam in Kooperation mit Pupille' },
 ];
 
-const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submissionStatus }) => {
+const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submissionStatusWithMessage }) => {
     const [selectedIssuesSubSelection, setSelectedIssuesSubSelection] = useState<string>('');
     const [subFormData, setSubFormData] = useState<EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData>({});
 
@@ -65,7 +68,7 @@ const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submi
                 return (
                     <EigenstaendigForm
                         onSubFormSubmit={onSubFormSubmit}
-                        submissionStatus={submissionStatus}
+                        submissionStatusWithMessage={submissionStatusWithMessage}
                         onInputChange={handleSubFormChange as (
                             event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
                         ) => void}
@@ -76,7 +79,7 @@ const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submi
                 return (
                     <MitKinotechnikForm
                         onSubFormSubmit={onSubFormSubmit}
-                        submissionStatus={submissionStatus}
+                        submissionStatusWithMessage={submissionStatusWithMessage}
                         onInputChange={handleSubFormChange as (
                             event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
                         ) => void}
@@ -87,7 +90,7 @@ const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submi
                 return (
                     <KooperationForm
                         onSubFormSubmit={onSubFormSubmit}
-                        submissionStatus={submissionStatus}
+                        submissionStatusWithMessage={submissionStatusWithMessage}
                         onInputChange={handleSubFormChange as (
                             event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
                         ) => void}

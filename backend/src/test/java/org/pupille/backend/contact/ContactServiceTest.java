@@ -121,7 +121,7 @@ public class ContactServiceTest {
                 contactService.handleAOBInquiry(payload)
         );
 
-        assertTrue(thrown.getMessage().contains("Failed to send message. There might be a temporary issue with the mail server."));
+        assertTrue(thrown.getMessage().contains("Failed to send message. There might be a temporary issue with the mail server. Please try again later or disable your VPN or sent a message to info@pupille.org"));
         // You can also verify the cause if needed: assertTrue(thrown.getCause() instanceof MailSendException);
     }
 
