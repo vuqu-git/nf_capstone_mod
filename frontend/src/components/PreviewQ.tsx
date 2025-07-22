@@ -2,7 +2,7 @@ import React, {useState, ChangeEvent} from "react";
 import {Button, Form} from "react-bootstrap";
 
 import {Link, useLoaderData, useNavigate} from "react-router-dom";
-import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
+import TerminDTOWithFilmAndReiheDTOGallery from "../types/TerminDTOWithFilmAndReiheDTOGallery.ts";
 
 
 
@@ -14,11 +14,11 @@ interface Configuration {
 
 export default function PreviewQ() {
 
-    const semesterTermine = useLoaderData<TerminDTOWithFilmDTOGallery[]>();
+    const semesterTermine = useLoaderData<TerminDTOWithFilmAndReiheDTOGallery[]>();
 
 
     const [selectedTnrs, setSelectedTnrs] = useState<number[]>([]);
-    const [selectedObjects, setSelectedObjects] = useState<TerminDTOWithFilmDTOGallery[]>([]);
+    const [selectedObjects, setSelectedObjects] = useState<TerminDTOWithFilmAndReiheDTOGallery[]>([]);
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedValues = Array.from(event.target.selectedOptions, option => option.value);

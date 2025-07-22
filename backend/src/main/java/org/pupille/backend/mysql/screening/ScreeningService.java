@@ -2,6 +2,7 @@ package org.pupille.backend.mysql.screening;
 
 import org.pupille.backend.mysql.film.Film;
 import org.pupille.backend.mysql.film.FilmDTOForm;
+import org.pupille.backend.mysql.reihe.ReiheDTOGallery;
 import org.pupille.backend.mysql.termin.Termin;
 import org.pupille.backend.mysql.termin.TerminDTOForm;
 import org.pupille.backend.mysql.termin.TerminRepository;
@@ -30,7 +31,6 @@ public class ScreeningService {
         this.terminRepository = terminRepository;
         this.terminverknuepfungRepository = terminverknuepfungRepository;
     }
-
 
 //    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
 //        // this time is too precise and hence Termine will disappear immediately when their screening DateTime is passed
@@ -95,7 +95,7 @@ public class ScreeningService {
 //                .toList();
 //    }
 
-    //filter for veroeffentlichen > 0 happen in frontend react component Gallery2.tsx
+    //filter for veroeffentlichen > 0 happens in frontend react component Gallery2.tsx
     public List<TerminDTOWithFilmAndReiheDTOGallery> getAllFutureTermineWithFilms() {
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
@@ -136,6 +136,21 @@ public class ScreeningService {
                 .toList();
     }
 
+    public ReihenAndFilmTermineForGallery getReihenAndTermineForGallery() {
+        // Get all rest termine with films + rest reihen of the semester; rest i.e. future from now date
+        List<TerminDTOWithFilmAndReiheDTOGallery> termineSemester = getAllFutureTermineWithFilms();
+
+        // Collect all unique reihen.titel values, ignoring null/empty
+        List<String> reihenSemester = termineSemester.stream()
+                .flatMap(termin -> termin.reihen().stream()) // stream of all reihen in all termine
+                .map(ReiheDTOGallery::getTitel)
+                .filter(Objects::nonNull)
+                .distinct()                                // unique
+                .sorted()                                  // A–Z, case-sensitive
+                .toList();
+
+        return new ReihenAndFilmTermineForGallery(reihenSemester, termineSemester);
+    }
 
 //    // not required because the list doesn't contain any termin data
 //    public List<FilmDTOForm> getFilmsByTnr(Long tnr) {
@@ -149,7 +164,6 @@ public class ScreeningService {
 //    }
 
 //    ########################################################
-
 
     public TerminDTOFormWithFilmsDTOFormPlus getTerminWithFilmsPlusByTnr(Long tnr) {
         // Fetch Termin
@@ -194,7 +208,7 @@ public class ScreeningService {
         );
     }
 
-        // ***** utils method *****
+            // ***** utils method *****
             private FilmDTOFormPlus convertToFilmDTO(Terminverknuepfung tv) {
                 return new FilmDTOFormPlus(
                         new FilmDTOForm(tv.getFilm()),
@@ -278,9 +292,25 @@ public class ScreeningService {
                             .mapToInt(Integer::intValue)
                             .sum();
 
-                    return new TerminDTOWithFilmDTOOverviewSemester(termin, mainfilms, terminGesamtlaufzeit);
+                    return new TerminDTOWithFilmDTOOverviewSemester(termin, mainfilms, termin.getReihen(), terminGesamtlaufzeit);
                 })
                 .toList();
+    }
+
+    public ReihenAndFilmTermineForOverviewSemester getReihenAndTermineForOverviewSemester() {
+        // Get all termine with films + reihen of the whole semester
+        List<TerminDTOWithFilmDTOOverviewSemester>  termineSemester = getTermineByCurrentSemester();
+
+        // Collect all unique reihen.titel values, ignoring null/empty
+        List<String> reihenSemester = termineSemester.stream()
+                .flatMap(termin -> termin.reihen().stream()) // stream of all reihen in all termine
+                .map(ReiheDTOGallery::getTitel)
+                .filter(Objects::nonNull)
+                .distinct()                                // unique
+                .sorted()                                  // A–Z, case-sensitive
+                .toList();
+
+        return new ReihenAndFilmTermineForOverviewSemester(reihenSemester, termineSemester);
     }
 
                 //    public List<TerminDTOWithFilmDTOSlideshow> getFutureTermineWithFilmsSlideshow() {

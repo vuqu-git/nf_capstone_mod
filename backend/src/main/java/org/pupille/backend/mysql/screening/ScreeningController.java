@@ -20,6 +20,11 @@ public class ScreeningController {
         return screeningService.getAllFutureTermineWithFilms();
     }
 
+//            @GetMapping("/new")
+//            public ReihenAndFilmTermineForGallery getReihenAndTermineForGallery() {
+//                return screeningService.getReihenAndTermineForGallery();
+//            }
+
     // for ScreeningDetails react component
     @GetMapping("/{tnr}")
     public ResponseEntity<TerminDTOFormWithFilmsDTOFormPlus> getTerminWithFilmsPlusForTermin(@PathVariable Long tnr) {
@@ -35,9 +40,14 @@ public class ScreeningController {
 
     // for SemesterArchive react component
     @GetMapping("/semester")
-    public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreenings() {
-        return screeningService.getTermineByCurrentSemester();
+    public ReihenAndFilmTermineForOverviewSemester getReihenAndTermineForOverviewSemester() {
+        return screeningService.getReihenAndTermineForOverviewSemester();
     }
+
+//            @GetMapping("/semester/old")
+//            public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreenings() {
+//                return screeningService.getTermineByCurrentSemester();
+//            }
 
     // For Slideshow react component
 //    @GetMapping("/screenings/slideshow")

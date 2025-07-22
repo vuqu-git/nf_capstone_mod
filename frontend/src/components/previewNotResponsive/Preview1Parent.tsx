@@ -1,11 +1,11 @@
 import {useLoaderData} from "react-router-dom";
 import {useState} from "react";
-import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery.ts";
+import TerminDTOWithFilmAndReiheDTOGallery from "../../types/TerminDTOWithFilmAndReiheDTOGallery.ts";
 import Preview1 from "./Preview1.tsx";
 import Preview1Child from "./Preview1Child.tsx";
 
 const Preview1Parent: React.FC = () => {
-    const semesterTermine = useLoaderData<TerminDTOWithFilmDTOGallery[]>();
+    const semesterTermine = useLoaderData<TerminDTOWithFilmAndReiheDTOGallery[]>();
 
     const [selectedTnrs, setSelectedTnrs] = useState<number[]>([]);
     const [slideDuration, setSlideDuration] = useState<number>(20);

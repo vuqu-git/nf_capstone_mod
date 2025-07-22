@@ -4,7 +4,7 @@ import { useState } from "react";
 import {Badge, Stack} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
-import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery.ts";
+import TerminDTOWithFilmAndReiheDTOGallery from "../../types/TerminDTOWithFilmAndReiheDTOGallery.ts";
 
 import OverviewAndFormLayout from "../LayoutWrapper/OverviewAndFormLayout.tsx";
 
@@ -21,7 +21,7 @@ import IdentSlideChromaticLogo from "./IdentSlideChromaticLogo.tsx";
 export default function Slides() {
     const [mode, setMode] = useState<"menu" | "identSlideFaintGradient" | 'identSlideBlack' | 'identSlideGradient' | 'identSlideChromaticLogo' | "preview">("menu");
 
-    const semesterTermine = useLoaderData<TerminDTOWithFilmDTOGallery[]>();
+    const semesterTermine = useLoaderData<TerminDTOWithFilmAndReiheDTOGallery[]>();
 
     const [selectedTnrs, setSelectedTnrs] = useState<number[]>([]);
     const [slideDuration, setSlideDuration] = useState<number>(20);

@@ -1,11 +1,11 @@
-import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery.ts";
+import TerminDTOWithFilmAndReiheDTOGallery from "../../types/TerminDTOWithFilmAndReiheDTOGallery.ts";
 import styles from "./PreviewShow.module.css";
 import {useEffect, useRef, useState} from "react";
 import {formatDateTime} from "../../utils/formatDateTime.ts";
 import TerminFilmPreviewCard from "./TerminFilmPreviewCard.tsx";
 
 interface Props {
-    selectedSemesterTermine: TerminDTOWithFilmDTOGallery[];
+    selectedSemesterTermine: TerminDTOWithFilmAndReiheDTOGallery[];
     slideDuration: number;
     setShowPreview: (value: boolean) => void;
 }
