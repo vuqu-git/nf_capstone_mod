@@ -14,7 +14,7 @@ export default function Gallery2() {
     //     validNews: News[];
     // }>();
 
-    const { screeningGalleryEntries, validNews } = useLoaderData<GalleryData>();
+    const {screeningGalleryEntries, validNews} = useLoaderData<GalleryData>();
 
     const visibleScreenings = screeningGalleryEntries
         .filter(termin => termin.veroeffentlichen !== null && termin.veroeffentlichen !== 0);
@@ -31,7 +31,7 @@ export default function Gallery2() {
                     <h2 className="visually-hidden">Neuigkeiten</h2>
                     {validNews.map(n => (
                         <article key={n.id}>
-                            <NewsCard variant={n.newsVariant} text={n.text} imageUrl={n.image} />
+                            <NewsCard variant={n.newsVariant} text={n.text} imageUrl={n.image}/>
                         </article>
                     ))}
                 </section>
@@ -113,10 +113,12 @@ export default function Gallery2() {
                 ) : (
                     <section>
                         <article>
-                            <p style={{ textAlign: 'center', marginTop: '2rem' }}>Das neue Filmprogramm wird demnächst hier veröffentlicht.</p>
+                            <p style={{textAlign: 'center', marginTop: '2rem'}}>Das neue Filmprogramm wird demnächst
+                                hier veröffentlicht.</p>
                         </article>
                     </section>
                 )
             }
         </>
     );
+}
