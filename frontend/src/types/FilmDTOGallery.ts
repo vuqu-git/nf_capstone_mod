@@ -1,3 +1,5 @@
+// for TerminDTOWithFilmAndReiheDTOGallery
+
 interface FilmDTOGallery {
     fnr: number;
     titel?: string | null;

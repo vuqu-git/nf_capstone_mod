@@ -1,7 +1,8 @@
 import FilmDTOGallery from "./FilmDTOGallery.ts";
+import ReiheDTOGallery from "./ReiheDTOGallery.ts";
 
-// this one mirrors TerminDTOWithFilmDTOGallery
-interface TerminDTOWithFilmDTOGallery {
+// this one mirrors TerminDTOWithFilmAndReiheDTOGallery
+interface TerminDTOWithFilmAndReiheDTOGallery {
     tnr: number;
     vorstellungsbeginn?: string;
     titel?: string | null;
@@ -11,6 +12,7 @@ interface TerminDTOWithFilmDTOGallery {
     sonderfarbe?: string | null;
     veroeffentlichen?: number | null;
     mainfilms: FilmDTOGallery[];
+    reihen: ReiheDTOGallery[];
 }
 
-export default TerminDTOWithFilmDTOGallery;
+export default TerminDTOWithFilmAndReiheDTOGallery;

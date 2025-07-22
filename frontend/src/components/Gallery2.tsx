@@ -10,7 +10,7 @@ export default function Gallery2() {
 
     // // syntax for without own type for useLoaderData input
     // const { screeningGalleryEntries, validNews } = useLoaderData<{
-    //     screeningGalleryEntries: TerminDTOWithFilmDTOGallery[];
+    //     screeningGalleryEntries: TerminDTOWithFilmAndReiheDTOGallery[];
     //     validNews: News[];
     // }>();
 
@@ -59,22 +59,26 @@ export default function Gallery2() {
                                     {/*for programms of (multiple) films*/}
                                     {/***********************************/}
                                     {termin.titel ? ( // current implementation: when there is no titel of termin, the list of mainfilms is empty! (to avoid unnecessary data traffic)
-                                        <TerminFilmGalleryCard
-                                            screeningSonderfarbe={termin.sonderfarbe ?? "pupille-glow"}
-                                            bild={termin.bild ?? null}
-                                            // bild={termin.bild ?? (termin.mainfilms[0]?.bild ?? null)} // i.e. if Programmbild is not present then take the Bild of the 1st mainfeature (when to the termin corresponding mainfeature exist)
-                                            offsetImageInGallery={undefined} // // this prop expects undefined or a % number from 0% to 100%. 50% is default i.e. vertically centered, value>50% pushes the image up and value<50% pushes down
-                                            titel={termin.titel}
-                                            kurztext={termin.kurztext ?? null}
+                                        <>
+                                            <TerminFilmGalleryCard
+                                                screeningSonderfarbe={termin.sonderfarbe ?? "pupille-glow"}
+                                                bild={termin.bild ?? null}
+                                                // bild={termin.bild ?? (termin.mainfilms[0]?.bild ?? null)} // i.e. if Programmbild is not present then take the Bild of the 1st mainfeature (when to the termin corresponding mainfeature exist)
+                                                offsetImageInGallery={undefined} // // this prop expects undefined or a % number from 0% to 100%. 50% is default i.e. vertically centered, value>50% pushes the image up and value<50% pushes down
+                                                titel={termin.titel}
+                                                kurztext={termin.kurztext ?? null}
 
-                                            hauptfilmFormat={undefined} // treatment with undefined (instead of null) here to have this prop be optional
-                                            hauptfilmRegie={undefined} // treatment with undefined (instead of null) here to have this prop be optional
-                                            hauptfilmJahr={undefined}
-                                            hauptfilmLaufzeit={undefined}
-                                            hauptfilmbesonderheit={undefined}
+                                                hauptfilmFormat={undefined} // treatment with undefined (instead of null) here to have this prop be optional
+                                                hauptfilmRegie={undefined} // treatment with undefined (instead of null) here to have this prop be optional
+                                                hauptfilmJahr={undefined}
+                                                hauptfilmLaufzeit={undefined}
+                                                hauptfilmbesonderheit={undefined}
 
-                                            {...jointTerminFilmGalleryCardPropValuesAsObj} // the rest of the props are spread here
-                                        />
+                                                {...jointTerminFilmGalleryCardPropValuesAsObj} // the rest of the props are spread here
+                                            />
+                                            {/*Display 1st reihe*/}
+                                            {/*{termin.reihen  && termin.reihen[0].titel}*/}
+                                        </>
                                     ) : (
                                         // this condition also holds true für Programmtermine, but it rather ensures that mainfilms[0] exist
                                         termin.mainfilms?.length > 0 && (
@@ -97,6 +101,8 @@ export default function Gallery2() {
 
                                                     {...jointTerminFilmGalleryCardPropValuesAsObj} // the rest of the props are spread here
                                                 />
+                                                {/*Display 1st reihe*/}
+                                                {/*{Array.isArray(termin.reihen) && termin.reihen.length > 0 && termin.reihen[0].titel}*/}
                                             </>
                                         )
                                     )}
@@ -114,4 +120,3 @@ export default function Gallery2() {
             }
         </>
     );
-}

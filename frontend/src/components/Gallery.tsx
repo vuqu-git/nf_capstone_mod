@@ -4,7 +4,7 @@ import {News} from "../types/News.ts";
 import axios from "axios";
 import NewsCard from "./news/NewsCard.tsx";
 import {useAllNews} from "../hooks/useAllNews.ts";
-import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
+import TerminDTOWithFilmAndReiheDTOGallery from "../types/TerminDTOWithFilmAndReiheDTOGallery.ts";
 
 import { formatDateTime } from '../utils/formatDateTime.ts';
 import TerminFilmGalleryCard from "./termine/TerminFilmGalleryCard.tsx";
@@ -39,7 +39,7 @@ export default function Gallery() {
         });
     }
 
-    const [screeningGalleryEntries, setScreeningGalleryEntries] = useState<TerminDTOWithFilmDTOGallery[]>([]);
+    const [screeningGalleryEntries, setScreeningGalleryEntries] = useState<TerminDTOWithFilmAndReiheDTOGallery[]>([]);
 
     const getScreeningGalleryEntries = () => {
         setIsLoadingScreenings(true);

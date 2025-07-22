@@ -1,11 +1,11 @@
-import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery.ts";
+import TerminDTOWithFilmAndReiheDTOGallery from "../../types/TerminDTOWithFilmAndReiheDTOGallery.ts";
 import styles from "../PreviewQ.module.css";
 import {useEffect, useState} from "react";
 import {formatDateTime} from "../../utils/formatDateTime.ts";
 import TerminFilmPreviewCard from "../preview/TerminFilmPreviewCard.tsx";
 
 interface Preview1ChildProps {
-    selectedSemesterTermine: TerminDTOWithFilmDTOGallery[];
+    selectedSemesterTermine: TerminDTOWithFilmAndReiheDTOGallery[];
     slideDuration: number;
     setShowPreview: (value: boolean) => void;
 }
@@ -13,7 +13,7 @@ interface Preview1ChildProps {
 const FADE_DURATION = 2000; // 1000 = 1 second
 
 const Preview1Child: React.FC<Preview1ChildProps> = ({ selectedSemesterTermine, slideDuration, setShowPreview }) => {
-    const [termineForSlides, setTermineForSlides] = useState<TerminDTOWithFilmDTOGallery[]>(selectedSemesterTermine);
+    const [termineForSlides, setTermineForSlides] = useState<TerminDTOWithFilmAndReiheDTOGallery[]>(selectedSemesterTermine);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFadingOut, setIsFadingOut] = useState(false);
     const [isFadingIn, setIsFadingIn] = useState(false);

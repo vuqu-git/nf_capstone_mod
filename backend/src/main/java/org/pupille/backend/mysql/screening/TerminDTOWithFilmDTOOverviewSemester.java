@@ -1,10 +1,14 @@
 package org.pupille.backend.mysql.screening;
 
 import org.pupille.backend.mysql.film.Film;
+import org.pupille.backend.mysql.reihe.Reihe;
+import org.pupille.backend.mysql.reihe.ReiheDTOGallery;
 import org.pupille.backend.mysql.termin.Termin;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public record TerminDTOWithFilmDTOOverviewSemester(
         Long tnr,
@@ -12,9 +16,10 @@ public record TerminDTOWithFilmDTOOverviewSemester(
         String titel,
         String terminBesonderheit,
         List<FilmDTOOverviewSemester> mainfilms,
+        Set<ReiheDTOGallery> reihen,
         Integer terminGesamtlaufzeit
 ) {
-    public TerminDTOWithFilmDTOOverviewSemester(Termin termin, List<Film> films, Integer terminGesamtlaufzeit) {
+    public TerminDTOWithFilmDTOOverviewSemester(Termin termin, List<Film> films, Set<Reihe> reihen, Integer terminGesamtlaufzeit) {
         this(
                 termin.getTnr(),
                 termin.getVorstellungsbeginn(),
@@ -24,6 +29,10 @@ public record TerminDTOWithFilmDTOOverviewSemester(
                 films.stream()
                         .map(FilmDTOOverviewSemester::new)
                         .toList(),
+
+                reihen.stream()
+                        .map(ReiheDTOGallery::new)
+                        .collect(Collectors.toSet()),
 
                 terminGesamtlaufzeit
         );

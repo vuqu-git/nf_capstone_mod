@@ -2,12 +2,12 @@ import React, {useEffect, useState} from "react";
 // import axios from "axios";
 import styles from "./PreviewQ.module.css";
 import {formatDateTime} from "../utils/formatDateTime.ts";
-import TerminDTOWithFilmDTOGallery from "../types/TerminDTOWithFilmDTOGallery.ts";
+import TerminDTOWithFilmAndReiheDTOGallery from "../types/TerminDTOWithFilmAndReiheDTOGallery.ts";
 import TerminFilmPreviewCard from "./preview/TerminFilmPreviewCard.tsx";
 import { useLocation } from "react-router-dom";
 
 
-const initialSlides: TerminDTOWithFilmDTOGallery[] = [
+const initialSlides: TerminDTOWithFilmAndReiheDTOGallery[] = [
     {
         "tnr": 850,
         "vorstellungsbeginn": "2025-05-16T19:00:00",
@@ -191,7 +191,7 @@ const FADE_DURATION = 1000; // 1000 = 1 second
 const DEFAULT_SLIDE_DURATION = 10000; // 10 seconds
 
 const StartPreviewQ: React.FC = () => {
-    const [termineForSlides, setTermineForSlides] = useState<TerminDTOWithFilmDTOGallery[]>(initialSlides);
+    const [termineForSlides, setTermineForSlides] = useState<TerminDTOWithFilmAndReiheDTOGallery[]>(initialSlides);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const [isFadingOut, setIsFadingOut] = useState(false);

@@ -1,4 +1,4 @@
-import TerminDTOWithFilmDTOGallery from "../../types/TerminDTOWithFilmDTOGallery.ts";
+import TerminDTOWithFilmAndReiheDTOGallery from "../../types/TerminDTOWithFilmAndReiheDTOGallery.ts";
 import React, {ChangeEvent} from "react";
 import {Badge, Col, Container, Form, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
@@ -8,7 +8,7 @@ import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 import Header2 from "../Header2.tsx";
 
 interface Preview1Props {
-    semesterTermine: TerminDTOWithFilmDTOGallery[];
+    semesterTermine: TerminDTOWithFilmAndReiheDTOGallery[];
     selectedTnrs: number[];
     setSelectedTnrs: (value: number[]) => void;
     slideDuration: number;

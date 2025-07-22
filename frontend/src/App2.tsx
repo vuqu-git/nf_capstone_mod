@@ -18,9 +18,9 @@ import AddNews from "./components/news/AddNews.tsx";
 import TerminverknuepfungForm from "./components/terminverkuepfungen/TerminverknuepfungForm.tsx";
 import TerminForm from "./components/termine/TerminForm.tsx";
 import FilmForm from "./components/filme/FilmForm.tsx";
-import TerminDTOWithFilmDTOGallery from "./types/TerminDTOWithFilmDTOGallery.ts";
+import TerminDTOWithFilmAndReiheDTOGallery from "./types/TerminDTOWithFilmAndReiheDTOGallery.ts";
 import {News} from "./types/News.ts";
-import TerminDTOWithFilmDTOOverviewSemester from "./types/TerminDTOWithFilmDTOOverviewSemester.ts";
+import ReihenAndFilmTermineForOverviewSemester from "./types/ReihenAndFilmTermineForOverviewSemester.ts";
 import TerminDTOWithFilmDTOOverviewArchive from "./types/TerminDTOWithFilmDTOOverviewArchive.ts";
 import ContentNotes from "./components/other/ContentNotes.tsx";
 import ProjektionAufLeinwand from "./components/other/ProjektionAufLeinwand.tsx";
@@ -48,7 +48,7 @@ import NotFound from "./components/NotFound.tsx";
 // #############################
 // for Gallery.tsx
 export interface GalleryData {
-    screeningGalleryEntries: TerminDTOWithFilmDTOGallery[];
+    screeningGalleryEntries: TerminDTOWithFilmAndReiheDTOGallery[];
     validNews: News[];
 }
 // Error Handling Template: Version with axios method
@@ -57,7 +57,7 @@ async function getGalleryData(): Promise<GalleryData> {
     try {
         // Fetch both endpoints concurrently
         const [response1, response2] = await Promise.all([
-            axios.get<TerminDTOWithFilmDTOGallery[]>("/api/screenings"),
+            axios.get<TerminDTOWithFilmAndReiheDTOGallery[]>("/api/screenings"),
             axios.get<News[]>("/api/news/valid")
         ]);
 
@@ -97,9 +97,9 @@ async function getGalleryData(): Promise<GalleryData> {
 // for preview slides in Slides.tsx
 // Error Handling Template: Version with axios method
 // --------------------------------------------------
-async function getGalleryDataWithoutNews(): Promise<TerminDTOWithFilmDTOGallery[]> {
+async function getGalleryDataWithoutNews(): Promise<TerminDTOWithFilmAndReiheDTOGallery[]> {
     try {
-        const response: AxiosResponse<TerminDTOWithFilmDTOGallery[]> = await axios.get("/api/screenings");
+        const response: AxiosResponse<TerminDTOWithFilmAndReiheDTOGallery[]> = await axios.get("/api/screenings");
         return response.data;
     } catch (error: any) { // Axios errors are not Response objects—they are custom error objects with a response property
         // console.error("Error fetching future screenings:", error);
@@ -135,7 +135,7 @@ async function getGalleryDataWithoutNews(): Promise<TerminDTOWithFilmDTOGallery[
 // for OverviewSemester.tsx
 // Error Handling Template: Version with fetch method
 // --------------------------------------------------
-async function getSemesterScreenings(): Promise<TerminDTOWithFilmDTOOverviewSemester[]> {
+async function getSemesterScreenings(): Promise<ReihenAndFilmTermineForOverviewSemester> {
     try {
         const response = await fetch(`/api/screenings/semester`);
         if (!response.ok) {
