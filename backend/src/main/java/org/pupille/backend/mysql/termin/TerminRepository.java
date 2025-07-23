@@ -29,7 +29,7 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
 
         @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"}) // Fetch all future Termine with their associated TVen and Films
         @Query("SELECT t FROM Termin t WHERE t.vorstellungsbeginn >= :now ORDER BY t.vorstellungsbeginn ASC")
-        List<Termin> findAllFutureTermine(LocalDateTime now);
+        List<Termin> findAllFutureTermine(@Param("now") LocalDateTime now);
 
 //        // If you need the projection for future termine as well:
 //        @Query("SELECT t FROM Termin t WHERE t.vorstellungsbeginn >= :now ORDER BY t.vorstellungsbeginn ASC")
@@ -37,7 +37,7 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
 
         @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"})
         @Query("SELECT t FROM Termin t WHERE t.vorstellungsbeginn < :now AND t.veroeffentlichen > 0 ORDER BY t.vorstellungsbeginn DESC")
-        List<Termin> findPastTermine(LocalDateTime now);
+        List<Termin> findPastTermine(@Param("now") LocalDateTime now);
 
         @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film", "reihen"})
         Optional<Termin> findById(Long id); // Overriding JpaRepository's findById
@@ -55,11 +55,11 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
                 "ORDER BY t.vorstellungsbeginn ASC"
         )
         List<Termin> findTermineByCurrentSemester(
-                LocalDateTime now,
-                LocalDateTime startDateSummer,
-                LocalDateTime endDateSummer,
-                LocalDateTime startDateWinter,
-                LocalDateTime endDateWinter
+                @Param("now") LocalDateTime now,
+                @Param("startDateSummer") LocalDateTime startDateSummer,
+                @Param("endDateSummer") LocalDateTime endDateSummer,
+                @Param("startDateWinter") LocalDateTime startDateWinter,
+                @Param("endDateWinter") LocalDateTime endDateWinter
         );
 
         //    +++++++++++++++++++++++++++++
