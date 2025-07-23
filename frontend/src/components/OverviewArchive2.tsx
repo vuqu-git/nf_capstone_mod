@@ -1,4 +1,4 @@
-import './Overview.css';
+import './OverviewAndProgram.css';
 
 import TerminDTOWithFilmDTOOverviewArchive from "../types/TerminDTOWithFilmDTOOverviewArchive.ts";
 import {formatDateInOverviewArchive} from "../utils/formatDateInOverviewArchive.ts";
@@ -102,11 +102,9 @@ export default function OverviewArchive2() {
     };
 
     return (
-        <div>
-            <section className="normal-content-container">
-                <h2>Programmarchiv</h2>
-                {renderArchiveWithSemesterHeaders()}
-            </section>
-        </div>
+        <section className="normal-content-container">
+            <h2>Programmarchiv</h2>
+            {renderArchiveWithSemesterHeaders()}
+        </section>
     );
 }

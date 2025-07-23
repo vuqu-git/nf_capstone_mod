@@ -1,4 +1,4 @@
-import './Overview.css';
+import './OverviewAndProgram.css';
 
 import {Link, useLoaderData} from "react-router-dom";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";
