@@ -11,7 +11,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 		"org.pupille.backend.mysql.termin",
 		"org.pupille.backend.mysql.film",
 		"org.pupille.backend.mysql.terminverknuepfung",
-		"org.pupille.backend.mysql.reihe"
+		"org.pupille.backend.mysql.reihe",
+		"org.pupille.backend.mysql.programmheft"
 })
 @EnableMongoRepositories(basePackages = "org.pupille.backend.news.repositories")
 @EnableScheduling
