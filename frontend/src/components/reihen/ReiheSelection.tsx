@@ -25,7 +25,7 @@ export default function ReiheSelection({
             <Form.Label htmlFor="reihe-selection">Reihe selection</Form.Label>
             <Form.Select
                 id="reihe-selection" // Add id to connect to the label
-                value={selectedReiheId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
+                value={selectedReiheId ?? ""} // Adjust the value prop to handle null/undefined by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
                 <option value="">{textForDefaultOption}</option>

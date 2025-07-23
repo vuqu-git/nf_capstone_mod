@@ -26,7 +26,7 @@ export default function TerminSelection({
             <Form.Label htmlFor="termin-selection">Termin selection</Form.Label>
             <Form.Select
                 id="termin-selection" // Add id to connect to the label
-                value={selectedTnr ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
+                value={selectedTnr ?? ""} // Adjust the value prop to handle null/undefined by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
                 <option value="">{textForDefaultOption}</option>

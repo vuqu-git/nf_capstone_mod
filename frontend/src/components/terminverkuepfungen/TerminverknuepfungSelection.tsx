@@ -25,7 +25,7 @@ export default function TerminverknuepfungSelection({
             <Form.Label htmlFor="tv-selection">Terminverknuepfung selection</Form.Label>
             <Form.Select
                 id="tv-selection" // Add id to connect to the label
-                value={selectedTVId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
+                value={selectedTVId ?? ""} // Adjust the value prop to handle null/undefined by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
                 <option value="">{textForDefaultOption}</option>

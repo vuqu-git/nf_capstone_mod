@@ -367,7 +367,7 @@ export default function TerminForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Bilddatei muss  unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
+                        Bilddatei muss unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
                         <br/>
                         <span className="text-danger">Wichtig:</span> Dieses Feld nur befüllen, wenn oben ein Titel angegeben wurde.
                     </Form.Text>

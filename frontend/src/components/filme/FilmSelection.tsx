@@ -26,7 +26,7 @@ export default function FilmSelection({
             <Form.Label htmlFor="film-selection">Film selection</Form.Label>
             <Form.Select
                 id="film-selection" // Add id to connect to the label
-                value={selectedFilmId ?? ""} // Adjust the value prop to handle null by converting it to an empty string (""):
+                value={selectedFilmId ?? ""} // Adjust the value prop to handle null/undefined by converting it to an empty string (""):
                 onChange={handleSelectChange}
             >
                 <option value="">{textForDefaultOption}</option>
