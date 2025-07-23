@@ -196,151 +196,159 @@ const router = createBrowserRouter([
             </AuthProvider>
         ),
         // errorElement: <ErrorBoundary />,    // top-level error boundary
-                                            // When an error occurs in this route or any of its children (unless they have their own errorElement), the ErrorBoundary component is rendered in place of the element, but STILL WITHIN the layout hierarchy.
-                                            // => if an error occurs in root / or any of its children, <ErrorBoundary /> will be rendered inside <BaseLayout />, so it inherits your app’s header, footer, and styling.
+                                            // => if an error occurs in root / or any of its children, <ErrorBoundary /> will be rendered INSTEAD <BaseLayout />
         children: [
             {
-                element: <ScreeningLayout />, // No path, just acts as a layout wrapper
+                // This acts as an error boundary wrapper for all content routes
+                path: "",
+                errorElement: <ErrorBoundary/>, // This will render WITHIN BaseLayout
                 children: [
                     {
-                        index: true,
-                        loader: getGalleryData,
-                        element: <Gallery2 />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "details/:tnr",
-                        element: <ScreeningDetails />,
-                        // no usage of loader here, because the data is fetched within ScreeningDetails
-                        // loader: ({ params }) => getScreeningDetails(params.tnr),
-                        handle: { scrollMode: "pathname" } // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
-                    },
-                ],
-            },
-
-            {
-                element: <OverviewAndFormLayout />, // No path, just acts as a layout wrapper
-                children: [
-                    {
-                        path: "semester",
-                        loader: getSemesterScreenings,
-                        element: <OverviewSemester2 />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "archive",
-                        loader: getArchiveScreenings,
-                        element: <OverviewArchive2 />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "kontakt",
-                        element: <ContactForm />,
-                        handle: { scrollMode: "pathname" },
-                    },
-
-                    // LOGIN, Login component which consumes AuthContext
-                    {
-                        path: "login",
-                        element: <Login />,
-                        handle: { scrollMode: "pathname" },
-                    },
-
-                    // PROTECTED ADMIN ROUTES, ProtectedRoute component which consumes AuthContext
-                    {
-                        element: <ProtectedRoute />, // No path, just acts as a guard for all children
+                        element: <ScreeningLayout/>, // No path, just acts as a layout wrapper
                         children: [
                             {
-                                path: "admin",
-                                element: <Admin />,
-                                handle: { scrollMode: "pathname" },
+                                index: true,
+                                loader: getGalleryData,
+                                element: <Gallery2/>,
+                                handle: {scrollMode: "pathname"},
                             },
                             {
-                                path: "addnews",
-                                element: <AddNews />,
-                                handle: { scrollMode: "pathname" },
-                            },
-                            {
-                                path: "editnews",
-                                element: <EditDeleteNews />,
-                                handle: { scrollMode: "pathname" },
-                            },
-                            {
-                                path: "deletenews",
-                                element: <EditDeleteNews />,
-                                handle: { scrollMode: "pathname" },
-                            },
-                            {
-                                path: "adminfilme",
-                                element: <FilmForm />,
-                                handle: { scrollMode: "pathname" },
-                            },
-                            {
-                                path: "admintermine",
-                                element: <TerminForm />,
-                                handle: { scrollMode: "pathname" },
-                            },
-                            {
-                                path: "admintven",
-                                element: <TerminverknuepfungForm />,
-                                handle: { scrollMode: "pathname" },
-                            },
-                            {
-                                path: "adminreihen",
-                                element: <ReiheForm />,
-                                handle: { scrollMode: "pathname" },
-                            },
-                            {
-                                path: "adminrven",
-                                element: <ReiheverknuepfungForm />,
-                                handle: { scrollMode: "pathname" },
+                                path: "details/:tnr",
+                                element: <ScreeningDetails/>,
+                                // no usage of loader here, because the data is fetched within ScreeningDetails
+                                // loader: ({ params }) => getScreeningDetails(params.tnr),
+                                handle: {scrollMode: "pathname"} // this child inherits the parent's scroll behavior if no handle is specified here, the parent in this case is the root path "/"
                             },
                         ],
                     },
 
                     {
-                        path: "previewq",
-                        loader: getGalleryDataWithoutNews,
-                        element: <PreviewQ />,
-                        handle: { scrollMode: "pathname" },
+                        element: <OverviewAndFormLayout/>, // No path, just acts as a layout wrapper
+                        children: [
+                            {
+                                path: "semester",
+                                loader: getSemesterScreenings,
+                                element: <OverviewSemester2/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+                            {
+                                path: "archive",
+                                loader: getArchiveScreenings,
+                                element: <OverviewArchive2/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+                            {
+                                path: "kontakt",
+                                element: <ContactForm/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+
+                            // LOGIN, Login component which consumes AuthContext
+                            {
+                                path: "login",
+                                element: <Login/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+
+                            // PROTECTED ADMIN ROUTES, ProtectedRoute component which consumes AuthContext
+                            {
+                                element: <ProtectedRoute/>, // No path, just acts as a guard for all children
+                                children: [
+                                    {
+                                        path: "admin",
+                                        element: <Admin/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "addnews",
+                                        element: <AddNews/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "editnews",
+                                        element: <EditDeleteNews/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "deletenews",
+                                        element: <EditDeleteNews/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "adminfilme",
+                                        element: <FilmForm/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "admintermine",
+                                        element: <TerminForm/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "admintven",
+                                        element: <TerminverknuepfungForm/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "adminreihen",
+                                        element: <ReiheForm/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "adminrven",
+                                        element: <ReiheverknuepfungForm/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                ],
+                            },
+
+                            {
+                                path: "previewq",
+                                loader: getGalleryDataWithoutNews,
+                                element: <PreviewQ/>,
+                                handle: {scrollMode: "pathname"},
+                            }
+                        ],
+                    },
+
+                    {
+                        element: <TextLayout/>, // No path, just acts as a layout wrapper
+                        children: [
+                            {
+                                path: "kinobesuch",
+                                element: <Kinobesuch/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+                            {
+                                path: "contentnotes",
+                                element: <ContentNotes/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+                            {
+                                path: "kinoprojektion",
+                                element: <ProjektionAufLeinwand/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+                            {
+                                path: "impressum",
+                                element: <Impressum/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+                        ],
+                    },
+
+                    {
+                        path: "*",
+                        element: <NotFound/>,
                     }
-                ],
-            },
-
-            {
-                element: <TextLayout />, // No path, just acts as a layout wrapper
-                children: [
-                    {
-                        path: "kinobesuch",
-                        element: <Kinobesuch />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "contentnotes",
-                        element: <ContentNotes />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "kinoprojektion",
-                        element: <ProjektionAufLeinwand />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                    {
-                        path: "impressum",
-                        element: <Impressum />,
-                        handle: { scrollMode: "pathname" },
-                    },
-                ],
-            },
-
-            {
-                path: "*",
-                element: <NotFound />,
+                ]
             }
 
         ],
     },
 
+    // These routes are outside BaseLayout and keep their own structure
+    // also error boundary wrapper ErrorBoundary does not cover these routes
     {
         path: "slides",
         element: <Slides />,
