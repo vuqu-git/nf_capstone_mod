@@ -44,6 +44,9 @@ import ReiheForm from "./components/reihen/ReiheForm.tsx";
 import ReiheverknuepfungForm from "./components/reihen/ReiheverknuepfungForm.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import NotFound from "./components/NotFound.tsx";
+import ProgrammheftForm from "./components/programmhefte/ProgrammheftForm.tsx";
+import {Programmheft} from "./types/Programmheft.ts";
+import PdfProgram from "./components/PdfProgram.tsx";
 
 // #############################
 // for Gallery.tsx
@@ -186,6 +189,26 @@ async function getArchiveScreenings(): Promise<TerminDTOWithFilmDTOOverviewArchi
     }
 }
 
+// #############################
+// for PdfProgram.tsx
+// Error Handling Template: Version with fetch method
+// --------------------------------------------------
+async function getPdfProgram(): Promise<Programmheft[]> {
+    try {
+        const response = await fetch(`/api/programmheft/valid`);
+        if (!response.ok) {
+            const errorMsgText = await response.text();
+            throw new Response(`Failed to fetch program pdfs: ${errorMsgText}`, {
+                status: response.status,
+            });
+        }
+        return await response.json();
+    } catch (error) {
+        if (error instanceof Response) throw error;
+        throw new Error("Failed to fetch archive screenings due to a network or unexpected error");
+    }
+}
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -235,6 +258,12 @@ const router = createBrowserRouter([
                                 path: "archive",
                                 loader: getArchiveScreenings,
                                 element: <OverviewArchive2/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+                            {
+                                path: "pdfprogramm",
+                                loader: getPdfProgram,
+                                element: <PdfProgram/>,
                                 handle: {scrollMode: "pathname"},
                             },
                             {
@@ -297,6 +326,11 @@ const router = createBrowserRouter([
                                     {
                                         path: "adminrven",
                                         element: <ReiheverknuepfungForm/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "adminprogrammhefte",
+                                        element: <ProgrammheftForm/>,
                                         handle: {scrollMode: "pathname"},
                                     },
                                 ],
