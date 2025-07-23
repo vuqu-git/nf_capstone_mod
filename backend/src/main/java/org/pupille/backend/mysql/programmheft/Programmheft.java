@@ -15,12 +15,13 @@ public class Programmheft {
         @Column(nullable = false)
         private Long pnr;
 
+        @Column(nullable = false)
         private String titel;
 
         private String bild;
 
         @Column(name = "programmheft", nullable = false)
-        private String programmPdf;
+        private String pdf;
 
         @Column(name = "gueltig_von", nullable = false)
         private LocalDate gueltigVon;
