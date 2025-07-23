@@ -31,7 +31,7 @@ public class NewsController {
     @GetMapping("/valid")
     public List<News> getValidNews()
     {
-        return newsService.getNewsByDateInRange();
+        return newsService.getAllValidNewsByDateInRange();
     }
 
     @GetMapping("/{id}")

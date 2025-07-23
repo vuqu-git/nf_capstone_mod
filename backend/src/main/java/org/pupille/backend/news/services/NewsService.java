@@ -73,9 +73,9 @@ public class NewsService {
     // ########################################
     // now non standard service queries/methods
 
-    public List<News> getNewsByDateInRange() {
+    public List<News> getAllValidNewsByDateInRange() {
         LocalDate currentDate = dateNowService.localDateNow();
-        List<News> newsList = newsRepo.findNewsByDateInRange(currentDate);
+        List<News> newsList = newsRepo.findAllValidNewsByDateInRange(currentDate);
         newsList.sort(Comparator.comparing(News::endDate));
         return newsList;
     }
