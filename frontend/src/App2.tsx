@@ -54,6 +54,14 @@ export interface GalleryData {
     screeningGalleryEntries: TerminDTOWithFilmAndReiheDTOGallery[];
     validNews: News[];
 }
+
+// for OverviewArchive2.tsx
+export interface ArchiveData {
+    screeningArchiveEntries: TerminDTOWithFilmDTOOverviewArchive[];
+    allPdfs: Programmheft[];
+}
+// #############################
+
 // Error Handling Template: Version with axios method
 // --------------------------------------------------
 async function getGalleryData(): Promise<GalleryData> {
@@ -189,6 +197,39 @@ async function getArchiveScreenings(): Promise<TerminDTOWithFilmDTOOverviewArchi
     }
 }
 
+// Error Handling Template: Version with axios method
+// --------------------------------------------------
+async function getArchiveData(): Promise<ArchiveData> {
+    try {
+        // Fetch both endpoints concurrently
+        const [response1, response2] = await Promise.all([
+            axios.get<TerminDTOWithFilmDTOOverviewArchive[]>("/api/screenings/archive"),
+            axios.get<Programmheft[]>("/api/programmheft")
+        ]);
+
+        return {
+            screeningArchiveEntries: response1.data,
+            allPdfs: response2.data
+        };
+    } catch (error: any) {
+        if (error.response) {
+            // Server responded, but with an error status (4xx/5xx)
+            throw new Response(
+                error.response.data?.message ||
+                `Failed to load gallery data: Server responded with status ${error.response.status}`,
+                { status: error.response.status }
+            );
+        } else if (error.request) {
+            // Request sent, but no response received (server down/network timeout)
+            throw new Error("Failed to load gallery data: No response received from the server.");
+        } else {
+            // Axios config or other unknown error. You throw a new Error with a descriptive message.
+            throw new Error(`Failed to load gallery data due to a network or unexpected error: ${error.message}`);
+        }
+        throw new Response("Failed to load gallery data", { status: 500 });
+    }
+}
+
 // #############################
 // for PdfProgram.tsx
 // Error Handling Template: Version with fetch method
@@ -256,7 +297,8 @@ const router = createBrowserRouter([
                             },
                             {
                                 path: "archive",
-                                loader: getArchiveScreenings,
+                                // loader: getArchiveScreenings,
+                                loader: getArchiveData,
                                 element: <OverviewArchive2/>,
                                 handle: {scrollMode: "pathname"},
                             },

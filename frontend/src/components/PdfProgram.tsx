@@ -15,7 +15,7 @@ export default function PdfProgram() {
                             to={"https://pupille.org/programmheft/" + p.pdf}
                             className="custom-link mb-1"
                         >
-                            Download PDF: {p.titel}
+                            Download PDF ▷ {p.titel}
                         </Link>
                         </div>
 

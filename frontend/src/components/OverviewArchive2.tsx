@@ -5,21 +5,27 @@ import {formatDateInOverviewArchive} from "../utils/formatDateInOverviewArchive.
 import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {Link, useLoaderData} from "react-router-dom";
 import {JSX} from "react";
+import {ArchiveData} from "../App2.tsx";
 
 export default function OverviewArchive2() {
 
-    const archiveTermine = useLoaderData<TerminDTOWithFilmDTOOverviewArchive[]>();
+    // const screeningArchiveEntries = useLoaderData<TerminDTOWithFilmDTOOverviewArchive[]>();
+    const {screeningArchiveEntries, allPdfs} = useLoaderData<ArchiveData>();
+
+
+
 
     const renderArchiveWithSemesterHeaders = () => {
-        if (!archiveTermine || archiveTermine.length === 0) {
+        if (!screeningArchiveEntries || screeningArchiveEntries.length === 0) {
             return null;
         }
 
         const rows: JSX.Element[] = [];
         let lastSemester = '';
 
-        for (let i = 0; i < archiveTermine.length; i++) {
-            const termin = archiveTermine[i];
+        // for (let i = 0; i < screeningArchiveEntries.length; i++) {
+        //     const termin = screeningArchiveEntries[i];
+        for (const termin of screeningArchiveEntries) {
 
             if (!termin.vorstellungsbeginn) continue;
             const screeningDate = new Date(termin.vorstellungsbeginn);
