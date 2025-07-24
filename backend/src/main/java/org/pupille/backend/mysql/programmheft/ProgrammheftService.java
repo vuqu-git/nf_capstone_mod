@@ -23,9 +23,13 @@ public class ProgrammheftService {
 
     public Programmheft getProgrammheftById(Long id) {
         return programmheftRepo.findById(id)
-                               .orElseThrow(
-                                       () -> new ProgrammheftNotFoundException(String.format(errorMessage, id))
-                               );
+//                // nice to remember
+//                .map(ProgrammheftDTOWithSemesterField::new)  // !!! this map converts the Optional<Programmheft> into an Optional<ProgrammheftDTO>, using your constructor,  though I don't have a constructor with input type Optional<Programmheft>!!!
+                                            // it does not require a constructor of type ProgrammheftDTOWithSemesterField(Optional<Programmheft>)
+                                            // .map() method here is mapping the value inside the Optional, not the Optional itself
+                .orElseThrow(
+                        () -> new ProgrammheftNotFoundException(String.format(errorMessage, id))
+                );
     }
 
     public Programmheft saveProgrammheft(Programmheft newProgrammheft) {

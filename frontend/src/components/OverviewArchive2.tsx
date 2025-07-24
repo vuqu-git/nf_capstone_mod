@@ -1,6 +1,5 @@
 import './OverviewAndProgram.css';
 
-import TerminDTOWithFilmDTOOverviewArchive from "../types/TerminDTOWithFilmDTOOverviewArchive.ts";
 import {formatDateInOverviewArchive} from "../utils/formatDateInOverviewArchive.ts";
 import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {Link, useLoaderData} from "react-router-dom";
@@ -9,52 +8,52 @@ import {ArchiveData} from "../App2.tsx";
 
 export default function OverviewArchive2() {
 
-    // const screeningArchiveEntries = useLoaderData<TerminDTOWithFilmDTOOverviewArchive[]>();
     const {screeningArchiveEntries, allPdfs} = useLoaderData<ArchiveData>();
-
-
-
 
     const renderArchiveWithSemesterHeaders = () => {
         if (!screeningArchiveEntries || screeningArchiveEntries.length === 0) {
             return null;
         }
 
-        const rows: JSX.Element[] = [];
-        let lastSemester = '';
+        const rowsForArchiveEntries: JSX.Element[] = [];
+        let lastSemester: string | undefined = '';
 
         // for (let i = 0; i < screeningArchiveEntries.length; i++) {
         //     const termin = screeningArchiveEntries[i];
         for (const termin of screeningArchiveEntries) {
 
             if (!termin.vorstellungsbeginn) continue;
-            const screeningDate = new Date(termin.vorstellungsbeginn);
+            
+            // const screeningDate = new Date(termin.vorstellungsbeginn);
 
-            const year = screeningDate.getFullYear();
-            const month = screeningDate.getMonth() + 1; // Month is 0-indexed
+            // const year = screeningDate.getFullYear();
+            // const month = screeningDate.getMonth() + 1; // Month is 0-indexed
+            //
+            // let currentSemester = '';
+            // let headerText = '';
+            //
+            // if (month < 4) {
+            //     currentSemester = `Wintersemester ${year - 1}/${year}`;
+            //     if (lastSemester !== currentSemester) {
+            //         headerText = currentSemester;
+            //     }
+            // } else if (month < 10) {
+            //     currentSemester = `Sommersemester ${year}`;
+            //     if (lastSemester !== currentSemester) {
+            //         headerText = currentSemester;
+            //     }
+            // } else {
+            //     currentSemester = `Wintersemester ${year}/${year + 1}`;
+            //     if (lastSemester !== currentSemester) {
+            //         headerText = currentSemester;
+            //     }
+            // }
 
-            let currentSemester = '';
-            let headerText = '';
-
-            if (month < 4) {
-                currentSemester = `Wintersemester ${year - 1}/${year}`;
-                if (lastSemester !== currentSemester) {
-                    headerText = currentSemester;
-                }
-            } else if (month < 10) {
-                currentSemester = `Sommersemester ${year}`;
-                if (lastSemester !== currentSemester) {
-                    headerText = currentSemester;
-                }
-            } else {
-                currentSemester = `Wintersemester ${year}/${year + 1}`;
-                if (lastSemester !== currentSemester) {
-                    headerText = currentSemester;
-                }
-            }
+            const currentSemester = termin.semester;
+            const headerText = (lastSemester !== currentSemester) ? currentSemester : '';
 
             if (headerText) {
-                rows.push(
+                rowsForArchiveEntries.push(
                     <tr key={`header-${currentSemester}`} className="semester-header-row">
                         <td
                             className="semester-header-cell"
@@ -66,7 +65,7 @@ export default function OverviewArchive2() {
                 );
             }
 
-            rows.push(
+            rowsForArchiveEntries.push(
                 <tr key={termin.tnr}>
                     <td className="screening-date-cell">
                         {formatDateInOverviewArchive(termin.vorstellungsbeginn)}
@@ -102,7 +101,7 @@ export default function OverviewArchive2() {
 
         return (
             <table>
-                <tbody>{rows}</tbody>
+                <tbody>{rowsForArchiveEntries}</tbody>
             </table>
         );
     };

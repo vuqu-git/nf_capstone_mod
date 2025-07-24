@@ -47,8 +47,9 @@ import NotFound from "./components/NotFound.tsx";
 import ProgrammheftForm from "./components/programmhefte/ProgrammheftForm.tsx";
 import {Programmheft} from "./types/Programmheft.ts";
 import PdfProgram from "./components/PdfProgram.tsx";
+import {ProgrammheftDTOWithSemesterField} from "./types/ProgrammheftDTOWithSemesterField.ts";
 
-// #############################
+// ############################################
 // for Gallery.tsx
 export interface GalleryData {
     screeningGalleryEntries: TerminDTOWithFilmAndReiheDTOGallery[];
@@ -58,9 +59,9 @@ export interface GalleryData {
 // for OverviewArchive2.tsx
 export interface ArchiveData {
     screeningArchiveEntries: TerminDTOWithFilmDTOOverviewArchive[];
-    allPdfs: Programmheft[];
+    allPdfs: ProgrammheftDTOWithSemesterField[];
 }
-// #############################
+// ############################################
 
 // Error Handling Template: Version with axios method
 // --------------------------------------------------
@@ -132,17 +133,6 @@ async function getGalleryDataWithoutNews(): Promise<TerminDTOWithFilmAndReiheDTO
 }
 
 // #############################
-// // only for test purposes
-// async function getScreeningDetails(tnr: string) {
-//     const response = await fetch(`/api/screenings/${tnr}`);
-//
-//     if (!response.ok) throw new Error("Details not found");
-//
-//     // While response.json() is the standard way to handle JSON APIs, your loader function can indeed return any JavaScript object (or any JavaScript value, for that matter).
-//     return response.json();
-// }
-
-// #############################
 // for OverviewSemester.tsx
 // Error Handling Template: Version with fetch method
 // --------------------------------------------------
@@ -204,7 +194,7 @@ async function getArchiveData(): Promise<ArchiveData> {
         // Fetch both endpoints concurrently
         const [response1, response2] = await Promise.all([
             axios.get<TerminDTOWithFilmDTOOverviewArchive[]>("/api/screenings/archive"),
-            axios.get<Programmheft[]>("/api/programmheft")
+            axios.get<ProgrammheftDTOWithSemesterField[]>("/api/programmheft/allwithsemesterinfo")
         ]);
 
         return {
@@ -226,7 +216,6 @@ async function getArchiveData(): Promise<ArchiveData> {
             // Axios config or other unknown error. You throw a new Error with a descriptive message.
             throw new Error(`Failed to load gallery data due to a network or unexpected error: ${error.message}`);
         }
-        throw new Response("Failed to load gallery data", { status: 500 });
     }
 }
 

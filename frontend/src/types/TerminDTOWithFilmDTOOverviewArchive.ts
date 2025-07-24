@@ -4,6 +4,7 @@ import FilmDTOOverviewArchive from "./FilmDTOOverviewArchive.ts";
 interface TerminDTOWithFilmDTOOverviewArchive{
     tnr: number;
     vorstellungsbeginn?: string;
+    semester?: string;
     titel?: string | null;
     films: FilmDTOOverviewArchive[];
 }

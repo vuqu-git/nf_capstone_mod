@@ -1,6 +1,6 @@
 package org.pupille.backend.mysql.terminverknuepfung;
 
-import org.pupille.backend.utils.DirectorExtractorUtils;
+import org.pupille.backend.utils.PupilleUtils;
 
 public record TVWithFilmAndTerminDTOSelection(
         Long tnr,          // the one from Terminverknuepfung
@@ -19,8 +19,7 @@ public record TVWithFilmAndTerminDTOSelection(
                 new FilmProjectionForTVSelection(
                         tv.getFilm().getTitel(),
                         tv.getFilm().getJahr(),
-//                        DirectorExtractorUtils.extractDirectors(tv.getFilm().getStab())
-                        (tv.getFilm().getRegie() == null || tv.getFilm().getRegie().isEmpty()) ? DirectorExtractorUtils.extractDirectors(tv.getFilm().getStab()) : tv.getFilm().getRegie()
+                        (tv.getFilm().getRegie() == null || tv.getFilm().getRegie().isEmpty()) ? PupilleUtils.extractDirectors(tv.getFilm().getStab()) : tv.getFilm().getRegie()
                 ),
                 new TerminProjectionForTVSelection(
                         tv.getTermin().getVorstellungsbeginn(),
