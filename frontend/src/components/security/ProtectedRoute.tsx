@@ -3,9 +3,8 @@
 //
 // // List of approved usernames
 // const APPROVED_USERS = [
-//     "vuqu-git",
-//     "user2",
-//     "yourgithubusername",
+//     "example-git",
+//     "",
 //     // Add more usernames as needed
 // ];
 //
@@ -33,7 +32,7 @@
 //         if (fetchedUser && fetchedUser !== "anonymousUser") {
 //             message = `User "${fetchedUser}" is not whitelisted for accessing the pupille.org admin section.`;
 //         } else {
-//             message = "You need to log in with your GitHub account to access pupille.org admin section.";
+//             message = "To proceed, authenticate yourself with your credentials to enter the restricted area.";
 //         }
 //         // => added a message variable that is set based on whether fetchedUser exists and is not "anonymousUser".
 //
@@ -61,16 +60,11 @@ export default function ProtectedRoute() {
         );
     }
 
-    // immediate redirection
-    // if (!fetchedUser || fetchedUser === "anonymousUser" || !APPROVED_USERS.includes(fetchedUser)) {
-    //     return <Navigate to="/login" replace />;
-    // }
-
     // If user is not fetched or is anonymous
     if (!fetchedUser || fetchedUser === "anonymousUser") {
-        const message = "You need to log in with your GitHub account to access pupille.org admin section.";
+        const message = "To proceed, authenticate yourself with your credentials to enter the restricted area.";
         // Navigate to /login and pass the message in the state
-        return <Navigate to="/login" replace state={{ message: message }} />;
+        return <Navigate to="/lgn" replace state={{ message: message }} />;
     }
 
     // Render nested routes here
