@@ -305,7 +305,7 @@ const router = createBrowserRouter([
 
                             // LOGIN, Login component which consumes AuthContext
                             {
-                                path: "login",
+                                path: "lgn",
                                 element: <Login/>,
                                 handle: {scrollMode: "pathname"},
                             },
@@ -315,7 +315,7 @@ const router = createBrowserRouter([
                                 element: <ProtectedRoute/>, // No path, just acts as a guard for all children
                                 children: [
                                     {
-                                        path: "admin",
+                                        path: "dmn",
                                         element: <Admin/>,
                                         handle: {scrollMode: "pathname"},
                                     },

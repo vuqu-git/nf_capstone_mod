@@ -110,7 +110,7 @@ export default function PreviewQ() {
 
     return (
         <div data-bs-theme="dark">
-            <Link to={`/admin`}>
+            <Link to={`/dmn`}>
                 zum Adminbereich
             </Link>
 

@@ -32,9 +32,9 @@ export default function Login() {
         // AND that user is NOT "anonymousUser" (meaning they are logged in).
         if (!loading && fetchedUser && fetchedUser !== "anonymousUser") {
             const timer = setTimeout(() => {
-                // After n seconds, navigate to the /admin route.
-                // 'replace: true' prevents the user from navigating back to /login using the browser's back button.
-                navigate("/admin", { replace: true });
+                // After n seconds, navigate to the /dmn route.
+                // 'replace: true' prevents the user from navigating back to /lgn using the browser's back button.
+                navigate("/dmn", { replace: true });
             }, 4000); // 1000 milliseconds = 1 second
 
             // Cleanup function: This will clear the timeout if the component unmounts
@@ -66,9 +66,9 @@ export default function Login() {
         );
     }
 
-    // // alternative to 2.: If the user is logged in (fetchedUser is not null/anonymousUser), immediate redirect to /admin.
+    // // alternative to 2.: If the user is logged in (fetchedUser is not null/anonymousUser), immediate redirect to /dmn.
     // if (fetchedUser && fetchedUser !== "anonymousUser") {
-    //     return <Navigate to="/admin" replace />;
+    //     return <Navigate to="/dmn" replace />;
     // }
 
     // 3. If not logged in, display the login button and any messages from location state.
@@ -79,7 +79,7 @@ export default function Login() {
     }
     return (
         <div className="text-center mt-4">
-            <Button onClick={login} variant="success">Login to admin section with Github</Button>
+            <Button onClick={login} variant="success">Speak, friend, and enter.</Button>
             {/* Display the message if it exists */}
             {message && (
                 <Alert data-bs-theme="dark" variant="danger" className="mt-4">
