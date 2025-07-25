@@ -44,13 +44,25 @@ import ReiheForm from "./components/reihen/ReiheForm.tsx";
 import ReiheverknuepfungForm from "./components/reihen/ReiheverknuepfungForm.tsx";
 import ErrorBoundary from "./components/ErrorBoundary.tsx";
 import NotFound from "./components/NotFound.tsx";
+import ProgrammheftForm from "./components/programmhefte/ProgrammheftForm.tsx";
+import {Programmheft} from "./types/Programmheft.ts";
+import PdfProgram from "./components/PdfProgram.tsx";
+import {ProgrammheftDTOWithSemesterField} from "./types/ProgrammheftDTOWithSemesterField.ts";
 
-// #############################
+// ############################################
 // for Gallery.tsx
 export interface GalleryData {
     screeningGalleryEntries: TerminDTOWithFilmAndReiheDTOGallery[];
     validNews: News[];
 }
+
+// for OverviewArchive2.tsx
+export interface ArchiveData {
+    screeningArchiveEntries: TerminDTOWithFilmDTOOverviewArchive[];
+    allPdfs: ProgrammheftDTOWithSemesterField[];
+}
+// ############################################
+
 // Error Handling Template: Version with axios method
 // --------------------------------------------------
 async function getGalleryData(): Promise<GalleryData> {
@@ -121,17 +133,6 @@ async function getGalleryDataWithoutNews(): Promise<TerminDTOWithFilmAndReiheDTO
 }
 
 // #############################
-// // only for test purposes
-// async function getScreeningDetails(tnr: string) {
-//     const response = await fetch(`/api/screenings/${tnr}`);
-//
-//     if (!response.ok) throw new Error("Details not found");
-//
-//     // While response.json() is the standard way to handle JSON APIs, your loader function can indeed return any JavaScript object (or any JavaScript value, for that matter).
-//     return response.json();
-// }
-
-// #############################
 // for OverviewSemester.tsx
 // Error Handling Template: Version with fetch method
 // --------------------------------------------------
@@ -176,6 +177,58 @@ async function getArchiveScreenings(): Promise<TerminDTOWithFilmDTOOverviewArchi
         if (!response.ok) {
             const errorMsgText = await response.text();
             throw new Response(`Failed to fetch archive screenings: ${errorMsgText}`, {
+                status: response.status,
+            });
+        }
+        return await response.json();
+    } catch (error) {
+        if (error instanceof Response) throw error;
+        throw new Error("Failed to fetch archive screenings due to a network or unexpected error");
+    }
+}
+
+// Error Handling Template: Version with axios method
+// --------------------------------------------------
+async function getArchiveData(): Promise<ArchiveData> {
+    try {
+        // Fetch both endpoints concurrently
+        const [response1, response2] = await Promise.all([
+            axios.get<TerminDTOWithFilmDTOOverviewArchive[]>("/api/screenings/archive"),
+            axios.get<ProgrammheftDTOWithSemesterField[]>("/api/programmheft/allwithsemesterinfo")
+        ]);
+
+        return {
+            screeningArchiveEntries: response1.data,
+            allPdfs: response2.data
+        };
+    } catch (error: any) {
+        if (error.response) {
+            // Server responded, but with an error status (4xx/5xx)
+            throw new Response(
+                error.response.data?.message ||
+                `Failed to load gallery data: Server responded with status ${error.response.status}`,
+                { status: error.response.status }
+            );
+        } else if (error.request) {
+            // Request sent, but no response received (server down/network timeout)
+            throw new Error("Failed to load gallery data: No response received from the server.");
+        } else {
+            // Axios config or other unknown error. You throw a new Error with a descriptive message.
+            throw new Error(`Failed to load gallery data due to a network or unexpected error: ${error.message}`);
+        }
+    }
+}
+
+// #############################
+// for PdfProgram.tsx
+// Error Handling Template: Version with fetch method
+// --------------------------------------------------
+async function getPdfProgram(): Promise<Programmheft[]> {
+    try {
+        const response = await fetch(`/api/programmheft/valid`);
+        if (!response.ok) {
+            const errorMsgText = await response.text();
+            throw new Response(`Failed to fetch program pdfs: ${errorMsgText}`, {
                 status: response.status,
             });
         }
@@ -233,8 +286,15 @@ const router = createBrowserRouter([
                             },
                             {
                                 path: "archive",
-                                loader: getArchiveScreenings,
+                                // loader: getArchiveScreenings,
+                                loader: getArchiveData,
                                 element: <OverviewArchive2/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+                            {
+                                path: "pdfprogramm",
+                                loader: getPdfProgram,
+                                element: <PdfProgram/>,
                                 handle: {scrollMode: "pathname"},
                             },
                             {
@@ -297,6 +357,11 @@ const router = createBrowserRouter([
                                     {
                                         path: "adminrven",
                                         element: <ReiheverknuepfungForm/>,
+                                        handle: {scrollMode: "pathname"},
+                                    },
+                                    {
+                                        path: "adminprogrammhefte",
+                                        element: <ProgrammheftForm/>,
                                         handle: {scrollMode: "pathname"},
                                     },
                                 ],

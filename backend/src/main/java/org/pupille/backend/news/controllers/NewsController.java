@@ -31,7 +31,7 @@ public class NewsController {
     @GetMapping("/valid")
     public List<News> getValidNews()
     {
-        return newsService.getNewsByDateInRange();
+        return newsService.getAllValidNewsByDateInRange();
     }
 
     @GetMapping("/{id}")
@@ -50,7 +50,7 @@ public class NewsController {
     }
 
     @PutMapping("/{id}")
-    // with fine-grained exception handling because IllegalArgumentException in movieService.updateTodo is specific
+    // with fine-grained exception handling because IllegalArgumentException in newsService.updateNews is specific
     // alternatively:
     //      inside newsService.updateNews the NewsUpdateException is thrown
     //      controller focused on handling requests and responses while delegating exception handling

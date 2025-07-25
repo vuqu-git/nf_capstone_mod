@@ -30,8 +30,8 @@ export default function Header2() {
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
 
                         <NavDropdown title="Programm" id="basic-nav-dropdown" className="custom-dropdown">
-                            <NavDropdown.Item as={Link} to="/semester">Semesterübersicht</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/1.1">Heft als pdf</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/semester">als Semesterübersicht</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/pdfprogramm">im PDF-Format</NavDropdown.Item>
                             <NavDropdown.Item as={Link} to="/archive">Archiv</NavDropdown.Item>
                         </NavDropdown>
 

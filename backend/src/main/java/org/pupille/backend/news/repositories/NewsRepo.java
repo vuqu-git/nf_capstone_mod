@@ -12,8 +12,7 @@ import java.util.List;
 public interface NewsRepo extends MongoRepository<News, String>{
     // @Query annotation for more complex queries
     @Query("{ $and: [{ startDate: { $lte: ?0 } }, { endDate: { $gte: ?0 } }] }")
-    List<News> findNewsByDateInRange(LocalDate date);
+    List<News> findAllValidNewsByDateInRange(LocalDate date);
 
-    // alternatively: using method naming convention for query
-
+    // alternatively: using method naming convention for derived query
 }

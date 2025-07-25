@@ -368,7 +368,7 @@ export default function FilmForm() {
                     onClick={() => generateFilmTextwithAI()}
                     disabled={!selectedFilm.titel}  // Disable if title is falsy (null, undefined, or empty string)
                 >
-                    🤖🧠💬 Generate film text! 💡📄✍️
+                    🤖🧠💬 Generate film text! ✨📄✍️
                 </Button>
 
                 <Form.Group controlId="kurztext" className="mt-3">
@@ -397,7 +397,7 @@ export default function FilmForm() {
                     <Form.Text className="text-muted">
                         Erscheint in Gallery (wenn es der Hauptfilm ist) und Detailseite; Eintrag bezieht sich auf Besonderheit des <b>Films</b> (bspw. Erwähnung Director's Cut, Farbstich der analogen Kopie);
                         <br/>
-                        keine Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite, kein Feld für Kooperation, Filmfestival, Gäste (Einführung/Gespräch), Publikumswunsch, besondere Startzeit, abweichender Ort → Feld 'Besonderheit' im Termin-Formular verwenden
+                        keine Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite, <b>kein</b> Feld für Kooperation, Filmfestival, Gäste (Einführung/Gespräch), Publikumswunsch, anderer Eintrittspreis, besondere Startzeit, abweichender Ort → Feld 'Besonderheit' im Termin-Formular verwenden
                     </Form.Text>
                 </Form.Group>
 

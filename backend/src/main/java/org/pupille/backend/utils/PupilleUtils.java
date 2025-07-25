@@ -10,11 +10,13 @@ package org.pupille.backend.utils;
 //    Make the method(s) public static for easy use from anywhere.
 //    Optionally, declare the class as final and make its constructor private to prevent instantiation (a common pattern for utility classes).
 
+import java.time.LocalDate;
+
 // No @Service annotation
-public final class DirectorExtractorUtils {
+public final class PupilleUtils {
 
     // Prevent instantiation by making it private
-    private DirectorExtractorUtils() {}
+    private PupilleUtils() {}
 
     public static String extractDirectors(String stab) {
         if (stab == null || stab.isEmpty()) return "";
@@ -56,5 +58,21 @@ public final class DirectorExtractorUtils {
 
         // If nothing found, return null
         return null;
+    }
+
+    public static String formatSemesterFromLocalDateTermin(LocalDate vorstellungsbeginn){
+        int year = vorstellungsbeginn.getYear();
+        int month = vorstellungsbeginn.getMonthValue();
+
+        if (month < 4) {
+            // January–March: preceding winter semester
+            return String.format("Wintersemester %d/%d", year - 1, year);
+        } else if (month < 10) {
+            // April–September: current year's summer semester
+            return String.format("Sommersemester %d", year);
+        } else {
+            // October–December: current winter semester (year/year+1)
+            return String.format("Wintersemester %d/%d", year, year + 1);
+        }
     }
 }

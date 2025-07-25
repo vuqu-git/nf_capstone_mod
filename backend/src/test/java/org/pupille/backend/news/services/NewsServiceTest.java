@@ -320,7 +320,7 @@ class NewsServiceTest {
     }
 
     @Test
-    void getNewsByDateInRange_whenEmpty_returnEmptyList() {
+    void getAllValidNewsByDateInRange_whenEmpty_returnEmptyList() {
         // GIVEN
         List<News> expected = new ArrayList<>();
 
@@ -328,11 +328,11 @@ class NewsServiceTest {
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow();
-        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
+        when(mockNewsRepo.findAllValidNewsByDateInRange(currentDate)).thenReturn(expected);
         // WHEN
-        List<News> actual = newsService.getNewsByDateInRange();
+        List<News> actual = newsService.getAllValidNewsByDateInRange();
         // THEN
-        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
+        verify(mockNewsRepo).findAllValidNewsByDateInRange(currentDate);
         assertEquals(expected, actual);
 
         //        // GIVEN
@@ -352,18 +352,18 @@ class NewsServiceTest {
     }
 
     @Test
-    void getNewsByDateInRange_whenNotEmpty_returnNewsList_1() {
+    void getNewsByDateInRange_whenNotEmpty_returnAllValidNewsList_1() {
         // GIVEN
         List<News> expected = new ArrayList<>(List.of(n1));
         // Mock now date generation
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
-        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn(expected);
+        when(mockNewsRepo.findAllValidNewsByDateInRange(currentDate)).thenReturn(expected);
         // WHEN
-        List<News> actual = newsService.getNewsByDateInRange();
+        List<News> actual = newsService.getAllValidNewsByDateInRange();
         // THEN
-        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
+        verify(mockNewsRepo).findAllValidNewsByDateInRange(currentDate);
         assertEquals(expected, actual);
 
         //        // GIVEN
@@ -382,7 +382,7 @@ class NewsServiceTest {
 
     // here with sorting in the actual call of newsService.getNewsByDateInRange()
     @Test
-    void getNewsByDateInRange_whenNotEmpty_returnNewsList_2() {
+    void getNewsByDateInRange_whenNotEmpty_returnAllValidNewsList_2() {
         // GIVEN
         List<News> expected = new ArrayList<>(List.of(n2, n1));
 
@@ -390,11 +390,11 @@ class NewsServiceTest {
         when(mockDateNowService.localDateNow()).thenReturn(LocalDate.of(2025, 4, 20));
 
         LocalDate currentDate = mockDateNowService.localDateNow(); // currentDate contains the predefined now date above
-        when(mockNewsRepo.findNewsByDateInRange(currentDate)).thenReturn( new ArrayList<>(List.of(n1, n2)) );
+        when(mockNewsRepo.findAllValidNewsByDateInRange(currentDate)).thenReturn( new ArrayList<>(List.of(n1, n2)) );
         // WHEN
-        List<News> actual = newsService.getNewsByDateInRange();
+        List<News> actual = newsService.getAllValidNewsByDateInRange();
         // THEN
-        verify(mockNewsRepo).findNewsByDateInRange(currentDate);
+        verify(mockNewsRepo).findAllValidNewsByDateInRange(currentDate);
         assertEquals(expected, actual);
 
         //        // GIVEN

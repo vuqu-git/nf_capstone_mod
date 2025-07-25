@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 
-import './Overview.css';
+import './OverviewAndProgram.css';
 
 import axios from "axios";
 import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOOverviewSemester.ts";

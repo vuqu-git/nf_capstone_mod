@@ -45,8 +45,8 @@ public class NewsService {
 
     public News saveNews(News newNews){
         String id = idService.randomId();
-        News movieToSave = newNews.withId(id);
-        return newsRepo.save(movieToSave);
+        News newsToSave = newNews.withId(id);
+        return newsRepo.save(newsToSave);
     }
 
     public void deleteNews(String id) {
@@ -57,25 +57,25 @@ public class NewsService {
         }
     }
 
-    public News updateNews(String targetId, News updatedMovie) {
+    public News updateNews(String targetId, News updatedNews) {
 
         if (!newsRepo.existsById(targetId)) {
             throw new NewsNotFoundException(String.format(errorMessage, targetId));
         }
 
         // Ensure the id in the updatedNews matches the path variable id.
-        if (!targetId.equals(updatedMovie.id())) {
+        if (!targetId.equals(updatedNews.id())) {
             throw new IllegalArgumentException("ID in path and body do not match");
         }
-        return newsRepo.save(updatedMovie);
+        return newsRepo.save(updatedNews);
     }
 
     // ########################################
     // now non standard service queries/methods
 
-    public List<News> getNewsByDateInRange() {
+    public List<News> getAllValidNewsByDateInRange() {
         LocalDate currentDate = dateNowService.localDateNow();
-        List<News> newsList = newsRepo.findNewsByDateInRange(currentDate);
+        List<News> newsList = newsRepo.findAllValidNewsByDateInRange(currentDate);
         newsList.sort(Comparator.comparing(News::endDate));
         return newsList;
     }

@@ -61,6 +61,7 @@ export default function TerminFilmGalleryCard({
                     <Card.Img
                         variant="top"
                         src={`https://www.pupille.org/bilder/filmbilder/${bild}`}
+                        alt={titel ? `Bild der Vorführung von ${titel}` : ""}
 
                         // 0) always pass a style prop
                         style={{ objectPosition: `center ${offsetImageInGallery ?? "center"}` }}

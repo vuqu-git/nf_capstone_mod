@@ -87,6 +87,17 @@ export default function Admin() {
                     </li>
                 </ul>
             </section>
+
+            <section>
+                <h3>Programmhefte/Flyer</h3>
+                <ul className="list-unstyled">
+                    <li>
+                        <Link to="/adminprogrammhefte" className="btn btn-secondary mb-2">
+                            Add, Edit, Delete
+                        </Link>
+                    </li>
+                </ul>
+            </section>
         </>
     )
 };
