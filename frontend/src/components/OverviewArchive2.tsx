@@ -11,11 +11,41 @@ import {convertToHtmlEntities} from "../utils/convertToHtmlEntities.ts";
 export default function OverviewArchive2() {
 
     const {screeningArchiveEntries, allPdfs} = useLoaderData<ArchiveData>();
-    const [archivedResource, setArchivedResource] = useState<string>("");
 
-    const [searchFilm, setSearchFilm] = useState<string>("");
-    const [searchPdf, setSearchPdf] = useState<string>("");
+    // ********************************************************
+    // ordinary state management → state is lost when the component unmounts and remounts, which happens when you navigate away and then back
+    // const [archivedResource, setArchivedResource] = useState<string>("");
+    //
+    // const [searchFilm, setSearchFilm] = useState<string>("");
+    // const [searchPdf, setSearchPdf] = useState<string>("");
 
+
+    // Initialize state from sessionStorage
+    //      Purpose: To keep the state after visiting the film details and get back to archive
+    const [archivedResource, setArchivedResource] = useState<string>(
+        sessionStorage.getItem("archivedResource") || ""
+    );
+    const [searchFilm, setSearchFilm] = useState<string>(
+        sessionStorage.getItem("searchFilm") || ""
+    );
+    const [searchPdf, setSearchPdf] = useState<string>(
+        sessionStorage.getItem("searchPdf") || ""
+    );
+
+    // Effect to save state to sessionStorage whenever it changes
+    useEffect(() => {
+        sessionStorage.setItem("archivedResource", archivedResource);
+    }, [archivedResource]);
+
+    useEffect(() => {
+        sessionStorage.setItem("searchFilm", searchFilm);
+    }, [searchFilm]);
+
+    useEffect(() => {
+        sessionStorage.setItem("searchPdf", searchPdf);
+    }, [searchPdf]);
+
+    // form handlers
     const handleSelectionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setArchivedResource(event.target.value);
     };
@@ -27,7 +57,6 @@ export default function OverviewArchive2() {
     const handlePdfInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchPdf(event.target.value);
     };
-
     // ********************************************************
 
     const renderArchiveWithScreenings = () => {
@@ -200,11 +229,11 @@ export default function OverviewArchive2() {
             <h2>Programmarchiv</h2>
 
             <div className={styles.formField}>
-                <label htmlFor="archivedRessourse" className={`${styles.formLabel} visually-hidden`}>
+                <label htmlFor="archivedResource" className={`${styles.formLabel} visually-hidden`}>
                     Screenings oder Hefte/Flyer auswählen
                 </label>
                 <select
-                    id="archivedRessourse"
+                    id="archivedResource"
                     value={archivedResource}
                     onChange={handleSelectionChange}
                     className={styles.formSelect}
