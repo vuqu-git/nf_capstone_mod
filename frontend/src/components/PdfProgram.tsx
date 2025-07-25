@@ -14,14 +14,18 @@ export default function PdfProgram() {
                         <Link
                             to={"https://pupille.org/programmheft/" + p.pdf}
                             className="custom-link mb-1"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
-                            Download PDF ▷ {p.titel}
+                            {p.titel}
                         </Link>
                         </div>
 
                             {p.bild && (
                                 <Link
                                     to={"https://pupille.org/programmheft/" + p.pdf}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                 >
                                 <img
                                     src={"https://pupille.org/bilder/programmheftbilder/" + p.bild}
