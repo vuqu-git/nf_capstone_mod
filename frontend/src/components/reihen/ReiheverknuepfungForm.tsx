@@ -192,7 +192,6 @@ export default function ReiheverknuepfungForm() {
         <div data-bs-theme="dark">
             <AdminNav />
 
-            {/*<h3 className="mt-3">{selectedReiheId ? "Edit or delete " : "Add new "} Reihe</h3>*/}
             <h3 className="mt-3">Add Termine (incl. its Film(e)) to Reihe</h3>
 
             <ReiheSelection
@@ -289,7 +288,6 @@ export default function ReiheverknuepfungForm() {
                 {allTermineWithMainfilme.map((t: TerminDTOWithFilmDTOOverviewArchive) => (
                     <option key={t.tnr} value={t.tnr}>
 
-                        {/*{`${formatDateInTerminSelectOption(t.vorstellungsbeginn)}| ${t.titel} | #${t.tnr}`}*/}
                         {
                             `${formatDateInTerminSelectOption(t.vorstellungsbeginn)} | tnr: #${t.tnr}
                             | ${t.titel ?? t.films.map(film =>  film.titel).join('+') 
