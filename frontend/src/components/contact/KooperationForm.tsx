@@ -34,6 +34,11 @@ interface KooperationFormProps {
 
 const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
 
+    const maxMessageLengthObj = {
+        nachricht: 1500,
+        zusammenarbeit: 500
+    };
+
     const [terminPraeferenzLabel, setTerminPraeferenzLabel] = useState('');
     const [momentaneAnfrageFuerSemester, setMomentaneAnfrageFuerSemester] = useState('');
 
@@ -43,10 +48,10 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
         const month = now.getMonth(); // 0-indexed (0 for January, 6 for July)
 
         if (month >= 3 && month <= 6) { // April (3) to July (6)
-            setTerminPraeferenzLabel(`Eure Terminpräferenzen für das Wintersemester ${year.toString().slice(-2)}/${(year + 1).toString().slice(-2)}*:`);
+            setTerminPraeferenzLabel(`Eure Terminpräferenzen für das Wintersemester ${year.toString().slice(-2)}/${(year + 1).toString().slice(-2)}`);
             setMomentaneAnfrageFuerSemester(`D.h. momentan sind nur Anfragen für das Wintersemester ${year.toString().slice(-2)}/${(year + 1).toString().slice(-2)} möglich.`)
         } else { // August (7) to March (2) of the following year
-            setTerminPraeferenzLabel(`Eure Terminpräferenzen für das Sommersemester ${year + 1}*:`);
+            setTerminPraeferenzLabel(`Eure Terminpräferenzen für das Sommersemester ${year + 1}`);
             setMomentaneAnfrageFuerSemester(`D.h. momentan sind nur Anfragen für das Sommersemester ${year + 1} möglich.`);
         }
     }, []);
@@ -64,79 +69,85 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                 Der Einsendeschluss für Kooperationsanfragen ist der 31. Januar (für das Sommersemester) sowie der 31. Juli (für das Wintersemester). <b>{momentaneAnfrageFuerSemester}</b>
             </p>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="betreff">Betreff*:</label>
+                <label className={styles.formLabel} htmlFor="betreff">Betreff *</label>
                 <input
                     type="text"
                     id="betreff"
                     name="betreff"
                     value={formData.betreff || ''}
+                    maxLength={100}
                     onChange={onInputChange}
                     required
                     className={styles.textInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson*:</label>
+                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson *</label>
                 <input
                     type="text"
                     id="ansprechperson"
                     name="ansprechperson"
                     value={formData.ansprechperson || ''}
+                    maxLength={50}
                     onChange={onInputChange}
                     required
                     className={styles.textInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="email">Email*:</label>
+                <label className={styles.formLabel} htmlFor="email">E-Mail-Adresse *</label>
                 <input
                     type="email"
                     id="email"
                     name="email"
                     value={formData.email || ''}
+                    maxLength={254} // RFC 5322 Standard
                     onChange={onInputChange}
                     required
                     className={styles.emailInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="telefon">Telefonnummer:</label>
+                <label className={styles.formLabel} htmlFor="telefon">Telefonnummer</label>
                 <input
                     type="tel"
                     id="telefon"
                     name="telefon"
                     value={formData.telefon || ''}
+                    maxLength={20}
                     onChange={onInputChange}
                     className={styles.telInput}
                 />
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="filmtitel">Filmtitel*:</label>
+                <label className={styles.formLabel} htmlFor="filmtitel">Filmtitel *</label>
                 <input
                     type="text"
                     id="filmtitel"
                     name="filmtitel"
                     value={formData.filmtitel || ''}
+                    maxLength={150}
                     onChange={onInputChange}
                     required
                     className={styles.textInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="verleih">Verleiher/Rechteinhaber des vorgeschlagenen Films*:</label>
+                <label className={styles.formLabel} htmlFor="verleih">Verleiher/Rechteinhaber des vorgeschlagenen Films *</label>
                 <input
                     type="text"
                     id="verleih"
                     name="verleih"
                     value={formData.verleih || ''}
+                    maxLength={100}
                     onChange={onInputChange}
                     required
                     className={styles.textInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="format">Abspielformat*:</label>
+                <label className={styles.formLabel} htmlFor="format">Abspielformat *</label>
                 <select
                     id="format"
                     name="format"
@@ -157,25 +168,30 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="nachricht">Eure Nachricht*:</label>
+                <label className={styles.formLabel} htmlFor="nachricht">Nachricht *</label>
                 <textarea
                     id="nachricht"
                     name="nachricht"
                     value={formData.nachricht || ''}
+                    maxLength={maxMessageLengthObj.nachricht}
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
                     style={{ height: '175px' }}
                 />
+                <div className={styles.characterCounter}>
+                    Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLengthObj.nachricht}
+                </div>
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="terminpraeferenz">{terminPraeferenzLabel}</label>
+                <label className={styles.formLabel} htmlFor="terminpraeferenz">{terminPraeferenzLabel} *</label>
                 <textarea
                     id="terminpraeferenz"
                     name="terminpraeferenz"
                     value={formData.terminpraeferenz || ''}
-                    placeholder="Spieltermine sind 20:15 Uhr i.d.R. am Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
+                    maxLength={250}
+                    placeholder="Spieltermine sind 20:15 Uhr i.d.R. am Montag und Mittwoch in der Vorlesungszeit des Semesters"
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
@@ -184,17 +200,21 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
 
             <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="zusammenarbeit">
-                    Eure Vorstellungen zur Arbeitsteilung und Kostenbeteiligung (u.a. Ticketeinnahmen, Filmbestellung, Vorführlizenz)*:
+                    Eure Vorstellungen zur Arbeitsteilung und Kostenbeteiligung (u.a. Ticketeinnahmen, Filmbestellung, Vorführlizenz) *
                 </label>
                 <textarea
                     id="zusammenarbeit"
                     name="zusammenarbeit"
                     value={formData.zusammenarbeit || ''}
+                    maxLength={maxMessageLengthObj.zusammenarbeit}
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
                     style={{ height: '100px' }}
                 />
+                <div className={styles.characterCounter}>
+                    Zeichen: {formData?.zusammenarbeit?.length || 0}/{maxMessageLengthObj.zusammenarbeit}
+                </div>
             </div>
 
             <DatenschutzCheck

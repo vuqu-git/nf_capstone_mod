@@ -46,35 +46,38 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
                 Ihr könnt gerne eine kurze Benachrichtigung zu eurer Nutzung hinterlassen.
             </p>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="betreff">Betreff*:</label>
+                <label className={styles.formLabel} htmlFor="betreff">Betreff *</label>
                 <input
                     type="text"
                     id="betreff"
                     name="betreff"
                     value={formData.betreff ?? ''}
+                    maxLength={100}
                     onChange={onInputChange}
                     className={styles.textInput}
                     required
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson:</label>
+                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson</label>
                 <input
                     type="text"
                     id="ansprechperson"
                     name="ansprechperson"
                     value={formData.ansprechperson || ''}
+                    maxLength={50}
                     onChange={onInputChange}
                     className={styles.textInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="email">Email*:</label>
+                <label className={styles.formLabel} htmlFor="email">E-Mail-Adresse *</label>
                 <input
                     type="email"
                     id="email"
                     name="email"
                     value={formData.email || ''}
+                    maxLength={254} // RFC 5322 Standard
                     onChange={onInputChange}
                     required
                     className={styles.emailInput}
@@ -82,7 +85,7 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="veranstaltungsbeginn">Veranstaltungsbeginn (Datum & Uhrzeit)*:</label>
+                <label className={styles.formLabel} htmlFor="veranstaltungsbeginn">Veranstaltungsbeginn (Datum & Uhrzeit) *</label>
                 <input
                     type="datetime-local"
                     id="veranstaltungsbeginn"
@@ -95,7 +98,7 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="veranstaltungsende">Veranstaltungsende (Datum & Uhrzeit)*:</label>
+                <label className={styles.formLabel} htmlFor="veranstaltungsende">Veranstaltungsende (Datum & Uhrzeit) *</label>
                 <input
                     type="datetime-local"
                     id="veranstaltungsende"

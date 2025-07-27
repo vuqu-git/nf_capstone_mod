@@ -24,6 +24,8 @@ interface KinomitarbeitFormProps {
 
 const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
 
+    const maxMessageLength = 1000;
+
     const handleLocalSubmit = (event: FormEvent) => {
         // Prevent the child form's default submission
         event.preventDefault();
@@ -36,44 +38,50 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
     return (
         <form className={styles.formContainer} onSubmit={handleLocalSubmit}>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="name">Name*:</label>
+                <label className={styles.formLabel} htmlFor="name">Name *</label>
                 <input
                     type="text"
                     id="name"
                     name="name"
                     value={formData.name || ''}     // Ensure initial value is defined
+                    maxLength={50}
                     onChange={onInputChange}
                     required
                     className={styles.textInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="email">Email*:</label>
+                <label className={styles.formLabel} htmlFor="email">E-Mail-Adresse *</label>
                 <input
                     type="email"
                     id="email"
                     name="email"
                     value={formData.email || ''}    // Ensure initial value is defined
+                    maxLength={254} // RFC 5322 Standard
                     onChange={onInputChange}
                     required
                     className={styles.emailInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="nachricht">Nachricht*:</label>
+                <label className={styles.formLabel} htmlFor="nachricht">Nachricht *</label>
                 <textarea
                     id="nachricht"
                     name="nachricht"
                     value={formData.nachricht || ''}  // Ensure initial value is defined
+                    maxLength={maxMessageLength}
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
                     style={{ height: '300px' }}
                 />
+                <div className={styles.characterCounter}>
+                    Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLength}
+                </div>
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="stundenEngagement">Geschätztes Engagement (in h) im Durchschnitt pro Monat:</label>
+                <label className={styles.formLabel} htmlFor="stundenEngagement">Geschätztes Engagement (in h) im Durchschnitt pro Monat</label>
                 <input
                     type="number"
                     id="stundenEngagement"

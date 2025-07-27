@@ -65,6 +65,19 @@
     font-size: 1rem;
 }
 
+.characterCounter {
+    font-size: 0.8em;
+    color: #a0a6b1;
+    text-align: right;
+    margin-top: 5px;
+    padding-right: 2px;
+}
+
+.textUnderTextField {
+    font-size: 0.8em;
+    color: #a0a6b1;
+}
+
 /* Submit button styling */
 .submitButton {
     padding: 0.5rem 1.2rem;

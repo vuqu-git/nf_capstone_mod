@@ -24,6 +24,8 @@ interface AOBFormProps {
 
 const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
 
+    const maxMessageLength = 2000;
+
     const handleLocalSubmit = (event: FormEvent) => {
         // Prevent the child form's default submission
         event.preventDefault();
@@ -36,12 +38,13 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage
     return (
         <form className={styles.formContainer} onSubmit={handleLocalSubmit}>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="betreff">Betreff*:</label>
+                <label className={styles.formLabel} htmlFor="betreff">Betreff *</label>
                 <input
                     type="text"
                     id="betreff"
                     name="betreff"
                     value={formData.betreff || ''} // Ensure initial value is defined
+                    maxLength={100}
                     onChange={onInputChange}
                     required
                     className={styles.textInput}
@@ -49,11 +52,12 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="name">Name:</label>
+                <label className={styles.formLabel} htmlFor="name">Name</label>
                 <input
                     type="text"
                     id="name"
                     name="name"
+                    maxLength={50}
                     value={formData.name || ''}     // Ensure initial value is defined
                     onChange={onInputChange}
                     className={styles.textInput}
@@ -61,11 +65,12 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="email">Email*:</label>
+                <label className={styles.formLabel} htmlFor="email">E-Mail-Adresse *</label>
                 <input
                     type="email"
                     id="email"
                     name="email"
+                    maxLength={254} // RFC 5322 Standard
                     value={formData.email || ''}    // Ensure initial value is defined
                     onChange={onInputChange}
                     required
@@ -74,16 +79,20 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="nachricht">Nachricht*:</label>
+                <label className={styles.formLabel} htmlFor="nachricht">Nachricht *</label>
                 <textarea
                     id="nachricht"
                     name="nachricht"
                     value={formData.nachricht || ''}  // Ensure initial value is defined
+                    maxLength={maxMessageLength}
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
                     style={{ height: '300px' }}
                 />
+                <div className={styles.characterCounter}>
+                    Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLength}
+                </div>
             </div>
 
             <DatenschutzCheck

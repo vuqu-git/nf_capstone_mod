@@ -37,6 +37,9 @@ interface MitKinotechnikFormProps {
 }
 
 const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit, submissionStatusWithMessage, onInputChange, formData }) => {
+
+    const maxMessageLength = 1500;
+
     const [errorMissingConfirmationMessage, setErrorMissingConfirmationMessage] = useState<string | null>(null);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -73,73 +76,82 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
     return (
         <form className={styles.formContainer} onSubmit={handleLocalSubmit}>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="betreff">Betreff*:</label>
+                <label className={styles.formLabel} htmlFor="betreff">Betreff *</label>
                 <input
                     type="text"
                     id="betreff"
                     name="betreff"
                     value={formData.betreff || ''}
+                    maxLength={100}
                     onChange={onInputChange}
                     required
                     className={styles.textInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson*:</label>
+                <label className={styles.formLabel} htmlFor="ansprechperson">Ansprechperson *</label>
                 <input
                     type="text"
                     id="ansprechperson"
                     name="ansprechperson"
                     value={formData.ansprechperson || ''}
+                    maxLength={50}
                     onChange={onInputChange}
                     required
                     className={styles.textInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="email">Email*:</label>
+                <label className={styles.formLabel} htmlFor="email">E-Mail-Adresse *</label>
                 <input
                     type="email"
                     id="email"
                     name="email"
                     value={formData.email || ''}
+                    maxLength={254} // RFC 5322 Standard
                     onChange={onInputChange}
                     required
                     className={styles.emailInput}
                 />
             </div>
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="telefon">Telefonnummer:</label>
+                <label className={styles.formLabel} htmlFor="telefon">Telefonnummer </label>
                 <input
                     type="tel"
                     id="telefon"
                     name="telefon"
                     value={formData.telefon || ''}
+                    maxLength={20}
                     onChange={onInputChange}
                     className={styles.telInput}
                 />
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="nachricht">Eure Nachricht*</label>
+                <label className={styles.formLabel} htmlFor="nachricht">Nachricht *</label>
                 <textarea
                     id="nachricht"
                     name="nachricht"
                     value={formData.nachricht || ''}
+                    maxLength={maxMessageLength}
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
                     style={{ height: '175px' }}
                 />
+                <div className={styles.characterCounter}>
+                    Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLength}
+                </div>
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="projektionsinhalt">Projektionsinhalt* (bspw. Filmtitel):</label>
+                <label className={styles.formLabel} htmlFor="projektionsinhalt">Projektionsinhalt (bspw. Filmtitel) *</label>
                 <input
                     type="text"
                     id="projektionsinhalt"
                     name="projektionsinhalt"
                     value={formData.projektionsinhalt || ''}
+                    maxLength={150}
                     onChange={onInputChange}
                     required
                     className={styles.textInput}
@@ -147,19 +159,20 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="verleih">Verleiher/Rechteinhaber (bei öffentlicher Filmvorführung):</label>
+                <label className={styles.formLabel} htmlFor="verleih">Verleiher/Rechteinhaber (bei öffentlicher Filmvorführung)</label>
                 <input
                     type="text"
                     id="verleih"
                     name="verleih"
                     value={formData.verleih || ''}
+                    maxLength={100}
                     onChange={onInputChange}
                     className={styles.textInput}
                 />
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="format">Abspielformat*:</label>
+                <label className={styles.formLabel} htmlFor="format">Abspielformat *</label>
                 <select
                     id="format"
                     name="format"
@@ -180,7 +193,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="anzMikrofone">Anzahl benötigter Mikrofone:</label>
+                <label className={styles.formLabel} htmlFor="anzMikrofone">Anzahl benötigter Mikrofone</label>
                 <input
                     type="number"
                     id="anzMikrofone"
@@ -194,7 +207,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="veranstaltungsbeginn">Veranstaltungsbeginn (Datum & Uhrzeit)*:</label>
+                <label className={styles.formLabel} htmlFor="veranstaltungsbeginn">Veranstaltungsbeginn (Datum & Uhrzeit) *</label>
                 <input
                     type="datetime-local"
                     id="veranstaltungsbeginn"
@@ -207,7 +220,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
             </div>
 
             <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="veranstaltungsende">Veranstaltungsende (Datum & Uhrzeit)*:</label>
+                <label className={styles.formLabel} htmlFor="veranstaltungsende">Veranstaltungsende (Datum & Uhrzeit) *</label>
                 <input
                     type="datetime-local"
                     id="veranstaltungsende"
@@ -225,9 +238,12 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 </div>
             </div>
 
-            <p >Weitere alternative Veranstaltungszeiträume (mit Datum & Uhrzeit) können Nachrichtenfeld oben genannt werden.</p>
+            <div className={styles.textUnderTextField}>
+                Weitere alternative Veranstaltungszeiträume (mit Angabe von Datum und Uhrzeiten) können oben Nachrichtenfeld genannt werden.
+            </div>
 
-            <div className={styles.formFieldCheckbox}>
+            {/*<div className={`${styles.formFieldCheckbox} mt-3`}>*/}
+            <div className={styles.formFieldCheckbox + " mt-3"}>
                 <input
                     type="checkbox"
                     id="istGemietetBeiAsta"
