@@ -161,7 +161,7 @@ const ContactForm: React.FC = () => {
 
             <h3 className={styles.subsectionTitle}>fernmündlich</h3>
             <p className={styles.formDescription}>I.d.R. nur taggleich vor und nach den Spielterminen erreichbar.</p>
-            <p className={styles.formDescription}>Telefon: <a href="tel:06979828976">069 7982 8976</a></p>
+            <p className={styles.formDescription}>Telefon: 069 7982 8976</p>
 
             <h3 className={styles.subsectionTitle}>schriftlich</h3>
 
