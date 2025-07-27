@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { News } from '../types/News.ts';
 
-const baseURL = "/api/news";
+// const baseURL = "/api/news";
 
 export const useAllNews = (shouldFetchDetails: boolean = true) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +17,7 @@ export const useAllNews = (shouldFetchDetails: boolean = true) => {
         setIsLoading(true);
         setError("");
 
-        axios.get(`${baseURL}`)
+        axios.get(`/api/news`)
             .then((response) => setAllNews(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -43,7 +43,7 @@ export const useAllNews = (shouldFetchDetails: boolean = true) => {
         setIsLoading(true);
         setError("");
 
-        axios.get(`${baseURL}/all/${id}`)
+        axios.get(`/api/news/${id}`)
             .then((response) => setSelectedNews(response.data))
             .catch((error) => {
                 const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
