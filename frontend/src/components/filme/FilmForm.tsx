@@ -336,10 +336,11 @@ export default function FilmForm() {
                 </Form.Group>
 
                 <Form.Group controlId="originaltitelAnzeigen" className="mt-3">
-                    <Form.Label><s>Originaltitel anzeigen</s></Form.Label>
+                    {/*<Form.Label>Originaltitel anzeigen</Form.Label>*/}
                     <Form.Check
+                        disabled={true}
                         type="checkbox"
-                        // label="Originaltitel anzeigen"
+                        label="Originaltitel anzeigen"
                         name="originaltitelAnzeigen"
                         checked={selectedFilm.originaltitelAnzeigen || false}
                         onChange={handleFormChange}
@@ -567,15 +568,16 @@ export default function FilmForm() {
                     <Form.Text className="text-muted">
                         <span className="text-danger">Wichtig:</span> Zeilenumbruch muss vorliegen d.h. jeweils 1 Eintrag pro Zeile → [key]: [value]
                         <br/>
-                        Bei form submit werden leading and trailing blanks entfernt und zwar pro Zeile in den beiden Substrings getrennt durch den 1. Doppelpunkt; so eine Zeile ist möglich: <pre> M   :     Ennio Morricone  </pre>
-                        <br/>
+                        Bei form submit werden leading and trailing blanks entfernt und zwar pro Zeile in den beiden Substrings getrennt durch den 1. Doppelpunkt; so eine Zeile ist möglich:
+                        <pre> M   :     Ennio Morricone  </pre>
                         a tag template → Link: {`<a href="" class="custom-link" target="_blank" rel="noopener noreferrer">Letterboxd</a>`}
                     </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="sonderfarbeTitel" className="mt-3">
-                    <Form.Label><s>Sonderfarbe Titel</s></Form.Label>
+                    <Form.Label>Sonderfarbe Titel</Form.Label>
                     <Form.Control
+                        disabled={true}
                         type="number"
                         name="sonderfarbeTitel"
                         value={selectedFilm.sonderfarbeTitel || ""}

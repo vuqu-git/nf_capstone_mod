@@ -379,8 +379,9 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="startReservierung" className="mt-3">
-                    <Form.Label><s>Start Reservierungsdatum</s></Form.Label>
+                    <Form.Label>Start Reservierungsdatum</Form.Label>
                     <Form.Control
+                        disabled={true}
                         type="date"
                         name="startReservierung"
                         value={selectedTermin.startReservierung || ""}
@@ -389,8 +390,9 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="linkReservierung" className="mt-3">
-                    <Form.Label><s>Link zur Reservierung</s></Form.Label>
+                    <Form.Label>Link zur Reservierung</Form.Label>
                     <Form.Control
+                        disabled={true}
                         type="text"
                         name="linkReservierung"
                         value={selectedTermin.linkReservierung || ""}
@@ -399,8 +401,9 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="sonderfarbeTitel" className="mt-3">
-                    <Form.Label><s>Sonderfarbe Titel</s></Form.Label>
+                    <Form.Label>Sonderfarbe Titel</Form.Label>
                     <Form.Control
+                        disabled={true}
                         type="number"
                         name="sonderfarbeTitel"
                         value={selectedTermin.sonderfarbeTitel || ""}
