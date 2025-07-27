@@ -8,6 +8,7 @@ import ReiheDTOForFormWithTermineAndFilme from "../../types/ReiheDTOForFormWithT
 import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
 import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
+import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 
 const baseURL = "/api/reihe";
 
@@ -101,7 +102,7 @@ export default function ReiheForm() {
         if (selectedReiheId) {
             // Editing an existing Reihe (PUT request)
 
-            axios.put(`${baseURL}/${selectedReiheId}`, preprocessFormData(selectedReihe))
+            axios.put(`${baseURL}/${selectedReiheId}`, trimAllStringsInObjectShallow( preprocessFormData(selectedReihe) ))
                 .then(() => {
                     setSuccessMessage("Reihe updated successfully!");
 
@@ -122,7 +123,7 @@ export default function ReiheForm() {
             // #####################################################
 
             // axios.post(`${baseURL}`, selectedReihe)
-            axios.post(`${baseURL}`, preprocessFormData(reiheInFormWithoutRnr))
+            axios.post(`${baseURL}`, trimAllStringsInObjectShallow( preprocessFormData(reiheInFormWithoutRnr) ))
                 .then(() => {
                     setSuccessMessage("Reihe saved successfully!");
 
@@ -253,6 +254,9 @@ export default function ReiheForm() {
                         value={selectedReihe.text || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        styled tag template → {'<span style="color: blue; font-weight: bold;">highlighted part</span>'}
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="farbe" className="mt-3">

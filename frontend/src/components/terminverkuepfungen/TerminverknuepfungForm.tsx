@@ -10,6 +10,7 @@ import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import TerminSelection from "../termine/TerminSelection.tsx";
 // import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 import AdminNav from "../AdminNav.tsx";
+import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 
 const baseURL = "/api/terminverknuepfung";
 
@@ -107,7 +108,7 @@ export default function TerminverknuepfungForm() {
 
             const [tnr, fnr] = selectedTVId.split(',');
 
-            axios.put(`${baseURL}/${tnr}/${fnr}`, preprocessFormData(selectedTV))
+            axios.put(`${baseURL}/${tnr}/${fnr}`, trimAllStringsInObjectShallow( preprocessFormData(selectedTV) ))
                 .then(() => {
                     setSuccessMessage("terminverknuepfung updated successfully!");
 
@@ -122,7 +123,7 @@ export default function TerminverknuepfungForm() {
                 .finally(() => setIsLoading(false));
 
         } else {
-            axios.post(`${baseURL}/link-film-termin`, preprocessFormData(selectedTV))
+            axios.post(`${baseURL}/link-film-termin`, trimAllStringsInObjectShallow( preprocessFormData(selectedTV) ))
                 .then(() => {
                     setSuccessMessage("terminverknuepfung saved successfully!");
 
@@ -185,7 +186,6 @@ export default function TerminverknuepfungForm() {
     // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
     // GET all films
     const [allFilms, setAllFilms] = useState<FilmDTOSelection[]>([]);
-    // const [selectedFilmId, setSelectedFilmId] = useState<number | undefined>(undefined);
 
     const getAllFilms = () => {
         setErrorMessage("");
@@ -214,7 +214,6 @@ export default function TerminverknuepfungForm() {
     // GET all termine
 
     const [allTermine, setAllTermine] = useState<TerminDTOSelection[]>([]);
-    // const [selectedTerminId, setSelectedTerminId] = useState<number | undefined>(undefined);
 
     // GET all termine
     const getAllSortedTermine = () => {

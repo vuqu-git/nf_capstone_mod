@@ -5,6 +5,7 @@ import NewsForm from "./NewsForm.tsx";
 
 import { preprocessFormData } from '../../utils/preprocessFormData.ts';
 import AdminNav from "../AdminNav.tsx";
+import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 
 const baseURL = "/api/news";
 
@@ -29,7 +30,7 @@ export default function AddNews() {
         setError("");
         setSuccessMessage("");
 
-        axios.post(`${baseURL}`, preprocessFormData(newsInForm))
+        axios.post(`${baseURL}`, trimAllStringsInObjectShallow( preprocessFormData(newsInForm) ))
             .then(() => {
                 setSuccessMessage("News added successfully!");
                 setAddingNews(emptyNewsForForm);

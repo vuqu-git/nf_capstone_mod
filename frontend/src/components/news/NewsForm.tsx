@@ -1,9 +1,11 @@
 import { FormEvent } from "react";
-import { Form, Button } from "react-bootstrap";
+import {Form, Button, Accordion} from "react-bootstrap";
 import { News } from "../../types/News.ts";
 import * as React from "react";
 import axios from "axios";
 import {copyToClipboard} from "../../utils/copyToClipboard.ts";
+import styles from "../contact/Forms.module.css";
+import {useDateStartBeforeEndValidation} from "../../hooks/useDateStartBeforeEndValidation.ts";
 
 interface Props {
     newsItem: News; // this is need for prefilled form in case of edit
@@ -12,7 +14,15 @@ interface Props {
     formType: "edit" | "add"; // determines whether the form is for editing or adding
 }
 
+// this component is called in AddNews.txs and EditNews.tsx
+
 export default function NewsForm({ newsItem, handleSubmit, onChange, formType }: Props) {
+
+    const dateOrderErrorMessage = useDateStartBeforeEndValidation(
+        newsItem.startDate,
+        newsItem.endDate
+    );
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         onChange({ ...newsItem, [name]: value });
@@ -41,6 +51,8 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
     //     }
     // };
 
+    // ################################
+
     const sendEmojifyRequestWithAI = () => {
         const url = '/api/perplexityai/emojify';
         const inputText = newsItem.text;
@@ -68,8 +80,6 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
             });
     };
 
-    // ################################
-    
     return (
         <div data-bs-theme="dark">
             {/* heading based on formType */}
@@ -77,15 +87,22 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
 
             <Form onSubmit={(e) => handleSubmit(e, newsItem)}>
                 <Form.Group controlId="text">
-                    <Form.Label>Text</Form.Label>
+                    <Form.Label>Text*</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={10} // Large textarea
                         name="text"
-                        value={newsItem.text}
+                        value={newsItem.text || ''}
                         onChange={handleChange}
                         required
                     />
+                    <Form.Text className="text-muted">
+                        a tag template → {`<a href="" class="custom-link" target="_blank" rel="noopener noreferrer">Linktext</a>`}
+                        <br/>
+                        styled tag template → {'<span style="color: blue; font-weight: bold;">highlighted part</span>'}
+                        <br/>
+                        img template for 'free' design → {'<img src="https://pupille.org/bilder/allgemein/ABC.jpg" style="border-radius: 10px; width: 100%; height: auto; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); margin-bottom: 2rem;" />'}
+                    </Form.Text>
                 </Form.Group>
 
                 <Button
@@ -93,7 +110,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                     className="mt-4"
                     onClick={() => sendEmojifyRequestWithAI()}
                 >
-                    🤖🧠💬 Emojify the news text! 😆🎨🦄
+                    🤖🧠✨ Emojify the news text! 😆🎨🦄
                 </Button>
 
                 <Form.Group controlId="image" className="mt-3">
@@ -101,13 +118,16 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                     <Form.Control
                         type="text"
                         name="image"
-                        value={newsItem.image}
+                        value={newsItem.image || ''}
                         onChange={handleChange}
                     />
+                    <Form.Text className="text-muted">
+                        full url of the image file
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="startDate" className="mt-3">
-                    <Form.Label>Start Date (inclusive)</Form.Label>
+                    <Form.Label>Start Date* (inclusive)</Form.Label>
                     <Form.Control
                         type="date"
                         name="startDate"
@@ -118,7 +138,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 </Form.Group>
 
                 <Form.Group controlId="endDate" className="mt-3">
-                    <Form.Label>End Date (inclusive)</Form.Label>
+                    <Form.Label>End Date* (inclusive)</Form.Label>
                     <Form.Control
                         type="date"
                         name="endDate"
@@ -128,32 +148,54 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                     />
                 </Form.Group>
 
-                <Form.Group controlId="exampleForm.Select" className="mt-3">
-                    <Form.Label>Color Design</Form.Label>
-                    <Form.Select
-                        value={newsItem.newsVariant}
-                        onChange={handleChange}
-                        name="newsVariant"
-                    >
-                        <option value="primary">blue</option>
-                        <option value="secondary">grey & grey text</option>
-                        <option value="success">green</option>
-                        <option value="danger">red</option>
-                        <option value="warning">yellow</option>
-                        <option value="info">cyan</option>
-                        <option value="light">light gray & white text</option>
-                        <option value="dark">dark grey & white text</option>
-                        <option value="free">free</option>
-                    </Form.Select>
-                </Form.Group>
-
                 <div>
-                    <img src="/assets/newsDesigns.png" alt="News Color Design Legend" className="mt-3" />
+                    {dateOrderErrorMessage && <p className={styles.statusError + " m-0"}>{dateOrderErrorMessage}</p>}
                 </div>
 
-                <Button variant="primary" type="submit" className="mt-4">
+                <Form.Group controlId="newsVariant" className="mt-3">
+                    <Form.Label>Color Design*</Form.Label>
+                    <Form.Select
+                        name="newsVariant"
+                        value={newsItem.newsVariant}
+                        onChange={handleChange}
+                    >
+                        <option value="primary">blue | primary</option>
+                        <option value="secondary">grey & grey text | secondary</option>
+                        <option value="success">green | success</option>
+                        <option value="danger">red | danger</option>
+                        <option value="warning">yellow | warning</option>
+                        <option value="info">cyan | info</option>
+                        <option value="light">light gray & white text | light</option>
+                        <option value="dark">dark grey & white text | dark</option>
+                        <option value="free">free 💡🎨🖌️</option>
+                    </Form.Select>
+                    <Form.Text className="text-muted">
+                        <span className="text-danger">Wichtig:</span> 'free' auswählen für eigenes Design, d.h. keine standardmäßig farbige Box
+                    </Form.Text>
+                </Form.Group>
+
+                {/*<div>*/}
+                {/*    <img src="/assets/newsDesigns.png" alt="News Color Design Legend" className="mt-3" />*/}
+                {/*</div>*/}
+
+                <Accordion flush style={{ maxWidth: '550px', marginLeft: '0', }}>
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header>Legend color design</Accordion.Header>
+                        <Accordion.Body>
+                            <img src="/assets/newsDesigns.png" alt="News Color Design Legend" className="mt-3" />
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+
+                <Button
+                    variant="primary"
+                    type="submit"
+                    className="mt-4"
+                    disabled={!!dateOrderErrorMessage}
+                >
                     Save
                 </Button>
+                <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
             </Form>
         </div>
     );

@@ -9,6 +9,7 @@ import {copyToClipboard} from "../../utils/copyToClipboard.ts";
 import AdminNav from "../AdminNav.tsx";
 import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
+import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 
 const baseURL = "/api/filme";
 
@@ -132,11 +133,32 @@ export default function FilmForm() {
         setSuccessMessage("");
         setIsLoading(true);
 
+
+        // #################################################
+        // sanitize string in stab linewise and elementwise:
+        if (selectedFilm?.stab) {
+            // logic here similar to utils function structureStabString
+            const lines = selectedFilm.stab.split(/\r?\n/); // Split by newline characters (\r\n or \n)
+            const sanitizedLines = lines.filter(line => line.trim() !== '') // Filter out empty lines
+                .map(line => {
+                    const parts = line.split(':');
+
+                    const abbrev = parts[0].trim();
+                    const entry = parts.slice(1).join(': ').trim();
+                    return `${abbrev}: ${entry}`;
+                }
+            );
+            selectedFilm.stab = sanitizedLines.join('\n');
+        }
+        // #################################################
+
         // Check if we're adding or editing a film
         if (selectedFilmId) {
             // Editing an existing film (PUT request)
 
-            axios.put(`${baseURL}/${selectedFilmId}`, preprocessFormData(selectedFilm))
+            axios.put(`${baseURL}/${selectedFilmId}`, trimAllStringsInObjectShallow( preprocessFormData(selectedFilm)) )
+                                                                                        // preprocessing converts '' into null
+                                                        // trims all string fields in top-level entries (no nested objects)
                 .then(() => {
                     setSuccessMessage("Film updated successfully!");
 
@@ -157,7 +179,7 @@ export default function FilmForm() {
             // ###################################################
 
             // axios.post(`${baseURL}`, selectedFilm)
-            axios.post(`${baseURL}`, preprocessFormData(filmInFormWithoutFnr))
+            axios.post(`${baseURL}`, trimAllStringsInObjectShallow( preprocessFormData(filmInFormWithoutFnr)) )
                 .then(() => {
                     setSuccessMessage("Film saved successfully!");
 
@@ -205,7 +227,7 @@ export default function FilmForm() {
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, type } = e.target;
 
-        setSelectedFilm((prevData: Film) => ({
+         setSelectedFilm((prevData: Film) => ({
             ...prevData,
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
         }));
@@ -314,9 +336,10 @@ export default function FilmForm() {
                 </Form.Group>
 
                 <Form.Group controlId="originaltitelAnzeigen" className="mt-3">
+                    <Form.Label><s>Originaltitel anzeigen</s></Form.Label>
                     <Form.Check
                         type="checkbox"
-                        label="Originaltitel anzeigen"
+                        // label="Originaltitel anzeigen"
                         name="originaltitelAnzeigen"
                         checked={selectedFilm.originaltitelAnzeigen || false}
                         onChange={handleFormChange}
@@ -360,6 +383,9 @@ export default function FilmForm() {
                         value={selectedFilm.text || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text>
+                        styled tag template → {'<span style="color: blue; font-weight: bold;">highlighted part</span>'}
+                    </Form.Text>
                 </Form.Group>
 
                 <Button
@@ -398,6 +424,8 @@ export default function FilmForm() {
                         Erscheint in Gallery (wenn es der Hauptfilm ist) und Detailseite; Eintrag bezieht sich auf Besonderheit des <b>Films</b> (bspw. Erwähnung Director's Cut, Farbstich der analogen Kopie);
                         <br/>
                         keine Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite, <b>kein</b> Feld für Kooperation, Filmfestival, Gäste (Einführung/Gespräch), Publikumswunsch, anderer Eintrittspreis, besondere Startzeit, abweichender Ort → Feld 'Besonderheit' im Termin-Formular verwenden
+                        <br/>
+                        a tag template → {`<a href="" class="custom-link" target="_blank" rel="noopener noreferrer">Linktext</a>`}
                     </Form.Text>
                 </Form.Group>
 
@@ -536,10 +564,17 @@ export default function FilmForm() {
                         value={selectedFilm.stab || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        <span className="text-danger">Wichtig:</span> Zeilenumbruch muss vorliegen d.h. jeweils 1 Eintrag pro Zeile → [key]: [value]
+                        <br/>
+                        Bei form submit werden leading and trailing blanks entfernt und zwar pro Zeile in den beiden Substrings getrennt durch den 1. Doppelpunkt; so eine Zeile ist möglich: <pre> M   :     Ennio Morricone  </pre>
+                        <br/>
+                        a tag template → Link: {`<a href="" class="custom-link" target="_blank" rel="noopener noreferrer">Letterboxd</a>`}
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="sonderfarbeTitel" className="mt-3">
-                    <Form.Label>Sonderfarbe Titel</Form.Label>
+                    <Form.Label><s>Sonderfarbe Titel</s></Form.Label>
                     <Form.Control
                         type="number"
                         name="sonderfarbeTitel"

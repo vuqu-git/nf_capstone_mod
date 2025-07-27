@@ -6,6 +6,9 @@ import AdminNav from "../AdminNav.tsx";
 import ProgrammheftDTOSelection from "../../types/ProgrammheftDTOSelection.ts";
 import {Programmheft} from "../../types/Programmheft.ts";
 import ProgrammheftSelection from "./ProgrammheftSelection.tsx";
+import {useDateStartBeforeEndValidation} from "../../hooks/useDateStartBeforeEndValidation.ts";
+import styles from "../contact/Forms.module.css";
+import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 
 const baseURL = "/api/programmheft";
 
@@ -34,6 +37,11 @@ export default function ProgrammheftForm() {
     const [isLoading, setIsLoading] = useState(false); // for POST, PUT of one Programmheft
 
     const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new selection has been made manually by the user
+
+    const dateOrderErrorMessage = useDateStartBeforeEndValidation(
+        selectedProgrammheft.gueltigVon,
+        selectedProgrammheft.gueltigBis
+    );
 
     // GET all Programmhefte
     const getAllProgrammhefte = () => {
@@ -100,7 +108,7 @@ export default function ProgrammheftForm() {
         if (selectedProgrammheftId) {
             // Editing an existing Programmheft (PUT request)
 
-            axios.put(`${baseURL}/${selectedProgrammheftId}`, preprocessFormData(selectedProgrammheft))
+            axios.put(`${baseURL}/${selectedProgrammheftId}`, trimAllStringsInObjectShallow( preprocessFormData(selectedProgrammheft) ))
                 .then(() => {
                     setSuccessMessage("Programmheft/Flyer updated successfully!");
 
@@ -121,7 +129,7 @@ export default function ProgrammheftForm() {
             // #####################################################
 
             // axios.post(`${baseURL}`, selectedProgrammheft)
-            axios.post(`${baseURL}`, preprocessFormData(programmheftInFormWithoutPnr))
+            axios.post(`${baseURL}`, trimAllStringsInObjectShallow( preprocessFormData(programmheftInFormWithoutPnr) ))
                 .then(() => {
                     setSuccessMessage("Programmheft/Flyer saved successfully!");
 
@@ -263,7 +271,16 @@ export default function ProgrammheftForm() {
                     />
                 </Form.Group>
 
-                <Button variant={selectedProgrammheftId ? "success" : "primary"} type="submit" className="mt-4">
+                <div>
+                    {dateOrderErrorMessage && <p className={styles.statusError + " m-0"}>{dateOrderErrorMessage}</p>}
+                </div>
+
+                <Button
+                    variant={selectedProgrammheftId ? "success" : "primary"}
+                    type="submit"
+                    className="mt-4"
+                    disabled={!!dateOrderErrorMessage}
+                >
                     {selectedProgrammheftId ? "Update " : "Add "} Programmheft/Flyer entry
                 </Button>
             </Form>

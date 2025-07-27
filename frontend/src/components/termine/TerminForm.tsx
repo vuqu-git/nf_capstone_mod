@@ -9,6 +9,7 @@ import { preprocessFormData } from '../../utils/preprocessFormData.ts';
 import AdminNav from "../AdminNav.tsx";
 import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import styles from "../contact/Forms.module.css";
+import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 
 const baseURL = "/api/termine";
 
@@ -140,7 +141,7 @@ export default function TerminForm() {
             if (selectedTerminId) {
                 // Editing an existing termin (PUT request)
 
-                axios.put(`${baseURL}/${selectedTerminId}`, preprocessFormData(selectedTermin))
+                axios.put(`${baseURL}/${selectedTerminId}`, trimAllStringsInObjectShallow( preprocessFormData(selectedTermin) ))
                     .then(() => {
                         setSuccessMessage("Termin updated successfully!");
 
@@ -161,7 +162,7 @@ export default function TerminForm() {
                 // ####################################################
 
                 // axios.post(`${baseURL}`, selectedTermin)
-                axios.post(`${baseURL}`, preprocessFormData(terminInFormWithoutFnr))
+                axios.post(`${baseURL}`, trimAllStringsInObjectShallow( preprocessFormData(terminInFormWithoutFnr) ))
                     .then(() => {
                         setSuccessMessage("Termin saved successfully!");
 
@@ -297,7 +298,7 @@ export default function TerminForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Höchstens 1 Email-Adresse eintragen
+                        Höchstens 1 Email-Adresse eintragen!
                     </Form.Text>
                 </Form.Group>
 
@@ -327,6 +328,8 @@ export default function TerminForm() {
                     />
                     <Form.Text className="text-muted">
                         Feld leerlassen, wenn es <b>kein</b> Programm(-termin) (mit mehreren Langfilmen), sondern ein "Standard"-Termin (mit 1 Langfilm + optionale Vorfilme) ist!
+                        <br/>
+                        styled tag template → {'<span style="color: blue; font-weight: bold;">highlighted part</span>'}
                     </Form.Text>
                 </Form.Group>
 
@@ -355,6 +358,8 @@ export default function TerminForm() {
                     />
                     <Form.Text className="text-muted">
                         Erscheint in Gallery und Detailseite; Eintrag bezieht sich auf den <b>Termin</b> (bspw. Kooperation, Filmfestival, Gäste (Einführung/Gespräch), Publikumswunsch, anderer Eintrittspreis, besondere Startzeit, abweichender Ort); keine Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite
+                        <br/>
+                        a tag template → {`<a href="" class="custom-link" target="_blank" rel="noopener noreferrer">Linktext</a>`}
                     </Form.Text>
                 </Form.Group>
 
@@ -374,7 +379,7 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="startReservierung" className="mt-3">
-                    <Form.Label>Start Reservierungsdatum</Form.Label>
+                    <Form.Label><s>Start Reservierungsdatum</s></Form.Label>
                     <Form.Control
                         type="date"
                         name="startReservierung"
@@ -384,7 +389,7 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="linkReservierung" className="mt-3">
-                    <Form.Label>Link zur Reservierung</Form.Label>
+                    <Form.Label><s>Link zur Reservierung</s></Form.Label>
                     <Form.Control
                         type="text"
                         name="linkReservierung"
@@ -394,7 +399,7 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="sonderfarbeTitel" className="mt-3">
-                    <Form.Label>Sonderfarbe Titel</Form.Label>
+                    <Form.Label><s>Sonderfarbe Titel</s></Form.Label>
                     <Form.Control
                         type="number"
                         name="sonderfarbeTitel"
@@ -429,15 +434,13 @@ export default function TerminForm() {
                     </Form.Text>
                 </Form.Group>
 
-                <p>
-                    <div><sub className={styles.formSubtext}>*Pflichtfeld</sub></div>
-                    <div><sub className={styles.formSubtext}>**bedingtes Pflichtfeld</sub></div>
-                </p>
-
                 <Button variant={selectedTerminId ? "success" : "primary"} type="submit" className="mt-2">
                     {selectedTerminId ? "Update " : "Add "} termin entry
                 </Button>
-
+                <p>
+                    <div><sub className={styles.formSubtext}>*Pflichtfelder</sub></div>
+                    <div><sub className={styles.formSubtext}>**bedingtes Pflichtfeld</sub></div>
+                </p>
             </Form>
 
             {errorMissingBildWhenGivenTitel && (

@@ -6,6 +6,7 @@ import { useAllNews } from "../../hooks/useAllNews.ts";
 import { News } from "../../types/News.ts";
 
 import {preprocessFormData} from "../../utils/preprocessFormData.ts";
+import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 
 const baseURL = "/api/news";
 
@@ -29,7 +30,7 @@ export default function EditNews() {
         setError("");
         setSuccessMessage("");
 
-        axios.put(`${baseURL}/${updatingId}`, preprocessFormData(newsInForm))
+        axios.put(`${baseURL}/${updatingId}`, trimAllStringsInObjectShallow( preprocessFormData(newsInForm) ))
             .then(() => {
                 setSuccessMessage("News updated successfully!");
                 setSelectedId("");
