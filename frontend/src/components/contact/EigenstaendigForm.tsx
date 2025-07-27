@@ -33,7 +33,7 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
         onSubFormSubmit(event, formData);
     };
 
-    const dateRangeError = useDateRangeValidation(
+    const dateRangeErrorMessage = useDateRangeValidation(
         formData.veranstaltungsbeginn,
         formData.veranstaltungsende
     );
@@ -107,7 +107,7 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
                 />
 
                 <div style={{ minHeight: '1.5em' }}>
-                    {dateRangeError && <p className={styles.statusError + " m-0"}>{dateRangeError}</p>}
+                    {dateRangeErrorMessage && <p className={styles.statusError + " m-0"}>{dateRangeErrorMessage}</p>}
                 </div>
             </div>
 
@@ -125,7 +125,7 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatusWithMessage.status === 'sending' || !!dateRangeError}
+                disabled={submissionStatusWithMessage.status === 'sending' || !!dateRangeErrorMessage}
             >
                 Mitteilung senden
             </button>

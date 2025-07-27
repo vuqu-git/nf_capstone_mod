@@ -11,6 +11,7 @@ interface EventMitProjektionProps {
         issue: string,
         data: EigenstaendigFormData | MitKinotechnikFormData | KooperationFormData
     ) => void;
+
     submissionStatusWithMessage: {
         status: 'idle' | 'sending' | 'success' | 'error';
         message?: string

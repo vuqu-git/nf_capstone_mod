@@ -175,7 +175,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     id="terminpraeferenz"
                     name="terminpraeferenz"
                     value={formData.terminpraeferenz || ''}
-                    placeholder="Spieltage sind i.d.R. Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
+                    placeholder="Spieltermine sind 20:15 Uhr i.d.R. am Montag und Mittwoch in der Vorlesungszeit des Uni-Semesters"
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
@@ -210,6 +210,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
             >
                 Anfrage senden
             </button>
+
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
             {submissionStatusWithMessage.status === 'sending' &&

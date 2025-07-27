@@ -70,7 +70,7 @@ export default function TerminFilmDetailsListing({
                 {/****** content note ******/}
                 {/*******------------*******/}
                 { f.contentNote && (
-                    <Accordion flush data-bs-theme="dark" className="mb-3">
+                    <Accordion flush data-bs-theme="dark" className="mb-3 content-note">
                         <Accordion.Item eventKey="0" >
                             <Accordion.Header>
                                 <span className="w-100 text-center">Hinweis auf sensible Inhalte</span>

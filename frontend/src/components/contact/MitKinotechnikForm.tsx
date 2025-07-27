@@ -65,7 +65,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
         }
     };
 
-    const dateRangeError = useDateRangeValidation(
+    const dateRangeErrorMessage = useDateRangeValidation(
         formData.veranstaltungsbeginn,
         formData.veranstaltungsende
     );
@@ -221,7 +221,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 {/*Fehlermeldung für Datenvalidierung (space reserved)*/}
                 {/*<div style={{ minHeight: '1.5em' }}>*/}
                 <div>
-                    {dateRangeError && <p className={styles.statusError + " m-0"}>{dateRangeError}</p>}
+                    {dateRangeErrorMessage && <p className={styles.statusError + " m-0"}>{dateRangeErrorMessage}</p>}
                 </div>
             </div>
 
@@ -272,11 +272,10 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
             <button
                 type="submit"
                 className={styles.submitButton}
-                disabled={submissionStatusWithMessage.status === 'sending' || !!dateRangeError}
+                disabled={submissionStatusWithMessage.status === 'sending' || !!dateRangeErrorMessage}
             >
                 Anfrage senden
             </button>
-
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
             {errorMissingConfirmationMessage && (

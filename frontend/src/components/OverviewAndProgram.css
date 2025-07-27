@@ -2,7 +2,8 @@
 /************************************************/
 .custom-link {
     text-decoration: none;
-    color: inherit;
+    /*color: inherit;*/
+    color: #F8F3A6;
     font-weight: 600;
     --bg-h: 1px;
     padding-bottom: 2px;
