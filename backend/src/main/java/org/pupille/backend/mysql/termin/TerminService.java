@@ -2,23 +2,16 @@ package org.pupille.backend.mysql.termin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class TerminService {
 
     private final TerminRepository terminRepository;
 
-    @Autowired
+    //@Autowired
     public TerminService(TerminRepository terminRepository) {
         this.terminRepository = terminRepository;
     }
@@ -96,4 +89,3 @@ public class TerminService {
     // ########################################################################
 
 }
-

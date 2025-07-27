@@ -1,15 +1,10 @@
 package org.pupille.backend.mysql.film;
 
 import lombok.RequiredArgsConstructor;
-import org.pupille.backend.mysql.termin.Termin;
-import org.pupille.backend.mysql.termin.TerminDTOForm;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service

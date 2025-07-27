@@ -4,6 +4,7 @@ import org.pupille.backend.contact.ContactService;
 import org.pupille.backend.mysql.screening.FilmDTOMailReminder;
 import org.pupille.backend.mysql.screening.ScreeningService;
 import org.pupille.backend.mysql.screening.TerminDTOWithFilmDTOMailReminder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class ReminderService {
     private final ContactService contactService;
     private final ScreeningService screeningService;
 
+    //@Autowired
     public ReminderService(ContactService contactService, ScreeningService screeningService) {
         this.contactService = contactService;
         this.screeningService = screeningService;
@@ -118,5 +120,4 @@ public class ReminderService {
             }
         }
     }
-
 }

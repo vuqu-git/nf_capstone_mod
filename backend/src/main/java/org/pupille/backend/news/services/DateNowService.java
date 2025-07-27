@@ -8,5 +8,4 @@ public class DateNowService {
     public LocalDate localDateNow() {
         return LocalDate.now();
     }
-
 }

@@ -7,7 +7,6 @@ import org.springframework.web.client.RestClient;
 import org.pupille.backend.perplexityai.model.OpenAIRequest;
 import org.pupille.backend.perplexityai.model.OpenAIResponse;
 
-
 @Service
 public class OpenAIService {
 
@@ -41,5 +40,4 @@ public class OpenAIService {
     public String getContentFromOpenAIResponse(OpenAIResponse oaiResponse) {
         return oaiResponse.choices().get(0).message().content();
     }
-
 }

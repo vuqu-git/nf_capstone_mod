@@ -25,7 +25,7 @@ public class TerminverknuepfungService {
     private final TerminRepository terminRepository;
     private final TerminverknuepfungRepository terminverknuepfungRepository;
 
-    @Autowired
+    //@Autowired
     public TerminverknuepfungService(FilmRepository filmRepository,
                                      TerminRepository terminRepository,
                                      TerminverknuepfungRepository terminverknuepfungRepository) {
