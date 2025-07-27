@@ -12,11 +12,11 @@ import lombok.Setter;
 public class ReiheDTOGallery {
     private Long rnr;
     private String titel;
-    private String farbe;
+    private String sonderfarbe;
 
     public ReiheDTOGallery(Reihe r) {
         this.rnr = r.getRnr();
         this.titel = r.getTitel();
-        this.farbe = r.getFarbe();
+        this.sonderfarbe = r.getSonderfarbe();
     }
 }

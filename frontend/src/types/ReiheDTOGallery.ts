@@ -3,7 +3,7 @@
 interface ReiheDTOGallery {
     rnr: number;
     titel?: string | null;
-    farbe?: string;
+    sonderfarbe?: string;
 }
 
 export default ReiheDTOGallery;

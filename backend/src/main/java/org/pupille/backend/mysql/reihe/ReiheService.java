@@ -1,8 +1,8 @@
 package org.pupille.backend.mysql.reihe;
 
+import lombok.RequiredArgsConstructor;
 import org.pupille.backend.mysql.termin.Termin;
 import org.pupille.backend.mysql.termin.TerminRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,12 +13,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ReiheService {
-    @Autowired
-    private ReiheRepository reiheRepository;
 
-    @Autowired
-    private TerminRepository terminRepository;
+    private final ReiheRepository reiheRepository;
+    private final TerminRepository terminRepository;
 
     // This method now benefits from @EntityGraph in repo method findAll(Sort)
     @Transactional(readOnly = true) // Good practice for read-only operations
@@ -58,8 +57,7 @@ public class ReiheService {
         Reihe existing = getReiheById(id);
         existing.setTitel(updatedReihe.getTitel());
         existing.setText(updatedReihe.getText());
-        existing.setFarbe(updatedReihe.getFarbe());
-        // Optional: update Termine or skip it here
+        existing.setSonderfarbe(updatedReihe.getSonderfarbe());
         return reiheRepository.save(existing);
     }
 

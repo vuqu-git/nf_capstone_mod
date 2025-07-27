@@ -26,7 +26,7 @@ public class Reihe {
     @Column(columnDefinition = "TEXT")
     private String text;
 
-    private String farbe;
+    private String sonderfarbe;
 
     // ############################################
     // many-to-many relationship

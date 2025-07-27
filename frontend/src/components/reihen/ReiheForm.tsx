@@ -16,7 +16,7 @@ const emptyReiheForForm = {
     rnr: 0,
     titel: '',
     text: '',
-    farbe: '',
+    sonderfarbe: '',
     termine:[]
 }
 
@@ -259,12 +259,12 @@ export default function ReiheForm() {
                     </Form.Text>
                 </Form.Group>
 
-                <Form.Group controlId="farbe" className="mt-3">
-                    <Form.Label>Farbe</Form.Label>
+                <Form.Group controlId="sonderfarbe" className="mt-3">
+                    <Form.Label>Sonderfarbe</Form.Label>
                     <Form.Control
                         type="text"
-                        name="farbe"
-                        value={selectedReihe.farbe || ""}
+                        name="sonderfarbe"
+                        value={selectedReihe.sonderfarbe || ""}
                         onChange={handleFormChange}
                     />
                 </Form.Group>

@@ -17,7 +17,7 @@ public class ReiheDTOForFormWithTermineAndFilme {
     private Long rnr;
     private String titel;
     private String text;
-    private String farbe;
+    private String sonderfarbe;
 
     private Set<TerminDTOWithMainFilme> termine; // a Set of your lean TerminDTOSelections
 
@@ -25,7 +25,7 @@ public class ReiheDTOForFormWithTermineAndFilme {
         this.rnr = r.getRnr();
         this.titel = r.getTitel();
         this.text = r.getText();
-        this.farbe = r.getFarbe();
+        this.sonderfarbe = r.getSonderfarbe();
 
         // Important: Map the Set<Termin> entities to Set<TerminDTOWithMainFilme>
         if (r.getTermine() != null) {
