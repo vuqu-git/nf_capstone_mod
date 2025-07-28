@@ -16,14 +16,8 @@ public class TerminService {
         this.terminRepository = terminRepository;
     }
 
-//    public List<TerminDTOForm> getAllTermine() {
-//        List<Termin> termine = terminRepository.findAll();
-//        return termine.stream()
-//                .map(TerminDTOForm::new)
-//                .collect(Collectors.toList());
-//    }
-
     public List<TerminProjectionSelection> getAllTermineByOrderByVorstellungsbeginnDesc() {
+        // alternative but this one doesn't return TerminProjectionSelection for List : terminRepository.findAll(Sort.by(Sort.Direction.DSC, "vorstellungsbeginn")) // use JpaRepository's built-in sorting instead of defining a custom query in TerminRepository
         return terminRepository.findAllByOrderByVorstellungsbeginnDesc();
     }
 

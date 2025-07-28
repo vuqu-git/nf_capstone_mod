@@ -18,6 +18,7 @@ public class TerminverknuepfungController {
 
     private final TerminverknuepfungService terminverknuepfungService;
 
+    // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     @GetMapping("/plain/all")
     public ResponseEntity<List<TerminverknuepfungDTOSelection>> getAllTerminverknuepfung() {
         List<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getAllTerminverknuepfung();
@@ -36,14 +37,54 @@ public class TerminverknuepfungController {
         Optional<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getTerminverknuepfungById(id);
         return terminverknuepfungDTOSelection.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+    // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-//    // this simple adding/creating doesn't work because of the relationships of Terminverknuepfung entity!
-//    @PostMapping
-//    public ResponseEntity<Terminverknuepfung> createTerminverknuepfung(@RequestBody Terminverknuepfung terminverknuepfung) {
-//        Terminverknuepfung createdTerminverknuepfung = terminverknuepfungService.saveTerminverknuepfung(terminverknuepfung);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(createdTerminverknuepfung);
-//    }
+    // here are the get methods in real use
 
+    // just for demonstration
+    @GetMapping()
+    public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getTVWithFilmAndTermin() {
+        List<TVWithFilmAndTerminDTOSelection> result = terminverknuepfungService.getAllTVWithFilmAndTermin();
+        return ResponseEntity.ok(result);
+    }
+
+    // used in TerminverknuepfungForm.tsx
+    @GetMapping("/terminsorted")
+    public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getAllTVSortedByTermin() {
+        return ResponseEntity.ok(
+                terminverknuepfungService.getAllTVWithFilmAndTerminSortedByTermin()
+        );
+    }
+
+    // used in TerminverknuepfungForm.tsx
+    @GetMapping("/{tnr}/{fnr}")
+    public ResponseEntity<TVWithFilmAndTerminDTOSelection> getTVbyIds(
+            @PathVariable Long tnr,
+            @PathVariable Long fnr
+    ) {
+        return ResponseEntity.ok(terminverknuepfungService.getTVWithFilmAndTerminByTnrAndFnr(tnr, fnr));
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // two methods for fetching list of filme (termine) when giving tnr (fnr)
+
+    // used in FilmForm.tsx
+    @GetMapping("gettermine/{fnr}")
+    public ResponseEntity<List<TerminProjectionSelection>> getTermineByFnr(@PathVariable Long fnr) {
+        return ResponseEntity.ok(terminverknuepfungService.getTerminlistByFnr(fnr));
+    }
+
+    // used in TerminForm.tsx
+    @GetMapping("getfilme/{tnr}")
+    public ResponseEntity<List<FilmDTOSelection>> getFilmeByTnr(
+            @PathVariable Long tnr
+    ) {
+        return ResponseEntity.ok(terminverknuepfungService.getFilmlistByTnr(tnr));
+    }
+    // ---------------------------------------------------------------------------------------------
+
+    //    #############################################################
+    //    #############################################################
 
     @PutMapping("/{tnr}/{fnr}")
     public ResponseEntity<TerminverknuepfungDTOSelection> updateTerminverknuepfung(
@@ -63,7 +104,13 @@ public class TerminverknuepfungController {
         return ResponseEntity.noContent().build();
     }
 
-    // ###############################################
+
+//    // this simple adding/creating doesn't work because of the relationships of Terminverknuepfung entity!
+//    @PostMapping
+//    public ResponseEntity<Terminverknuepfung> createTerminverknuepfung(@RequestBody Terminverknuepfung terminverknuepfung) {
+//        Terminverknuepfung createdTerminverknuepfung = terminverknuepfungService.saveTerminverknuepfung(terminverknuepfung);
+//        return ResponseEntity.status(HttpStatus.CREATED).body(createdTerminverknuepfung);
+//    }
 
     // this is the usual add function for new Terminverknuepfung, but because of the relationships of
     // Terminverknuepfung entity, there a various versions of this add function, version here: link between existing Film and existing Termin
@@ -76,40 +123,7 @@ public class TerminverknuepfungController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    //    #############################################################
+    //    #############################################################
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    @GetMapping()
-    public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getTVWithFilmAndTermin() {
-        List<TVWithFilmAndTerminDTOSelection> result = terminverknuepfungService.getAllTVWithFilmAndTermin();
-        return ResponseEntity.ok(result);
-    }
-
-    @GetMapping("/{tnr}/{fnr}") // used in TerminverknuepfungForm.tsx
-    public ResponseEntity<TVWithFilmAndTerminDTOSelection> getTVbyIds(
-            @PathVariable Long tnr,
-            @PathVariable Long fnr
-    ) {
-        return ResponseEntity.ok(terminverknuepfungService.getTVWithFilmAndTerminByTnrAndFnr(tnr, fnr));
-    }
-
-    @GetMapping("/terminsorted") // used in TerminverknuepfungForm.tsx
-    public ResponseEntity<List<TVWithFilmAndTerminDTOSelection>> getAllTVSortedByTermin() {
-        return ResponseEntity.ok(
-                terminverknuepfungService.getAllTVWithFilmAndTerminSortedByTermin()
-        );
-    }
-
-    // two methods for fetching list of filme (termine) when giving tnr (fnr)
-    @GetMapping("gettermine/{fnr}") // used in FilmForm.tsx
-    public ResponseEntity<List<TerminProjectionSelection>> getTermineByFnr(@PathVariable Long fnr) {
-        return ResponseEntity.ok(terminverknuepfungService.getTerminlistByFnr(fnr));
-    }
-
-    @GetMapping("getfilme/{tnr}") // used in TerminForm.tsx
-    public ResponseEntity<List<FilmDTOSelection>> getFilmeByTnr(
-            @PathVariable Long tnr
-    ) {
-        return ResponseEntity.ok(terminverknuepfungService.getFilmlistByTnr(tnr));
-    }
 }

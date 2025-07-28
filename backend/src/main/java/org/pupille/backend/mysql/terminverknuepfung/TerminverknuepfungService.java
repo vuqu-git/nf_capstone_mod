@@ -34,14 +34,14 @@ public class TerminverknuepfungService {
         this.terminverknuepfungRepository = terminverknuepfungRepository;
     }
 
-
+    // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // it seems there's no real usage for these 3 methods, which are called in the "plain" endpoints in TerminverknuepfungController
     public List<TerminverknuepfungDTOSelection> getAllTerminverknuepfung() {
         List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAll();
         return terminverknuepfungen.stream()
                 .map(TerminverknuepfungDTOSelection::new)
                 .collect(Collectors.toList());
     }
-
 
     public List<TerminverknuepfungDTOSelection> getAllTVByOrderByTnrDesc() {
         List<Terminverknuepfung> terminverknuepfungen = terminverknuepfungRepository.findAllByOrderByTnrDesc();
@@ -50,16 +50,58 @@ public class TerminverknuepfungService {
                 .collect(Collectors.toList());
     }
 
-
     public Optional<TerminverknuepfungDTOSelection> getTerminverknuepfungById(Terminverknuepfung.TerminverknuepfungId id) {
         return Optional.of( new TerminverknuepfungDTOSelection(terminverknuepfungRepository.findById(id).get()) );
     }
+    // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-
-    // this simple saving doesn't work because of the relationships of Terminverknuepfung entity!
-    public Terminverknuepfung saveTerminverknuepfung(Terminverknuepfung terminverknuepfung) {
-        return terminverknuepfungRepository.save(terminverknuepfung);
+    public List<TVWithFilmAndTerminDTOSelection> getAllTVWithFilmAndTermin() {
+        return terminverknuepfungRepository.findAllWithFilmAndTermin()
+                .stream()
+                .map(TVWithFilmAndTerminDTOSelection::new)
+                .collect(Collectors.toList());
     }
+
+    public List<TVWithFilmAndTerminDTOSelection> getAllTVWithFilmAndTerminSortedByTermin() {
+        return terminverknuepfungRepository.findAllWithFilmAndTerminOrderByTerminDesc()
+                .stream()
+                .map(TVWithFilmAndTerminDTOSelection::new)
+                .collect(Collectors.toList());
+    }
+
+    public TVWithFilmAndTerminDTOSelection getTVWithFilmAndTerminByTnrAndFnr(Long tnr, Long fnr) {
+        return terminverknuepfungRepository.findWithFilmAndTerminByTnrAndFnr(tnr, fnr)
+                .map(TVWithFilmAndTerminDTOSelection::new)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Terminverknüpfung not found with tnr: " + tnr + " and fnr: " + fnr
+                ));
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // two methods for fetching list of filme (termine) when giving tnr (fnr)
+    // the first one: getFilmlistByTnr uses a simple repo method and a constructor to create FilmDTOSelection objects
+    // the second one: getTerminlistByFnr contains logic in the repo method (see SELECT in @Query) to return TerminProjectionSelection objects
+    public List<FilmDTOSelection> getFilmlistByTnr(Long tnr) {
+        List<Terminverknuepfung> fnrList = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
+        List<FilmDTOSelection> filmList = new ArrayList<>();
+
+        for (Terminverknuepfung tv : fnrList) {
+            Film film = tv.getFilm();
+
+            FilmDTOSelection filmDto = new FilmDTOSelection(film);
+            filmList.add(filmDto);
+        }
+        return filmList;
+    }
+
+    public List<TerminProjectionSelection> getTerminlistByFnr(Long fnr) {
+        return terminverknuepfungRepository.findTermineByFilmFnr(fnr);
+    }
+    // ---------------------------------------------------------------------------------------------
+
+    //    #############################################################
+    //    #############################################################
 
 //    // this "traditional" update does not work, because in the update we want to change the composite key of tnr and fnr
 //    // when I pass the new tnr-fnr-pair the method terminverknuepfungRepository.findById(id) won't find it
@@ -82,6 +124,9 @@ public class TerminverknuepfungService {
 //                        "Terminverknuepfung not found with tnr: " + tnr + " and fnr: " + fnr));
 //    }
 
+    // THIS update method works!
+    // since Terminverknuepfung has relationships a simple save is not enough
+    // and more relationship management needs to be done to keep the (relationship) data consistent
     @Transactional
     public TerminverknuepfungDTOSelection updateTerminverknuepfung(
             Long oldTnr, Long oldFnr,
@@ -96,6 +141,7 @@ public class TerminverknuepfungService {
         terminverknuepfungRepository.deleteById(oldId);
 
         // 2. Create and save the new entity
+        //      If RuntimeException occurs during the creation step, because of @Transactional the whole transaction rolls back, so the delete operation is reverted.
         Film film = filmRepository.findById(newTV.fnr())
                 .orElseThrow(() -> new RuntimeException("Film not found"));
         Termin termin = terminRepository.findById(newTV.tnr())
@@ -113,14 +159,17 @@ public class TerminverknuepfungService {
         return new TerminverknuepfungDTOSelection(saved);
     }
 
-
+                                                         // TerminverknuepfungId is a class within Terminverknuepfung!
     public void deleteTerminverknuepfung(Terminverknuepfung.TerminverknuepfungId deletingTVId) {
         terminverknuepfungRepository.deleteById(deletingTVId);
     }
 
-    //    #############################################################
+//    // this simple saving doesn't work because of the relationships of Terminverknuepfung entity!
+//    public Terminverknuepfung saveTerminverknuepfung(Terminverknuepfung terminverknuepfung) {
+//        return terminverknuepfungRepository.save(terminverknuepfung);
+//    }
 
-    // this represents the usual add or save function for new Terminverknuepfung
+    // THIS represents the usual add or save function for new Terminverknuepfung
     // since Terminverknuepfung has relationships a simple save is not enough
     // and more relationship management needs to be done to keep the (relationship) data consistent
     @Transactional
@@ -145,55 +194,7 @@ public class TerminverknuepfungService {
         // Remove bidirectional relationship management
         terminverknuepfungRepository.save(connection);
     }
-
+    //    #############################################################
     //    #############################################################
 
-    public List<TVWithFilmAndTerminDTOSelection> getAllTVWithFilmAndTermin() {
-        return terminverknuepfungRepository.findAllWithFilmAndTermin()
-                .stream()
-                .map(TVWithFilmAndTerminDTOSelection::new)
-                .collect(Collectors.toList());
-    }
-
-
-    public TVWithFilmAndTerminDTOSelection getTVWithFilmAndTerminByTnrAndFnr(Long tnr, Long fnr) {
-        return terminverknuepfungRepository.findWithFilmAndTerminByTnrAndFnr(tnr, fnr)
-                .map(TVWithFilmAndTerminDTOSelection::new)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "Terminverknüpfung not found with tnr: " + tnr + " and fnr: " + fnr
-                ));
-    }
-
-
-    public List<TVWithFilmAndTerminDTOSelection> getAllTVWithFilmAndTerminSortedByTermin() {
-        return terminverknuepfungRepository.findAllWithFilmAndTerminOrderByTerminDesc()
-                .stream()
-                .map(TVWithFilmAndTerminDTOSelection::new)
-                .collect(Collectors.toList());
-    }
-
-    // ---------------------------------------------------------------------------------------------
-    // two methods for fetching list of filme (termine) when giving tnr (fnr)
-    // the first one: getFilmlistByTnr uses a simple repo method and a constructor to create FilmDTOSelection objects
-    // the second one: getTerminlistByFnr contains logic in the repo method to return TerminProjectionSelection objects
-    public List<FilmDTOSelection> getFilmlistByTnr(Long tnr) {
-        List<Terminverknuepfung> fnrList = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
-        List<FilmDTOSelection> filmList = new ArrayList<>();
-
-        for (Terminverknuepfung tv : fnrList) {
-            // Assuming Terminverknuepfung has a method getFilm() or similar
-            Film film = tv.getFilm();
-
-            // Now create a FilmDTOSelection from the Film object
-            FilmDTOSelection filmDto = new FilmDTOSelection(film);
-            filmList.add(filmDto);
-        }
-        return filmList;
-    }
-
-    public List<TerminProjectionSelection> getTerminlistByFnr(Long fnr) {
-        return terminverknuepfungRepository.findTermineByFilmFnr(fnr);
-    }
-    // ---------------------------------------------------------------------------------------------
 }

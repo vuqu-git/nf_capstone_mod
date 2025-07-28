@@ -19,8 +19,18 @@ public class ReiheService {
     private final ReiheRepository reiheRepository;
     private final TerminRepository terminRepository;
 
+//    When would @Transactional matter for delete?
+//          You have more than one modifying repository call in the same method, and want them to succeed/fail together (example: delete A, then delete B, but if B fails, rollback A as well).
+//          !!! Also when there is only 1 modifying repository call @Transactional can be required !!!
+//          => see updateTerminverknuepfung in TerminverknuepfungService: Even without the save call heere @Transctional ensures the deletion is reverted when a RuntimeException occurs during step 2
+//          Your method does other related flushes/modifications that must be atomic.
+//          You have special transactional requirements (propagation, isolation, etc.)
+
+
     // This method now benefits from @EntityGraph in repo method findAll(Sort)
-    @Transactional(readOnly = true) // Good practice for read-only operations
+    @Transactional(readOnly = true)     // Good practice for read-only operations
+                                        // Optimizes for reads: Tells the transaction manager and the underlying database that no data will be modified.
+                                        // This can allow for database optimizations (e.g., fewer locks, skipping dirty checks in Hibernate), and sometimes uses a different transaction isolation mode internally.
     public List<ReiheDTOSelection> getAllReihen() {
         return reiheRepository.findAll(Sort.by(Sort.Direction.ASC, "titel")) // use JpaRepository's built-in sorting instead of defining a custom query in ReiheRepository
                 .stream()
@@ -34,8 +44,7 @@ public class ReiheService {
     public ReiheDTOForFormWithTermineAndFilme getReiheDTOForFormById(Long id) {
         Reihe reihe = reiheRepository.findById(id) // This will eagerly fetch 'termine' due to @EntityGraph
                 .orElseThrow(() -> new RuntimeException("Reihe not found"));
-        // The DTO conversion happens here, within the open transaction, but the data
-        // was already fetched in one go by the repository.
+        // DTO conversion happens here, within the open transaction, but the data was already fetched in one go by the repository
         return new ReiheDTOForFormWithTermineAndFilme(reihe);
     }
 
@@ -47,12 +56,11 @@ public class ReiheService {
                 .orElseThrow(() -> new RuntimeException("Reihe not found"));
     }
 
-    @Transactional // Ensure write operations are transactional
     public Reihe createReihe(Reihe reihe) {
         return reiheRepository.save(reihe);
     }
 
-    @Transactional // Ensure write operations are transactional
+    // @Transactional // redundant because method only performs one modifying operation
     public Reihe updateReihe(Long id, Reihe updatedReihe) {
         Reihe existing = getReiheById(id);
         existing.setTitel(updatedReihe.getTitel());
@@ -61,7 +69,6 @@ public class ReiheService {
         return reiheRepository.save(existing);
     }
 
-    @Transactional // Ensure write operations are transactional
     public void deleteReihe(Long id) {
         Reihe reihe = getReiheById(id);
         reiheRepository.delete(reihe);

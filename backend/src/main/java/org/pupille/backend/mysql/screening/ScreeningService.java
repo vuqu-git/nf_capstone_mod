@@ -25,102 +25,45 @@ public class ScreeningService {
     private final TerminRepository terminRepository;
     private final TerminverknuepfungRepository terminverknuepfungRepository;
 
-    @Autowired // Constructor injection (recommended)
+    //@Autowired // Constructor injection (recommended)
     public ScreeningService(TerminRepository terminRepository,
                             TerminverknuepfungRepository terminverknuepfungRepository) {
         this.terminRepository = terminRepository;
         this.terminverknuepfungRepository = terminverknuepfungRepository;
     }
 
-//    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
-//        // this time is too precise and hence Termine will disappear immediately when their screening DateTime is passed
-//        // LocalDateTime now = LocalDateTime.now();
-//
-//        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
-//        LocalTime fixedTime = LocalTime.of(0, 1);
-//        // Combine the current date and the fixed time
-//        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
-//
-//        // 1. Get future Termine
-//        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
-//
-//        // 2. Get related films in batch
-//        List<Long> terminIds = futureTermine.stream()
-//                .map(Termin::getTnr)
-//                .toList();
-//
-//        List<Terminverknuepfung> connections = terminverknuepfungRepository
-//                .findWithFilmsByTerminIds(terminIds);
-//
-//        // 3. Map to DTO
-//        return futureTermine.stream()
-//                .map(termin -> new TerminDTOWithFilmDTOGallery(
-//                        termin,
-//                        connections.stream()
-//                                .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
-//                                .map(Terminverknuepfung::getFilm)
-//                                .toList()
-//                ))
-//                .toList();
-//    }
-
-//    public List<TerminDTOWithFilmDTOGallery> getFutureTermineWithFilms() {
-//        // Use a fixed time to avoid Termine disappearing immediately after their screening DateTime
-//        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
-//        LocalTime fixedTime = LocalTime.of(0, 1);
-//        LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
-//
-//        // 1. Get future Termine
-//        List<Termin> futureTermine = terminRepository.findFutureTermine(now);
-//
-//        // 2. Get related films in batch
-//        List<Long> terminIds = futureTermine.stream()
-//                .map(Termin::getTnr)
-//                .toList();
-//
-//        // Fetch connections with films for the relevant Termine
-//        List<Terminverknuepfung> connections = terminverknuepfungRepository
-//                .findWithFilmsByTerminIds(terminIds);
-//
-//        // 3. Map to DTO, filtering out films where vorfilm is true
-//        return futureTermine.stream()
-//                .map(termin -> new TerminDTOWithFilmDTOGallery(
-//                        termin,
-//                        connections.stream()
-//                                .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
-//                                .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm()) // Include only if vorfilm is null or false
-//                                .map(Terminverknuepfung::getFilm)
-//                                .toList()
-//                ))
-//                .toList();
-//    }
-
     //filter for veroeffentlichen > 0 happens in frontend react component Gallery2.tsx
     public List<TerminDTOWithFilmAndReiheDTOGallery> getAllFutureTermineWithFilms() {
+
+        // -- 0. Set the "now" date as today but right after midnight (today's screening should still appear even though we're past their screening time)
         LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
         LocalTime fixedTime = LocalTime.of(0, 1);
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
 
+        // -- 1. Get future Termine
         List<Termin> futureTermine = terminRepository.findAllFutureTermine(now);
 
+        // -- 2. Get related films in batch
         List<Long> terminIds = futureTermine.stream()
                 .map(Termin::getTnr)
                 .toList();
 
+        // Fetch connections with films for the relevant Termine
         List<Terminverknuepfung> connections = terminverknuepfungRepository
                 .findWithFilmsByTerminIds(terminIds);
 
+        // -- 3. Map to DTO, filtering out films where vorfilm is true
         return futureTermine.stream()
                 .map(termin -> {
-                    // Check if titel exists (not null/empty)
+                    // Check if titel of Termin object exists (not null/empty)
                     if (termin.getTitel() != null && !termin.getTitel().isBlank()) {
                         return new TerminDTOWithFilmAndReiheDTOGallery(
                                 termin,
-                                List.of(), // Empty films list when titel is present
+                                List.of(), // !!! Empty films list when titel is present !!!
                                 termin.getReihen()
                         );
                     } else {
-                        // Include films only when titel is absent
+                        // Include main films only when titel is absent
                         List<Film> films = connections.stream()
                                 .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
                                 .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
@@ -152,7 +95,7 @@ public class ScreeningService {
         return new ReihenAndFilmTermineForGallery(reihenSemester, termineSemester);
     }
 
-//    // not required because the list doesn't contain any termin data
+//    // not required because the returned list doesn't contain any termin data (only film data relating to tnr)
 //    public List<FilmDTOForm> getFilmsByTnr(Long tnr) {
 //        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
 //
@@ -216,6 +159,8 @@ public class ScreeningService {
                         tv.getRang()
                 );
             }
+
+//    ########################################################
 
     public List<TerminDTOWithFilmDTOOverviewArchive> getPastTermineWithFilms() {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Berlin"));

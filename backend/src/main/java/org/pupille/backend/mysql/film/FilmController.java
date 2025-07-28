@@ -18,13 +18,7 @@ public class FilmController {
 //        return filmService.getAllFilms();
 //    }
 
-//    @GetMapping("/servicesort")
-//    public ResponseEntity<List<FilmDTOForm>> getAllFilmsServiceSortedByTitleAsc() {
-//        List<FilmDTOForm> films = filmService.getAllFilmsServiceSortedByTitleAsc();
-//        return ResponseEntity.ok(films);
-//    }
-
-    // this one is repo sorted
+    // this one is sorted in repo method
     @GetMapping()
     public ResponseEntity<List<FilmDTOSelection>> getAllFilmsRepoSortedByTitleAsc() {
         List<FilmDTOSelection> films = filmService.getAllFilmsRepoSortedByTitleAsc();

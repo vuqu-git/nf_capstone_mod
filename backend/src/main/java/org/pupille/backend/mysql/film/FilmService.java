@@ -21,21 +21,14 @@ public class FilmService {
 //                .collect(Collectors.toList());
 //    }
 
-    // Retrieve all films sorted in service method by title ascending
-//    public List<FilmDTOForm> getAllFilmsServiceSortedByTitleAsc() {
-//        List<Film> filme = filmRepository.findAll(Sort.by(Sort.Direction.ASC, "titel"));
-//        return filme.stream()
-//                .map(FilmDTOForm::new)
-//                .collect(Collectors.toList());
-//    }
 
 //    public List<FilmProjectionInterface> getAllFilmsByOrderByTitelAsc() {
-//        return filmRepository.findAllByOrderByTitelAsc();
+//        return filmRepository.findAllByOrderByTitelAscReturnListInterface();
 //    }
 
     // here DTO for Selection is used and the director gets extracted within the constructor of FilmDTOSelection
     public List<FilmDTOSelection> getAllFilmsRepoSortedByTitleAsc() {
-        return filmRepository.findAllByOrderByTitelAsc()
+        return filmRepository.findAllByOrderByTitelAsc()    // alternative: filmRepository.findAll(Sort.by(Sort.Direction.ASC, "titel")) // use JpaRepository's built-in sorting instead of defining a custom query in FilmRepository
                                 .stream()
                                 .map(FilmDTOSelection::new)
                                 .collect(Collectors.toList());

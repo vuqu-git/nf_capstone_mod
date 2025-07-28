@@ -20,6 +20,7 @@ public class ScreeningController {
         return screeningService.getAllFutureTermineWithFilms();
     }
 
+//            // this can be used when Reihe information is required in Gallery
 //            @GetMapping("/new")
 //            public ReihenAndFilmTermineForGallery getReihenAndTermineForGallery() {
 //                return screeningService.getReihenAndTermineForGallery();
@@ -44,6 +45,7 @@ public class ScreeningController {
         return screeningService.getReihenAndTermineForOverviewSemester();
     }
 
+//            // this was used when Reihe data wasn't processed yet in OverviewSemester
 //            @GetMapping("/semester/old")
 //            public List<TerminDTOWithFilmDTOOverviewSemester> getCurrentSemesterScreenings() {
 //                return screeningService.getTermineByCurrentSemester();
@@ -64,7 +66,7 @@ public class ScreeningController {
     }
 
 //    +++++++++++++++++++++++++++++
-//    mail reminder stuff
+//    mail reminder stuff => not required because the corresponding service method is called directly instead of going through a controller endpoint
 //    +++++++++++++++++++++++++++++
 
 //    // For screenings exactly N days in the future

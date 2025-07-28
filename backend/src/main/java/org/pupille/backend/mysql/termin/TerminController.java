@@ -15,11 +15,6 @@ public class TerminController {
 
     private final TerminService terminService;
 
-//    @GetMapping
-//    public ResponseEntity<List<TerminDTOForm>> getAllTermine() {
-//        return new ResponseEntity<>(terminService.getAllTermine(), HttpStatus.OK);
-//    }
-
     @GetMapping()
     public ResponseEntity<List<TerminProjectionSelection>> getAllTermineByOrderByVorstellungsbeginnDesc() {
         List<TerminProjectionSelection> termine = terminService.getAllTermineByOrderByVorstellungsbeginnDesc();

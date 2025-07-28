@@ -19,11 +19,6 @@ public class ReiheController {
         return ResponseEntity.ok(reiheService.getAllReihen());
     }
 
-//    @GetMapping("/{rnr}")
-//    public ResponseEntity<Reihe> getReiheById(@PathVariable Long rnr) {
-//        return ResponseEntity.ok(reiheService.getReiheById(rnr));
-//    }
-
     @GetMapping("/{rnr}")
     public ResponseEntity<ReiheDTOForFormWithTermineAndFilme> getReiheById(@PathVariable Long rnr) {
         return ResponseEntity.ok(reiheService.getReiheDTOForFormById(rnr));
