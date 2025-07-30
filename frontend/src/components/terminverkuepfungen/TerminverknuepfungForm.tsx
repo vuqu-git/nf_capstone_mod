@@ -329,6 +329,11 @@ export default function TerminverknuepfungForm() {
                         value={selectedTV.rang ?? ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        vorgesehene Werte: 0, 1, 2, 3... → bestimmt die Anzeigereihenfolge der Filme des Programms im Termineintrag
+                        <br/>
+                        bei "Standard-Termin" d. h. (Vorfilm + )Hauptfilm das Feld leerlassen
+                    </Form.Text>
                 </Form.Group>
 
                 <Button variant={selectedTVId ? "success" : "primary"} type="submit" className="mt-4">
