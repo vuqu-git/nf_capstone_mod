@@ -59,6 +59,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT,"/api/terminverknuepfung/{tnr}/{fnr}").authenticated()
                         .requestMatchers(HttpMethod.DELETE,"/api/terminverknuepfung/{tnr}/{fnr}").authenticated()
 
+                        .requestMatchers(HttpMethod.POST,"/api/programmheft").authenticated()
+                        .requestMatchers(HttpMethod.PUT,"/api/programmheft/{pnr}").authenticated()
+                        .requestMatchers(HttpMethod.DELETE,"/api/programmheft/{pnr}").authenticated()
+
                         .requestMatchers(HttpMethod.POST,"/api/perplexityai/emojify").authenticated()
                         .requestMatchers(HttpMethod.POST,"/api/perplexityai/film-text").authenticated()
                         .anyRequest().permitAll())
