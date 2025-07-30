@@ -21,7 +21,9 @@ public record FilmDTOGallery(
     public FilmDTOGallery(Film film) {
         this(
                 film != null ? film.getFnr() : null,
-                film != null ? film.getTitel() : null,
+                film != null && Boolean.TRUE.equals(film.getOriginaltitelAnzeigen()) && film.getOriginaltitel() != null && !film.getOriginaltitel().isBlank()
+                        ? film.getOriginaltitel()
+                        : (film != null ? film.getTitel() : null),
                 film != null ? film.getKurztext() : null,
                 film != null ? film.getBesonderheit() : null,
                 film != null ? film.getBild() : null,

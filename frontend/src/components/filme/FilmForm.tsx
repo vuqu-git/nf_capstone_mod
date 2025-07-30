@@ -333,18 +333,25 @@ export default function FilmForm() {
                         value={selectedFilm.originaltitel || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        Wenn der Titel gleich dem Originaltitel ist (bspw. deutscher Film oder ausländischer Film ohne Auswertung in DE) → nur Titel befüllen
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="originaltitelAnzeigen" className="mt-3">
                     {/*<Form.Label>Originaltitel anzeigen</Form.Label>*/}
                     <Form.Check
-                        disabled={true}
                         type="checkbox"
                         label="Originaltitel anzeigen"
                         name="originaltitelAnzeigen"
                         checked={selectedFilm.originaltitelAnzeigen || false}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        nur ankreuzen/aktivieren, wenn das Feld für Originaltitel nicht leer ist.
+                        <br/>
+                        Anzeige des Originaltitels erfolgt in Gallery, Semester Overview, Archiv (auf der Detailfilmseite wird es stets mit angezeigt); keine Anzeige im Adminbereich (außer im Feld Originaltitel des Filmformulars)
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">
@@ -408,7 +415,7 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Erscheint nur in Gallery, wenn es der Hauptfilm in einem "Standard"-Termin (mit 1 Langfilm + optionale Vorfilme); Feld vorgesehen für <b>Inhaltliches bzgl. des Hauptfilms; idR keine Eintragung für Vorfilme</b>
+                        erscheint nur in Gallery, wenn es der Hauptfilm in einem "Standard"-Termin (mit 1 Langfilm + optionale Vorfilme); Feld vorgesehen für <b>Inhaltliches bzgl. des Hauptfilms; idR keine Eintragung für Vorfilme</b>
                     </Form.Text>
                 </Form.Group>
 
@@ -422,7 +429,7 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Erscheint in Gallery (wenn es der Hauptfilm ist) und Detailseite; Eintrag bezieht sich auf Besonderheit des <b>Films</b> (bspw. Erwähnung Director's Cut, Farbstich der analogen Kopie);
+                        erscheint in Gallery (wenn es der Hauptfilm ist) und Detailseite; Eintrag bezieht sich auf Besonderheit des <b>Films</b> (bspw. Erwähnung Director's Cut, Farbstich der analogen Kopie);
                         <br/>
                         keine Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite, <b>kein</b> Feld für Kooperation, Filmfestival, Gäste (Einführung/Gespräch), Publikumswunsch, anderer Eintrittspreis, besondere Startzeit, abweichender Ort → Feld 'Besonderheit' im Termin-Formular verwenden
                         <br/>
@@ -552,7 +559,9 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Für Anzeige in der Gallery, Semesterübersicht und im Adminbereich. Unten im Feld "Stab & Besetzung" bitte die Regie ebenfalls eintragen.
+                        für Anzeige in der Gallery, Semesterübersicht und im Adminbereich
+                        <br/>
+                        unten im Feld "Stab & Besetzung" bitte die Regie ebenfalls eintragen.
                     </Form.Text>
                 </Form.Group>
 
