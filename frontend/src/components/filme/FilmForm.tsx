@@ -470,7 +470,7 @@ export default function FilmForm() {
                     <Form.Control
                         type="number"
                         name="jahr"
-                        value={selectedFilm.jahr || ""}
+                        value={selectedFilm.jahr ?? ""}
                         onChange={handleFormChange}
                     />
                 </Form.Group>
@@ -480,7 +480,7 @@ export default function FilmForm() {
                     <Form.Control
                         type="number"
                         name="laufzeit"
-                        value={selectedFilm.laufzeit || ""}
+                        value={selectedFilm.laufzeit ?? ""}
                         onChange={handleFormChange}
                     />
                 </Form.Group>
@@ -580,7 +580,7 @@ export default function FilmForm() {
                         disabled={true}
                         type="number"
                         name="sonderfarbeTitel"
-                        value={selectedFilm.sonderfarbeTitel || ""}
+                        value={selectedFilm.sonderfarbeTitel ?? ""}
                         onChange={handleFormChange}
                     />
                 </Form.Group>

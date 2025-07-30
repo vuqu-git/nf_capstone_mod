@@ -406,7 +406,7 @@ export default function TerminForm() {
                         disabled={true}
                         type="number"
                         name="sonderfarbeTitel"
-                        value={selectedTermin.sonderfarbeTitel || ""}
+                        value={selectedTermin.sonderfarbeTitel ?? ""}
                         onChange={handleFormChange}
                     />
                 </Form.Group>
@@ -429,7 +429,7 @@ export default function TerminForm() {
                     <Form.Control
                         type="number"
                         name="veroeffentlichen"
-                        value={selectedTermin.veroeffentlichen || ""}
+                        value={selectedTermin.veroeffentlichen ?? ""}
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">

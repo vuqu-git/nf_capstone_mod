@@ -326,7 +326,7 @@ export default function TerminverknuepfungForm() {
                     <Form.Control
                         type="number"
                         name="rang"
-                        value={selectedTV.rang || ""}
+                        value={selectedTV.rang ?? ""}
                         onChange={handleFormChange}
                     />
                 </Form.Group>
