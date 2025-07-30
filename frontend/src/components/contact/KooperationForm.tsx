@@ -121,6 +121,23 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
             </div>
 
             <div className={styles.formField}>
+                <label className={styles.formLabel} htmlFor="nachricht">Nachricht *</label>
+                <textarea
+                    id="nachricht"
+                    name="nachricht"
+                    value={formData.nachricht || ''}
+                    maxLength={maxMessageLengthObj.nachricht}
+                    onChange={onInputChange}
+                    required
+                    className={styles.textareaField}
+                    style={{ height: '175px' }}
+                />
+                <div className={styles.characterCounter}>
+                    Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLengthObj.nachricht}
+                </div>
+            </div>
+
+            <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="filmtitel">Filmtitel *</label>
                 <input
                     type="text"
@@ -133,6 +150,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     className={styles.textInput}
                 />
             </div>
+
             <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="verleih">Verleiher/Rechteinhaber des vorgeschlagenen Films *</label>
                 <input
@@ -146,6 +164,7 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     className={styles.textInput}
                 />
             </div>
+
             <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="format">Abspielformat *</label>
                 <select
@@ -165,22 +184,8 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     <option value="16mm" className={styles.selectOption}>16mm</option>
                     <option value="noch unbekannt" className={styles.selectOption}>noch unbekannt</option>
                 </select>
-            </div>
-
-            <div className={styles.formField}>
-                <label className={styles.formLabel} htmlFor="nachricht">Nachricht *</label>
-                <textarea
-                    id="nachricht"
-                    name="nachricht"
-                    value={formData.nachricht || ''}
-                    maxLength={maxMessageLengthObj.nachricht}
-                    onChange={onInputChange}
-                    required
-                    className={styles.textareaField}
-                    style={{ height: '175px' }}
-                />
-                <div className={styles.characterCounter}>
-                    Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLengthObj.nachricht}
+                <div className={styles.textUnderTextField}>
+                    Weitere alternative Filmideen (mit Angabe von Verleih und Abspielformat) können im obigen Nachrichtenfeld genannt werden.
                 </div>
             </div>
 
