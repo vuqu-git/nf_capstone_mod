@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -112,12 +113,15 @@ public class TerminverknuepfungController {
     // THIS is the add function for new Terminverknuepfung, but because of the relationships of
     // Terminverknuepfung entity, there could be various versions of this add function, version here: link between existing Film and existing Termin (more logic required)
     @PostMapping("/link-film-termin")
-    public ResponseEntity<String> linkExistingFilmToExistingTermin(@RequestBody TerminverknuepfungDTOSelection newTV) {
+    public ResponseEntity<Map<String, String>> linkExistingFilmToExistingTermin(@RequestBody TerminverknuepfungDTOSelection newTV) {
+        //  instead of returning a string in form of ResponseEntity<String>, create a simple response object with Map
         try {
             terminverknuepfungService.linkExistingFilmToExistingTermin(newTV);
-            return new ResponseEntity<>("Film with fnr " + newTV.fnr() + " linked to Termin with tnr " + newTV.tnr() + " successfully", HttpStatus.CREATED);
+            Map<String, String> successResponse = Map.of("message", "Film with fnr " + newTV.fnr() + " linked to Termin with tnr " + newTV.tnr() + " successfully");
+            return new ResponseEntity<>(successResponse, HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            Map<String, String> errorResponse = Map.of("error", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
     //    #############################################################
