@@ -19,7 +19,7 @@ public class ProgrammheftController {
         return programmheftService.getAllProgrammhefte();
     }
 
-    @GetMapping("/allwithsemesterinfo")
+    @GetMapping("/allwithsemesterfield")
     public List<ProgrammheftDTOWithSemesterField> getAllProgrammhefteWithSemesterField()
     {
         return programmheftService.getAllProgrammhefte().stream().map(ProgrammheftDTOWithSemesterField::new).toList();

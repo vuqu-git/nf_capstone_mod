@@ -194,7 +194,7 @@ async function getArchiveData(): Promise<ArchiveData> {
         // Fetch both endpoints concurrently
         const [response1, response2] = await Promise.all([
             axios.get<TerminDTOWithFilmDTOOverviewArchive[]>("/api/screenings/archive"),
-            axios.get<ProgrammheftDTOWithSemesterField[]>("/api/programmheft/allwithsemesterinfo")
+            axios.get<ProgrammheftDTOWithSemesterField[]>("/api/programmheft/allwithsemesterfield")
         ]);
 
         return {

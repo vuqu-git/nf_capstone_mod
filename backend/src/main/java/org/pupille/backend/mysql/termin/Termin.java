@@ -63,7 +63,6 @@ public class Termin {
 
     // ############################################
     // relationships (extension of the entity model)
-
     @OneToMany(mappedBy = "termin", cascade = CascadeType.ALL)
     @JsonManagedReference("TV-Termin-Ref")
     // @EqualsAndHashCode.Exclude // maybe here as well like below for field reihen
