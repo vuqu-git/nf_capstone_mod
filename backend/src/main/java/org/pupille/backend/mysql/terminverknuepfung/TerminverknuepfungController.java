@@ -3,7 +3,6 @@ package org.pupille.backend.mysql.terminverknuepfung;
 import lombok.RequiredArgsConstructor;
 import org.pupille.backend.mysql.film.FilmDTOSelection;
 import org.pupille.backend.mysql.termin.TerminProjectionSelection;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +31,9 @@ public class TerminverknuepfungController {
     }
 
     @GetMapping("/plain/{tnr}/{fnr}")
-    public ResponseEntity<TerminverknuepfungDTOSelection> getTerminverknuepfungById(@PathVariable Long tnr, @PathVariable Long fnr) {
-        Terminverknuepfung.TerminverknuepfungId id = new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
-        Optional<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getTerminverknuepfungById(id);
+    public ResponseEntity<TerminverknuepfungDTOSelection> getTVById(@PathVariable Long tnr, @PathVariable Long fnr) {
+        Terminverknuepfung.TerminverknuepfungId compositeTvId = new Terminverknuepfung.TerminverknuepfungId(tnr, fnr);
+        Optional<TerminverknuepfungDTOSelection> terminverknuepfungDTOSelection = terminverknuepfungService.getTVById(compositeTvId);
         return terminverknuepfungDTOSelection.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
     // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -68,18 +67,16 @@ public class TerminverknuepfungController {
     // ---------------------------------------------------------------------------------------------
     // two methods for fetching list of filme (termine) when giving tnr (fnr)
 
+    // used in TerminForm.tsx
+    @GetMapping("getfilme/{tnr}")
+    public ResponseEntity<List<FilmDTOSelection>> getFilmeByTnr(@PathVariable Long tnr) {
+        return ResponseEntity.ok(terminverknuepfungService.getFilmlistByTnr(tnr));
+    }
+
     // used in FilmForm.tsx
     @GetMapping("gettermine/{fnr}")
     public ResponseEntity<List<TerminProjectionSelection>> getTermineByFnr(@PathVariable Long fnr) {
         return ResponseEntity.ok(terminverknuepfungService.getTerminlistByFnr(fnr));
-    }
-
-    // used in TerminForm.tsx
-    @GetMapping("getfilme/{tnr}")
-    public ResponseEntity<List<FilmDTOSelection>> getFilmeByTnr(
-            @PathVariable Long tnr
-    ) {
-        return ResponseEntity.ok(terminverknuepfungService.getFilmlistByTnr(tnr));
     }
     // ---------------------------------------------------------------------------------------------
 
@@ -90,9 +87,9 @@ public class TerminverknuepfungController {
     public ResponseEntity<TerminverknuepfungDTOSelection> updateTerminverknuepfung(
             @PathVariable Long tnr,
             @PathVariable Long fnr,
-            @RequestBody TerminverknuepfungDTOSelection updatingTV) {
+            @RequestBody TerminverknuepfungDTOSelection updatingTVDTO) {
 
-        TerminverknuepfungDTOSelection updated = terminverknuepfungService.updateTerminverknuepfung(tnr, fnr, updatingTV);
+        TerminverknuepfungDTOSelection updated = terminverknuepfungService.updateTerminverknuepfung(tnr, fnr, updatingTVDTO);
 
         return ResponseEntity.ok(updated);
     }
@@ -112,8 +109,8 @@ public class TerminverknuepfungController {
 //        return ResponseEntity.status(HttpStatus.CREATED).body(createdTerminverknuepfung);
 //    }
 
-    // this is the usual add function for new Terminverknuepfung, but because of the relationships of
-    // Terminverknuepfung entity, there a various versions of this add function, version here: link between existing Film and existing Termin
+    // THIS is the add function for new Terminverknuepfung, but because of the relationships of
+    // Terminverknuepfung entity, there could be various versions of this add function, version here: link between existing Film and existing Termin (more logic required)
     @PostMapping("/link-film-termin")
     public ResponseEntity<String> linkExistingFilmToExistingTermin(@RequestBody TerminverknuepfungDTOSelection newTV) {
         try {

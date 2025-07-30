@@ -12,7 +12,7 @@ import java.util.List;
 public interface ProgrammheftRepo extends JpaRepository<Programmheft, Long> {
     List<Programmheft> findAllByOrderByGueltigBisDesc();
 
-    // derived queries () per name conventionhere not possible: method name alone cannot express "start ≤ param ≤ end"), hence
+    // derived queries () per name convention here not possible: method name alone cannot express "start ≤ param ≤ end"), hence
     @Query("SELECT p FROM Programmheft p WHERE :nowDate BETWEEN p.gueltigVon AND p.gueltigBis ORDER BY p.gueltigBis DESC")
     List<Programmheft> findValidProgrammhefteByDateInRange(@Param("nowDate") LocalDate nowDate);
                             //    What is @Param("nowDate") For?

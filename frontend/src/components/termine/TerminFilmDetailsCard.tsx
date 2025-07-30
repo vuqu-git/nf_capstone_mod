@@ -7,7 +7,7 @@ import TerminFilmDetailsListing from "./TerminFilmDetailsCardFilmListing.tsx";
 import {createICSFileName} from "../../utils/createICSFileName.ts";
 import {AddToCalendarButton} from "add-to-calendar-button-react";
 import {createDateAndTimeForAddToCalendarButton} from "../../utils/createDateAndTimeForAddToCalendarButton.ts";
-import ReiheDTOForFormWithTermineAndFilme from "../../types/ReiheDTOForFormWithTermineAndFilme.ts";
+import ReiheDTOFormWithTermineAndFilme from "../../types/ReiheDTOFormWithTermineAndFilme.ts";
 import {formatDateTime} from "../../utils/formatDateTime.ts";
 import {Link} from "react-router-dom";
 
@@ -32,7 +32,7 @@ interface Props {
 
     terminGesamtlaufzeit: number;
 
-    reihen: ReiheDTOForFormWithTermineAndFilme[];
+    reihen: ReiheDTOFormWithTermineAndFilme[];
 }
 
 export default function TerminFilmDetailsCard({
@@ -131,7 +131,7 @@ export default function TerminFilmDetailsCard({
                             Diese Vorstellung { new Date() > new Date(calenderDateObj.startDate) ? " lief" : "läuft"}
                             {reihen.length == 1 ? " in der Filmreihe" : " in den Filmreihen"}
                         </div>
-                        {reihen.map((reihe: ReiheDTOForFormWithTermineAndFilme, i) => (
+                        {reihen.map((reihe: ReiheDTOFormWithTermineAndFilme, i) => (
                             <div key={reihe.rnr} className="">
                                 <div style={{paddingLeft: '1rem'}}><em>{reihe.titel}</em> zusammen mit</div>
                                 {reihe.termine && (

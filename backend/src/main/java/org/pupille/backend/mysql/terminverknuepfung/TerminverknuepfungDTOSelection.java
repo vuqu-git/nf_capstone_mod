@@ -5,6 +5,7 @@ public record TerminverknuepfungDTOSelection(
         Long fnr,
         Boolean vorfilm,
         Short rang
+        // omitted are film and termin field for relationship
 ) {
     public TerminverknuepfungDTOSelection(Terminverknuepfung tv) {
         this(

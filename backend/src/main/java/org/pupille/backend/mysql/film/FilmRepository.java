@@ -14,8 +14,8 @@ public interface FilmRepository extends JpaRepository<Film, Long> {
 //    // @Query("SELECT f.fnr, f.titel, f.jahr FROM Film f ORDER BY f.titel ASC")
 //    List<FilmProjectionInterface> findAllByOrderByTitelAscReturnListInterface();
 
-    @Query("SELECT f FROM Film f ORDER BY f.titel ASC")
+    // @Query("SELECT f FROM Film f ORDER BY f.titel ASC")  // This query can be expressed using Spring Data JPA's method naming convention, and you can remove the @Query annotation entirely
+                                                            // Spring Data JPA will automatically generate the required SQL/JPQL
     List<Film> findAllByOrderByTitelAsc();
-
 
 }

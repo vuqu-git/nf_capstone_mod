@@ -4,7 +4,7 @@ import axios from "axios";
 import {preprocessFormData} from "../../utils/preprocessFormData.ts";
 import ReiheSelection from "./ReiheSelection.tsx";
 import AdminNav from "../AdminNav.tsx";
-import ReiheDTOForFormWithTermineAndFilme from "../../types/ReiheDTOForFormWithTermineAndFilme.ts";
+import ReiheDTOFormWithTermineAndFilme from "../../types/ReiheDTOFormWithTermineAndFilme.ts";
 import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
 import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
@@ -24,7 +24,7 @@ export default function ReiheForm() {
     const [allReihen, setAllReihen] = useState<ReiheDTOSelection[]>([]); // All Reihen fetched from the server
 
     const [selectedReiheId, setSelectedReiheId] = useState<number | undefined>(undefined); // Selected TVId (as concatenated string) for editing or deleting
-    const [selectedReihe, setSelectedReihe] = useState<ReiheDTOForFormWithTermineAndFilme>(emptyReiheForForm); // Reihe data for the form
+    const [selectedReihe, setSelectedReihe] = useState<ReiheDTOFormWithTermineAndFilme>(emptyReiheForForm); // Reihe data for the form
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
@@ -170,7 +170,7 @@ export default function ReiheForm() {
     // Handle Reihe form field changes
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setSelectedReihe((prevData: ReiheDTOForFormWithTermineAndFilme) => ({
+        setSelectedReihe((prevData: ReiheDTOFormWithTermineAndFilme) => ({
             ...prevData,
             [name]: value,
         }));
@@ -213,9 +213,9 @@ export default function ReiheForm() {
                                 <li key={t.tnr}>
                                     {formatDateInTerminSelectOption(t.vorstellungsbeginn)} | tnr: #{t.tnr} | {t.titel ?? "---"}
                                     {/* Nested sub-list for mainfilms */}
-                                    {t.films && t.films.length > 0 && (
+                                    {t.mainfilms && t.mainfilms.length > 0 && (
                                         <ul>
-                                            {t.films.map(f => (
+                                            {t.mainfilms.map(f => (
                                                 <li key={f.fnr}>
                                                     {renderHtmlText(f.titel)}
                                                 </li>

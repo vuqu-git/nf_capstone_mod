@@ -4,10 +4,10 @@ import styles from './ReiheverknuepfungForm.module.css';
 import axios from "axios";
 import ReiheSelection from "./ReiheSelection.tsx";
 import AdminNav from "../AdminNav.tsx";
-import ReiheDTOForFormWithTermineAndFilme from "../../types/ReiheDTOForFormWithTermineAndFilme.ts";
+import ReiheDTOFormWithTermineAndFilme from "../../types/ReiheDTOFormWithTermineAndFilme.ts";
 import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
+import TerminDTOWithMainfilms from "../../types/TerminDTOWithMainfilms.ts";
 import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
-import TerminDTOWithFilmDTOOverviewArchive from "../../types/TerminDTOWithFilmDTOOverviewArchive.ts";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 
 const baseURL = "/api/reihe";
@@ -23,10 +23,10 @@ const emptyReihe = {
 export default function ReiheverknuepfungForm() {
     const [allReihen, setAllReihen] = useState<ReiheDTOSelection[]>([]); // All Reihen fetched from the server
     const [selectedReiheId, setSelectedReiheId] = useState<number | undefined>(undefined); // Selected TVId (as concatenated string) for editing or deleting
-    const [selectedReihe, setSelectedReihe] = useState<ReiheDTOForFormWithTermineAndFilme>(emptyReihe); // Reihe data for the form
+    const [selectedReihe, setSelectedReihe] = useState<ReiheDTOFormWithTermineAndFilme>(emptyReihe); // Reihe data for the form
     const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new Reihe selection has been made manually by the user
 
-    const [allTermineWithMainfilme, setAllTermineWithMainfilme] = useState<TerminDTOWithFilmDTOOverviewArchive[]>([]);
+    const [allTermineWithMainfilme, setAllTermineWithMainfilme] = useState<TerminDTOWithMainfilms[]>([]);
     const [selectedTerminId, setSelectedTerminId] = useState<number | undefined>(undefined);
 
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -247,9 +247,9 @@ export default function ReiheverknuepfungForm() {
                                     </div>
                                 </div>
 
-                                {t.films && t.films.length > 0 && (
+                                {t.mainfilms && t.mainfilms.length > 0 && (
                                     <div className={styles.filmList}>
-                                        {t.films.map((f) => (
+                                        {t.mainfilms.map((f) => (
                                             <div key={f.fnr} className={styles.filmItem}>
                                                 {renderHtmlText(f.titel)}
                                             </div>
@@ -285,12 +285,12 @@ export default function ReiheverknuepfungForm() {
                 style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
             >
                 <option value="">Select a Termin</option>
-                {allTermineWithMainfilme.map((t: TerminDTOWithFilmDTOOverviewArchive) => (
+                {allTermineWithMainfilme.map((t: TerminDTOWithMainfilms) => (
                     <option key={t.tnr} value={t.tnr}>
 
                         {
                             `${formatDateInTerminSelectOption(t.vorstellungsbeginn)} | tnr: #${t.tnr}
-                            | ${t.titel ?? t.films.map(film =>  film.titel).join('+') 
+                            | ${t.titel ?? t.mainfilms.map(film =>  film.titel).join('+') 
                             }`
                         }
                     </option>

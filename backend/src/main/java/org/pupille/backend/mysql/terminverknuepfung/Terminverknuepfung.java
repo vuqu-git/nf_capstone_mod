@@ -52,7 +52,6 @@ public class Terminverknuepfung implements Serializable {
         }
     }
 
-
     // ############################################
     // relationship (extension of the entity model)
     @ManyToOne(fetch = FetchType.LAZY)

@@ -8,7 +8,6 @@ import org.pupille.backend.mysql.termin.TerminDTOForm;
 import org.pupille.backend.mysql.termin.TerminRepository;
 import org.pupille.backend.mysql.terminverknuepfung.Terminverknuepfung;
 import org.pupille.backend.mysql.terminverknuepfung.TerminverknuepfungRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,7 +31,7 @@ public class ScreeningService {
         this.terminverknuepfungRepository = terminverknuepfungRepository;
     }
 
-    //filter for veroeffentlichen > 0 happens in frontend react component Gallery2.tsx
+    // filter for veroeffentlichen > 0 happens in frontend react component Gallery2.tsx
     public List<TerminDTOWithFilmAndReiheDTOGallery> getAllFutureTermineWithFilms() {
 
         // -- 0. Set the "now" date as today but right after midnight (today's screening should still appear even though we're past their screening time)
@@ -41,38 +40,59 @@ public class ScreeningService {
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
 
         // -- 1. Get future Termine
-        List<Termin> futureTermine = terminRepository.findAllFutureTermine(now);
+        List<Termin> futureTermine = terminRepository.findAllFutureTermineWithReihen(now);
 
         // -- 2. Get related films in batch
-        List<Long> terminIds = futureTermine.stream()
+        //  !! no access films directly from the futureTermine: instead batch/bulk fetch them via findByTerminIdsWithFilms(terminIds)
+        //  i.e fetch connections with films for the relevant Termine
+        List<Long> futureTerminIds = futureTermine.stream()
                 .map(Termin::getTnr)
                 .toList();
 
-        // Fetch connections with films for the relevant Termine
-        List<Terminverknuepfung> connections = terminverknuepfungRepository
-                .findWithFilmsByTerminIds(terminIds);
+        List<Terminverknuepfung> connectionsByTerminIds = terminverknuepfungRepository.findByTerminIdsWithFilms(futureTerminIds);
+
+        //        What about connectionsByTerminIds? (Could be used in @EntityGraph(attributePaths = {"filmConnections"} for findAllFutureTermine with TerinRepositroy)
+        //          I'm NOT accessing termin.getFilmConnections() in this code. I fetch all needed Terminverknuepfung rows in bulk via a repository using the batch of terminIds.
+
+        //        Why is batch-fetching related films via findByTerminIdsWithFilms(terminIds) a good pattern?
+                    //        This is a good pattern for several important reasons:
+                    //        a. Avoids the N + 1 Select Problem
+                    //              If you loop over future Termine and do something like termin.getFilmConnections() (assuming it's a lazy relationship), Hibernate would issue one query for the list of (future) Termin, then potentially one query per Termin for its film connections, and further queries for each film. For lots of Termine, this leads to tons of separate SQL statements ("N+1 problem").
+                    //              By collecting all the IDs and fetching the related entities in a single custom query, you remove these extra per-entity SQL queries.
+                    //              Limit this data strictly to those connected with the relevant list of Termine you care about (future Termine in your case), rather than fetching all records or loading lazy collections on each Termin individually.
+                    //        b. Better Control and Readability
+                    //              You explicitly define when and how you want to load the related entities, making the code easier to understand and maintain. You know exactly when the related data is loaded.
+                    //        c. Flexible Filtering/Joining
+                    //              You can fine-tune your JOIN conditions and fetched attributes. For instance, you can filter rows, join additional data, or fetch only the desired subset (e.g., excluding vorfilms, if you want).
+                    //        d. Performance
+                    //              Fetching everything in one or two SQL queries is orders of magnitude more efficient than issuing one-per-parent-entity, especially as your dataset grows.
+                    //        e. Decoupling
+                    //              It allows the Termin entity and its relationships to remain LAZY in JPA, which is often the optimal default, and leaves loading decisions to your service layer.
 
         // -- 3. Map to DTO, filtering out films where vorfilm is true
         return futureTermine.stream()
-                .map(termin -> {
+                .map(fTermin -> {
                     // Check if titel of Termin object exists (not null/empty)
-                    if (termin.getTitel() != null && !termin.getTitel().isBlank()) {
+                    if (fTermin.getTitel() != null && !fTermin.getTitel().isBlank()) {
                         return new TerminDTOWithFilmAndReiheDTOGallery(
-                                termin,
+                                fTermin,
                                 List.of(), // !!! Empty films list when titel is present !!!
-                                termin.getReihen()
+                                fTermin.getReihen()
                         );
                     } else {
                         // Include main films only when titel is absent
-                        List<Film> films = connections.stream()
-                                .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+                        List<Film> films = connectionsByTerminIds.stream() // connectionsByTerminIds contain Terminverknuepfung entities (plural!) where the tnrs belongs to future Termine (see the query in findByTerminIdsWithFilms)
+                                .filter(tv -> tv.getTnr().equals(fTermin.getTnr()))   // It filters the list of all fetched Terminverknuepfungs down to only those linked to the current Termin (fTermin)
+                                                                                                        // assemble the appropriate subset of films (fnrs) for each Termin in your list of future Termine
+                                                                                                        // i.e. for each specific Termin (fTermin) in the futureTermine list, I filter those connections to just those that match this fTermin by its ID tnr
+                                                                                                        // because Terminverknuepfung explicitly contains the tnr FK column as a regular field, you can simply use tv.getTnr() — that is the FK value without fetching Termin i.e. filter/match by tv.tnr instead of tv.termin.tnr
                                 .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
                                 .map(Terminverknuepfung::getFilm)
                                 .toList();
                         return new TerminDTOWithFilmAndReiheDTOGallery(
-                                termin,
+                                fTermin,
                                 films,
-                                termin.getReihen()
+                                fTermin.getReihen()
                         );
                     }
                 })
@@ -80,7 +100,7 @@ public class ScreeningService {
     }
 
     public ReihenAndFilmTermineForGallery getReihenAndTermineForGallery() {
-        // Get all rest termine with films + rest reihen of the semester; rest i.e. future from now date
+        // Get all rest termine with films + remaining reihen of the semester; rest i.e. future from now date
         List<TerminDTOWithFilmAndReiheDTOGallery> termineSemester = getAllFutureTermineWithFilms();
 
         // Collect all unique reihen.titel values, ignoring null/empty
@@ -95,29 +115,19 @@ public class ScreeningService {
         return new ReihenAndFilmTermineForGallery(reihenSemester, termineSemester);
     }
 
-//    // not required because the returned list doesn't contain any termin data (only film data relating to tnr)
-//    public List<FilmDTOForm> getFilmsByTnr(Long tnr) {
-//        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
-//
-//        return connections.stream()
-//                .map(Terminverknuepfung::getFilm)
-//                .filter(Objects::nonNull)
-//                .map(FilmDTOForm::new)
-//                .toList();
-//    }
 
 //    ########################################################
 
     public TerminDTOFormWithFilmsDTOFormPlus getTerminWithFilmsPlusByTnr(Long tnr) {
         // Fetch Termin
         Termin termin = terminRepository.findById(tnr)
-                .orElseThrow(() -> new NoSuchElementException("Termin not found"));
+                .orElseThrow(() -> new NoSuchElementException("Termin not found with ID " + tnr));
 
-        // Get all connections with films
-        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTnr(tnr);
+        // Get from Termin with tnr all connections with films
+        List<Terminverknuepfung> connectionsByTerminIds = terminverknuepfungRepository.findByTnrWithFilms(tnr);
 
         // Split and sort
-        Map<Boolean, List<Terminverknuepfung>> grouped = connections.stream()
+        Map<Boolean, List<Terminverknuepfung>> groupedConnectionsMap = connectionsByTerminIds.stream()
                 .collect(Collectors.partitioningBy(
                         tv -> Boolean.TRUE.equals(tv.getVorfilm())
                 ));
@@ -127,12 +137,12 @@ public class ScreeningService {
                 Comparator.nullsFirst(Short::compare)
         );
 
-        List<FilmDTOFormPlus> mainFilms = grouped.get(false).stream()
+        List<FilmDTOFormPlus> mainFilms = groupedConnectionsMap.get(false).stream()
                 .sorted(rangComparator)
                 .map(this::convertToFilmDTO)
                 .toList();
 
-        List<FilmDTOFormPlus> vorfilms = grouped.get(true).stream()
+        List<FilmDTOFormPlus> vorfilms = groupedConnectionsMap.get(true).stream()
                 .sorted(rangComparator)
                 .map(this::convertToFilmDTO)
                 .toList();
@@ -161,64 +171,83 @@ public class ScreeningService {
             }
 
 //    ########################################################
-
-    public List<TerminDTOWithFilmDTOOverviewArchive> getPastTermineWithFilms() {
+    // similar to getAllFutureTermineWithFilms above
+    public List<TerminDTOWithFilmDTOOverviewArchive> getAllPastTermineWithFilms() {
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Berlin"));
-        List<Termin> pastTermine = terminRepository.findPastTermine(now);
 
+        // -- 1. Get past Termine
+        List<Termin> pastTermine = terminRepository.findAllPastTermine(now);
+
+        // -- 2. Get related films in batch
+        //  !! no access films directly from the futureTermine: instead batch/bulk fetch them via findByTerminIdsWithFilms(terminIds)
+        //  i.e fetch connections with films for the relevant Termine
         List<Long> terminIds = pastTermine.stream()
                 .map(Termin::getTnr)
                 .collect(Collectors.toList()); // Explicit collection
 
-        List<Terminverknuepfung> connections = terminverknuepfungRepository
-                .findWithFilmsByTerminIds(terminIds);
+        List<Terminverknuepfung> connectionsByTerminIds = terminverknuepfungRepository.findByTerminIdsWithFilms(terminIds);
 
         return pastTermine.stream()
-                .map(termin -> {
-                    List<Film> films = connections.stream()
-                            .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+                .map(pTermin -> {
+                    List<Film> films = connectionsByTerminIds.stream()
+                            .filter(tv -> tv.getTnr().equals(pTermin.getTnr()))
                             .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
                             .map(Terminverknuepfung::getFilm)
                             .collect(Collectors.toList()); // Explicit collection
-                    return new TerminDTOWithFilmDTOOverviewArchive(termin, films);
+                    return new TerminDTOWithFilmDTOOverviewArchive(pTermin, films);
                 })
                 .collect(Collectors.toList()); // Convert stream to List
     }
 
     public List<TerminDTOWithFilmDTOOverviewSemester> getTermineByCurrentSemester() {
 
+        // -- 0. Determine start and end date of the current semester
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Europe/Berlin"));
 
-        boolean isWinter = now.getMonthValue() >= 10 || now.getMonthValue() <= 3;
+        //  Define winter semester start and end dates
+        LocalDateTime startDateWinter = (now.getMonthValue() <= 3)
+                ? LocalDateTime.of(now.getYear() - 1, 10, 1, 0, 0) // WiSe, which started last year
+                : LocalDateTime.of(now.getYear(), 10, 1, 0, 0); // WiSe, which will start this year
 
-        LocalDateTime startDate = isWinter
-                ? (now.getMonthValue() <= 3
-                    ? LocalDateTime.of(now.getYear() - 1, 10, 1, 0, 0)
-                    : LocalDateTime.of(now.getYear(), 10, 1, 0, 0))
-                : LocalDateTime.of(now.getYear(), 4, 1, 0, 0);
+        LocalDateTime endDateWinter = (now.getMonthValue() <= 3)
+                ? LocalDateTime.of(now.getYear(), 3, 31, 23, 59, 59) // WiSe, which will end this year
+                : LocalDateTime.of(now.getYear() + 1, 3, 31, 23, 59, 59); // Wise, which will end next year
 
-        LocalDateTime endDate = isWinter
-                ? LocalDateTime.of(now.getMonthValue() <= 3 ? now.getYear() : now.getYear() + 1, 3, 31, 23, 59, 59)
-                : LocalDateTime.of(now.getYear(), 9, 30, 23, 59, 59);
+        //  Define summer semester start and end dates (Apr 1 to Sep 30, same year)
+        LocalDateTime startDateSummer = LocalDateTime.of(now.getYear(), 4, 1, 0, 0);
 
+        LocalDateTime endDateSummer = LocalDateTime.of(now.getYear(), 9, 30, 23, 59, 59);
+
+        // -- 1. Get Termine of current semester; call with distinct semester boundaries:
         List<Termin> termineInSemester = terminRepository.findTermineByCurrentSemester(
-                now, startDate, endDate, startDate, endDate
+                now,
+                startDateSummer, endDateSummer,
+                startDateWinter, endDateWinter
         );
 
-        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+        // -- 2. Get related films in batch
+        //  !! no access films directly from the termineInSemester: instead batch/bulk fetch them via findByTerminIdsWithFilms(terminIds)
+        //  i.e fetch connections with films for the relevant Termine
         List<Long> terminIds = termineInSemester.stream()
                 .map(Termin::getTnr)
                 .collect(Collectors.toList());
 
-        Map<Long, List<Terminverknuepfung>> connectionsByTerminId = terminverknuepfungRepository
-                .findWithFilmsByTerminIds(terminIds)
+        Map<Long, List<Terminverknuepfung>> connectionsByTerminIdsMap = terminverknuepfungRepository
+                .findByTerminIdsWithFilms(terminIds)
                 .stream()
-                .collect(Collectors.groupingBy(tv -> tv.getTermin().getTnr()));
+                .collect(Collectors.groupingBy(tv -> tv.getTnr()));   // .collect(Collectors.groupingBy(tv -> tv.getTnr())) collects the stream elements into a Map.
+                                                                                        // The key of the map is the tnr value of each Terminverknuepfung (i.e., the ID of the corresponding Termin).
+                                                                                        // The value is a list(!) of all Terminverknuepfung objects that share the same tnr
+                                                                                        // i.e. I get a Map<Long, List<Terminverknuepfung>>
+                                                                                        //    Why is this useful?
+                                                                                        //       It enables efficient lookup of all film connections belonging to a specific Termin by its ID.
+                                                                                        //       Avoids repeatedly filtering the entire list when you need to access the connections related to a single Termin.
+                                                                                        //       Simplifies your code when building DTOs — you can quickly get all film connections for each Termin without overhead.
+
 
         return termineInSemester.stream()
-                .map(termin -> {
-                    List<Terminverknuepfung> connections = connectionsByTerminId.getOrDefault(termin.getTnr(), List.of());
+                .map(sTermin -> {
+                    List<Terminverknuepfung> connections = connectionsByTerminIdsMap.getOrDefault(sTermin.getTnr(), List.of()); // if map does NOT contain that key, it returns the default value — here, List.of(), which is an immutable empty list
 
                     List<Film> mainfilms = new ArrayList<>();
                     List<Film> vorfilms = new ArrayList<>();
@@ -237,18 +266,20 @@ public class ScreeningService {
                             .mapToInt(Integer::intValue)
                             .sum();
 
-                    return new TerminDTOWithFilmDTOOverviewSemester(termin, mainfilms, termin.getReihen(), terminGesamtlaufzeit);
+                    return new TerminDTOWithFilmDTOOverviewSemester(sTermin, mainfilms, sTermin.getReihen(), terminGesamtlaufzeit);
                 })
                 .toList();
     }
 
     public ReihenAndFilmTermineForOverviewSemester getReihenAndTermineForOverviewSemester() {
         // Get all termine with films + reihen of the whole semester
-        List<TerminDTOWithFilmDTOOverviewSemester>  termineSemester = getTermineByCurrentSemester();
+        List<TerminDTOWithFilmDTOOverviewSemester> termineSemester = getTermineByCurrentSemester();
 
         // Collect all unique reihen.titel values, ignoring null/empty
         List<String> reihenSemester = termineSemester.stream()
                 .flatMap(termin -> termin.reihen().stream()) // stream of all reihen in all termine
+                                                                                            // reihen collections are already loaded in memory, and no additional lazy-loading queries will be triggered
+                                                                                            // because it's eager fetched within getTermineByCurrentSemester and terminRepository.findTermineByCurrentSemester
                 .map(ReiheDTOGallery::getTitel)
                 .filter(Objects::nonNull)
                 .distinct()                                // unique
@@ -384,17 +415,17 @@ public class ScreeningService {
         LocalDateTime now = LocalDateTime.of(currentDate, fixedTime);
 
         // 1. Get all future Termine
-        List<Termin> futureTermine = terminRepository.findAllFutureTermine(now);
+        List<Termin> futureTermine = terminRepository.findAllFutureTermineWithReihen(now); // to do: reihen is eager fetched here, so adjusting TerminDTOWithFilmDTOSlideshow and it's constructor could include reihen
 
         // 2. Filter veroeffentlichen > 0
         List<Termin> publishableTermine = futureTermine.stream()
                 .filter(t -> t.getVeroeffentlichen() != null && t.getVeroeffentlichen() > 0)
                 .sorted(Comparator.comparing(Termin::getVorstellungsbeginn))
-                .collect(Collectors.toList());
+                .toList();
 
         // 3. Exclude the first next Termin
         if (!publishableTermine.isEmpty()) {
-            publishableTermine.remove(0);
+            publishableTermine.removeFirst();
         }
 
         // 4. Apply 'next' limit if present
@@ -402,26 +433,26 @@ public class ScreeningService {
             publishableTermine = publishableTermine.subList(0, next.get());
         }
 
-        // 5. Get termin IDs
+        // 5. Get termin IDs and batch fetching (bulk fetching) related film ids in tv
         List<Long> terminIds = publishableTermine.stream()
                 .map(Termin::getTnr)
-                .collect(Collectors.toList());
+                .toList();
 
-        List<Terminverknuepfung> connections = terminverknuepfungRepository.findWithFilmsByTerminIds(terminIds);
+        List<Terminverknuepfung> connectionsByTerminIds = terminverknuepfungRepository.findByTerminIdsWithFilms(terminIds);
 
         // 6. Build DTOs
         return publishableTermine.stream()
-                .map(termin -> {
-                    List<Film> mainfilms = connections.stream()
-                            .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+                .map(pTermin -> {
+                    List<Film> mainfilms = connectionsByTerminIds.stream()
+                            .filter(tv -> tv.getTnr().equals(pTermin.getTnr()))
                             .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
                             .sorted(Comparator.comparing(Terminverknuepfung::getRang, Comparator.nullsFirst(Short::compare)))
                             .map(Terminverknuepfung::getFilm)
-                            .collect(Collectors.toList());
+                            .toList();
 
-                    return new TerminDTOWithFilmDTOSlideshow(termin, mainfilms);
+                    return new TerminDTOWithFilmDTOSlideshow(pTermin, mainfilms);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
 //    +++++++++++++++++++++++++++++
@@ -438,7 +469,8 @@ public class ScreeningService {
 
         List<Termin> termineOnTargetDate = terminRepository.findTermineByDateRange(startOfDay, endOfDay);
 
-        return buildTerminDTOWithFilmDTOMailReminderList(termineOnTargetDate).stream()
+        return buildTerminDTOWithFilmDTOMailReminderList(termineOnTargetDate)
+                .stream()
                 .filter(terminDTO -> terminDTO.veroeffentlichen() != null && terminDTO.veroeffentlichen() > 0)
                 .collect(Collectors.toList());
     }
@@ -453,19 +485,22 @@ public class ScreeningService {
 
         List<Termin> termineOnTargetDate = terminRepository.findTermineByDateRange(startOfDay, endOfDay);
 
-        return buildTerminDTOWithFilmDTOMailReminderList(termineOnTargetDate).stream()
+        return buildTerminDTOWithFilmDTOMailReminderList(termineOnTargetDate)
+                .stream()
                 .filter(terminDTO -> terminDTO.veroeffentlichen() != null && terminDTO.veroeffentlichen() > 0) // only keep termine, which are veröffentlicht
                 .collect(Collectors.toList());
     }
 
-            // Helper method to avoid code duplication
+            // Helper method to avoid code duplication for the both methods above
             private List<TerminDTOWithFilmDTOMailReminder> buildTerminDTOWithFilmDTOMailReminderList(List<Termin> termine) {
+
+                // Get termin IDs and batch fetching (bulk fetching) related film ids in tv
                 List<Long> terminIds = termine.stream()
                         .map(Termin::getTnr)
                         .toList();
 
-                List<Terminverknuepfung> connections = terminverknuepfungRepository
-                        .findWithFilmsByTerminIds(terminIds);
+                List<Terminverknuepfung> connectionsByTerminIds = terminverknuepfungRepository
+                        .findByTerminIdsWithFilms(terminIds);
 
                 return termine.stream()
                         .map(termin -> {
@@ -477,8 +512,8 @@ public class ScreeningService {
                                 );
                             } else {
                                 // Include films only when titel is absent
-                                List<Film> films = connections.stream()
-                                        .filter(tv -> tv.getTermin().getTnr().equals(termin.getTnr()))
+                                List<Film> films = connectionsByTerminIds.stream()
+                                        .filter(tv -> tv.getTnr().equals(termin.getTnr()))
                                         .filter(tv -> tv.getVorfilm() == null || !tv.getVorfilm())
                                         .map(Terminverknuepfung::getFilm)
                                         .toList();

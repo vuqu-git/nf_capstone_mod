@@ -20,7 +20,7 @@ public class ScreeningController {
         return screeningService.getAllFutureTermineWithFilms();
     }
 
-//            // this can be used when Reihe information is required in Gallery
+//            // this can be used when Reihe information in addition to  required in Gallery
 //            @GetMapping("/new")
 //            public ReihenAndFilmTermineForGallery getReihenAndTermineForGallery() {
 //                return screeningService.getReihenAndTermineForGallery();
@@ -35,8 +35,8 @@ public class ScreeningController {
 
     // for OverviewArchive react component
     @GetMapping("/archive")
-    public List<TerminDTOWithFilmDTOOverviewArchive> getArchiveScreenings() {
-        return screeningService.getPastTermineWithFilms();
+    public List<TerminDTOWithFilmDTOOverviewArchive> getAllPastTermineWithFilms() {
+        return screeningService.getAllPastTermineWithFilms();
     }
 
     // for SemesterArchive react component

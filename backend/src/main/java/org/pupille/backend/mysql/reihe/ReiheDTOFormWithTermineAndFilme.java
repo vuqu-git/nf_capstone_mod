@@ -3,7 +3,7 @@ package org.pupille.backend.mysql.reihe;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.pupille.backend.mysql.termin.TerminDTOWithMainFilme;
+import org.pupille.backend.mysql.termin.TerminDTOWithMainfilms;
 
 import java.util.Comparator;
 import java.util.LinkedHashSet;
@@ -13,25 +13,25 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ReiheDTOForFormWithTermineAndFilme {
+public class ReiheDTOFormWithTermineAndFilme {
     private Long rnr;
     private String titel;
     private String text;
     private String sonderfarbe;
 
-    private Set<TerminDTOWithMainFilme> termine; // a Set of your lean TerminDTOSelections
+    private Set<TerminDTOWithMainfilms> termine;
 
-    public ReiheDTOForFormWithTermineAndFilme(Reihe r) {
+    public ReiheDTOFormWithTermineAndFilme(Reihe r) {
         this.rnr = r.getRnr();
         this.titel = r.getTitel();
         this.text = r.getText();
         this.sonderfarbe = r.getSonderfarbe();
 
-        // Important: Map the Set<Termin> entities to Set<TerminDTOWithMainFilme>
+        // Important: Map the Set<Termin> entities to Set<TerminDTOWithMainfilms>
         if (r.getTermine() != null) {
             this.termine = r.getTermine().stream()
-                    .map(TerminDTOWithMainFilme::new)
-                    .sorted(Comparator.comparing(TerminDTOWithMainFilme::getVorstellungsbeginn))
+                    .map(TerminDTOWithMainfilms::new)
+                    .sorted(Comparator.comparing(TerminDTOWithMainfilms::getVorstellungsbeginn))
                     .collect(Collectors.toCollection(LinkedHashSet::new));
         } else {
             this.termine = new LinkedHashSet<>();

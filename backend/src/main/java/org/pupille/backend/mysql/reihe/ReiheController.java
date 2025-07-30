@@ -20,8 +20,8 @@ public class ReiheController {
     }
 
     @GetMapping("/{rnr}")
-    public ResponseEntity<ReiheDTOForFormWithTermineAndFilme> getReiheById(@PathVariable Long rnr) {
-        return ResponseEntity.ok(reiheService.getReiheDTOForFormById(rnr));
+    public ResponseEntity<ReiheDTOFormWithTermineAndFilme> getReiheDTOFormByIdWithTermineAndFilms(@PathVariable Long rnr) {
+        return ResponseEntity.ok(reiheService.getReiheDTOFormByIdWithTermineAndFilms(rnr));
     }
 
     @PostMapping
@@ -43,8 +43,8 @@ public class ReiheController {
     // #####################################################################
     // --- Get a list of Reihen (with Termine & Films) for a given Tnr ---
     @GetMapping("/from-termin/{tnr}")
-    public ResponseEntity<List<ReiheDTOForFormWithTermineAndFilme>> getReihenByTerminId(@PathVariable Long tnr) {
-        return ResponseEntity.ok(reiheService.getReihenDTOsByTerminId(tnr));
+    public ResponseEntity<List<ReiheDTOFormWithTermineAndFilme>> getAllReihenByTerminIdWithTermineAndFilms(@PathVariable Long tnr) {
+        return ResponseEntity.ok(reiheService.getAllReihenByTerminIdWithTermineAndFilms(tnr));
     }
 
     // #####################################################################

@@ -27,40 +27,42 @@ public class ReiheService {
 //          You have special transactional requirements (propagation, isolation, etc.)
 
 
-    // This method now benefits from @EntityGraph in repo method findAll(Sort)
     @Transactional(readOnly = true)     // Good practice for read-only operations
                                         // Optimizes for reads: Tells the transaction manager and the underlying database that no data will be modified.
                                         // This can allow for database optimizations (e.g., fewer locks, skipping dirty checks in Hibernate), and sometimes uses a different transaction isolation mode internally.
     public List<ReiheDTOSelection> getAllReihen() {
-        return reiheRepository.findAll(Sort.by(Sort.Direction.ASC, "titel")) // use JpaRepository's built-in sorting instead of defining a custom query in ReiheRepository
+        return reiheRepository.findAll(Sort.by(Sort.Direction.ASC, "titel")) // use JpaRepository's built-in sorting instead of defining a custom query in ReiheRepository => The sorting is done in the database, not in your service method.
                 .stream()
                 .map(ReiheDTOSelection::new)
                 .collect(Collectors.toList());
     }
 
-    // --- Read one and convert to DTO (Recommended pattern) ---
-    // This method now benefits from @EntityGraph in findById(Long)
+    // --- Read one and convert to DTO ---
     @Transactional(readOnly = true) // Good practice for read-only operations
-    public ReiheDTOForFormWithTermineAndFilme getReiheDTOForFormById(Long id) {
-        Reihe reihe = reiheRepository.findById(id) // This will eagerly fetch 'termine' due to @EntityGraph
-                .orElseThrow(() -> new RuntimeException("Reihe not found"));
+    public ReiheDTOFormWithTermineAndFilme getReiheDTOFormByIdWithTermineAndFilms(Long id) {
+        Reihe reihe = reiheRepository.findWithTermineAndFilmsByRnr(id) // this uses @EntityGraph
+                .orElseThrow(() -> new RuntimeException("Reihe not found with ID " + id));
         // DTO conversion happens here, within the open transaction, but the data was already fetched in one go by the repository
-        return new ReiheDTOForFormWithTermineAndFilme(reihe);
+        return new ReiheDTOFormWithTermineAndFilme(reihe);
     }
 
-    // other service methods us this method, which returns a Reihe object
-    // This method now benefits from @EntityGraph in findById(Long)
-    @Transactional(readOnly = true)
+    // updateReihe and deleteReihe service methods use this method, which returns a Reihe object
     public Reihe getReiheById(Long id) {
-        return reiheRepository.findById(id) // This will still use the @EntityGraph version
-                .orElseThrow(() -> new RuntimeException("Reihe not found"));
+        return reiheRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Reihe not found with ID " + id));
+    }
+
+    // addTerminToReihe service method use
+    public Reihe getReiheByIdWithTermine(Long id) {
+        return reiheRepository.findWithTermineByRnr(id) // this uses @EntityGraph
+                .orElseThrow(() -> new RuntimeException("Reihe not found with ID " + id));
     }
 
     public Reihe createReihe(Reihe reihe) {
         return reiheRepository.save(reihe);
     }
 
-    // @Transactional // redundant because method only performs one modifying operation
+    // @Transactional // redundant because method only performs one modifying operation as the very last operation
     public Reihe updateReihe(Long id, Reihe updatedReihe) {
         Reihe existing = getReiheById(id);
         existing.setTitel(updatedReihe.getTitel());
@@ -77,14 +79,14 @@ public class ReiheService {
     // #####################################################################
     // --- Get a list of Reihen for a given Tnr ---
     @Transactional(readOnly = true)
-    public List<ReiheDTOForFormWithTermineAndFilme> getReihenDTOsByTerminId(Long tnr) {
-        Termin termin = terminRepository.findById(tnr)
+    public List<ReiheDTOFormWithTermineAndFilme> getAllReihenByTerminIdWithTermineAndFilms(Long tnr) {
+        Termin termin = terminRepository.findWithReihenAndTermineAndFilmsByTnr(tnr)
                 .orElseThrow(() -> new NoSuchElementException("Termin not found with ID " + tnr));
 
         Set<Reihe> reihen = termin.getReihen(); // many-to-many relationship
 
         return reihen.stream()
-                .map(ReiheDTOForFormWithTermineAndFilme::new)
+                .map(ReiheDTOFormWithTermineAndFilme::new)
                 .toList();
     }
 
@@ -92,19 +94,17 @@ public class ReiheService {
     // --- Add Termin to Reihe ---
     @Transactional // This method definitely needs @Transactional as it modifies state
     public Reihe addTerminToReihe(Long reiheId, Long terminId) {
-        // Fetching 'reihe' here will include its 'termine' due to @EntityGraph
-        Reihe reihe = getReiheById(reiheId);
+        Reihe reihe = getReiheByIdWithTermine(reiheId); // Fetching 'reihe' here (with ReiheService method getReiheById above) will include its 'termine' due to @EntityGraph
 
-        Termin termin = terminRepository.findById(terminId)
-                .orElseThrow(() -> new RuntimeException("Termin not found"));
+        Termin termin = terminRepository.findWithReihenByTnr(terminId) // Fetch Termin (eagerly with reihen due to @EntityGraph)
+                .orElseThrow(() -> new NoSuchElementException("Termin not found with id: " + terminId));
 
         reihe.getTermine().add(termin);
         // For bidirectional consistency (optional but recommended):
         termin.getReihen().add(reihe);
 
         // Saving the owning side (Reihe) typically cascades the changes to the join table.
-        // It's good practice to save both sides if the relationship is bidirectional
-        // and you're modifying both collections within the same transaction.
+        // It's good practice to save both sides if the relationship is bidirectional and you're modifying both collections within the same transaction.
         terminRepository.save(termin);
         // Save the owning side (reihe)
         return reiheRepository.save(reihe);
@@ -113,10 +113,9 @@ public class ReiheService {
     // --- Remove Termin from Reihe ---
     @Transactional
     public void removeTerminFromReihe(Long reiheId, Long terminId) {
-        Reihe reihe = reiheRepository.findById(reiheId) // Fetch Reihe (eagerly with termine due to @EntityGraph)
-                .orElseThrow(() -> new NoSuchElementException("Reihe not found with id: " + reiheId));
+        Reihe reihe = getReiheByIdWithTermine(reiheId); // Fetching 'reihe' here (with ReiheService method getReiheById above) will include its 'termine' due to @EntityGraph
 
-        Termin termin = terminRepository.findById(terminId) // Fetch Termin (eagerly with reihen due to @EntityGraph)
+        Termin termin = terminRepository.findWithReihenByTnr(terminId) // Fetch Termin (eagerly with reihen due to @EntityGraph)
                 .orElseThrow(() -> new NoSuchElementException("Termin not found with id: " + terminId));
 
         // Attempt to remove the termin from the reihe's set, i.e. reihe object has field termine, which is a set of Termin objects; removal of termin from this set

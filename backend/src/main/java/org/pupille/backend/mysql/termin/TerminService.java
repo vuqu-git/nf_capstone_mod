@@ -1,6 +1,5 @@
 package org.pupille.backend.mysql.termin;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +20,12 @@ public class TerminService {
         return terminRepository.findAllByOrderByVorstellungsbeginnDesc();
     }
 
-    public List<TerminDTOWithMainFilme> getAllTermineWithMainfilmeByOrderByVorstellungsbeginnDesc() {
-        return terminRepository.findWithMainfilmeAllByOrderByVorstellungsbeginnDesc();
+    public List<TerminDTOWithMainfilms> getAllTermineWithMainfilmeByOrderByVorstellungsbeginnDesc() {
+        return terminRepository.findWithMainfilmeAllByOrderByVorstellungsbeginnDesc()
+                .stream()
+                .map(TerminDTOWithMainfilms::new)
+                .toList();
+        // return terminRepository.findWithMainfilmeAllByOrderByVorstellungsbeginnDesc(); // this one is enough, when the repo method return type List<TerminDTOWithMainfilms>
     }
 
     public Optional<TerminDTOForm> getTerminById(Long tnr) {
@@ -51,7 +54,7 @@ public class TerminService {
                     termin.setPatenschaft(terminDetails.getPatenschaft());
                     return new TerminDTOForm(terminRepository.save(termin));
                 })
-                .orElseThrow(() -> new RuntimeException("Termin not found"));
+                .orElseThrow(() -> new RuntimeException("Termin not found with id " + tnr));
     }
 
     public void deleteTermin(Long tnr) {
@@ -59,7 +62,7 @@ public class TerminService {
     }
 
     // ########################################################################
-//    // both methods here are just only used for controller for testing purposes
+////  both methods here are just only used for controller for testing purposes
 //    public List<TerminDTOForm> getAllFutureTermine() {
 //        LocalDate currentDate = LocalDate.now(ZoneId.of("Europe/Berlin"));
 //        LocalTime fixedTime = LocalTime.of(0, 1);

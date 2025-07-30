@@ -15,16 +15,10 @@ public class TerminController {
 
     private final TerminService terminService;
 
-    @GetMapping()
+    @GetMapping() // used in TerminForm
     public ResponseEntity<List<TerminProjectionSelection>> getAllTermineByOrderByVorstellungsbeginnDesc() {
         List<TerminProjectionSelection> termine = terminService.getAllTermineByOrderByVorstellungsbeginnDesc();
         return ResponseEntity.ok(termine);
-    }
-
-    @GetMapping("/withmainfilms")
-    public ResponseEntity<List<TerminDTOWithMainFilme>> getAllTermineWithMainfilmsByOrderByVorstellungsbeginnDesc() {
-        List<TerminDTOWithMainFilme> termineWithMainfilme = terminService.getAllTermineWithMainfilmeByOrderByVorstellungsbeginnDesc();
-        return ResponseEntity.ok(termineWithMainfilme);
     }
 
     @GetMapping("/{tnr}")
@@ -48,6 +42,12 @@ public class TerminController {
     public ResponseEntity<Void> deleteTermin(@PathVariable Long tnr) {
         terminService.deleteTermin(tnr);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/withmainfilms") // used in ReiheverknuepfungForm
+    public ResponseEntity<List<TerminDTOWithMainfilms>> getAllTermineWithMainfilmsByOrderByVorstellungsbeginnDesc() {
+        List<TerminDTOWithMainfilms> termineWithMainfilme = terminService.getAllTermineWithMainfilmeByOrderByVorstellungsbeginnDesc();
+        return ResponseEntity.ok(termineWithMainfilme);
     }
 
 //    ###########################################################

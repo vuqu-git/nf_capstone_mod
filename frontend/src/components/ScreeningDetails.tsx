@@ -4,14 +4,14 @@ import {formatDateTime} from "../utils/formatDateTime.ts";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import ReiheDTOForFormWithTermineAndFilme from "../types/ReiheDTOForFormWithTermineAndFilme.ts";
+import ReiheDTOFormWithTermineAndFilme from "../types/ReiheDTOFormWithTermineAndFilme.ts";
 import NotFound from "./NotFound.tsx";
 
 export default function ScreeningDetails() {
 
     const { tnr } = useParams();
     const [screeningDetails, setScreeningDetails] = useState<TerminDTOFormWithFilmsDTOFormPlus | null>(null);
-    const [reihenDetails, setReihenDetails] = useState<ReiheDTOForFormWithTermineAndFilme[]>([]);
+    const [reihenDetails, setReihenDetails] = useState<ReiheDTOFormWithTermineAndFilme[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 

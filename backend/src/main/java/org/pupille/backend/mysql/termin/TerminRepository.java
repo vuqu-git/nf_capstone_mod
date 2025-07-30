@@ -14,45 +14,81 @@ import java.util.Optional;
 public interface TerminRepository extends JpaRepository<Termin, Long> {
 
 //        Explanation of @EntityGraph:
+//        for Associations: The purpose of @EntityGraph is to control how associated entities (relationships like @OneToMany, @ManyToOne, etc.) are fetched. It's used to eager-load relationships that would otherwise be lazily loaded, preventing N+1 problems.
 //        attributePaths = {"filmConnections", "filmConnections.film"} tells JPA to fetch:
 //              1) The filmConnections collection (which contains Terminverknuepfung objects) eagerly.
 //              2) And then, for each Terminverknuepfung, eagerly fetch its associated film object.
 //        => @EntityGraph tells JPA how to traverse the graph starting from Termin (Termin -> Terminverknuepfung -> Film).
 
-        @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"}) // Fetch all Termine with their associated TVen and Films
+
+
+        // @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"})   // Fetch all Termine with their associated TVen and Films
+                                                                                        // But @EntityGraph would only become relevant if your TerminProjectionSelection (or another projection) included fields from Terminverknuepfung or Film and you wanted to ensure those associated entities were fetched in a single query (e.g., using JOIN FETCH or by defining the @EntityGraph).
+                                                                                        // THIS is NOT the case here! Comment it out or better delete @EntityGraph because of misleading Information: Future developers (or even yourself later) might look at that @EntityGraph and assume that filmConnections and film data are being fetched and available in the TerminProjectionSelection, leading to incorrect assumptions or debugging efforts.
         @Query("SELECT t FROM Termin t ORDER BY t.vorstellungsbeginn DESC")
         List<TerminProjectionSelection> findAllByOrderByVorstellungsbeginnDesc();
-
-        @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"}) // Fetch all Termine with their associated TVen and Films
-        @Query("SELECT t FROM Termin t ORDER BY t.vorstellungsbeginn DESC")
-        List<TerminDTOWithMainFilme> findWithMainfilmeAllByOrderByVorstellungsbeginnDesc();
-
-        @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"}) // Fetch all future Termine with their associated TVen and Films
-        @Query("SELECT t FROM Termin t WHERE t.vorstellungsbeginn >= :now ORDER BY t.vorstellungsbeginn ASC")
-        List<Termin> findAllFutureTermine(@Param("now") LocalDateTime now);
 
 //        // If you need the projection for future termine as well:
 //        @Query("SELECT t FROM Termin t WHERE t.vorstellungsbeginn >= :now ORDER BY t.vorstellungsbeginn ASC")
 //        List<TerminProjectionSelection> findAllFutureTermineProjected(LocalDateTime now);
 
-        @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"})
+        @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"}) // Fetch all Termine with their associated TVen and Films
+        @Query("SELECT t FROM Termin t ORDER BY t.vorstellungsbeginn DESC")
+        List<Termin> findWithMainfilmeAllByOrderByVorstellungsbeginnDesc();
+        //List<TerminDTOWithMainfilms> findWithMainfilmeAllByOrderByVorstellungsbeginnDesc();
+                // Return type is List<TerminDTOWithMainfilms> but the query selects entities (Termin t), but somehow the conversion works here though the chatbots say that the conversion to TerminDTOWithMainfilms is not actually happening automatically: There's a mismatch in your current setup
+
+
+        // different findById methods
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // called by getTerminById in TerminService, called by getTerminWithFilmsPlusByTnr in ScreeningService
+        // Optional<Termin> findById(Long id); // no need to manually declare (JpaRepository already provides a generic findById) => Only if you want to add special behavior, custom JPQL, or annotations (like @EntityGraph), then you can redeclare (override) it with your custom logic or annotations
+
+        // called by getAllReihenWithTermineAndFilmsByTerminId in ReiheService
+        // !!! TAKE NOTE: identifiers reihen, termine, filmConnections and film in the attributePaths are the field names in the respective entities !!!
+        @EntityGraph(attributePaths = {
+                "reihen",
+                "reihen.termine",
+                "reihen.termine.filmConnections",
+                "reihen.termine.filmConnections.film"
+        })
+        Optional<Termin> findWithReihenAndTermineAndFilmsByTnr(Long id);
+                        // With your typical data:
+                        //1 Termin → at most 2 Reihen
+                        //Each Reihe → at most 4 Termine
+                        //Each Termin → 1 FilmConnection
+                        //Cartesian product size: 1 × 2 × 4 × 1 = 8 rows
+                        //This is actually quite manageable! The entity graph isn't terrible here.
+
+        // called by addTerminToReihe in ReiheService
+        // !!! TAKE NOTE: identifier reihen in the attributePaths are the field names in the respective entities !!!
+        @EntityGraph(attributePaths = {
+                "reihen"
+        })
+        Optional<Termin> findWithReihenByTnr(Long id);
+
+        // called in getAllFutureTermineWithFilms within ScreeningService
+        @EntityGraph(attributePaths = "reihen")
+        @Query("SELECT t FROM Termin t WHERE t.vorstellungsbeginn >= :now ORDER BY t.vorstellungsbeginn ASC")
+        List<Termin> findAllFutureTermineWithReihen(@Param("now") LocalDateTime now);
+
+        // called by getAllPastTermineWithFilms in ScreeningService
         @Query("SELECT t FROM Termin t WHERE t.vorstellungsbeginn < :now AND t.veroeffentlichen > 0 ORDER BY t.vorstellungsbeginn DESC")
-        List<Termin> findPastTermine(@Param("now") LocalDateTime now);
+        List<Termin> findAllPastTermine(@Param("now") LocalDateTime now);
 
-        @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film", "reihen"})
-        Optional<Termin> findById(Long id); // Overriding JpaRepository's findById
-
-        @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"})
+        // called by getTermineByCurrentSemester in ScreeningService
+        @EntityGraph(attributePaths = {"reihen"})
         @Query(
-        "SELECT t FROM Termin t " +
-                "WHERE " +
-                "   (" + // Start of the main seasonal logic group
-                "       (:now BETWEEN :startDateSummer AND :endDateSummer AND t.vorstellungsbeginn BETWEEN :startDateSummer AND :endDateSummer) " +
-                "       OR " +
-                "       (:now NOT BETWEEN :startDateSummer AND :endDateSummer AND t.vorstellungsbeginn BETWEEN :startDateWinter AND :endDateWinter) " +
-                "   ) " + // End of the main seasonal logic group
-                "   AND (t.veroeffentlichen > 0) " + // AND this condition with the entire preceding group
-                "ORDER BY t.vorstellungsbeginn ASC"
+                "SELECT t FROM Termin t " +
+                        "WHERE " +
+                        "   (" + // Start of the semester logic group
+                        "       (:now BETWEEN :startDateSummer AND :endDateSummer AND t.vorstellungsbeginn BETWEEN :startDateSummer AND :endDateSummer) " +
+                        "       OR " +
+                        "       (:now NOT BETWEEN :startDateSummer AND :endDateSummer AND t.vorstellungsbeginn BETWEEN :startDateWinter AND :endDateWinter) " +
+                        "   ) " + // End of the semester logic group
+                        "   AND (t.veroeffentlichen > 0) " +
+                        "ORDER BY t.vorstellungsbeginn ASC"
         )
         List<Termin> findTermineByCurrentSemester(
                 @Param("now") LocalDateTime now,
@@ -63,10 +99,8 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
         );
 
         //    +++++++++++++++++++++++++++++
-        //    for mail reminder stuff
+        //       for mail reminder stuff
         //    +++++++++++++++++++++++++++++
-
-        @EntityGraph(attributePaths = {"filmConnections", "filmConnections.film"})
         @Query("SELECT t FROM Termin t WHERE t.vorstellungsbeginn BETWEEN :startDateTime AND :endDateTime ORDER BY t.vorstellungsbeginn ASC")
         List<Termin> findTermineByDateRange(
                 @Param("startDateTime") LocalDateTime startDateTime,

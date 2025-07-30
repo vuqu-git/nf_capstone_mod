@@ -1,7 +1,7 @@
 import FilmDTOOverviewArchive from "./FilmDTOOverviewArchive.ts";
 
-// this one mirrors TerminDTOWithMainFilme but mainfilms objects are leaner containing only fnr and titel attributes
-interface TerminDTOWithMainFilme{
+// this one mirrors TerminDTOWithMainfilme
+interface TerminDTOWithMainfilms {
     tnr: number;
     vorstellungsbeginn?: string;
     titel?: string | null;
@@ -9,4 +9,4 @@ interface TerminDTOWithMainFilme{
     mainfilms: FilmDTOOverviewArchive[];
 }
 
-export default TerminDTOWithMainFilme;
+export default TerminDTOWithMainfilms;
