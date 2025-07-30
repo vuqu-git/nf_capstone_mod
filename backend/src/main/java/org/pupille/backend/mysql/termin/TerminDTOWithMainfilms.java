@@ -24,7 +24,7 @@ public class TerminDTOWithMainfilms {
     private LocalDateTime vorstellungsbeginn;
     private String titel;
 
-    private Set<FilmDTOOverviewArchive> films; // a Set of FilmDTOOverviewArchive, no vorfilms included (because of filtering below)
+    private Set<FilmDTOOverviewArchive> mainfilms; // a Set of FilmDTOOverviewArchive, no vorfilms included (because of filtering below)
     // private Set<FilmDTOSelection> films; // when having FilmDTOSelection instead, the fields jahr and regie are available in addition
 
     public TerminDTOWithMainfilms(Termin termin) {
@@ -38,7 +38,7 @@ public class TerminDTOWithMainfilms {
                 .orElse(new ArrayList<>()); // Fallback for null list
 
         // Map each Terminverknuepfung to its associated Film, then to FilmDTOSelection
-        this.films = filmConnections.stream()
+        this.mainfilms = filmConnections.stream()
                 .filter(connection -> connection.getVorfilm() == null || !connection.getVorfilm()) // Exclude vorfilms
                 .map(Terminverknuepfung::getFilm) // Get the Film entity
                 .filter(java.util.Objects::nonNull) // Ensure film is not null (e.g., if lazy loading failed, though @EntityGraph should prevent this)
