@@ -250,7 +250,7 @@ export default function ProgrammheftForm() {
                 </Form.Group>
 
                 <Form.Group controlId="gueltigVon" className="mt-3">
-                    <Form.Label>Vorstellungsbeginn*</Form.Label>
+                    <Form.Label>Gültig von (inkl.)*</Form.Label>
                     <Form.Control
                         type="date"
                         name="gueltigVon"
@@ -261,7 +261,7 @@ export default function ProgrammheftForm() {
                 </Form.Group>
 
                 <Form.Group controlId="gueltigBis" className="mt-3">
-                    <Form.Label>Vorstellungsbeginn*</Form.Label>
+                    <Form.Label>Gültig bis (inkl.)*</Form.Label>
                     <Form.Control
                         type="date"
                         name="gueltigBis"
@@ -283,6 +283,7 @@ export default function ProgrammheftForm() {
                 >
                     {selectedProgrammheftId ? "Update " : "Add "} Programmheft/Flyer entry
                 </Button>
+                <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
             </Form>
 
             {selectedProgrammheftId && !confirmDeleteOpen && (
