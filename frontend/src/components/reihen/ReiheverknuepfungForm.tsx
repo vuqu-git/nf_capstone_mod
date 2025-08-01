@@ -13,7 +13,7 @@ import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSele
 const baseURL = "/api/reihe";
 
 const emptyReihe = {
-    rnr: 0,
+    rnr: undefined,
     titel: '',
     text: '',
     farbe: '',
@@ -22,7 +22,7 @@ const emptyReihe = {
 
 export default function ReiheverknuepfungForm() {
     const [allReihen, setAllReihen] = useState<ReiheDTOSelection[]>([]); // All Reihen fetched from the server
-    const [selectedReiheId, setSelectedReiheId] = useState<number | undefined>(undefined); // Selected TVId (as concatenated string) for editing or deleting
+    const [selectedReiheId, setSelectedReiheId] = useState<number | undefined>(undefined); // Selected ReiheId (as concatenated string) for editing or deleting
     const [selectedReihe, setSelectedReihe] = useState<ReiheDTOFormWithTermineAndFilme>(emptyReihe); // Reihe data for the form
     const [selectionChanged, setSelectionChanged] = useState(false); // to track if a new Reihe selection has been made manually by the user
 
@@ -296,6 +296,7 @@ export default function ReiheverknuepfungForm() {
                     </option>
                 ))}
             </Form.Select>
+            <div><sub className={styles.formSubtext}>Pflichtfelder: Reihen- und Terminauswahl</sub></div>
 
             {selectedReiheId && selectedTerminId && (
                 <Button

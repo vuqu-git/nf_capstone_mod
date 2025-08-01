@@ -76,7 +76,7 @@
     white-space: nowrap;
     transition: background-color 0.2s;
 
-    border: none;
+    border: 1px solid transparent;
 }
 
 .red {

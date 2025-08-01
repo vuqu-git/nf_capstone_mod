@@ -9,11 +9,12 @@ import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
 import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
+import styles from "../contact/Forms.module.css";
 
 const baseURL = "/api/reihe";
 
 const emptyReiheForForm = {
-    rnr: 0,
+    rnr: undefined,
     titel: '',
     text: '',
     sonderfarbe: '',
@@ -236,12 +237,13 @@ export default function ReiheForm() {
                 <h3 className="mt-3">Reihe details</h3>
 
                 <Form.Group controlId="titel" className="mt-3">
-                    <Form.Label>Titel</Form.Label>
+                    <Form.Label>Titel *</Form.Label>
                     <Form.Control
                         type="text"
                         name="titel"
                         value={selectedReihe.titel || ""}
                         onChange={handleFormChange}
+                        required
                     />
                 </Form.Group>
 
@@ -262,6 +264,7 @@ export default function ReiheForm() {
                 <Form.Group controlId="sonderfarbe" className="mt-3">
                     <Form.Label>Sonderfarbe</Form.Label>
                     <Form.Control
+                        disabled={true}
                         type="text"
                         name="sonderfarbe"
                         value={selectedReihe.sonderfarbe || ""}
@@ -272,6 +275,7 @@ export default function ReiheForm() {
                 <Button variant={selectedReiheId ? "success" : "primary"} type="submit" className="mt-4">
                     {selectedReiheId ? "Update " : "Add "} Reihe entry
                 </Button>
+                <div><sub className={styles.formSubtext}>*Pflichtfeld</sub></div>
             </Form>
 
             {selectedReiheId && !confirmDeleteOpen && (

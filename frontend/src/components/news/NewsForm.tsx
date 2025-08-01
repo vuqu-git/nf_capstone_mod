@@ -87,7 +87,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
 
             <Form onSubmit={(e) => handleSubmit(e, newsItem)}>
                 <Form.Group controlId="text">
-                    <Form.Label>Text*</Form.Label>
+                    <Form.Label>Text *</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={10} // Large textarea
@@ -127,7 +127,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 </Form.Group>
 
                 <Form.Group controlId="startDate" className="mt-3">
-                    <Form.Label>Start Date* (inclusive)</Form.Label>
+                    <Form.Label>Start Date * (inclusive)</Form.Label>
                     <Form.Control
                         type="date"
                         name="startDate"
@@ -138,7 +138,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 </Form.Group>
 
                 <Form.Group controlId="endDate" className="mt-3">
-                    <Form.Label>End Date* (inclusive)</Form.Label>
+                    <Form.Label>End Date * (inclusive)</Form.Label>
                     <Form.Control
                         type="date"
                         name="endDate"
@@ -153,7 +153,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 </div>
 
                 <Form.Group controlId="newsVariant" className="mt-3">
-                    <Form.Label>Color Design*</Form.Label>
+                    <Form.Label>Color Design *</Form.Label>
                     <Form.Select
                         name="newsVariant"
                         value={newsItem.newsVariant}
@@ -195,7 +195,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 >
                     Save
                 </Button>
-                <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
+                <div><sub className={styles.formSubtext}>*Pflichtfelder</sub></div>
             </Form>
         </div>
     );

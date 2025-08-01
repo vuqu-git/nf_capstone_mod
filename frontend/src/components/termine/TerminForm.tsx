@@ -279,7 +279,7 @@ export default function TerminForm() {
                 <h3 className="mt-3">Termin details</h3>
 
                 <Form.Group controlId="vorstellungsbeginn" className="mt-3">
-                    <Form.Label>Vorstellungsbeginn*</Form.Label>
+                    <Form.Label>Vorstellungsbeginn *</Form.Label>
                     <Form.Control
                         type="datetime-local"
                         name="vorstellungsbeginn"
@@ -290,12 +290,13 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="patenschaft" className="mt-3">
-                    <Form.Label>Patenschaft (Mailadresse)</Form.Label>
+                    <Form.Label>Patenschaft (Mailadresse) *</Form.Label>
                     <Form.Control
                         type="email"
                         name="patenschaft"
                         value={selectedTermin.patenschaft || ""}
                         onChange={handleFormChange}
+                        required
                     />
                     <Form.Text className="text-muted">
                         Höchstens 1 Email-Adresse eintragen!
@@ -303,7 +304,7 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="titel" className="mt-3">
-                    <Form.Label>Titel (für den ganzen Termin)</Form.Label>
+                    <Form.Label>Titel (für das ganze Programm am Termin)</Form.Label>
                     <Form.Control
                         type="text"
                         name="titel"
@@ -364,7 +365,7 @@ export default function TerminForm() {
                 </Form.Group>
 
                 <Form.Group controlId="bild" className="mt-3">
-                    <Form.Label className={errorMissingBildWhenGivenTitel ? "text-danger" : ""}>vollständiger Bildname mit Dateiendung (Bild repräsentiert das ganze Filmprogramm)**</Form.Label>
+                    <Form.Label className={errorMissingBildWhenGivenTitel ? "text-danger" : ""}>vollständiger Bildname mit Dateiendung (Bild repräsentiert das ganze Filmprogramm) **</Form.Label>
                     <Form.Control
                         type="text"
                         name="bild"
@@ -440,10 +441,8 @@ export default function TerminForm() {
                 <Button variant={selectedTerminId ? "success" : "primary"} type="submit" className="mt-2">
                     {selectedTerminId ? "Update " : "Add "} termin entry
                 </Button>
-                <p>
-                    <div><sub className={styles.formSubtext}>*Pflichtfelder</sub></div>
-                    <div><sub className={styles.formSubtext}>**bedingtes Pflichtfeld</sub></div>
-                </p>
+                <div><sub className={styles.formSubtext}>*Pflichtfelder</sub></div>
+                <div><sub className={styles.formSubtext}>**bedingtes Pflichtfeld</sub></div>
             </Form>
 
             {errorMissingBildWhenGivenTitel && (

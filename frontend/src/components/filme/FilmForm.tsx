@@ -10,11 +10,12 @@ import AdminNav from "../AdminNav.tsx";
 import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
+import styles from "../contact/Forms.module.css";
 
 const baseURL = "/api/filme";
 
 const emptyFilmForForm = {
-    fnr: 0,
+    fnr: undefined,
     titel: '',
     originaltitel: '',
     originaltitelAnzeigen: undefined,
@@ -141,10 +142,16 @@ export default function FilmForm() {
             const lines = selectedFilm.stab.split(/\r?\n/); // Split by newline characters (\r\n or \n)
             const sanitizedLines = lines.filter(line => line.trim() !== '') // Filter out empty lines
                 .map(line => {
-                    const parts = line.split(':');
+                    // const parts = line.split(':');   // splits at every colon
+                    //                                  // .split(/:(.+)/) this splits at the first occurence of : but somehow parts has 3 items incl. an empty string
+                    // const abbrev = parts[0].trim();
+                    // const entry = parts.slice(1).join(':').trim();   // reversed the all colon split above
 
-                    const abbrev = parts[0].trim();
-                    const entry = parts.slice(1).join(': ').trim();
+                    const index = line.indexOf(':');
+
+                    const abbrev = line.substring(0, index).trim();
+                    const entry = line.substring(index + 1).trim();
+
                     return `${abbrev}: ${entry}`;
                 }
             );
@@ -227,10 +234,38 @@ export default function FilmForm() {
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, type } = e.target;
 
-         setSelectedFilm((prevData: Film) => ({
-            ...prevData,
-            [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
-        }));
+        //  setSelectedFilm((prevData: Film) => ({
+        //     ...prevData,
+        //     [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
+        // }));
+
+        setSelectedFilm((prevData: Film) => {
+            // Erstellen Sie ein temporäres Objekt für die Änderungen
+            const updatedData = {
+                ...prevData,
+                [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
+            };
+
+            let newValue;
+            // --- special condition for originaltitel ---
+            if (name === 'originaltitel') {
+                newValue = updatedData.originaltitel ?? "";
+                // if new value of Originaltitel is empty, originaltitelAnzeigen is set to false
+                if (!newValue.trim()) { // check console.log(!" ");
+                    updatedData.originaltitelAnzeigen = false;
+                }
+            }
+            // --- special condition on offsetImageInGallery
+            if (name === 'bild') {
+                newValue = updatedData.bild ?? "";
+                // if new value of bild is empty, offsetImageInGallery is set to empty string
+                if (!newValue.trim()) { // check console.log(!" ");
+                    updatedData.offsetImageInGallery = "";
+                }
+            }
+
+            return updatedData;
+        });
     };
 
     // Handle selection changes
@@ -255,7 +290,7 @@ export default function FilmForm() {
         axios.post(`${url}?${params.toString()}`)
             .then((response) => {
                 // Copy the original text to clipboard
-                copyToClipboard(selectedFilm.text ? selectedFilm.text : '');
+                copyToClipboard(selectedFilm.text ?? '');
 
                 // Update the news item with the response data
                 setSelectedFilm((prevData: Film) => ({
@@ -316,12 +351,13 @@ export default function FilmForm() {
                 <h3 className="mt-3">Film details</h3>
 
                 <Form.Group controlId="titel" className="mt-3">
-                    <Form.Label>Titel</Form.Label>
+                    <Form.Label>Titel *</Form.Label>
                     <Form.Control
                         type="text"
                         name="titel"
                         value={selectedFilm.titel || ""}
                         onChange={handleFormChange}
+                        required
                     />
                 </Form.Group>
 
@@ -334,7 +370,7 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Wenn der Titel gleich dem Originaltitel ist (bspw. deutscher Film oder ausländischer Film ohne Auswertung in DE) → nur Titel befüllen
+                        Wenn der Titel gleich dem Originaltitel ist (bspw. deutscher Film oder ausländischer Film ohne Auswertung in DE) → nur Feld Titel befüllen
                     </Form.Text>
                 </Form.Group>
 
@@ -342,14 +378,13 @@ export default function FilmForm() {
                     {/*<Form.Label>Originaltitel anzeigen</Form.Label>*/}
                     <Form.Check
                         type="checkbox"
-                        label="Originaltitel anzeigen"
+                        label="Originaltitel anzeigen **"
                         name="originaltitelAnzeigen"
                         checked={selectedFilm.originaltitelAnzeigen || false}
                         onChange={handleFormChange}
+                        disabled={!(selectedFilm.originaltitel ?? "").trim()}
                     />
                     <Form.Text className="text-muted">
-                        nur ankreuzen/aktivieren, wenn das Feld für Originaltitel nicht leer ist.
-                        <br/>
                         Anzeige des Originaltitels erfolgt in Gallery, Semester Overview, Archiv (auf der Detailfilmseite wird es stets mit angezeigt); keine Anzeige im Adminbereich (außer im Feld Originaltitel des Filmformulars)
                     </Form.Text>
                 </Form.Group>
@@ -368,15 +403,16 @@ export default function FilmForm() {
                 </Form.Group>
 
                 <Form.Group controlId="offsetImageInGallery" className="mt-3">
-                    <Form.Label>Offset für Bildanzeige in der Gallery </Form.Label>
+                    <Form.Label>Offset für Bildanzeige in der Gallery **</Form.Label>
                     <Form.Control
                         type="text"
                         name="offsetImageInGallery"
                         value={selectedFilm.offsetImageInGallery || ""}
                         onChange={handleFormChange}
+                        disabled={!(selectedFilm.bild ?? "").trim()}
                     />
                     <Form.Text className="text-muted">
-                        Werte: center (=default; Feld bitte leer lassen), top, bottom, Ganzzahlen in % oder px bspw. 10%, 20px, -30px
+                        Textfeld; zulässige Werte: center (=default; Feld bitte leer lassen), top, bottom, Ganzzahlen in % oder px bspw. 10%, 20px, -30px
                         <br/> Erläuterung [0%, 100%]: 50% = (vertically) center; {"value>50%"} pushes the image up and {"value<50%"} pushes it down
                         <br/> Erläuterung: bottom, negative Pixelzahlen → viel vom unteren Bildausschnitt sehen; top, positive Pixelzahlen → viel vom oberen Bildausschnitt sehen
                     </Form.Text>
@@ -392,6 +428,8 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text>
+                        use p tag for <strong>each</strong> paragraph
+                        <br/>
                         styled tag template → {'<span style="color: blue; font-weight: bold;">highlighted part</span>'}
                     </Form.Text>
                 </Form.Group>
@@ -420,7 +458,7 @@ export default function FilmForm() {
                 </Form.Group>
 
                 <Form.Group controlId="besonderheit" className="mt-3">
-                    <Form.Label>Besonderheit</Form.Label>
+                    <Form.Label><u>Film</u>besonderheit</Form.Label>
                     <Form.Control
                         as="textarea"
                         rows={2}
@@ -431,7 +469,7 @@ export default function FilmForm() {
                     <Form.Text className="text-muted">
                         erscheint in Gallery (wenn es der Hauptfilm ist) und Detailseite; Eintrag bezieht sich auf Besonderheit des <b>Films</b> (bspw. Erwähnung Director's Cut, Farbstich der analogen Kopie);
                         <br/>
-                        keine Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite, <b>kein</b> Feld für Kooperation, Filmfestival, Gäste (Einführung/Gespräch), Publikumswunsch, anderer Eintrittspreis, besondere Startzeit, abweichender Ort → Feld 'Besonderheit' im Termin-Formular verwenden
+                        keine Reihe(n) erwähnen, weil sonst Doppelung auf Detailseite, <b>kein</b> Feld für Kooperation, Filmfestival, Gäste (mit Einführung/Gespräch), Publikumswunsch, anderer Eintrittspreis, besondere Startzeit, abweichender Ort → Feld 'Besonderheit' im Termin-Formular verwenden
                         <br/>
                         a tag template → {`<a href="" class="custom-link" target="_blank" rel="noopener noreferrer">Linktext</a>`}
                     </Form.Text>
@@ -441,7 +479,7 @@ export default function FilmForm() {
                     <Form.Label>Content Note</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={4}
+                        rows={3}
                         name="contentNote"
                         value={selectedFilm.contentNote || ""}
                         onChange={handleFormChange}
@@ -460,6 +498,11 @@ export default function FilmForm() {
                         value={selectedFilm.trailer || ""}
                         onChange={handleFormChange}
                     />
+                    <Form.Text className="text-muted">
+                        embedded link code: {'<iframe ...'}
+                        <br/>
+                        a tag: {`<a href="" class="custom-link" target="_blank" rel="noopener noreferrer">Trailer</a>`}
+                    </Form.Text>
                 </Form.Group>
 
                 <Form.Group controlId="land" className="mt-3">
@@ -575,11 +618,12 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        <span className="text-danger">Wichtig:</span> Zeilenumbruch muss vorliegen d.h. jeweils 1 Eintrag pro Zeile → [key]: [value]
-                        <br/>
-                        Bei form submit werden leading and trailing blanks entfernt und zwar pro Zeile in den beiden Substrings getrennt durch den 1. Doppelpunkt; so eine Zeile ist möglich:
-                        <pre> M   :     Ennio Morricone  </pre>
                         a tag template → Link: {`<a href="" class="custom-link" target="_blank" rel="noopener noreferrer">Letterboxd</a>`}
+                        <br/>
+                        <span className="text-danger">Wichtig:</span> Zeilenumbruch muss vorliegen d.h. jeweils 1 Eintrag pro Zeile → [key]: [value] d.h. key und value getrennt durch einen Doppelpunkt
+                        <br/>
+                        Bei form submit werden leading and trailing blanks entfernt und zwar pro Zeile in den beiden Substrings getrennt durch den 1. Doppelpunkt; so eine Zeile ist zulässig und wird schön formatiert:
+                        <pre> M   :     Ennio Morricone  </pre>
                     </Form.Text>
                 </Form.Group>
 
@@ -610,6 +654,8 @@ export default function FilmForm() {
                 <Button variant={selectedFilmId ? "success" : "primary"} type="submit" className="mt-4">
                     {selectedFilmId ? "Update " : "Add "} film entry
                 </Button>
+                <div><sub className={styles.formSubtext}>*Pflichtfeld</sub></div>
+                <div><sub className={styles.formSubtext}>**bedingtes Pflichtfeld</sub></div>
             </Form>
 
             {selectedFilmId && !confirmDeleteOpen && (

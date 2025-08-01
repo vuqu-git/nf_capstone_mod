@@ -143,11 +143,11 @@ export default function TerminFilmDetailsCard({
                                                 <li key={termin.tnr}>
                                                     <Link to={`/details/${termin.tnr}`} className="custom-link">
                                                     {/*{formatDateTime(termin.vorstellungsbeginn, false, true)?.date}: {" "}*/}
-                                                    {termin.films && termin.films.length > 0
-                                                        ? termin.films.map((film, k) => (
+                                                    {termin.mainfilms && termin.mainfilms.length > 0
+                                                        ? termin.mainfilms.map((film, k) => (
                                                             <span key={film.fnr}>
                                                                 {renderHtmlText(film.titel)}
-                                                                {k < termin.films.length - 1 ? ", " : ""}
+                                                                {k < termin.mainfilms.length - 1 ? ", " : ""}
                                                             </span>
                                                         ))
                                                         : "Kein Filmtitel vorhanden"}

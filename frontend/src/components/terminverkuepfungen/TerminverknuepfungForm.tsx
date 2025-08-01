@@ -11,12 +11,13 @@ import TerminSelection from "../termine/TerminSelection.tsx";
 // import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 import AdminNav from "../AdminNav.tsx";
 import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
+import styles from "../contact/Forms.module.css";
 
 const baseURL = "/api/terminverknuepfung";
 
 const emptyTVForForm = {
-    tnr: 0,
-    fnr: 0,
+    tnr: undefined,
+    fnr: undefined,
     vorfilm: undefined,
     rang: undefined,
 
@@ -332,13 +333,19 @@ export default function TerminverknuepfungForm() {
                     <Form.Text className="text-muted">
                         vorgesehene Werte: 0, 1, 2, 3... → bestimmt die Anzeigereihenfolge der Filme des Programms im Termineintrag
                         <br/>
-                        bei "Standard-Termin" d. h. (Vorfilm + )Hauptfilm das Feld leerlassen
+                        bei "Standard-Termin" (mit genau 1 Langfilm + optionale Vorfilme) das Feld leerlassen
                     </Form.Text>
                 </Form.Group>
 
-                <Button variant={selectedTVId ? "success" : "primary"} type="submit" className="mt-4">
+                <Button
+                    type="submit"
+                    variant={selectedTVId ? "success" : "primary"}
+                    className="mt-4"
+                    disabled={!((selectedTV.tnr !== undefined) && (selectedTV.fnr !== undefined))}
+                >
                     {selectedTVId ? "Update " : "Add "} terminverknuepfung entry
                 </Button>
+                <div><sub className={styles.formSubtext}>Pflichtfelder: Termin- und Filmauswahl</sub></div>
             </Form>
 
             {selectedTVId && !confirmDeleteOpen && (

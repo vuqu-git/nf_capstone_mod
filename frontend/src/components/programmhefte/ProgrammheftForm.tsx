@@ -13,7 +13,7 @@ import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectS
 const baseURL = "/api/programmheft";
 
 const emptyProgrammheftForForm = {
-    pnr: 0,
+    pnr: undefined,
     titel: '',
     bild: '',
     pdf: '',
@@ -212,7 +212,7 @@ export default function ProgrammheftForm() {
                 <h3 className="mt-3">Programmheft/Flyer details</h3>
 
                 <Form.Group controlId="titel" className="mt-3">
-                    <Form.Label>Titel*</Form.Label>
+                    <Form.Label>Titel *</Form.Label>
                     <Form.Control
                         type="text"
                         name="titel"
@@ -236,7 +236,7 @@ export default function ProgrammheftForm() {
                 </Form.Group>
 
                 <Form.Group controlId="pdf" className="mt-3">
-                    <Form.Label>vollständiger PDF-Dateiname*</Form.Label>
+                    <Form.Label>vollständiger PDF-Dateiname *</Form.Label>
                     <Form.Control
                         type="text"
                         name="pdf"
@@ -250,7 +250,7 @@ export default function ProgrammheftForm() {
                 </Form.Group>
 
                 <Form.Group controlId="gueltigVon" className="mt-3">
-                    <Form.Label>Gültig von (inkl.)*</Form.Label>
+                    <Form.Label>Gültig von (inkl.) *</Form.Label>
                     <Form.Control
                         type="date"
                         name="gueltigVon"
@@ -261,7 +261,7 @@ export default function ProgrammheftForm() {
                 </Form.Group>
 
                 <Form.Group controlId="gueltigBis" className="mt-3">
-                    <Form.Label>Gültig bis (inkl.)*</Form.Label>
+                    <Form.Label>Gültig bis (inkl.) *</Form.Label>
                     <Form.Control
                         type="date"
                         name="gueltigBis"
@@ -283,7 +283,7 @@ export default function ProgrammheftForm() {
                 >
                     {selectedProgrammheftId ? "Update " : "Add "} Programmheft/Flyer entry
                 </Button>
-                <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
+                <div><sub className={styles.formSubtext}>*Pflichtfelder</sub></div>
             </Form>
 
             {selectedProgrammheftId && !confirmDeleteOpen && (
