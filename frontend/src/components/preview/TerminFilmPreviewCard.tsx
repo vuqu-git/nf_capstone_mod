@@ -2,6 +2,7 @@ import Card from 'react-bootstrap/Card';
 import { renderHtmlText } from "../../utils/renderHtmlText.tsx";
 import '../termine/TerminFilmGalleryCard.css';
 import { useNavigate } from "react-router-dom";
+import {renderHtmlContent} from "../../utils/renderHtmlContent.tsx";
 
 interface Props {
     screeningWeekday: string | null;
@@ -39,7 +40,7 @@ export default function TerminFilmPreviewCard({
                                                   laufzeit,
                                                   regie,
                                                   tnr,
-                                              }: Props) {
+                                              }: Readonly<Props>) {
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -47,7 +48,7 @@ export default function TerminFilmPreviewCard({
     };
 
     return (
-        <>
+
             <Card
                 className={`custom-card ${screeningSonderfarbe} zoom-effect`}
                 onClick={handleClick}
@@ -113,30 +114,54 @@ export default function TerminFilmPreviewCard({
                     </div>
                 )}
 
+                {/*<Card.Body*/}
+                {/*    style={{*/}
+                {/*        paddingTop: '0rem',*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    {kurztext && (*/}
+                {/*        <Card.Text className="card-kurztext"*/}
+                {/*                   style={{*/}
+                {/*                       fontSize: '2.0rem',*/}
+                {/*                   }}*/}
+                {/*        >*/}
+                {/*            {renderHtmlText(kurztext)}*/}
+                {/*        </Card.Text>*/}
+                {/*    )}*/}
+
+                {/*    {besonderheit && (*/}
+                {/*        <Card.Text className="card-besonderheit"*/}
+                {/*                   style={{ fontSize: '2.0rem', borderTop: kurztext ? undefined : 'none', padding: '0 0' }}*/}
+                {/*        >*/}
+                {/*            {renderHtmlText(besonderheit)}*/}
+                {/*        </Card.Text>*/}
+                {/*    )}*/}
+                {/*</Card.Body>*/}
+
                 <Card.Body
                     style={{
                         paddingTop: '0rem',
                     }}
                 >
                     {kurztext && (
-                        <Card.Text className="card-kurztext"
+                        <div className="card-kurztext"
                                    style={{
                                        fontSize: '2.0rem',
                                    }}
                         >
-                            {renderHtmlText(kurztext)}
-                        </Card.Text>
+                            {renderHtmlContent(kurztext)}
+                        </div>
                     )}
 
                     {besonderheit && (
-                        <Card.Text className="card-besonderheit"
+                        <div className="card-besonderheit"
                                    style={{ fontSize: '2.0rem', borderTop: kurztext ? undefined : 'none', padding: '0 0' }}
                         >
-                            {renderHtmlText(besonderheit)}
-                        </Card.Text>
+                            {renderHtmlContent(besonderheit)}
+                        </div>
                     )}
                 </Card.Body>
             </Card>
-        </>
+
     );
 }

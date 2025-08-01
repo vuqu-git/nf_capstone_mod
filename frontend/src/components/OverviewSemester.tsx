@@ -7,6 +7,7 @@ import TerminDTOWithFilmDTOOverviewSemester from "../types/TerminDTOWithFilmDTOO
 import {renderHtmlText} from "../utils/renderHtmlText.tsx";
 import {Link} from "react-router-dom";
 import {formatDateTime} from "../utils/formatDateTime.ts";
+import {renderHtmlContent} from "../utils/renderHtmlContent.tsx";
 
 
 // interface Props {
@@ -78,7 +79,7 @@ export default function OverviewSemester() {
                                                 </Link>
                                                 {termin.mainfilms[0]?.besonderheit && (
                                                     <p style={{ fontSize: '0.75em', marginBottom: '0' }}>
-                                                        {renderHtmlText(termin.mainfilms[0]?.besonderheit) ?? ""}
+                                                        {renderHtmlContent(termin.mainfilms[0]?.besonderheit) ?? ""}
                                                     </p>
                                                 )}
                                             </>

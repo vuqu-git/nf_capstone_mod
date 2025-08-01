@@ -130,13 +130,12 @@ export default function OverviewArchive2() {
                         </td>
                     </tr>
                 );
-
                 lastSemester = currentSemester;
             }
         }
 
         return (
-            <>
+            <section>
                 {/*search field for film*/}
                 <div className={styles.formField}>
                     <label htmlFor="searchFilm" className={`${styles.formLabel} visually-hidden`}>
@@ -157,8 +156,7 @@ export default function OverviewArchive2() {
                 <table>
                     <tbody>{rowsForArchiveEntries}</tbody>
                 </table>
-
-            </>
+            </section>
         );
     };
 
@@ -168,12 +166,11 @@ export default function OverviewArchive2() {
         }
 
         return (
-            <>
-                {/*termin.titel?.toLowerCase().includes(searchFilm.toLowerCase())*/}
+            <section>
                 {/*search field for pdfs*/}
                 <div className={styles.formField}>
                     <label htmlFor="searchPdf" className={`${styles.formLabel} visually-hidden`}>
-                        einfache Filmsuche
+                        einfache Suche nach Programmheften und Flyern
                     </label>
                     <input
                         type="text"
@@ -217,7 +214,7 @@ export default function OverviewArchive2() {
                         </article>
                     ))
                 }
-            </>
+            </section>
         )
     }
 
@@ -247,7 +244,6 @@ export default function OverviewArchive2() {
                     <option key="pdfs" value="pdfs">
                         PDF-Programmhefte/Flyer (bis Wintersemester 2002/2003)
                     </option>
-
                 </select>
             </div>
 

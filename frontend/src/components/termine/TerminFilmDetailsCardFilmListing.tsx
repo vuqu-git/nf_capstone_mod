@@ -6,6 +6,7 @@ import {structureStabString} from "../../utils/structureStabString.ts";
 import './TerminFilmDetailsCardFilmListing.css';
 import {Accordion} from "react-bootstrap";
 import {getFilmTitleForFilmDetailsCardFilmListing} from "../../utils/getFilmTitleForFilmDetailsCardFilmListing.tsx";
+import {renderHtmlContent} from "../../utils/renderHtmlContent.tsx";
 
 interface Props {
     index: number;
@@ -52,7 +53,7 @@ export default function TerminFilmDetailsListing({
                     <Card.Text
                         className="film-text style-video-in-card iframe"
                     >
-                        {renderHtmlText(f.text)}
+                        {renderHtmlContent(f.text)}
                     </Card.Text>
                 )}
 
@@ -63,7 +64,7 @@ export default function TerminFilmDetailsListing({
                     <Card.Text
                         className="film-besonderheit"
                     >
-                        {renderHtmlText(f.besonderheit)}
+                        {renderHtmlContent(f.besonderheit)}
                     </Card.Text>
                 }
 
@@ -76,7 +77,7 @@ export default function TerminFilmDetailsListing({
                                 <span className="w-100 text-center">Hinweis auf sensible Inhalte</span>
                             </Accordion.Header>
                             <Accordion.Body>
-                                {f.contentNote}
+                                {renderHtmlContent(f.contentNote)}
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
@@ -89,7 +90,7 @@ export default function TerminFilmDetailsListing({
                     <Card.Text
                         className="film-text style-video-in-card iframe"
                     >
-                        {renderHtmlText(f.trailer)}
+                        {renderHtmlContent(f.trailer)}
                     </Card.Text>
                 }
 

@@ -11,6 +11,7 @@ import ReihenAndFilmTermineForOverviewSemester from "../types/ReihenAndFilmTermi
 import React, {useState} from "react";
 
 import Select, { ActionMeta, SingleValue } from "react-select";
+import {renderHtmlContent} from "../utils/renderHtmlContent.tsx";
 
 interface ReihenOption {
     value: string;
@@ -64,7 +65,7 @@ const darkModeStyles = {
 
 const avgDurationTrailer = 12;
 
-export default function OverviewSemester() {
+export default function OverviewSemester2() {
     const objReihenAndTermineForOverviewSemester = useLoaderData<ReihenAndFilmTermineForOverviewSemester>();
     const semesterTermine: TerminDTOWithFilmDTOOverviewSemester[] = objReihenAndTermineForOverviewSemester.termineSemester;
     const semesterReihen: string[] = objReihenAndTermineForOverviewSemester.reihenSemester;
@@ -124,7 +125,7 @@ export default function OverviewSemester() {
                             const icsFileName = createICSFileName(calenderTitle, termin.vorstellungsbeginn);
 
                             return (
-                                <div key={termin.tnr} className="overview-row">
+                                <article key={termin.tnr} className="overview-row">
                                     <div className="overview-date">
                                         <div className="weekday">{screeningDateObj?.weekday}</div>
                                         <div
@@ -186,13 +187,13 @@ export default function OverviewSemester() {
                                         )}
 
                                         {termin.terminBesonderheit && (
-                                            <p className="besonderheit">
-                                                {renderHtmlText(termin.terminBesonderheit) ?? ""}
-                                            </p>
+                                            <div className="besonderheit">
+                                                {renderHtmlContent(termin.terminBesonderheit) ?? ""}
+                                            </div>
                                         )}
 
                                     </div>
-                                </div>
+                                </article>
                             );
                         })}
                 </div>

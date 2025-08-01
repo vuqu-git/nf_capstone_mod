@@ -2,6 +2,7 @@ import Card from 'react-bootstrap/Card';
 import { renderHtmlText } from "../../utils/renderHtmlText.tsx";
 import './TerminFilmGalleryCard.css';
 import { useNavigate } from "react-router-dom";
+import {renderHtmlContent} from "../../utils/renderHtmlContent.tsx";
 
 interface Props {
     screeningWeekday: string | null;
@@ -118,26 +119,52 @@ export default function TerminFilmGalleryCard({
                     </div>
                 </div>
             )}
+            {/*Here with Card.Text (p tag) and renderHtmlText (span tag)*/}
+            {/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+            {/*<Card.Body>*/}
+            {/*    {kurztext && (*/}
+            {/*        <Card.Text className="card-kurztext">*/}
+            {/*            {renderHtmlText(kurztext)}*/}
+            {/*        </Card.Text>*/}
+            {/*    )}*/}
 
+            {/*    {hauptfilmbesonderheit && (*/}
+            {/*        <Card.Text style={{ borderTop: kurztext ? undefined : 'none' }}>*/}
+            {/*            <div className="card-filmBesonderheit">*/}
+            {/*                {renderHtmlText(hauptfilmbesonderheit)}*/}
+            {/*            </div>*/}
+            {/*        </Card.Text>*/}
+            {/*    )}*/}
+
+            {/*    {terminBesonderheit && (*/}
+            {/*        <Card.Text className="card-terminBesonderheit">*/}
+            {/*            {renderHtmlText(terminBesonderheit)}*/}
+            {/*        </Card.Text>*/}
+            {/*    )}*/}
+            {/*</Card.Body>*/}
+
+            {/*Here with div tag instead of Card.Text (p tag) and renderHtmlContent (div tag)*/}
+            {/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
             <Card.Body>
                 {kurztext && (
-                    <Card.Text className="card-kurztext">
-                        {renderHtmlText(kurztext)}
-                    </Card.Text>
+                    <div className="card-kurztext">
+                        {renderHtmlContent(kurztext)}
+                    </div>
                 )}
 
                 {hauptfilmbesonderheit && (
-                    <Card.Text style={{ borderTop: kurztext ? undefined : 'none' }}>
-                        <span className="card-filmBesonderheit">
-                            {renderHtmlText(hauptfilmbesonderheit)}
-                        </span>
-                    </Card.Text>
+                    <div
+                        className="card-filmBesonderheit"
+                        style={{ borderTop: kurztext ? undefined : 'none' }}
+                    >
+                        {renderHtmlContent(hauptfilmbesonderheit)}
+                    </div>
                 )}
 
                 {terminBesonderheit && (
-                    <Card.Text className="card-terminBesonderheit">
-                        {renderHtmlText(terminBesonderheit)}
-                    </Card.Text>
+                    <div className="card-terminBesonderheit">
+                        {renderHtmlContent(terminBesonderheit)}
+                    </div>
                 )}
             </Card.Body>
         </Card>

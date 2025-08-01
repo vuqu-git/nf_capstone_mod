@@ -1,6 +1,6 @@
 import {useState} from "react";
 import Alert from 'react-bootstrap/Alert';
-import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
+import {renderHtmlContent} from "../../utils/renderHtmlContent.tsx";
 
 type props = {
     variant: string,
@@ -14,20 +14,19 @@ export default function NewsCard({variant, text, imageUrl}: props) {
     if (show) {
 
         if (variant === "free" && text) {
-            return renderHtmlText(text)
+            return renderHtmlContent(text)
         } else {
             return (
                 <Alert variant={variant} data-bs-theme="dark" onClose={() => setShow(false)} dismissible>
-                    {/*<Alert.Heading>Oh snap! You got an error!</Alert.Heading>*/}
+                    {/*<Alert.Heading>Heading</Alert.Heading>*/}
 
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", width: "100%" }}>
                         {/* Text */}
                         {/********/}
                         { text && (
-                            // <div dangerouslySetInnerHTML={{ __html: text }} style={{ textAlign: "left", width: "100%" }} />
-                            <div>
-                                {renderHtmlText(text)}
-                            </div>
+                            <>
+                                {renderHtmlContent(text)}
+                            </>
                         )}
 
                         {/* Image */}
@@ -52,4 +51,3 @@ export default function NewsCard({variant, text, imageUrl}: props) {
         }
     }
 }
-

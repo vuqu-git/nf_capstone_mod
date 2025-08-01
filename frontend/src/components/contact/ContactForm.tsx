@@ -9,7 +9,6 @@ import KinomitarbeitForm, { KinomitarbeitFormData } from "./KinomitarbeitForm.ts
 import {EigenstaendigFormData} from "./EigenstaendigForm.tsx";
 import {MitKinotechnikFormData} from "./MitKinotechnikForm.tsx";
 import {KooperationFormData} from "./KooperationForm.tsx";
-import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 
 // type for object, which combines status and message information (comparable to formData that contains all form fields)
 interface SubmissionStatusWithMessageType {
@@ -170,7 +169,7 @@ const ContactForm: React.FC = () => {
             {submissionStatusWithMessage.status === 'success' && (
                                                    // role-Attribut: Teil von WAI-ARIA (Accessible Rich Internet Applications); wird verwendet, um semantische Informationen über ein Element hinzuzufügen
                 <div className={styles.statusSuccess} role="alert">
-                    {renderHtmlText( submissionStatusWithMessage.message )}
+                    {submissionStatusWithMessage.message}
                 </div>
             )}
 

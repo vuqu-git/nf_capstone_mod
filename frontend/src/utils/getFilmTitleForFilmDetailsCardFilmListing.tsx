@@ -10,7 +10,6 @@ type Props = {
     renderHtmlText: (text: string) => ReactNode;
 };
 
-
 export function getFilmTitleForFilmDetailsCardFilmListing({
                                                               f,
                                                               fType,
@@ -39,28 +38,28 @@ export function getFilmTitleForFilmDetailsCardFilmListing({
         // fType is a string with the values "Vorfilm:" or "Film:"
         if (fType === "Vorfilm:") {
             return (
-                <>
+                <div>
                     {fType}
                     <br />
                     {titleContentSingleFilm}
-                </>
+                </div>
             );
         } else {
             return (
-                <>
+                <div>
                     {fType}
                     {titleContentSingleFilm}
-                </>
+                </div>
             );
         }
     } else {
         // here numeration
         return (
-            <>
+            <div>
                 {index + 1}. {fType}
                 <br />
                 {titleContentMultipleFilms}
-            </>
+            </div>
         );
     }
 }

@@ -16,7 +16,6 @@
 .add-to-calendar-button-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 1.0rem;
 }
 
 .program-title {
@@ -27,6 +26,7 @@
 
 .program-text {
     color: #cfd6e1;
+    margin-bottom: 1.0rem;
 }
 
 .program-besonderheit {
@@ -34,4 +34,5 @@
     border-top: 2px dotted #FFD036;
     border-bottom: 2px dotted #FFD036;
     padding: 0.5rem 0em;
+    margin-bottom: 1.0rem;
 }

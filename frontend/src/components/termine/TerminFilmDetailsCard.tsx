@@ -1,5 +1,6 @@
 import Card from 'react-bootstrap/Card';
 import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
+import {renderHtmlContent} from "../../utils/renderHtmlContent.tsx";
 
 import './TerminFilmDetailsCard.css';
 import FilmDTOFormPlus from "../../types/FilmDTOFormPlus.ts";
@@ -67,39 +68,38 @@ export default function TerminFilmDetailsCard({
             className={`terminFilm-card ${screeningSonderfarbe}`}
         >
             <Card.Body>
+                <div className="add-to-calendar-button-container">
+                    <AddToCalendarButton
+
+                        name={"Pupille: " + calenderTitle}
+                        startDate={calenderDateObj.startDate}
+                        startTime={calenderDateObj.startTime}
+                        endDate={calenderDateObj.endDate}
+                        endTime={calenderDateObj.endTime}
+                        timeZone="Europe/Berlin" // Handles DST automatically
+
+                        options={['Apple', 'Google', 'iCal']}
+                        uid={tnr + "-uidTermin@pupille.org"}
+                        iCalFileName={"pupille-" +  icsFileName}
+
+                        trigger="click"
+
+                        // inline={true}
+                        label="Termin speichern"
+                        // hideTextLabelButton={true}
+
+                        pastDateHandling="hide"
+                        size="2"
+                        lightMode={"dark"}
+                        // hideBackground={true}
+                        hideBranding={true}
+                    />
+                </div>
 
                 <Card.Header
                     as="h4"
                     className="terminFilm-card-header"
                 >
-
-                    <div className="add-to-calendar-button-container">
-                        <AddToCalendarButton
-                            name={"Pupille: " + calenderTitle}
-                            startDate={calenderDateObj.startDate}
-                            startTime={calenderDateObj.startTime}
-                            endDate={calenderDateObj.endDate}
-                            endTime={calenderDateObj.endTime}
-                            timeZone="Europe/Berlin" // Handles DST automatically
-
-                            options={['Apple', 'Google', 'iCal']}
-                            uid={tnr + "-uidTermin@pupille.org"}
-                            iCalFileName={"pupille-" +  icsFileName}
-
-                            trigger="click"
-
-                            // inline={true}
-                            label="Termin speichern"
-                            // hideTextLabelButton={true}
-
-                            pastDateHandling="hide"
-                            size="2"
-                            lightMode={"dark"}
-                            // hideBackground={true}
-                            hideBranding={true}
-                        />
-                    </div>
-
                     {screeningWeekday} | {screeningDate} | {screeningTime}
                 </Card.Header>
 
@@ -110,16 +110,32 @@ export default function TerminFilmDetailsCard({
                     {renderHtmlText(programmtitel)}
                 </Card.Title>
 
+                {/*Here with Card.Text (p tag) and renderHtmlText (span tag)*/}
+                {/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+                {/*{programmtext && (*/}
+                {/*    <Card.Text className="program-text">*/}
+                {/*        {renderHtmlText(programmtext)}*/}
+                {/*    </Card.Text>*/}
+                {/*)}*/}
+
+                {/*{programmbesonderheit && (*/}
+                {/*    <Card.Text className="program-besonderheit">*/}
+                {/*        {renderHtmlText(programmbesonderheit)}*/}
+                {/*    </Card.Text>*/}
+                {/*)}*/}
+
+                {/*Here with div tag instead of Card.Text (p tag) and renderHtmlContent (div tag)*/}
+                {/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
                 {programmtext && (
-                    <Card.Text className="program-text">
-                        {renderHtmlText(programmtext)}
-                    </Card.Text>
+                    <div className="program-text">
+                        {renderHtmlContent(programmtext)}
+                    </div>
                 )}
 
                 {programmbesonderheit && (
-                    <Card.Text className="program-besonderheit">
-                        {renderHtmlText(programmbesonderheit)}
-                    </Card.Text>
+                    <div className="program-besonderheit">
+                        {renderHtmlContent(programmbesonderheit)}
+                    </div>
                 )}
 
                 {/*#########################################*/}
@@ -142,7 +158,6 @@ export default function TerminFilmDetailsCard({
 
                                                 <li key={termin.tnr}>
                                                     <Link to={`/details/${termin.tnr}`} className="custom-link">
-                                                    {/*{formatDateTime(termin.vorstellungsbeginn, false, true)?.date}: {" "}*/}
                                                     {termin.mainfilms && termin.mainfilms.length > 0
                                                         ? termin.mainfilms.map((film, k) => (
                                                             <span key={film.fnr}>
@@ -172,7 +187,7 @@ export default function TerminFilmDetailsCard({
 
                     return (
                         <TerminFilmDetailsListing
-                            key={index}
+                            key={film.fnr}
                             index={index}
                             f={film}
                             numberOfF={mainfilms.length}
@@ -184,12 +199,12 @@ export default function TerminFilmDetailsCard({
                 {vorfilms.map((filmPlusObj, index) => {
                     const vorfilm = filmPlusObj.film;
 
-                    // Check if film properties exist
+                    // Check if vorfilm properties exist
                     if (!vorfilm) return null;
 
                     return (
                         <TerminFilmDetailsListing
-                            key={index}
+                            key={vorfilm.fnr}
                             index={index}
                             f={vorfilm}
                             numberOfF={vorfilms.length}
