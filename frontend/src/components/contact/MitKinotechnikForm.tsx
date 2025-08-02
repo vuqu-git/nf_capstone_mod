@@ -138,8 +138,9 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     required
                     className={styles.textareaField}
                     style={{ height: '175px' }}
+                    aria-describedby="nachricht-counter"
                 />
-                <div className={styles.characterCounter}>
+                <div id="nachricht-counter" className={styles.characterCounter}>
                     Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLength}
                 </div>
             </div>
@@ -216,6 +217,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     onChange={onInputChange}
                     required
                     className={styles.datetimeInput}
+                    aria-describedby="date-range-error"
                 />
             </div>
 
@@ -229,12 +231,13 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                     onChange={onInputChange}
                     required
                     className={styles.datetimeInput}
+                    aria-describedby="date-range-error"
                 />
 
                 {/*Fehlermeldung für Datenvalidierung (space reserved)*/}
                 {/*<div style={{ minHeight: '1.5em' }}>*/}
                 <div>
-                    {dateRangeErrorMessage && <p className={styles.statusError + " m-0"}>{dateRangeErrorMessage}</p>}
+                    {dateRangeErrorMessage && <p role="alert" id="date-range-error" className={styles.statusError + " m-0"}>{dateRangeErrorMessage}</p>}
                 </div>
             </div>
 
@@ -256,6 +259,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 <label
                     htmlFor="istGemietetBeiAsta"
                     className={errorMissingConfirmationMessage && !formData.istGemietetBeiAsta ? styles.errorRedLabel : ''}
+                    role="alert"
                 >
                     Ich bestätige, dass der Festsaal beim AStA für den oben genannten Veranstaltungszeitraum bereits reserviert bzw. gemietet wurde.
                 </label>
@@ -274,6 +278,7 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
                 <label
                     htmlFor="wurdeGelesenHinweisEventlocation"
                     className={errorMissingConfirmationMessage && !formData.wurdeGelesenHinweisEventlocation ? styles.errorOrangeLabel : ''}
+                    role="alert"
                 >
                     Hiermit bestätige ich, dass bei Werbemaßnahmen der "Festsaal im Studierendenhaus" als Veranstaltungsort genannt wird und <b>nicht</b> Pupille-Kino, da die Pupille nicht der Veranstalter ist.
                 </label>
@@ -295,11 +300,16 @@ const MitKinotechnikForm: React.FC<MitKinotechnikFormProps> = ({ onSubFormSubmit
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
             {errorMissingConfirmationMessage && (
-                <p className={styles.errorOrangeLabel}>{errorMissingConfirmationMessage}</p>
+                <p role="alert" className={styles.errorOrangeLabel}>{errorMissingConfirmationMessage}</p>
             )}
 
             {submissionStatusWithMessage.status === 'sending' && (
-                <p className={`${styles.statusMessage} ${styles.statusSending}`}>&#x2709; Sende Nachricht...</p>
+                <p
+                    className={styles.statusMessage + " " + styles.statusSending}
+                    role="status"
+                >
+                    &#x2709; Sende Nachricht...
+                </p>
             )}
         </form>
     );

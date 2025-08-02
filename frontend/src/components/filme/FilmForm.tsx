@@ -120,8 +120,7 @@ export default function FilmForm() {
             getTermineOfSingleFilm();
 
         } else {
-            // Reset the form for adding a new film
-            setSelectedFilm(emptyFilmForForm);
+            setSelectedFilm(emptyFilmForForm); // Reset the form for further adding/editing/deleting
         }
     }, [selectedFilmId]);
 
@@ -171,7 +170,7 @@ export default function FilmForm() {
 
                     getAllFilms();
                     setSelectedFilmId(undefined); // Reset the selection
-                    setSelectedFilm(emptyFilmForForm); // Reset the form
+                    setSelectedFilm(emptyFilmForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Update failed";
@@ -192,7 +191,7 @@ export default function FilmForm() {
 
                     getAllFilms();
                     // setSelectedFilmId(null); // Reset the selection, not required for POST because selection is unchanged
-                    setSelectedFilm(emptyFilmForForm); // Reset the form
+                    setSelectedFilm(emptyFilmForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Saving failed";
@@ -220,7 +219,7 @@ export default function FilmForm() {
                     // => I need to set it to remove the delete button from display after deletion!!
                     setSelectedFilmId(undefined);
 
-                    setSelectedFilm(emptyFilmForForm); // Reset the form
+                    setSelectedFilm(emptyFilmForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Deletion failed";
@@ -310,7 +309,7 @@ export default function FilmForm() {
     // ########################################
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             <AdminNav />
 
             <h3 className="mt-3">{selectedFilmId ? "Edit or delete " : "Add new "} Film</h3>
@@ -323,27 +322,22 @@ export default function FilmForm() {
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading film details... Please wait!</div>}
+                {isGetLoading && <output className="text-warning mb-3">&#x1f504; Loading film details... Please wait!</output>}
             </div>
 
+            {/*display corresponding Termine*/}
+            {/*******************************/}
             {selectedFilmId && (
-                <Form.Group controlId="termineDisplay"
-                            className="mt-3"
-                            style={{
-                                opacity: 0.4,
-                            }}
-                >
-                    <Form.Label>{termineOfSelectedFilmId.length > 1 ? "Termine" : "Termin"} zum ausgewählten Film:</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={termineOfSelectedFilmId.length}
-                        value={
-                            termineOfSelectedFilmId.map(t => formatDateInTerminSelectOption(t.vorstellungsbeginn) + " | #" + t.tnr).join("\n")
-                        }
-                        readOnly
-
-                    />
-                </Form.Group>
+                <div className={styles.correspondingItems}>
+                    <p>{termineOfSelectedFilmId.length > 1 ? "Termine" : "Termin"} zum ausgewählten Film:</p>
+                    <ul>
+                        {termineOfSelectedFilmId.map((t) => (
+                            <li key={t.tnr}>
+                                {formatDateInTerminSelectOption(t.vorstellungsbeginn)} | #{t.tnr}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             )}
 
             <Form onSubmit={handleSubmit}>
@@ -422,7 +416,7 @@ export default function FilmForm() {
                     <Form.Label>Text</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={13}
+                        rows={11}
                         name="text"
                         value={selectedFilm.text || ""}
                         onChange={handleFormChange}
@@ -479,7 +473,7 @@ export default function FilmForm() {
                     <Form.Label>Content Note</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={3}
+                        rows={2}
                         name="contentNote"
                         value={selectedFilm.contentNote || ""}
                         onChange={handleFormChange}
@@ -493,7 +487,7 @@ export default function FilmForm() {
                     <Form.Label>Trailer</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={5}
+                        rows={4}
                         name="trailer"
                         value={selectedFilm.trailer || ""}
                         onChange={handleFormChange}
@@ -612,7 +606,7 @@ export default function FilmForm() {
                     <Form.Label>Stab & Besetzung</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={10}
+                        rows={9}
                         name="stab"
                         value={selectedFilm.stab || ""}
                         onChange={handleFormChange}
@@ -680,9 +674,9 @@ export default function FilmForm() {
                     </Button>
                 </div>
             )}
-            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedFilmId ? "updating " : "saving "} film entry... Please wait!</div>}
-            {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-        </div>
+            {isLoading && <output className="text-warning mb-3">&#x1f504; Perform {selectedFilmId ? "updating " : "saving "} film entry... Please wait!</output>}
+            {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
+            {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
+        </main>
     );
 };

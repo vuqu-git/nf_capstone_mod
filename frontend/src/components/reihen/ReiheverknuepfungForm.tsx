@@ -12,6 +12,7 @@ import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSele
 
 const baseURL = "/api/reihe";
 
+// this one is not for the form fields, but for the selection to see/edit the corresponding screenings via termine field
 const emptyReihe = {
     rnr: undefined,
     titel: '',
@@ -176,8 +177,7 @@ export default function ReiheverknuepfungForm() {
             getSingleReihe();
 
         } else {
-            // Reset the form for adding a new Reihe
-            setSelectedReihe(emptyReihe);
+            setSelectedReihe(emptyReihe); // Reset the form for further adding/editing/deleting
         }
     }, [selectedReiheId]);
 
@@ -189,7 +189,7 @@ export default function ReiheverknuepfungForm() {
     };
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             <AdminNav />
 
             <h3 className="mt-3">Add Termine (incl. its Film(e)) to Reihe</h3>
@@ -203,8 +203,8 @@ export default function ReiheverknuepfungForm() {
 
 
             <div style={{ minHeight: '30px' }}>
-                {isLoadingAllReihen && <div className="text-warning mb-3">&#x1f504; Loading all Reihe entries... Please wait!</div>}
-                {isLoadingOneReihe && <div className="text-warning mb-3">&#x1f504; Loading Reihe's Termine and Filme... Please wait!</div>}
+                {isLoadingAllReihen && <output className="text-warning mb-3">&#x1f504; Loading all Reihe entries... Please wait!</output>}
+                {isLoadingOneReihe && <output className="text-warning mb-3">&#x1f504; Loading Reihe's Termine and Filme... Please wait!</output>}
             </div>
 
             {selectedReihe.titel && !isLoadingAllReihen && (
@@ -265,9 +265,9 @@ export default function ReiheverknuepfungForm() {
             )}
 
             <div style={{ minHeight: '30px' }}>
-                {isLoadingForAddDelete && <div className="text-warning mb-3">&#x1f504; Processing... Please wait!</div>}
-                {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-                {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
+                {isLoadingForAddDelete && <output className="text-warning mb-3">&#x1f504; Processing... Please wait!</output>}
+                {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
+                {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
             </div>
 
             {/*Here now reihe-terminverknuepfung*/}
@@ -308,6 +308,6 @@ export default function ReiheverknuepfungForm() {
                 </Button>
             )}
 
-        </div>
+        </main>
     );
 }

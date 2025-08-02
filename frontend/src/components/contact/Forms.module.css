@@ -233,3 +233,18 @@
     color: #ff7f7f;
 }
 
+/*-----------------------------------------*/
+/* Here are the styles for the admin forms */
+/*-----------------------------------------*/
+
+.correspondingItems {
+    opacity: 0.4;
+    border: 1px solid;
+    padding: 0.375rem 0.75rem;
+
+    border-radius: 0.375rem;
+}
+
+.correspondingItems p, ul {
+    margin-bottom: 0.0rem;
+}

@@ -8,6 +8,7 @@ const EventOhneProjektion: React.FC = () => {
 
     return (
         <section>
+            <h5>Kontak zum AStA</h5>
             <p>Das Pupille-Kino verantwortet die Räumlichkeit des Festsaals im Studierendenhaus <b>nicht</b> und ist auch nur Mieter beim AStA.</p>
             <p>
                 Bitte kontaktiert direkt das <a className="custom-link" href="https://asta-frankfurt.de/kontakt" target="_blank" rel="noopener noreferrer">AStA-Sekretariat</a> für die Verfügbarkeit und Mietung des Festsaals.

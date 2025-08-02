@@ -85,8 +85,7 @@ export default function ReiheForm() {
             getSingleReihe();
 
         } else {
-            // Reset the form for adding a new Reihe
-            setSelectedReihe(emptyReiheForForm);
+            setSelectedReihe(emptyReiheForForm); // Reset the form for further adding/editing/deleting
         }
     }, [selectedReiheId]);
 
@@ -109,7 +108,7 @@ export default function ReiheForm() {
 
                     getAllReihen();
                     setSelectedReiheId(undefined); // Reset the selection
-                    setSelectedReihe(emptyReiheForForm); // Reset the form
+                    setSelectedReihe(emptyReiheForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Update failed";
@@ -130,7 +129,7 @@ export default function ReiheForm() {
 
                     getAllReihen();
                     // setSelectedReiheId(undefined); // Reset the selection, not required for POST because selection is unchanged
-                    setSelectedReihe(emptyReiheForForm); // Reset the form
+                    setSelectedReihe(emptyReiheForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Saving failed";
@@ -158,7 +157,7 @@ export default function ReiheForm() {
                     // => I need to set it to remove the delete button from display after deletion!!
                     setSelectedReiheId(undefined);
 
-                    setSelectedReihe(emptyReiheForForm); // Reset the form
+                    setSelectedReihe(emptyReiheForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Deletion failed";
@@ -184,7 +183,7 @@ export default function ReiheForm() {
     };
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             <AdminNav />
 
             <h3 className="mt-3">{selectedReiheId ? "Edit or delete " : "Add new "} Reihe</h3>
@@ -197,17 +196,15 @@ export default function ReiheForm() {
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isLoadingAllReihen && <div className="text-warning mb-3">&#x1f504; Loading all Reihe entries... Please wait!</div>}
-                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading details of selected Reihe... Please wait!</div>}
+                {isLoadingAllReihen && <output className="text-warning mb-3">&#x1f504; Loading all Reihe entries... Please wait!</output>}
+                {isGetLoading && <output className="text-warning mb-3">&#x1f504; Loading details of selected Reihe... Please wait!</output>}
             </div>
 
+            {/*display corresponding Termine incl. Filme*/}
+            {/*******************************************/}
             {selectedReiheId && (
-                <div className="mt-3"
-                     style={{
-                         opacity: 0.4,
-                     }}
-                >
-                    <p className="mb-0">currently corresponding screenings (Termine with each Film(e)) of the above selected Reihe:</p>
+                <div className={styles.correspondingItems}>
+                    <p>currently corresponding screenings (Termine with each Film(e)) of the above selected Reihe:</p>
                     <ul>
                         {selectedReihe.termine && selectedReihe.termine.length > 0 ? (
                             selectedReihe.termine.map(t => (
@@ -301,10 +298,10 @@ export default function ReiheForm() {
                 </div>
             )}
 
-            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedReiheId ? "updating " : "saving "} Reihe entry... Please wait!</div>}
-            {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
+            {isLoading && <output className="text-warning mb-3">&#x1f504; Perform {selectedReiheId ? "updating " : "saving "} Reihe entry... Please wait!</output>}
+            {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
+            {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
 
-        </div>
+        </main>
     );
 }

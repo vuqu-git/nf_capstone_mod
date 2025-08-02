@@ -89,8 +89,7 @@ export default function TerminverknuepfungForm() {
             getSingleTV();
 
         } else {
-            // Reset the form for adding a new terminverknuepfung
-            setSelectedTV(emptyTVForForm);
+            setSelectedTV(emptyTVForForm); // Reset the form for further adding/editing/deleting
         }
     }, [selectedTVId]);
 
@@ -115,7 +114,7 @@ export default function TerminverknuepfungForm() {
 
                     getAllTVs();
                     setSelectedTVId(undefined); // Reset the selection
-                    setSelectedTV(emptyTVForForm); // Reset the form
+                    setSelectedTV(emptyTVForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Update failed";
@@ -130,7 +129,7 @@ export default function TerminverknuepfungForm() {
 
                     getAllTVs();
                     // setSelectedTVId(undefined); // Reset the selection, not required for POST because selection is unchanged
-                    setSelectedTV(emptyTVForForm); // Reset the form
+                    setSelectedTV(emptyTVForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Saving failed";
@@ -159,7 +158,7 @@ export default function TerminverknuepfungForm() {
                     // => I need to set it to remove the delete button from display after deletion!!
                     setSelectedTVId(undefined);
 
-                    setSelectedTV(emptyTVForForm); // Reset the form
+                    setSelectedTV(emptyTVForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Deletion failed";
@@ -242,7 +241,7 @@ export default function TerminverknuepfungForm() {
     // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             <AdminNav />
 
             <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and existing Termin"}</h3>
@@ -255,7 +254,7 @@ export default function TerminverknuepfungForm() {
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading Termin details... Please wait!</div>}
+                {isGetLoading && <output className="text-warning mb-3">&#x1f504; Loading Termin details... Please wait!</output>}
             </div>
 
 
@@ -370,10 +369,10 @@ export default function TerminverknuepfungForm() {
                     </Button>
                 </div>
             )}
-            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedTVId ? "updating " : "saving "} terminverknuepfung entry... Please wait!</div>}
-            {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-        </div>
+            {isLoading && <output className="text-warning mb-3">&#x1f504; Perform {selectedTVId ? "updating " : "saving "} terminverknuepfung entry... Please wait!</output>}
+            {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
+            {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
+        </main>
     );
 
 }

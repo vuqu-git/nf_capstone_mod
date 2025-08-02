@@ -142,7 +142,6 @@ export default function TerminFilmDetailsCard({
                 {/*###### Listing of Reihe(-elements) ######*/}
                 {reihen.length > 0 && (
                     <article className="program-text" style={{marginBottom: '1.5rem'}}>
-                        {/*<div style={{color: '#9ac7fa'}}>{reihen.length == 1 ? "In der Filmreihe" : "In den Filmreihen"}</div>*/}
                         <div style={{color: '#9ac7fa'}}>
                             Diese Vorstellung { new Date() > new Date(calenderDateObj.startDate) ? " lief" : "läuft"}
                             {reihen.length == 1 ? " in der Filmreihe" : " in den Filmreihen"}

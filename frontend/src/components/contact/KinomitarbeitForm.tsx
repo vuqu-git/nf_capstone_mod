@@ -43,7 +43,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                     type="text"
                     id="name"
                     name="name"
-                    value={formData.name || ''}     // Ensure initial value is defined
+                    value={formData.name || ''}
                     maxLength={50}
                     onChange={onInputChange}
                     required
@@ -56,7 +56,7 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                     type="email"
                     id="email"
                     name="email"
-                    value={formData.email || ''}    // Ensure initial value is defined
+                    value={formData.email || ''}
                     maxLength={254} // RFC 5322 Standard
                     onChange={onInputChange}
                     required
@@ -68,14 +68,15 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
                 <textarea
                     id="nachricht"
                     name="nachricht"
-                    value={formData.nachricht || ''}  // Ensure initial value is defined
+                    value={formData.nachricht || ''}
                     maxLength={maxMessageLength}
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
                     style={{ height: '300px' }}
+                    aria-describedby="nachricht-counter"
                 />
-                <div className={styles.characterCounter}>
+                <div id="nachricht-counter" className={styles.characterCounter}>
                     Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLength}
                 </div>
             </div>
@@ -110,7 +111,12 @@ const KinomitarbeitForm: React.FC<KinomitarbeitFormProps> = ({ onSubmit, submiss
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
             {submissionStatusWithMessage.status === 'sending' &&
-                <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
+                <p
+                    className={styles.statusMessage + " " + styles.statusSending}
+                    role="status"
+                >
+                    &#x2709; Sende Nachricht...
+                </p>
             }
         </form>
     );

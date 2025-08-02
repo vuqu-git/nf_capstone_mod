@@ -81,7 +81,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
     };
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             {/* heading based on formType */}
             <h4 className="mb-4">{formType === "edit" ? "Edit News Form" : "Add News Form"}</h4>
 
@@ -197,6 +197,6 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 </Button>
                 <div><sub className={styles.formSubtext}>*Pflichtfelder</sub></div>
             </Form>
-        </div>
+        </main>
     );
 }

@@ -43,7 +43,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage
                     type="text"
                     id="betreff"
                     name="betreff"
-                    value={formData.betreff || ''} // Ensure initial value is defined
+                    value={formData.betreff || ''}
                     maxLength={100}
                     onChange={onInputChange}
                     required
@@ -58,7 +58,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage
                     id="name"
                     name="name"
                     maxLength={50}
-                    value={formData.name || ''}     // Ensure initial value is defined
+                    value={formData.name || ''}
                     onChange={onInputChange}
                     className={styles.textInput}
                 />
@@ -71,7 +71,7 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage
                     id="email"
                     name="email"
                     maxLength={254} // RFC 5322 Standard
-                    value={formData.email || ''}    // Ensure initial value is defined
+                    value={formData.email || ''}
                     onChange={onInputChange}
                     required
                     className={styles.emailInput}
@@ -83,14 +83,15 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage
                 <textarea
                     id="nachricht"
                     name="nachricht"
-                    value={formData.nachricht || ''}  // Ensure initial value is defined
+                    value={formData.nachricht || ''}
                     maxLength={maxMessageLength}
                     onChange={onInputChange}
                     required
                     className={styles.textareaField}
                     style={{ height: '300px' }}
+                    aria-describedby="nachricht-counter"
                 />
-                <div className={styles.characterCounter}>
+                <div id="nachricht-counter" className={styles.characterCounter}>
                     Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLength}
                 </div>
             </div>
@@ -111,7 +112,11 @@ const AOBForm: React.FC<AOBFormProps> = ({ onSubmit, submissionStatusWithMessage
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
             {submissionStatusWithMessage.status === 'sending' &&
-                <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
+                <p role="status"
+                   className={styles.statusMessage + " " + styles.statusSending}
+                >
+                    &#x2709; Sende Nachricht...
+                </p>
             }
         </form>
     );
