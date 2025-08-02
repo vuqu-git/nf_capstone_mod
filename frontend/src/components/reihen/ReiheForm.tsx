@@ -196,8 +196,8 @@ export default function ReiheForm() {
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isLoadingAllReihen && <output className="text-warning mb-3">&#x1f504; Loading all Reihe entries... Please wait!</output>}
-                {isGetLoading && <output className="text-warning mb-3">&#x1f504; Loading details of selected Reihe... Please wait!</output>}
+                {isLoadingAllReihen && <div className="text-warning mb-3" role="status">&#x1f504; Loading all Reihe entries... Please wait!</div>}
+                {isGetLoading && <div className="text-warning mb-3" role="status">&#x1f504; Loading details of selected Reihe... Please wait!</div>}
             </div>
 
             {/*display corresponding Termine incl. Filme*/}
@@ -298,9 +298,9 @@ export default function ReiheForm() {
                 </div>
             )}
 
-            {isLoading && <output className="text-warning mb-3">&#x1f504; Perform {selectedReiheId ? "updating " : "saving "} Reihe entry... Please wait!</output>}
+            {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedReiheId ? "updating " : "saving "} Reihe entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
-            {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
+            {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
 
         </main>
     );

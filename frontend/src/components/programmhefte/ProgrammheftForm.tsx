@@ -201,8 +201,8 @@ export default function ProgrammheftForm() {
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isLoadingAllProgrammhefte && <output className="text-warning mb-3">&#x1f504; Loading all Programmheft entries... Please wait!</output>}
-                {isGetLoading && <output className="text-warning mb-3">&#x1f504; Loading details of selected Programmheft... Please wait!</output>}
+                {isLoadingAllProgrammhefte && <div className="text-warning mb-3" role="status">&#x1f504; Loading all Programmheft entries... Please wait!</div>}
+                {isGetLoading && <div className="text-warning mb-3" role="status">&#x1f504; Loading details of selected Programmheft... Please wait!</div>}
             </div>
 
 
@@ -308,9 +308,9 @@ export default function ProgrammheftForm() {
                 </div>
             )}
 
-            {isLoading && <output className="text-warning mb-3">&#x1f504; Perform {selectedProgrammheftId ? "updating " : "saving "} Programmheft entry... Please wait!</output>}
+            {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedProgrammheftId ? "updating " : "saving "} Programmheft entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
-            {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
+            {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
 
         </main>
     );

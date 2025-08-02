@@ -55,9 +55,9 @@ export default function AddNews() {
                 onChange={(addingNews) => setAddingNews(addingNews)}
                 formType="add"
             />
-            {isLoading && <output className="text-warning mb-3">&#x1f4be; Saving news...</output>}
+            {isLoading && <div className="text-warning mb-3" role="status">&#x1f4be; Saving news...</div>}
             {error && <div className="text-danger mb-3" role="alert">{error}</div>}
-            {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
+            {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
         </div>
     );
 }

@@ -322,7 +322,7 @@ export default function FilmForm() {
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isGetLoading && <output className="text-warning mb-3">&#x1f504; Loading film details... Please wait!</output>}
+                {isGetLoading && <div className="text-warning mb-3" role="status">&#x1f504; Loading film details... Please wait!</div>}
             </div>
 
             {/*display corresponding Termine*/}
@@ -678,9 +678,9 @@ export default function FilmForm() {
                     </Button>
                 </div>
             )}
-            {isLoading && <output className="text-warning mb-3">&#x1f504; Perform {selectedFilmId ? "updating " : "saving "} film entry... Please wait!</output>}
+            {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedFilmId ? "updating " : "saving "} film entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
-            {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
+            {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
         </main>
     );
 };

@@ -203,8 +203,8 @@ export default function ReiheverknuepfungForm() {
 
 
             <div style={{ minHeight: '30px' }}>
-                {isLoadingAllReihen && <output className="text-warning mb-3">&#x1f504; Loading all Reihe entries... Please wait!</output>}
-                {isLoadingOneReihe && <output className="text-warning mb-3">&#x1f504; Loading Reihe's Termine and Filme... Please wait!</output>}
+                {isLoadingAllReihen && <div className="text-warning mb-3" role="status">&#x1f504; Loading all Reihe entries... Please wait!</div>}
+                {isLoadingOneReihe && <div className="text-warning mb-3" role="status">&#x1f504; Loading Reihe's Termine and Filme... Please wait!</div>}
             </div>
 
             {selectedReihe.titel && !isLoadingAllReihen && (
@@ -265,9 +265,9 @@ export default function ReiheverknuepfungForm() {
             )}
 
             <div style={{ minHeight: '30px' }}>
-                {isLoadingForAddDelete && <output className="text-warning mb-3">&#x1f504; Processing... Please wait!</output>}
+                {isLoadingForAddDelete && <div className="text-warning mb-3" role="status">&#x1f504; Processing... Please wait!</div>}
                 {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
-                {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
+                {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
             </div>
 
             {/*Here now reihe-terminverknuepfung*/}

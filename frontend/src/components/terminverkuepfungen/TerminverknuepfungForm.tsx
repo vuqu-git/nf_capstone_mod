@@ -254,7 +254,7 @@ export default function TerminverknuepfungForm() {
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isGetLoading && <output className="text-warning mb-3">&#x1f504; Loading Termin details... Please wait!</output>}
+                {isGetLoading && <div className="text-warning mb-3" role="status">&#x1f504; Loading Termin details... Please wait!</div>}
             </div>
 
 
@@ -369,9 +369,9 @@ export default function TerminverknuepfungForm() {
                     </Button>
                 </div>
             )}
-            {isLoading && <output className="text-warning mb-3">&#x1f504; Perform {selectedTVId ? "updating " : "saving "} terminverknuepfung entry... Please wait!</output>}
+            {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedTVId ? "updating " : "saving "} terminverknuepfung entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
-            {successMessage && <output className="text-success mb-3">&#x2705; {successMessage}</output>}
+            {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
         </main>
     );
 
