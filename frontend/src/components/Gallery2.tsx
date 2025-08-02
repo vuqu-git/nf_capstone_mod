@@ -58,13 +58,14 @@ export default function Gallery2() {
                                 <article key={termin.tnr} className="gallery-article-padding">
                                     {/*for programms of (multiple) films*/}
                                     {/***********************************/}
-                                    {termin.titel ? ( // current implementation: when there is no titel of termin, the list of mainfilms is empty! (to avoid unnecessary data traffic)
+                                    {termin.titel ? ( // current implementation: when there is no titel of termin, then the list of mainfilms is empty! (to avoid unnecessary data traffic)
                                         <>
                                             <TerminFilmGalleryCard
                                                 screeningSonderfarbe={termin.sonderfarbe ?? "pupille-glow"}
-                                                bild={termin.bild ?? null}
+                                                bild={termin.bild ?? "default_film.jpg"}
                                                 // bild={termin.bild ?? (termin.mainfilms[0]?.bild ?? null)} // i.e. if Programmbild is not present then take the Bild of the 1st mainfeature (when to the termin corresponding mainfeature exist)
                                                 offsetImageInGallery={undefined} // // this prop expects undefined or a % number from 0% to 100%. 50% is default i.e. vertically centered, value>50% pushes the image up and value<50% pushes down
+
                                                 titel={termin.titel}
                                                 kurztext={termin.kurztext ?? null}
 
@@ -87,7 +88,7 @@ export default function Gallery2() {
                                                 {/*****************************************************/}
                                                 <TerminFilmGalleryCard
                                                     screeningSonderfarbe={termin.mainfilms[0]?.sonderfarbe ?? "pupille-glow"}
-                                                    bild={termin.mainfilms[0]?.bild ?? null}
+                                                    bild={termin.mainfilms[0]?.bild ?? "default_film.jpg"}
                                                     offsetImageInGallery={termin.mainfilms[0]?.offsetImageInGallery ?? undefined}
 
                                                     titel={termin.mainfilms[0]?.titel ?? null}

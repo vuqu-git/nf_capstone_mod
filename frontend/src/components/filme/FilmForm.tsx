@@ -392,7 +392,11 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Bilddatei muss  unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
+                        Bilddatei muss unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
+                        <br/>
+                        Bilder für Überraschungsfilme: surprise_film1.jpg, ... , surprise_film3.jpg
+                        <br/>
+                        Wenn keine Eingabe erfolgt, erscheint default_film.jpg in der Gallery.
                     </Form.Text>
                 </Form.Group>
 

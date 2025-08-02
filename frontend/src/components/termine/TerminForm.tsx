@@ -292,7 +292,7 @@ export default function TerminForm() {
                         name="patenschaft"
                         value={selectedTermin.patenschaft || ""}
                         onChange={handleFormChange}
-                        required
+                        // required
                     />
                     <Form.Text className="text-muted">
                         Höchstens 1 Email-Adresse eintragen!
@@ -369,9 +369,11 @@ export default function TerminForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
+                        <span className="text-danger">Wichtig:</span> Dieses Feld muss befüllt, wenn oben ein Titel angegeben wurde, sonst leer lassen.
+                        <br/>
                         Bilddatei muss unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
                         <br/>
-                        <span className="text-danger">Wichtig:</span> Dieses Feld nur befüllen, wenn oben ein Titel angegeben wurde.
+                        Bilder für Überraschungsfilme: surprise_film1.jpg, ... , surprise_film3.jpg
                     </Form.Text>
                 </Form.Group>
 
