@@ -50,22 +50,18 @@ export default function TerminFilmDetailsListing({
                 {/****** text ******/}
                 {/*******----*******/}
                 { f.text && (
-                    <Card.Text
-                        className="film-text style-video-in-card iframe"
-                    >
+                    <div className="film-text style-video-in-card iframe">
                         {renderHtmlContent(f.text)}
-                    </Card.Text>
+                    </div>
                 )}
 
                 {/****** besonderheit ******/}
                 {/*******------------*******/}
                 {
                     f.besonderheit &&
-                    <Card.Text
-                        className="film-besonderheit"
-                    >
+                    <div className="film-besonderheit">
                         {renderHtmlContent(f.besonderheit)}
-                    </Card.Text>
+                    </div>
                 }
 
                 {/****** content note ******/}
@@ -87,11 +83,9 @@ export default function TerminFilmDetailsListing({
                 {/*******-------*******/}
                 {
                     f.trailer &&
-                    <Card.Text
-                        className="film-text style-video-in-card iframe"
-                    >
+                    <div className="film-text style-video-in-card iframe">
                         {renderHtmlContent(f.trailer)}
-                    </Card.Text>
+                    </div>
                 }
 
                 {/****** film informationen ******/}

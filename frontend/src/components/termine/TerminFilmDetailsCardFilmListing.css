@@ -28,6 +28,7 @@
 .film-besonderheit{
     border-top: 1px dotted #606060;
     border-bottom: 1px dotted #606060;
+    margin-bottom: 1rem;
 
     padding: 0.5rem 0em;
     color: #cfd6e1;
