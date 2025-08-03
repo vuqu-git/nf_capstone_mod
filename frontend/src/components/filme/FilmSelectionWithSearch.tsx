@@ -24,10 +24,10 @@ export default function FilmSelectionWithSearch({
                                           textForDefaultOption = "Select/search a film to edit (or leave empty to add new)",
                                       }: Readonly<FilmSelectionWithSearchProps>) {
 
-    const [isClearable, setIsClearable] = useState(true);
-    const [isSearchable, setIsSearchable] = useState(true);
+    const [isClearable] = useState(true);
+    const [isSearchable] = useState(true);
 
-    const [selectedOption, setSelectedOption] = useState<FilmOption | null>(null); // contains the currently selected
+    const [selectedOption, setSelectedOption] = useState<FilmOption | null>(null); // contains the currently selected option
 
 
     const filmOptions = useMemo(() =>
