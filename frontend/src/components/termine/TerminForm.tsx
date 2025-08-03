@@ -87,38 +87,25 @@ export default function TerminForm() {
         }
 
         if (selectedTerminId) {
+
+            setIsGetLoading(true);
+            setErrorMessage("");
+
             // GET single termin (details)
-            const getSingleTermin = () => {
-
-                setIsGetLoading(true);
-                setErrorMessage("");
-
-                axios.get(`${baseURL}/${selectedTerminId}`)
-                    .then((response) => setSelectedTermin(response.data))
-                    .catch((error) => {
-                        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-                        setErrorMessage(errorMessage);
-                    })
-                    .finally(() => setIsGetLoading(false));
-            };
-            getSingleTermin();
-
-            // *****************************************************************************
+            const getSingleTermin = axios.get(`${baseURL}/${selectedTerminId}`);
             // GET corresponding films (as FilmDTOSelection[]) of the selected single termin
-            const getFilmsOfSingleTermin = () => {
+            const getFilmsOfSingleTermin = axios.get(`/api/terminverknuepfung/getfilme/${selectedTerminId}`);
 
-                setIsGetLoading(true);
-                setErrorMessage("");
-
-                axios.get(`/api/terminverknuepfung/getfilme/${selectedTerminId}`)
-                    .then((response) => setFilmsOfSelectedTerminId(response.data))
-                    .catch((error) => {
-                        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-                        setErrorMessage(errorMessage);
-                    })
-                    .finally(() => setIsGetLoading(false));
-            };
-            getFilmsOfSingleTermin();
+            Promise.all([getSingleTermin, getFilmsOfSingleTermin])
+                .then(([terminResponse, filmsResponse]) => {
+                    setSelectedTermin(terminResponse.data);
+                    setFilmsOfSelectedTerminId(filmsResponse.data);
+                })
+                .catch((error) => {
+                    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                    setErrorMessage(errorMessage);
+                })
+                .finally(() => setIsGetLoading(false));
 
         } else {
             // Reset the form for further adding/editing/deleting, including the default time for vorstellungsbeginn
