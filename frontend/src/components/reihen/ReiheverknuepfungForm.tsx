@@ -9,6 +9,7 @@ import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
 import TerminDTOWithMainfilms from "../../types/TerminDTOWithMainfilms.ts";
 import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
+import ReiheSelectionWithSearch from "./ReiheSelectionWithSearch.tsx";
 
 const baseURL = "/api/reihe";
 
@@ -194,13 +195,12 @@ export default function ReiheverknuepfungForm() {
 
             <h3 className="mt-3">Add Termine (incl. its Film(e)) to Reihe</h3>
 
-            <ReiheSelection
-                reihen={allReihen}
+             <ReiheSelectionWithSearch
+                allReihen={allReihen}
                 selectedReiheId={selectedReiheId}
                 onSelectReihe={handleSelectionChange}
                 textForDefaultOption={"Select a Reihe to edit the Reiheverknuepfungen"}
             />
-
 
             <div style={{ minHeight: '30px' }}>
                 {isLoadingAllReihen && <div className="text-warning mb-3" role="status">&#x1f504; Loading all Reihe entries... Please wait!</div>}

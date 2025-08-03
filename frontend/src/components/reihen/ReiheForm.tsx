@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {preprocessFormData} from "../../utils/preprocessFormData.ts";
-import ReiheSelection from "./ReiheSelection.tsx";
 import AdminNav from "../AdminNav.tsx";
 import ReiheDTOFormWithTermineAndFilme from "../../types/ReiheDTOFormWithTermineAndFilme.ts";
 import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
@@ -10,6 +9,7 @@ import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 import styles from "../contact/Forms.module.css";
+import ReiheSelectionWithSearch from "./ReiheSelectionWithSearch.tsx";
 
 const baseURL = "/api/reihe";
 
@@ -188,7 +188,7 @@ export default function ReiheForm() {
 
             <h3 className="mt-3">{selectedReiheId ? "Edit or delete " : "Add new "} Reihe</h3>
 
-            <ReiheSelection
+            <ReiheSelectionWithSearch
                 allReihen={allReihen}
                 selectedReiheId={selectedReiheId}
                 onSelectReihe={handleSelectionChange}
@@ -297,6 +297,7 @@ export default function ReiheForm() {
                     </Button>
                 </div>
             )}
+            <div><sub className={styles.formSubtext}>If a specific Reihe entity is deleted, only the <u>connection</u> to its Termine entities is removed, not the Termine entities themselves. These entities, along with their associated Film entities, remain unaffected.</sub></div>
 
             {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedReiheId ? "updating " : "saving "} Reihe entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
