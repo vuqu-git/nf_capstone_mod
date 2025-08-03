@@ -8,10 +8,11 @@ import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import FilmSelection from "../filme/FilmSelection.tsx";
 import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import TerminSelection from "../termine/TerminSelection.tsx";
-// import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
+import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 import AdminNav from "../AdminNav.tsx";
 import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 import styles from "../contact/Forms.module.css";
+import FilmSelectionWithSearch from "../filme/FilmSelectionWithSearch.tsx";
 
 const baseURL = "/api/terminverknuepfung";
 
@@ -287,12 +288,12 @@ export default function TerminverknuepfungForm() {
                 {/*</Form.Select>*/}
 
                 {/*---------------------------------------------------------------------------*/}
-                <FilmSelection
-                    allFilms={allFilms}
-                    selectedFilmId={selectedTV.fnr}
-                    onSelectFilm={handleFilmSelectionChange}
-                    textForDefaultOption={"Select a Film for the creation of a Terminverknuepfung"}
-                />
+                {/*<FilmSelection*/}
+                {/*    allFilms={allFilms}*/}
+                {/*    selectedFilmId={selectedTV.fnr}*/}
+                {/*    onSelectFilm={handleFilmSelectionChange}*/}
+                {/*    textForDefaultOption={"Select a Film for the creation of a Terminverknuepfung"}*/}
+                {/*/>*/}
 
                 {/*<Form.Label htmlFor="film-selection" className="mt-3">Film selection</Form.Label>*/}
                 {/*<Form.Select*/}
@@ -310,6 +311,12 @@ export default function TerminverknuepfungForm() {
                 {/*    ))}*/}
                 {/*</Form.Select>*/}
 
+                <FilmSelectionWithSearch
+                    allFilms={allFilms}
+                    selectedFilmId={selectedTV.fnr}
+                    onSelectFilm={handleFilmSelectionChange}
+                    textForDefaultOption={undefined}
+                />
 
                 <Form.Group controlId="vorfilm" className="mt-3">
                     <Form.Check
