@@ -189,7 +189,7 @@ export default function ReiheForm() {
             <h3 className="mt-3">{selectedReiheId ? "Edit or delete " : "Add new "} Reihe</h3>
 
             <ReiheSelection
-                reihen={allReihen}
+                allReihen={allReihen}
                 selectedReiheId={selectedReiheId}
                 onSelectReihe={handleSelectionChange}
                 textForDefaultOption={undefined}

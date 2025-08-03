@@ -232,7 +232,7 @@ export default function TerminForm() {
             <h3 className="mt-3">{selectedTerminId ? "Edit or delete " : "Add new "} Termin</h3>
 
             <TerminSelection
-                termine={allTermine}
+                allTermine={allTermine}
                 selectedTnr={selectedTerminId}
                 onSelectTermin={handleSelectionChange}
                 textForDefaultOption={undefined}

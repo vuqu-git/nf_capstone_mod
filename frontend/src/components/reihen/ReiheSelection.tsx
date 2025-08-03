@@ -3,14 +3,14 @@ import React from "react";
 import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
 
 interface ReiheSelectionProps {
-    reihen: ReiheDTOSelection[];
+    allReihen: ReiheDTOSelection[];
     selectedReiheId: number | undefined;
     onSelectReihe: (id: number | undefined) => void;
     textForDefaultOption: string | undefined;
 }
 
 export default function ReiheSelection({
-                                           reihen,
+                                           allReihen,
                                            selectedReiheId,
                                            onSelectReihe,
                                            textForDefaultOption  = "Select a Reihe to edit (or leave unselected to add a new Reihe)",
@@ -29,7 +29,7 @@ export default function ReiheSelection({
                 onChange={handleSelectChange}
             >
                 <option value="">{textForDefaultOption}</option>
-                {reihen.map((reihe: ReiheDTOSelection) => (
+                {allReihen.map((reihe: ReiheDTOSelection) => (
                     <option key={reihe.rnr} value={reihe.rnr}>
                         {`${reihe.titel} | #${reihe.rnr}`}
                     </option>

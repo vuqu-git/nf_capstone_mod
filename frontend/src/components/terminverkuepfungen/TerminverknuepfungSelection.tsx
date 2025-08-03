@@ -3,14 +3,14 @@ import React from "react";
 import {TVWithFilmAndTerminDTOSelection} from "../../types/TVWithFilmAndTerminDTOSelection.ts";
 
 interface TVSelectionProps {
-    tvenWithFilmAndTermin: TVWithFilmAndTerminDTOSelection[];
+    allTVsWithFilmAndTermin: TVWithFilmAndTerminDTOSelection[];
     selectedTVId: string | undefined;
     onSelectTV: (id: string | undefined) => void;
     textForDefaultOption: string | undefined;
 }
 
 export default function TerminverknuepfungSelection({
-                                                        tvenWithFilmAndTermin,
+                                                        allTVsWithFilmAndTermin,
                                                         selectedTVId,
                                                         onSelectTV,
                                                         textForDefaultOption="Select a Terminverknuepfung to edit (or leave unselected to add a new Terminverknuepfung)",
@@ -29,7 +29,7 @@ export default function TerminverknuepfungSelection({
                 onChange={handleSelectChange}
             >
                 <option value="">{textForDefaultOption}</option>
-                {tvenWithFilmAndTermin.map((tvFT: TVWithFilmAndTerminDTOSelection) => (
+                {allTVsWithFilmAndTermin.map((tvFT: TVWithFilmAndTerminDTOSelection) => (
                     <option key={`${tvFT.tnr},${tvFT.fnr}`} value={`${tvFT.tnr},${tvFT.fnr}`}>
                         tnr : fnr | #{tvFT.tnr} : #{tvFT.fnr} | {tvFT.termin.vorstellungsbeginn?.slice(0,-3)} : {tvFT.film.titel} ({tvFT.film.regie}, {tvFT.film.jahr})
                     </option>

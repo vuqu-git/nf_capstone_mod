@@ -3,14 +3,14 @@ import React from "react";
 import ProgrammheftDTOSelection from "../../types/ProgrammheftDTOSelection.ts";
 
 interface ProgrammheftSelectionProps {
-    programmhefte: ProgrammheftDTOSelection[];
+    allProgrammhefte: ProgrammheftDTOSelection[];
     selectedPnr: number | undefined;
     onSelectProgrammheft: (id: number | undefined) => void;
     textForDefaultOption: string | undefined;
 }
 
 export default function ProgrammheftSelection({
-                                                  programmhefte,
+                                                  allProgrammhefte,
                                                   selectedPnr,
                                                   onSelectProgrammheft,
                                             textForDefaultOption  = "Select a Programmheft to edit (or leave empty to add new)",
@@ -29,7 +29,7 @@ export default function ProgrammheftSelection({
     onChange={handleSelectChange}
     >
     <option value="">{textForDefaultOption}</option>
-    {programmhefte.map((p: ProgrammheftDTOSelection) => (
+    {allProgrammhefte.map((p: ProgrammheftDTOSelection) => (
         <option key={p.pnr} value={p.pnr}>
         {`${p.titel}, bis ${p.gueltigBis}`}
         </option>

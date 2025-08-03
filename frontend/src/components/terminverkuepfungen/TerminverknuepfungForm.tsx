@@ -247,7 +247,7 @@ export default function TerminverknuepfungForm() {
             <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and existing Termin"}</h3>
 
             <TerminverknuepfungSelection
-                tvenWithFilmAndTermin={allTVs}
+                allTVsWithFilmAndTermin={allTVs}
                 selectedTVId={selectedTVId}
                 onSelectTV={handleTVSelectionChange}
                 textForDefaultOption={undefined}
@@ -263,7 +263,7 @@ export default function TerminverknuepfungForm() {
                 <h3 className="mt-3">Terminverknuepfung details</h3>
 
                 <TerminSelection
-                    termine={allTermine}
+                    allTermine={allTermine}
                     selectedTnr={selectedTV.tnr}
                     onSelectTermin={handleTerminSelectionChange}
                     textForDefaultOption={"Select a Termin for the creation of a Terminverknuepfung"}
@@ -288,7 +288,7 @@ export default function TerminverknuepfungForm() {
 
                 {/*---------------------------------------------------------------------------*/}
                 <FilmSelection
-                    films={allFilms}
+                    allFilms={allFilms}
                     selectedFilmId={selectedTV.fnr}
                     onSelectFilm={handleFilmSelectionChange}
                     textForDefaultOption={"Select a Film for the creation of a Terminverknuepfung"}

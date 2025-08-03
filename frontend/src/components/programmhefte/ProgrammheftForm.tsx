@@ -194,7 +194,7 @@ export default function ProgrammheftForm() {
             <h3 className="mt-3">{selectedProgrammheftId ? "Edit or delete " : "Add new "} Programmheft/Fyler</h3>
 
             <ProgrammheftSelection
-                programmhefte={allProgrammhefte}
+                allProgrammhefte={allProgrammhefte}
                 selectedPnr={selectedProgrammheftId}
                 onSelectProgrammheft={handleSelectionChange}
                 textForDefaultOption={undefined}
