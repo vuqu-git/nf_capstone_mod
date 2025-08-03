@@ -207,6 +207,8 @@ export default function ReiheverknuepfungForm() {
                 {isLoadingOneReihe && <div className="text-warning mb-3" role="status">&#x1f504; Loading Reihe's Termine and Filme... Please wait!</div>}
             </div>
 
+            {/*display corresponding Termine incl. Filme*/}
+            {/*******************************************/}
             {selectedReihe.titel && !isLoadingAllReihen && (
                 <div className={styles.terminList}>
                     <p className="mb-0">currently corresponding screenings (Termine with each Film(e)) of the above selected Reihe:</p>
@@ -259,7 +261,7 @@ export default function ReiheverknuepfungForm() {
                             </div>
                         ))
                     ) : (
-                        <div className={styles.filmList}>[none]</div>
+                        <div className={styles.terminRow}>[no screenings assigned yet]</div>
                     )}
                 </div>
             )}

@@ -246,7 +246,16 @@ export default function TerminForm() {
             {/*****************************/}
             {selectedTerminId && (
                 <div className={styles.correspondingItems}>
-                    <p>{filmsOfSelectedTerminId.length > 1 ? "Filme" : "Film"} zum ausgewählten Termin:</p>
+                    <p>
+                        {
+                            filmsOfSelectedTerminId.length === 1 ?
+                                "Film zum ausgewählten Termin:" :
+                                filmsOfSelectedTerminId.length > 1 ?
+                                    "Filme zum ausgewählten Termin:" :
+                                    "keine Filme zugeordnet"
+                        }
+                    </p>
+
                     <ul>
                         {filmsOfSelectedTerminId.map(f => (
                             <li key={f.fnr}>

@@ -223,7 +223,7 @@ export default function ReiheForm() {
                                 </li>
                             ))
                         ) : (
-                            <li>[none]</li> // Display "none" as a list item
+                            <li>[no screenings assigned yet]</li> // Display "none" as a list item
                         )}
                     </ul>
                 </div>
