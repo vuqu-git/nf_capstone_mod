@@ -16,17 +16,17 @@ export default function Admin() {
                 <h3>News</h3>
                 <ul className="list-unstyled">
                     <li>
-                        <Link to="/addnews" className="btn btn-secondary mb-2">
+                        <Link to="/addnews" className="btn btn-dark mb-2">
                             Add
                         </Link>
                     </li>
                     <li>
-                        <Link to="/editnews" className="btn btn-secondary mb-2">
+                        <Link to="/editnews" className="btn btn-dark mb-2">
                             Edit
                         </Link>
                     </li>
                     <li>
-                        <Link to="/deletenews" className="btn btn-secondary mb-2">
+                        <Link to="/deletenews" className="btn btn-dark mb-2">
                             Delete
                         </Link>
                     </li>
@@ -56,18 +56,7 @@ export default function Admin() {
             </section>
 
             <section>
-                <h3>Terminverknüpfungen</h3>
-                <ul className="list-unstyled">
-                    <li>
-                        <Link to="/admintven" className="btn btn-secondary mb-2">
-                            Add, Edit, Delete
-                        </Link>
-                    </li>
-                </ul>
-            </section>
-
-            <section>
-                <h3>Reihen</h3>
+                <h3>Reihe</h3>
                 <ul className="list-unstyled">
                     <li>
                         <Link to="/adminreihen" className="btn btn-secondary mb-2">
@@ -78,10 +67,21 @@ export default function Admin() {
             </section>
 
             <section>
-                <h3>Reihenverknüpfungen</h3>
+                <h3>Terminverknüpfung (Termin ↔ Film)</h3>
                 <ul className="list-unstyled">
                     <li>
-                        <Link to="/adminrven" className="btn btn-secondary mb-2">
+                        <Link to="/admintven" className="btn btn-outline-secondary mb-2">
+                            Add, Edit, Delete
+                        </Link>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Reiheverknüpfung (Reihe ↔ Termin)</h3>
+                <ul className="list-unstyled">
+                    <li>
+                        <Link to="/adminrven" className="btn btn-outline-secondary mb-2">
                             Add, Edit, Delete
                         </Link>
                     </li>
@@ -92,7 +92,7 @@ export default function Admin() {
                 <h3>Programmhefte/Flyer</h3>
                 <ul className="list-unstyled">
                     <li>
-                        <Link to="/adminprogrammhefte" className="btn btn-secondary mb-2">
+                        <Link to="/adminprogrammhefte" className="btn btn-light mb-2">
                             Add, Edit, Delete
                         </Link>
                     </li>
