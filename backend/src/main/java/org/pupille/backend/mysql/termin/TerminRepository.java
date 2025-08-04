@@ -42,8 +42,8 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
         // different findById methods
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        // called by getTerminById in TerminService, called by getTerminWithFilmsPlusByTnr in ScreeningService
-        // Optional<Termin> findById(Long id); // no need to manually declare (JpaRepository already provides a generic findById) => Only if you want to add special behavior, custom JPQL, or annotations (like @EntityGraph), then you can redeclare (override) it with your custom logic or annotations
+        // called by getTerminById in TerminService, called by getTerminWithFilmsPlusByTnr in ScreeningService, called by getAllReihenByTerminId in ReiheService
+        // Optional<Termin> findById(Long tnr); // no need to manually declare (JpaRepository already provides a generic findById) => Only if you want to add special behavior, custom JPQL, or annotations (like @EntityGraph), then you can redeclare (override) it with your custom logic or annotations
 
         // called by getAllReihenWithTermineAndFilmsByTerminId in ReiheService
         // !!! TAKE NOTE: identifiers reihen, termine, filmConnections and film in the attributePaths are the field names in the respective entities !!!
@@ -53,7 +53,7 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
                 "reihen.termine.filmConnections",
                 "reihen.termine.filmConnections.film"
         })
-        Optional<Termin> findWithReihenAndTermineAndFilmsByTnr(Long id);
+        Optional<Termin> findWithReihenAndTermineAndFilmsByTnr(Long tnr);
                         // With your typical data:
                         //1 Termin → at most 2 Reihen
                         //Each Reihe → at most 4 Termine
@@ -66,7 +66,7 @@ public interface TerminRepository extends JpaRepository<Termin, Long> {
         @EntityGraph(attributePaths = {
                 "reihen"
         })
-        Optional<Termin> findWithReihenByTnr(Long id);
+        Optional<Termin> findWithReihenByTnr(Long tnr);
 
         // called in getAllFutureTermineWithFilms within ScreeningService
         @EntityGraph(attributePaths = "reihen")
