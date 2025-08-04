@@ -41,8 +41,9 @@ public class ReiheController {
     }
 
     // #####################################################################
-    // --- Get a list of Reihen (with Termine & Films) for a given Tnr ---
-    @GetMapping("/from-termin/{tnr}")
+    // --- Get a list of Reihen (with all Termine & Films belonging to one Reihe) for a given Tnr ---
+    // What for? → data fetched in ScreeningDetails.tsx and displayed in TerminFilmDetailsCard.tsx
+    @GetMapping("/fromtermin/{tnr}")
     public ResponseEntity<List<ReiheDTOFormWithTermineAndFilme>> getAllReihenByTerminIdWithTermineAndFilms(@PathVariable Long tnr) {
         return ResponseEntity.ok(reiheService.getAllReihenByTerminIdWithTermineAndFilms(tnr));
     }

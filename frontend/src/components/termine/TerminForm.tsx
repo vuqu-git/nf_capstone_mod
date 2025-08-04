@@ -94,7 +94,7 @@ export default function TerminForm() {
             // GET single termin (details)
             const getSingleTermin = axios.get(`${baseURL}/${selectedTerminId}`);
             // GET corresponding films (as FilmDTOSelection[]) of the selected single termin
-            const getFilmsOfSingleTermin = axios.get(`/api/terminverknuepfung/getfilme/${selectedTerminId}`);
+            const getFilmsOfSingleTermin = axios.get(`/api/terminverknuepfung/getfilme-fromtermin/${selectedTerminId}`);
 
             Promise.all([getSingleTermin, getFilmsOfSingleTermin])
                 .then(([terminResponse, filmsResponse]) => {
