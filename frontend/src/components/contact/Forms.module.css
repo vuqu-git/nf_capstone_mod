@@ -248,3 +248,148 @@
 .correspondingItems p, ul {
     margin-bottom: 0.0rem;
 }
+
+
+
+/* for ReiheVerknuepfungForm */
+/* ''''''''''''''''''''''''''*/
+
+
+.correspondingItemsInReiheVerknuepfungForm {
+    border: 1px solid;
+    padding: 0.375rem 0.75rem;
+
+    border-radius: 0.375rem;
+}
+
+.correspondingItemsInReiheVerknuepfungForm p {
+    /*opacity: 0.4;*/
+}
+
+/* Boxes for listing all termine including corresponding films for one selected reiheverknuepfung */
+.terminList {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.terminRow {
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #1a1a1a;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.terminTitel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #f0f0f0;
+    line-height: 1.4;
+}
+
+.date {
+    font-weight: 500;
+    color: #f0f0f0;
+}
+
+.tnr {
+    color: #f0f0f0;
+}
+
+.titel {
+    font-style: italic;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.filmList {
+    padding-left: 12px;
+    border-left: 2px solid #333;
+    /*margin-top: 6px;*/
+}
+
+/*filmItem belonging to a specific termin or display [none] from else clause*/
+.filmItem {
+    font-size: 0.85rem;
+    /*color: #f0f0f0;*/
+    padding: 1px 0;
+}
+
+/*---------------------------------------------------*/
+/* Buttons in the top-right corner for deletion */
+.button {
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 1px;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+
+    border: 1px solid transparent;
+}
+
+.red {
+    background-color: #dc3545;
+}
+
+.red:hover {
+    background-color: #c82333;
+}
+
+.red-outline {
+    color: #dc3545;
+    border-color: #dc3545;
+    background-color: transparent;
+
+    border: 1px solid;
+}
+
+.red-outline:hover {
+    color: #fff;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.grey {
+    background-color: #6c757d;
+}
+
+.grey:hover {
+    background-color: #5c636a;
+}
+
+/* not used at the moment: */
+.yellow {
+    background-color: #d4ac0d;
+    color: black;
+}
+
+.yellow:hover {
+    background-color: #f1c40f;
+}
+
+.green {
+    background-color: #27ae60;
+}
+
+.green:hover {
+    background-color: #2ecc71;
+}

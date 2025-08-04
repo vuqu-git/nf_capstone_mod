@@ -730,6 +730,11 @@ export default function FilmForm() {
                     </Button>
                 </div>
             )}
+
+            {( (selectedFilmId && !confirmDeleteOpen) || confirmDeleteOpen ) && (
+                <div><sub className={styles.formSubtext}>When a specific Film entry is deleted, also the <u>connections</u> (Terminverknuepfungen) to its Termin entities are removed, but not the Termin entities themselves. These entities are preserved.</sub></div>
+            )}
+
             {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedFilmId ? "updating " : "saving "} film entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
             {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}

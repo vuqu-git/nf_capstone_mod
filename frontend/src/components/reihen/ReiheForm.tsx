@@ -297,7 +297,10 @@ export default function ReiheForm() {
                     </Button>
                 </div>
             )}
-            <div><sub className={styles.formSubtext}>If a specific Reihe entity is deleted, only the <u>connection</u> to its Termine entities is removed, not the Termine entities themselves. These entities, along with their associated Film entities, remain unaffected.</sub></div>
+
+            {( (selectedReiheId && !confirmDeleteOpen) || confirmDeleteOpen ) && (
+            <div><sub className={styles.formSubtext}>If a certain Reihe entry is deleted, also the <u>connections</u> (Reiheverknuepfungen) to its Termin entities are removed, but not the Termin entities themselves. These entities, along with their assigned Film entities, remain unaffected.</sub></div>
+            )}
 
             {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedReiheId ? "updating " : "saving "} Reihe entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}

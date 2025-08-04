@@ -466,6 +466,14 @@ export default function TerminForm() {
                 </div>
             )}
 
+            {( (selectedTerminId && !confirmDeleteOpen) || confirmDeleteOpen ) && (
+                <div>
+                    <sub className={styles.formSubtext}>
+                        When deleting a specific Termin entry, also the <u>connections</u> (Terminverknuepfungen) to its Film entities are removed as well as the <u>connections</u> (Reiheverknuepfungen) to its Reihe entities are erased. The associated Film and Reihe entities themselves remain untouched.
+                    </sub>
+                </div>
+            )}
+
             {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedTerminId ? "updating " : "saving "} termin entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
             {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}

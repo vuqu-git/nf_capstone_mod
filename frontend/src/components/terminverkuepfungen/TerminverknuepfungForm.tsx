@@ -376,6 +376,11 @@ export default function TerminverknuepfungForm() {
                     </Button>
                 </div>
             )}
+
+            {( (selectedTVId && !confirmDeleteOpen) || confirmDeleteOpen ) && (
+                <div><sub className={styles.formSubtext}>"Delete terminverkuepfung entry" removes the <u>connection</u> between the selected Termin and Film. The corresponding Termin and Film entities themselves will still exist.</sub></div>
+            )}
+
             {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedTVId ? "updating " : "saving "} terminverknuepfung entry... Please wait!</div>}
             {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
             {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
