@@ -110,7 +110,7 @@ export default function FilmForm() {
             //     setIsGetLoading(true);
             //     setErrorMessage("");
             //
-            //     axios.get(`/api/terminverknuepfung/gettermine-fromfilm/${selectedFilmId}`)
+            //     axios.get(`/api/terminverknuepfung/termin/fromfilm/${selectedFilmId}`)
             //         .then((response) => setTermineOfSelectedFilmId(response.data))
             //         .catch((error) => {
             //             const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -127,7 +127,7 @@ export default function FilmForm() {
             // GET single film (details)
             const getSingleFilm = axios.get(`${baseURL}/${selectedFilmId}`);
             // GET corresponding termine (as TerminDTOSelection[]) of the selected single film
-            const getTermine = axios.get(`/api/terminverknuepfung/gettgettermine-fromfilmermine/${selectedFilmId}`);
+            const getTermine = axios.get(`/api/terminverknuepfung/termin/fromfilm/${selectedFilmId}`);
 
             Promise.all([getSingleFilm, getTermine])
                 .then(([filmResponse, termineResponse]) => {

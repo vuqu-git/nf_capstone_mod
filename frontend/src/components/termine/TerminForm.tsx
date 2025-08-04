@@ -11,6 +11,7 @@ import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import styles from "../contact/Forms.module.css";
 import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
+import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
 
 const baseURL = "/api/termine";
 
@@ -46,6 +47,7 @@ export default function TerminForm() {
     const [selectedTermin, setSelectedTermin] = useState<Termin>(emptyTerminForForm); // Termin data for the form
 
     const [filmsOfSelectedTerminId, setFilmsOfSelectedTerminId] = useState<FilmDTOSelection[]>([]); // list of the corresponding films of selectedTerminId
+    const [reihenOfSelectedTerminId, setReihenOfSelectedTerminId] = useState<ReiheDTOSelection[]>([]); // list of the corresponding reihen of selectedTerminId
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
@@ -94,12 +96,15 @@ export default function TerminForm() {
             // GET single termin (details)
             const getSingleTermin = axios.get(`${baseURL}/${selectedTerminId}`);
             // GET corresponding films (as FilmDTOSelection[]) of the selected single termin
-            const getFilmsOfSingleTermin = axios.get(`/api/terminverknuepfung/getfilme-fromtermin/${selectedTerminId}`);
+            const getFilmsOfSingleTermin = axios.get(`/api/terminverknuepfung/film/fromtermin/${selectedTerminId}`);
+            // GET corresponding reihen (as ReiheDTOSelection[]) of the selected single film
+            const getReihen = axios.get(`/api/reihe/fromtermin/${selectedTerminId}`);
 
-            Promise.all([getSingleTermin, getFilmsOfSingleTermin])
-                .then(([terminResponse, filmsResponse]) => {
+            Promise.all([getSingleTermin, getFilmsOfSingleTermin, getReihen])
+                .then(([terminResponse, filmsResponse, reihenResponse]) => {
                     setSelectedTermin(terminResponse.data);
                     setFilmsOfSelectedTerminId(filmsResponse.data);
+                    setReihenOfSelectedTerminId(reihenResponse.data)
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
@@ -260,6 +265,30 @@ export default function TerminForm() {
                         {filmsOfSelectedTerminId.map(f => (
                             <li key={f.fnr}>
                                 {renderHtmlText(f.titel)} | #{f.fnr}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            {/*display corresponding Reihen*/}
+            {/******************************/}
+            {selectedTerminId && (
+                <div className={styles.correspondingItems}>
+                    <p>
+                        {
+                            reihenOfSelectedTerminId.length === 1 ?
+                                "Reihe zum ausgewählten Termin:" :
+                                reihenOfSelectedTerminId.length > 1 ?
+                                    "Reihen zum ausgewählten Termin:" :
+                                    "keine Reihe zugeordnet"
+                        }
+                    </p>
+
+                    <ul>
+                        {reihenOfSelectedTerminId.map(r => (
+                            <li key={r.rnr}>
+                                {renderHtmlText(r.titel)} | #{r.rnr}
                             </li>
                         ))}
                     </ul>

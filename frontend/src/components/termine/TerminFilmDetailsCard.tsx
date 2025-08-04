@@ -152,7 +152,7 @@ export default function TerminFilmDetailsCard({
                                 {reihe.termine && (
                                     <ul className="">
                                         {[...reihe.termine]
-                                            .filter(termin => termin.tnr?.toString() !== tnr)
+                                            .filter(termin => termin.tnr?.toString() !== tnr) // Termin in focus (in TerminFilmDetailsCard) should not be listed
                                             .map((termin, j) => (
 
                                                 <li key={termin.tnr}>
