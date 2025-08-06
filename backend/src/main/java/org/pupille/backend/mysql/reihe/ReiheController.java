@@ -40,11 +40,20 @@ public class ReiheController {
         return ResponseEntity.noContent().build();
     }
 
+    // ---------------------------------------------------------------------------------------------
+    // a method for fetching list of reihen when giving tnr (fnr)
+    // used in TerminForm.tsx
+    @GetMapping("/fromtermin/{tnr}")
+    public ResponseEntity<List<ReiheDTOSelection>> getAllReihenByTerminId(@PathVariable Long tnr) {
+        return ResponseEntity.ok(reiheService.getAllReihenByTerminId(tnr));
+    }
+
     // #####################################################################
-    // --- Get a list of Reihen (with Termine & Films) for a given Tnr ---
-    @GetMapping("/from-termin/{tnr}")
-    public ResponseEntity<List<ReiheDTOFormWithTermineAndFilme>> getAllReihenByTerminIdWithTermineAndFilms(@PathVariable Long tnr) {
-        return ResponseEntity.ok(reiheService.getAllReihenByTerminIdWithTermineAndFilms(tnr));
+    // --- Get a list of Reihen (with all its Termine & Films belonging to one Reihe) for a given Tnr ---
+    // --- What for? → data fetched in ScreeningDetails.tsx and displayed in TerminFilmDetailsCard.tsx
+    @GetMapping("/getreihen-withallitstermineandfilms-fromtermin/{tnr}")
+    public ResponseEntity<List<ReiheDTOFormWithTermineAndFilme>> getAllReihenByTerminIdWithAllItsTermineAndFilms(@PathVariable Long tnr) {
+        return ResponseEntity.ok(reiheService.getAllReihenByTerminIdWithAllItsTermineAndFilms(tnr));
     }
 
     // #####################################################################

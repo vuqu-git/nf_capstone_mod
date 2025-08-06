@@ -112,10 +112,12 @@ const EventMitProjektion: React.FC<EventMitProjektionProps> = ({ onSubmit, submi
                     <a className="custom-link" href="/kinoprojektion" target="_blank" rel="noopener noreferrer">
                         Infos & Service: Filme etc. zeigen
                     </a>
-                    .
                 </p>
                 {/* subselection */}
                 {/*~~~~~~~~~~~~~~*/}
+                <label htmlFor="subSelection" className={styles.formLabel} hidden>
+                    Art der Veranstaltung
+                </label>
                 <select
                     id="subSelection"
                     value={selectedIssuesSubSelection}

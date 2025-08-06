@@ -76,17 +76,29 @@ public class ReiheService {
         reiheRepository.delete(reihe);
     }
 
+    // ---------------------------------------------------------------------------------------------
+    // a method for fetching list of reihen when giving tnr (fnr)
+    public List<ReiheDTOSelection> getAllReihenByTerminId(Long tnr) {
+        Termin termin = terminRepository.findById(tnr)
+                .orElseThrow(() -> new NoSuchElementException("Termin not found with ID " + tnr));
+
+        Set<Reihe> reihen = termin.getReihen(); // many-to-many relationship
+        return reihen.stream()
+                .map(ReiheDTOSelection::new)
+                .toList();
+    }
+
     // #####################################################################
-    // --- Get a list of Reihen for a given Tnr ---
+    // --- Get a list of Reihen (with all its Termine & Films belonging to one Reihe) for a given Tnr ---
     @Transactional(readOnly = true)
-    public List<ReiheDTOFormWithTermineAndFilme> getAllReihenByTerminIdWithTermineAndFilms(Long tnr) {
+    public List<ReiheDTOFormWithTermineAndFilme> getAllReihenByTerminIdWithAllItsTermineAndFilms(Long tnr) {
         Termin termin = terminRepository.findWithReihenAndTermineAndFilmsByTnr(tnr)
                 .orElseThrow(() -> new NoSuchElementException("Termin not found with ID " + tnr));
 
         Set<Reihe> reihen = termin.getReihen(); // many-to-many relationship
 
         return reihen.stream()
-                .map(ReiheDTOFormWithTermineAndFilme::new)
+                .map(ReiheDTOFormWithTermineAndFilme::new) // the constructors (also nested) contain the main logic
                 .toList();
     }
 

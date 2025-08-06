@@ -8,10 +8,11 @@ import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import FilmSelection from "../filme/FilmSelection.tsx";
 import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import TerminSelection from "../termine/TerminSelection.tsx";
-// import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
+import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 import AdminNav from "../AdminNav.tsx";
 import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 import styles from "../contact/Forms.module.css";
+import FilmSelectionWithSearch from "../filme/FilmSelectionWithSearch.tsx";
 
 const baseURL = "/api/terminverknuepfung";
 
@@ -89,8 +90,7 @@ export default function TerminverknuepfungForm() {
             getSingleTV();
 
         } else {
-            // Reset the form for adding a new terminverknuepfung
-            setSelectedTV(emptyTVForForm);
+            setSelectedTV(emptyTVForForm); // Reset the form for further adding/editing/deleting
         }
     }, [selectedTVId]);
 
@@ -115,7 +115,7 @@ export default function TerminverknuepfungForm() {
 
                     getAllTVs();
                     setSelectedTVId(undefined); // Reset the selection
-                    setSelectedTV(emptyTVForForm); // Reset the form
+                    setSelectedTV(emptyTVForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Update failed";
@@ -130,7 +130,7 @@ export default function TerminverknuepfungForm() {
 
                     getAllTVs();
                     // setSelectedTVId(undefined); // Reset the selection, not required for POST because selection is unchanged
-                    setSelectedTV(emptyTVForForm); // Reset the form
+                    setSelectedTV(emptyTVForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Saving failed";
@@ -159,7 +159,7 @@ export default function TerminverknuepfungForm() {
                     // => I need to set it to remove the delete button from display after deletion!!
                     setSelectedTVId(undefined);
 
-                    setSelectedTV(emptyTVForForm); // Reset the form
+                    setSelectedTV(emptyTVForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Deletion failed";
@@ -242,20 +242,20 @@ export default function TerminverknuepfungForm() {
     // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             <AdminNav />
 
             <h3 className="mt-3">{selectedTVId ? "Edit or delete Terminverknuepfung" : "Add new Terminverknuepfung for existing Film and existing Termin"}</h3>
 
             <TerminverknuepfungSelection
-                tvenWithFilmAndTermin={allTVs}
+                allTVsWithFilmAndTermin={allTVs}
                 selectedTVId={selectedTVId}
                 onSelectTV={handleTVSelectionChange}
                 textForDefaultOption={undefined}
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading Termin details... Please wait!</div>}
+                {isGetLoading && <div className="text-warning mb-3" role="status">&#x1f504; Loading Termin details... Please wait!</div>}
             </div>
 
 
@@ -264,7 +264,7 @@ export default function TerminverknuepfungForm() {
                 <h3 className="mt-3">Terminverknuepfung details</h3>
 
                 <TerminSelection
-                    termine={allTermine}
+                    allTermine={allTermine}
                     selectedTnr={selectedTV.tnr}
                     onSelectTermin={handleTerminSelectionChange}
                     textForDefaultOption={"Select a Termin for the creation of a Terminverknuepfung"}
@@ -288,12 +288,12 @@ export default function TerminverknuepfungForm() {
                 {/*</Form.Select>*/}
 
                 {/*---------------------------------------------------------------------------*/}
-                <FilmSelection
-                    films={allFilms}
-                    selectedFilmId={selectedTV.fnr}
-                    onSelectFilm={handleFilmSelectionChange}
-                    textForDefaultOption={"Select a Film for the creation of a Terminverknuepfung"}
-                />
+                {/*<FilmSelection*/}
+                {/*    allFilms={allFilms}*/}
+                {/*    selectedFilmId={selectedTV.fnr}*/}
+                {/*    onSelectFilm={handleFilmSelectionChange}*/}
+                {/*    textForDefaultOption={"Select a Film for the creation of a Terminverknuepfung"}*/}
+                {/*/>*/}
 
                 {/*<Form.Label htmlFor="film-selection" className="mt-3">Film selection</Form.Label>*/}
                 {/*<Form.Select*/}
@@ -311,6 +311,12 @@ export default function TerminverknuepfungForm() {
                 {/*    ))}*/}
                 {/*</Form.Select>*/}
 
+                <FilmSelectionWithSearch
+                    allFilms={allFilms}
+                    selectedFilmId={selectedTV.fnr}
+                    onSelectFilm={handleFilmSelectionChange}
+                    textForDefaultOption={undefined}
+                />
 
                 <Form.Group controlId="vorfilm" className="mt-3">
                     <Form.Check
@@ -370,10 +376,15 @@ export default function TerminverknuepfungForm() {
                     </Button>
                 </div>
             )}
-            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedTVId ? "updating " : "saving "} terminverknuepfung entry... Please wait!</div>}
-            {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-        </div>
+
+            {( (selectedTVId && !confirmDeleteOpen) || confirmDeleteOpen ) && (
+                <div><sub className={styles.formSubtext}>"Delete terminverkuepfung entry" removes the <u>connection</u> between the selected Termin and Film. The corresponding Termin and Film entities themselves will still exist.</sub></div>
+            )}
+
+            {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedTVId ? "updating " : "saving "} terminverknuepfung entry... Please wait!</div>}
+            {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
+            {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
+        </main>
     );
 
 }

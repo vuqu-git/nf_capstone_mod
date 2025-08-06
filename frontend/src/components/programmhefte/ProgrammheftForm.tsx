@@ -90,8 +90,7 @@ export default function ProgrammheftForm() {
             getSingleProgrammheft();
 
         } else {
-            // Reset the form for adding a new Programmheft
-            setSelectedProgrammheft(emptyProgrammheftForForm);
+            setSelectedProgrammheft(emptyProgrammheftForForm); // Reset the form for further adding/editing/deleting
         }
     }, [selectedProgrammheftId]);
 
@@ -114,7 +113,7 @@ export default function ProgrammheftForm() {
 
                     getAllProgrammhefte();
                     setSelectedProgrammheftId(undefined); // Reset the selection
-                    setSelectedProgrammheft(emptyProgrammheftForForm); // Reset the form
+                    setSelectedProgrammheft(emptyProgrammheftForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Update failed";
@@ -135,7 +134,7 @@ export default function ProgrammheftForm() {
 
                     getAllProgrammhefte();
                     // setSelectedProgrammheftId(undefined); // Reset the selection, not required for POST because selection is unchanged
-                    setSelectedProgrammheft(emptyProgrammheftForForm); // Reset the form
+                    setSelectedProgrammheft(emptyProgrammheftForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Saving failed";
@@ -163,7 +162,7 @@ export default function ProgrammheftForm() {
                     // => I need to set it to remove the delete button from display after deletion!!
                     setSelectedProgrammheftId(undefined);
 
-                    setSelectedProgrammheft(emptyProgrammheftForForm); // Reset the form
+                    setSelectedProgrammheft(emptyProgrammheftForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Deletion failed";
@@ -189,21 +188,21 @@ export default function ProgrammheftForm() {
     };
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             <AdminNav />
 
             <h3 className="mt-3">{selectedProgrammheftId ? "Edit or delete " : "Add new "} Programmheft/Fyler</h3>
 
             <ProgrammheftSelection
-                programmhefte={allProgrammhefte}
+                allProgrammhefte={allProgrammhefte}
                 selectedPnr={selectedProgrammheftId}
                 onSelectProgrammheft={handleSelectionChange}
                 textForDefaultOption={undefined}
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isLoadingAllProgrammhefte && <div className="text-warning mb-3">&#x1f504; Loading all Programmheft entries... Please wait!</div>}
-                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading details of selected Programmheft... Please wait!</div>}
+                {isLoadingAllProgrammhefte && <div className="text-warning mb-3" role="status">&#x1f504; Loading all Programmheft entries... Please wait!</div>}
+                {isGetLoading && <div className="text-warning mb-3" role="status">&#x1f504; Loading details of selected Programmheft... Please wait!</div>}
             </div>
 
 
@@ -309,10 +308,10 @@ export default function ProgrammheftForm() {
                 </div>
             )}
 
-            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedProgrammheftId ? "updating " : "saving "} Programmheft entry... Please wait!</div>}
-            {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
+            {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedProgrammheftId ? "updating " : "saving "} Programmheft entry... Please wait!</div>}
+            {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
+            {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
 
-        </div>
+        </main>
     );
 }

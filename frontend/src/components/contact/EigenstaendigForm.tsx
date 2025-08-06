@@ -41,9 +41,7 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
     return (
         <form className={styles.formContainer} onSubmit={handleLocalSubmit}>
             <p className={styles.formDescription}>
-                Der Schlüssel zum Ausrollen der Leinwand liegt bei der Pforte des Studierendenhauses.
-                {/*Wir bitten hier um kurze Benachrichtigung zu eurer Nutzung.*/}
-                Ihr könnt gerne eine kurze Benachrichtigung zu eurer Nutzung hinterlassen.
+                Der Schlüssel zum Ausrollen der Leinwand liegt bei der Pforte des Studierendenhauses. Ihr könnt gerne eine kurze Benachrichtigung zu eurer Nutzung hinterlassen.
             </p>
             <div className={styles.formField}>
                 <label className={styles.formLabel} htmlFor="betreff">Betreff *</label>
@@ -107,10 +105,11 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
                     onChange={onInputChange}
                     required
                     className={styles.datetimeInput}
+                    aria-describedby="date-range-error"
                 />
 
                 <div style={{ minHeight: '1.5em' }}>
-                    {dateRangeErrorMessage && <p className={styles.statusError + " m-0"}>{dateRangeErrorMessage}</p>}
+                    {dateRangeErrorMessage && <p id="date-range-error" className={styles.statusError + " m-0"}>{dateRangeErrorMessage}</p>}
                 </div>
             </div>
 
@@ -135,7 +134,12 @@ const EigenstaendigForm: React.FC<EigenstaendigFormProps> = ({ onSubFormSubmit, 
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
             {submissionStatusWithMessage.status === 'sending' &&
-                <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
+                <p
+                    className={styles.statusMessage + " " + styles.statusSending}
+                    role="status"
+                >
+                    &#x2709; Sende Nachricht...
+                </p>
             }
         </form>
     );

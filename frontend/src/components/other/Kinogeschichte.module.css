@@ -1,0 +1,58 @@
+/*###################################*/
+/*these only when <Carousel> for the photos of D is used*/
+.carouselImage {
+    height: 350px; /* Fixed height */
+    width: auto;   /* Automatically adjusts the width */
+    object-fit: cover; /* Ensures the image covers the area without stretching */
+}
+
+.carouselItemWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.carouselCaption {
+    margin-bottom: -15px; /* Reduces space below the text */
+
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    color: white;
+    padding: 3px 8px;
+    display: inline-block;
+}
+
+/*###################################*/
+/*for section 'Ausweitung der Aktivitäten und fortschreitende Politisierung' to have on the text on the left and the images on the right*/
+.sectionContentWrapper {
+    display: flex;
+    gap: 20px; /* Dieser Abstand trennt die beiden Spalten */
+    flex-wrap: wrap; /* Ermöglicht das Umbrechen auf kleineren Bildschirmen */
+}
+
+.textColumn {
+    flex: 65;
+    min-width: 300px; /* Verhindert, dass die Spalte auf kleinen Bildschirmen zu schmal wird */
+}
+
+.albumColumn {
+    flex: 35;
+    min-width: 240px; /* Verhindert, dass die Spalte auf kleinen Bildschirmen zu schmal wird */
+}
+
+
+/*###################################*/
+/*for the images in the albums*/
+.photoAlbumImage {
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+}
+
+.photoAlbumLogo {
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+
+    /*these only when RowsPhotoAlbum with Logos is used*/
+    /*background-color: dimgrey;*/
+    /*background-color: #F8F3A6; !*from custom-link*!*/
+}

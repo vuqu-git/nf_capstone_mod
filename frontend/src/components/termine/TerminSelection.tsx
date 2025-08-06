@@ -4,14 +4,14 @@ import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 
 interface TerminSelectionProps {
-    termine: TerminDTOSelection[];
+    allTermine: TerminDTOSelection[];
     selectedTnr: number | undefined;
     onSelectTermin: (id: number | undefined) => void;
     textForDefaultOption: string | undefined;
 }
 
 export default function TerminSelection({
-                                            termine,
+                                            allTermine,
                                             selectedTnr,
                                             onSelectTermin,
                                             textForDefaultOption  = "Select a Termin to edit (or leave empty to add new)",
@@ -30,7 +30,7 @@ export default function TerminSelection({
                 onChange={handleSelectChange}
             >
                 <option value="">{textForDefaultOption}</option>
-                {termine.map((t: TerminDTOSelection) => (
+                {allTermine.map((t: TerminDTOSelection) => (
                     <option key={t.tnr} value={t.tnr}>
                         {`${formatDateInTerminSelectOption(t.vorstellungsbeginn)} | ${t.titel} | #${t.tnr}`}
                     </option>

@@ -81,7 +81,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
     };
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             {/* heading based on formType */}
             <h4 className="mb-4">{formType === "edit" ? "Edit News Form" : "Add News Form"}</h4>
 
@@ -178,7 +178,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 {/*    <img src="/assets/newsDesigns.png" alt="News Color Design Legend" className="mt-3" />*/}
                 {/*</div>*/}
 
-                <Accordion flush style={{ maxWidth: '550px', marginLeft: '0', }}>
+                <Accordion style={{ maxWidth: '550px', }}>
                     <Accordion.Item eventKey="0">
                         <Accordion.Header>Legend color design</Accordion.Header>
                         <Accordion.Body>
@@ -197,6 +197,6 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 </Button>
                 <div><sub className={styles.formSubtext}>*Pflichtfelder</sub></div>
             </Form>
-        </div>
+        </main>
     );
 }

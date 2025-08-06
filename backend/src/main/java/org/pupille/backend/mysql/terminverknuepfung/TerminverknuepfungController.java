@@ -69,13 +69,13 @@ public class TerminverknuepfungController {
     // two methods for fetching list of filme (termine) when giving tnr (fnr)
 
     // used in TerminForm.tsx
-    @GetMapping("getfilme/{tnr}")
+    @GetMapping("film/fromtermin/{tnr}")
     public ResponseEntity<List<FilmDTOSelection>> getFilmeByTnr(@PathVariable Long tnr) {
         return ResponseEntity.ok(terminverknuepfungService.getFilmlistByTnr(tnr));
     }
 
     // used in FilmForm.tsx
-    @GetMapping("gettermine/{fnr}")
+    @GetMapping("termin/fromfilm/{fnr}")
     public ResponseEntity<List<TerminProjectionSelection>> getTermineByFnr(@PathVariable Long fnr) {
         return ResponseEntity.ok(terminverknuepfungService.getTerminlistByFnr(fnr));
     }

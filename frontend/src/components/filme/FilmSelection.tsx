@@ -4,14 +4,14 @@ import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import {formatFilmDetailsInFilmSelectOption} from "../../utils/formatFilmDetailsInFilmSelectOption.ts";
 
 interface FilmSelectionProps {
-    films: FilmDTOSelection[];
+    allFilms: FilmDTOSelection[];
     selectedFilmId: number | undefined;
     onSelectFilm: (id: number  | undefined) => void;
     textForDefaultOption: string | undefined;
 }
 
 export default function FilmSelection({
-                                          films,
+                                          allFilms,
                                           selectedFilmId,
                                           onSelectFilm,
                                           textForDefaultOption = "Select a film to edit (or leave empty to add new)",
@@ -30,7 +30,7 @@ export default function FilmSelection({
                 onChange={handleSelectChange}
             >
                 <option value="">{textForDefaultOption}</option>
-                {films.map((film) => (
+                {allFilms.map((film) => (
                         <option key={film.fnr} value={film.fnr}>
                             {`${formatFilmDetailsInFilmSelectOption(film.titel, film.regie, film.jahr)} | #${film.fnr}`}
                         </option>

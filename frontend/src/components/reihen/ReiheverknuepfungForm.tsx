@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import {Button, Form} from "react-bootstrap";
-import styles from './ReiheverknuepfungForm.module.css';
+import styles from "../contact/Forms.module.css";
 import axios from "axios";
-import ReiheSelection from "./ReiheSelection.tsx";
 import AdminNav from "../AdminNav.tsx";
 import ReiheDTOFormWithTermineAndFilme from "../../types/ReiheDTOFormWithTermineAndFilme.ts";
 import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
 import TerminDTOWithMainfilms from "../../types/TerminDTOWithMainfilms.ts";
 import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
+import ReiheSelectionWithSearch from "./ReiheSelectionWithSearch.tsx";
 
 const baseURL = "/api/reihe";
 
+// this one is not for the form fields, but for the selection to see/edit the corresponding screenings via termine field
 const emptyReihe = {
     rnr: undefined,
     titel: '',
@@ -176,8 +177,7 @@ export default function ReiheverknuepfungForm() {
             getSingleReihe();
 
         } else {
-            // Reset the form for adding a new Reihe
-            setSelectedReihe(emptyReihe);
+            setSelectedReihe(emptyReihe); // Reset the form for further adding/editing/deleting
         }
     }, [selectedReiheId]);
 
@@ -189,27 +189,29 @@ export default function ReiheverknuepfungForm() {
     };
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             <AdminNav />
 
-            <h3 className="mt-3">Add Termine (incl. its Film(e)) to Reihe</h3>
+            <h3 className="mt-3">Add/delete Termin (incl. its Film(e)) to/from Reihe</h3>
 
-            <ReiheSelection
-                reihen={allReihen}
+             <ReiheSelectionWithSearch
+                allReihen={allReihen}
                 selectedReiheId={selectedReiheId}
                 onSelectReihe={handleSelectionChange}
                 textForDefaultOption={"Select a Reihe to edit the Reiheverknuepfungen"}
             />
 
-
             <div style={{ minHeight: '30px' }}>
-                {isLoadingAllReihen && <div className="text-warning mb-3">&#x1f504; Loading all Reihe entries... Please wait!</div>}
-                {isLoadingOneReihe && <div className="text-warning mb-3">&#x1f504; Loading Reihe's Termine and Filme... Please wait!</div>}
+                {isLoadingAllReihen && <div className="text-warning mb-3" role="status">&#x1f504; Loading all Reihe entries... Please wait!</div>}
+                {isLoadingOneReihe && <div className="text-warning mb-3" role="status">&#x1f504; Loading Reihe's Termine and Filme... Please wait!</div>}
             </div>
 
+            {/*display corresponding Termine incl. Filme + delete feature of Reihe-Termin-Connections*/}
+            {/****************************************************************************************/}
             {selectedReihe.titel && !isLoadingAllReihen && (
-                <div className={styles.terminList}>
-                    <p className="mb-0">currently corresponding screenings (Termine with each Film(e)) of the above selected Reihe:</p>
+                // <div className={styles.correspondingItems}>
+                <div className={styles.correspondingItemsInReiheVerknuepfungForm + " " + styles.terminList}>
+                    <p className="mb-0">currently assigned Termine (displayed with its Film(e)) to the above selected Reihe:</p>
 
                     {selectedReihe.termine && selectedReihe.termine.length > 0 ? (
                         selectedReihe.termine.map((t) => (
@@ -226,7 +228,7 @@ export default function ReiheverknuepfungForm() {
                                                 className={`${styles.button} ${styles.red}`}
                                                 onClick={() => setConfirmDeleteTnr(t.tnr)}
                                             >
-                                                Delete
+                                                Delete (rnr, tnr)={`(#${selectedReiheId}, #${t.tnr})`}
                                             </button>
                                         ) : (
                                             <>
@@ -259,55 +261,60 @@ export default function ReiheverknuepfungForm() {
                             </div>
                         ))
                     ) : (
-                        <div className={styles.filmList}>[none]</div>
+                        <div className={styles.terminRow}>[no screenings assigned yet]</div>
                     )}
+
+                    {selectedReihe.termine && selectedReihe.termine.length > 0 ? <div><sub className={styles.formSubtext}><span className="text-danger">"Delete (rnr, tnr)=..."</span> removes the <u>connection</u>  between the selected Reihe (above) and the chosen Termin. The both associated Reihe and Termin entities are preserved.</sub></div> : null}
                 </div>
             )}
 
             <div style={{ minHeight: '30px' }}>
-                {isLoadingForAddDelete && <div className="text-warning mb-3">&#x1f504; Processing... Please wait!</div>}
-                {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-                {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
+                {isLoadingForAddDelete && <div className="text-warning mb-3" role="status">&#x1f504; Processing... Please wait!</div>}
+                {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
+                {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
             </div>
 
-            {/*Here now reihe-terminverknuepfung*/}
-            {/*#################################*/}
+            {/*establish reihe-terminverknuepfung by adding Termin to the chosen Reihe*/}
+            {/*#######################################################################*/}
 
-            <h3 className="mt-3">Reihe: add screenings/films</h3>
+            { selectedReiheId && (
+                <>
+                    <h3 className="mt-3">Add Termin to Reihe #{selectedReiheId}</h3>
 
-            <p>Add a Termin (displayed here with Termin title <u>or</u> the corresponding films) to the selected Reihe above:</p>
+                    <p>Add a Termin (displayed here with Termin title <u>or</u> the corresponding films) to the selected Reihe above:</p>
 
-            <Form.Label htmlFor="termin-selection" className="mt-0">Termin selection</Form.Label>
-            <Form.Select
-                id="termin-selection" // Add id to connect to the label
-                value={selectedTerminId ?? ""}
-                onChange={handleTerminSelectionChange}
-                style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
-            >
-                <option value="">Select a Termin</option>
-                {allTermineWithMainfilme.map((t: TerminDTOWithMainfilms) => (
-                    <option key={t.tnr} value={t.tnr}>
+                    <Form.Label htmlFor="termin-selection" className="mt-0">Termin selection</Form.Label>
+                    <Form.Select
+                        id="termin-selection" // Add id to connect to the label
+                        value={selectedTerminId ?? ""}
+                        onChange={handleTerminSelectionChange}
+                        style={{ backgroundColor: 'dimgrey', color: 'whitesmoke' }}
+                    >
+                        <option value="">Select a Termin</option>
+                        {allTermineWithMainfilme.map((t: TerminDTOWithMainfilms) => (
+                            <option key={t.tnr} value={t.tnr}>
 
-                        {
-                            `${formatDateInTerminSelectOption(t.vorstellungsbeginn)} | tnr: #${t.tnr}
-                            | ${t.titel ?? t.mainfilms.map(film =>  film.titel).join('+') 
-                            }`
-                        }
-                    </option>
-                ))}
-            </Form.Select>
-            <div><sub className={styles.formSubtext}>Pflichtfelder: Reihen- und Terminauswahl</sub></div>
+                                {
+                                    `${formatDateInTerminSelectOption(t.vorstellungsbeginn)} | tnr: #${t.tnr}
+                                → ${t.titel ?? t.mainfilms.map(film =>  film.titel).join('+')
+                                    }`
+                                }
+                            </option>
+                        ))}
+                    </Form.Select>
+                    <div><sub className={styles.formSubtext}>Pflichtfelder: Reihen- und Terminauswahl</sub></div>
 
-            {selectedReiheId && selectedTerminId && (
-                <Button
-                    variant="success"
-                    className="mt-4"
-                    onClick={handleAddTerminToReihe}
-                >
-                    Add selected Termin #{selectedTerminId} to chosen Reihe #{selectedReiheId}
-                </Button>
+                    {selectedReiheId && selectedTerminId && (
+                        <Button
+                            variant="success"
+                            className="mt-4"
+                            onClick={handleAddTerminToReihe}
+                        >
+                            Add selected Termin #{selectedTerminId} to chosen Reihe #{selectedReiheId}
+                        </Button>
+                    )}
+                </>
             )}
-
-        </div>
+        </main>
     );
 }

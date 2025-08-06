@@ -11,6 +11,7 @@ import TerminDTOSelection from "../../types/TerminDTOSelection.ts";
 import {formatDateInTerminSelectOption} from "../../utils/formatDateInTerminSelectOption.ts";
 import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
 import styles from "../contact/Forms.module.css";
+import FilmSelectionWithSearch from "./FilmSelectionWithSearch.tsx";
 
 const baseURL = "/api/filme";
 
@@ -86,42 +87,61 @@ export default function FilmForm() {
         }
 
         if (selectedFilmId) {
+            // // GET single film (details)
+            // const getSingleFilm = () => {
+            //
+            //     setIsGetLoading(true);
+            //     setErrorMessage("");
+            //
+            //     axios.get(`${baseURL}/${selectedFilmId}`)
+            //         .then((response) => setSelectedFilm(response.data))
+            //         .catch((error) => {
+            //             const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+            //             setErrorMessage(errorMessage);
+            //         })
+            //         .finally(() => setIsGetLoading(false));
+            // };
+            // getSingleFilm();
+            //
+            // // *****************************************************************************
+            // // GET corresponding termine (as TerminDTOSelection[]) of the selected single film
+            // const getTermineOfSingleFilm = () => {
+            //
+            //     setIsGetLoading(true);
+            //     setErrorMessage("");
+            //
+            //     axios.get(`/api/terminverknuepfung/termin/fromfilm/${selectedFilmId}`)
+            //         .then((response) => setTermineOfSelectedFilmId(response.data))
+            //         .catch((error) => {
+            //             const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+            //             setErrorMessage(errorMessage);
+            //         })
+            //         .finally(() => setIsGetLoading(false));
+            // };
+            // getTermineOfSingleFilm();
+
+            // fetch two resources concurrently using Promise.all (avoid multiple rapid state updates through setIsGetLoading(true))
+            setIsGetLoading(true);
+            setErrorMessage("");
+
             // GET single film (details)
-            const getSingleFilm = () => {
-
-                setIsGetLoading(true);
-                setErrorMessage("");
-
-                axios.get(`${baseURL}/${selectedFilmId}`)
-                    .then((response) => setSelectedFilm(response.data))
-                    .catch((error) => {
-                        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-                        setErrorMessage(errorMessage);
-                    })
-                    .finally(() => setIsGetLoading(false));
-            };
-            getSingleFilm();
-
-            // *****************************************************************************
+            const getSingleFilm = axios.get(`${baseURL}/${selectedFilmId}`);
             // GET corresponding termine (as TerminDTOSelection[]) of the selected single film
-            const getTermineOfSingleFilm = () => {
+            const getTermine = axios.get(`/api/terminverknuepfung/termin/fromfilm/${selectedFilmId}`);
 
-                setIsGetLoading(true);
-                setErrorMessage("");
-
-                axios.get(`/api/terminverknuepfung/gettermine/${selectedFilmId}`)
-                    .then((response) => setTermineOfSelectedFilmId(response.data))
-                    .catch((error) => {
-                        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-                        setErrorMessage(errorMessage);
-                    })
-                    .finally(() => setIsGetLoading(false));
-            };
-            getTermineOfSingleFilm();
+            Promise.all([getSingleFilm, getTermine])
+                .then(([filmResponse, termineResponse]) => {
+                    setSelectedFilm(filmResponse.data);
+                    setTermineOfSelectedFilmId(termineResponse.data);
+                })
+                .catch((error) => {
+                    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                    setErrorMessage(errorMessage);
+                })
+                .finally(() => setIsGetLoading(false));
 
         } else {
-            // Reset the form for adding a new film
-            setSelectedFilm(emptyFilmForForm);
+            setSelectedFilm(emptyFilmForForm); // Reset the form for further adding/editing/deleting
         }
     }, [selectedFilmId]);
 
@@ -171,7 +191,7 @@ export default function FilmForm() {
 
                     getAllFilms();
                     setSelectedFilmId(undefined); // Reset the selection
-                    setSelectedFilm(emptyFilmForForm); // Reset the form
+                    setSelectedFilm(emptyFilmForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Update failed";
@@ -192,7 +212,7 @@ export default function FilmForm() {
 
                     getAllFilms();
                     // setSelectedFilmId(null); // Reset the selection, not required for POST because selection is unchanged
-                    setSelectedFilm(emptyFilmForForm); // Reset the form
+                    setSelectedFilm(emptyFilmForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Saving failed";
@@ -220,7 +240,7 @@ export default function FilmForm() {
                     // => I need to set it to remove the delete button from display after deletion!!
                     setSelectedFilmId(undefined);
 
-                    setSelectedFilm(emptyFilmForForm); // Reset the form
+                    setSelectedFilm(emptyFilmForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Deletion failed";
@@ -234,13 +254,14 @@ export default function FilmForm() {
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, type } = e.target;
 
+        // ordinary logic without handling the special conditions:
         //  setSelectedFilm((prevData: Film) => ({
         //     ...prevData,
         //     [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
         // }));
 
         setSelectedFilm((prevData: Film) => {
-            // Erstellen Sie ein temporäres Objekt für die Änderungen
+            // temporary object for changes
             const updatedData = {
                 ...prevData,
                 [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : (e.target as HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement).value,
@@ -310,41 +331,67 @@ export default function FilmForm() {
     // ########################################
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             <AdminNav />
 
             <h3 className="mt-3">{selectedFilmId ? "Edit or delete " : "Add new "} Film</h3>
 
-            <FilmSelection
-                films={allFilms}
+            <FilmSelectionWithSearch
+                allFilms={allFilms}
                 selectedFilmId={selectedFilmId}
                 onSelectFilm={handleSelectionChange}
                 textForDefaultOption={undefined}
             />
 
+
+            {/*<FilmSelection*/}
+            {/*    allFilms={allFilms}*/}
+            {/*    selectedFilmId={selectedFilmId}*/}
+            {/*    onSelectFilm={handleSelectionChange}*/}
+            {/*    textForDefaultOption={undefined}*/}
+            {/*/>*/}
+
+
             <div style={{ minHeight: '30px' }}>
-                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading film details... Please wait!</div>}
+                {isGetLoading && <div className="text-warning mb-3" role="status">&#x1f504; Loading film details... Please wait!</div>}
             </div>
 
+            {/*display corresponding Termine*/}
+            {/*******************************/}
             {selectedFilmId && (
-                <Form.Group controlId="termineDisplay"
-                            className="mt-3"
-                            style={{
-                                opacity: 0.4,
-                            }}
-                >
-                    <Form.Label>{termineOfSelectedFilmId.length > 1 ? "Termine" : "Termin"} zum ausgewählten Film:</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={termineOfSelectedFilmId.length}
-                        value={
-                            termineOfSelectedFilmId.map(t => formatDateInTerminSelectOption(t.vorstellungsbeginn) + " | #" + t.tnr).join("\n")
-                        }
-                        readOnly
+                <div className={styles.correspondingItems}>
+                    <p>
+                        {/*{*/}
+                        {/*    termineOfSelectedFilmId.length === 1 ?*/}
+                        {/*        "Termin zum ausgewählten Film:" :*/}
+                        {/*        termineOfSelectedFilmId.length > 1 ?*/}
+                        {/*            "Termine zum ausgewählten Film:" :*/}
+                        {/*            "kein Termin zugeordnet"*/}
+                        {/*}*/}
 
-                    />
-                </Form.Group>
-            )}
+                        {/*no nested ternary operations here below*/}
+                        {
+                            (() => {
+                                if (termineOfSelectedFilmId.length === 1) {
+                                    return "Termin zum ausgewählten Film:";
+                                } else if (termineOfSelectedFilmId.length > 1) {
+                                    return "Termine zum ausgewählten Film:";
+                                } else {
+                                    return "keine Termine zugeordnet";
+                                }
+                            })()
+                        }
+                    </p>
+                    <ul>
+                        {termineOfSelectedFilmId.map((t) => (
+                            <li key={t.tnr}>
+                                {formatDateInTerminSelectOption(t.vorstellungsbeginn)} | #{t.tnr}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )
+            }
 
             <Form onSubmit={handleSubmit}>
 
@@ -398,7 +445,11 @@ export default function FilmForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
-                        Bilddatei muss  unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
+                        Bilddatei muss unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
+                        <br/>
+                        Bilder für Überraschungsfilme: surprise_film1.jpg, ... , surprise_film3.jpg
+                        <br/>
+                        Wenn keine Eingabe erfolgt, erscheint default_film.jpg in der Gallery.
                     </Form.Text>
                 </Form.Group>
 
@@ -422,7 +473,7 @@ export default function FilmForm() {
                     <Form.Label>Text</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={13}
+                        rows={11}
                         name="text"
                         value={selectedFilm.text || ""}
                         onChange={handleFormChange}
@@ -479,7 +530,7 @@ export default function FilmForm() {
                     <Form.Label>Content Note</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={3}
+                        rows={2}
                         name="contentNote"
                         value={selectedFilm.contentNote || ""}
                         onChange={handleFormChange}
@@ -493,7 +544,7 @@ export default function FilmForm() {
                     <Form.Label>Trailer</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={5}
+                        rows={4}
                         name="trailer"
                         value={selectedFilm.trailer || ""}
                         onChange={handleFormChange}
@@ -612,7 +663,7 @@ export default function FilmForm() {
                     <Form.Label>Stab & Besetzung</Form.Label>
                     <Form.Control
                         as="textarea"
-                        rows={10}
+                        rows={9}
                         name="stab"
                         value={selectedFilm.stab || ""}
                         onChange={handleFormChange}
@@ -680,9 +731,14 @@ export default function FilmForm() {
                     </Button>
                 </div>
             )}
-            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedFilmId ? "updating " : "saving "} film entry... Please wait!</div>}
-            {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-        </div>
+
+            {( (selectedFilmId && !confirmDeleteOpen) || confirmDeleteOpen ) && (
+                <div><sub className={styles.formSubtext}>When a specific Film entry is deleted, also the <u>connections</u> (Terminverknuepfungen) to its Termin entities are removed, but not the Termin entities themselves. These entities are preserved.</sub></div>
+            )}
+
+            {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedFilmId ? "updating " : "saving "} film entry... Please wait!</div>}
+            {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
+            {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
+        </main>
     );
-};
+}

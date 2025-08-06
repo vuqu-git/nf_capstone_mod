@@ -6,6 +6,7 @@ import {structureStabString} from "../../utils/structureStabString.ts";
 import './TerminFilmDetailsCardFilmListing.css';
 import {Accordion} from "react-bootstrap";
 import {getFilmTitleForFilmDetailsCardFilmListing} from "../../utils/getFilmTitleForFilmDetailsCardFilmListing.tsx";
+import {renderHtmlContent} from "../../utils/renderHtmlContent.tsx";
 
 interface Props {
     index: number;
@@ -49,22 +50,18 @@ export default function TerminFilmDetailsListing({
                 {/****** text ******/}
                 {/*******----*******/}
                 { f.text && (
-                    <Card.Text
-                        className="film-text style-video-in-card iframe"
-                    >
-                        {renderHtmlText(f.text)}
-                    </Card.Text>
+                    <div className="film-text style-video-in-card iframe">
+                        {renderHtmlContent(f.text)}
+                    </div>
                 )}
 
                 {/****** besonderheit ******/}
                 {/*******------------*******/}
                 {
                     f.besonderheit &&
-                    <Card.Text
-                        className="film-besonderheit"
-                    >
-                        {renderHtmlText(f.besonderheit)}
-                    </Card.Text>
+                    <div className="film-besonderheit">
+                        {renderHtmlContent(f.besonderheit)}
+                    </div>
                 }
 
                 {/****** content note ******/}
@@ -76,7 +73,7 @@ export default function TerminFilmDetailsListing({
                                 <span className="w-100 text-center">Hinweis auf sensible Inhalte</span>
                             </Accordion.Header>
                             <Accordion.Body>
-                                {f.contentNote}
+                                {renderHtmlContent(f.contentNote)}
                             </Accordion.Body>
                         </Accordion.Item>
                     </Accordion>
@@ -86,11 +83,9 @@ export default function TerminFilmDetailsListing({
                 {/*******-------*******/}
                 {
                     f.trailer &&
-                    <Card.Text
-                        className="film-text style-video-in-card iframe"
-                    >
-                        {renderHtmlText(f.trailer)}
-                    </Card.Text>
+                    <div className="film-text style-video-in-card iframe">
+                        {renderHtmlContent(f.trailer)}
+                    </div>
                 }
 
                 {/****** film informationen ******/}

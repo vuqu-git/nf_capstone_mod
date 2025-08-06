@@ -3,8 +3,9 @@ import React, {useEffect, useState} from "react";
 // import axios from "axios";
 import TerminDTOWithFilmDTOSlideshow from "../../types/TerminDTOWithFilmDTOSlideshow.ts";
 import styles from "./Slideshow.module.css";
-import { renderHtmlText } from "../../utils/renderHtmlText.tsx";
+import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
 import {formatDateTime} from "../../utils/formatDateTime.ts";
+import {renderHtmlContent} from "../../utils/renderHtmlContent.tsx";
 
 
 
@@ -160,19 +161,19 @@ const Slideshow: React.FC<SlideshowProps> = ({
 
             {termin.mainfilms[0].trailer && (
                 <div className={styles.filmTrailer}>
-                    {renderHtmlText(termin.mainfilms[0].trailer)}
+                    {renderHtmlContent(termin.mainfilms[0].trailer)}
                 </div>
             )}
 
             {termin.mainfilms[0].kurztext && (
                 <div className={styles.filmShortText}>
-                    {renderHtmlText(termin.mainfilms[0].kurztext)}
+                    {renderHtmlContent(termin.mainfilms[0].kurztext)}
                 </div>
             )}
 
             {termin.mainfilms[0].besonderheit && (
                 <div className={styles.filmSpecial}>
-                    {renderHtmlText(termin.mainfilms[0].besonderheit)}
+                    {renderHtmlContent(termin.mainfilms[0].besonderheit)}
                 </div>
             )}
         </div>

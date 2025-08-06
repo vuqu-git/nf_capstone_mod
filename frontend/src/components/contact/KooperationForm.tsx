@@ -131,8 +131,9 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     required
                     className={styles.textareaField}
                     style={{ height: '175px' }}
+                    aria-describedby="nachricht-counter"
                 />
-                <div className={styles.characterCounter}>
+                <div id="nachricht-counter" className={styles.characterCounter}>
                     Zeichen: {formData?.nachricht?.length || 0}/{maxMessageLengthObj.nachricht}
                 </div>
             </div>
@@ -216,8 +217,9 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
                     required
                     className={styles.textareaField}
                     style={{ height: '100px' }}
+                    aria-describedby="zusammenarbeit-counter"
                 />
-                <div className={styles.characterCounter}>
+                <div id="zusammenarbeit-counter" className={styles.characterCounter}>
                     Zeichen: {formData?.zusammenarbeit?.length || 0}/{maxMessageLengthObj.zusammenarbeit}
                 </div>
             </div>
@@ -239,7 +241,12 @@ const KooperationForm: React.FC<KooperationFormProps> = ({ onSubFormSubmit, subm
             <p><sub className={styles.formSubtext}>*Pflichtfelder</sub></p>
 
             {submissionStatusWithMessage.status === 'sending' &&
-                <p className={styles.statusMessage + " " + styles.statusSending}>&#x2709; Sende Nachricht...</p>
+                <p
+                    className={styles.statusMessage + " " + styles.statusSending}
+                    role="status"
+                >
+                    &#x2709; Sende Nachricht...
+                </p>
             }
         </form>
     );

@@ -36,7 +36,7 @@ export default function ScreeningDetails() {
         setError(null);
 
         const fetchScreeningDetails = axios.get(`/api/screenings/${tnr}`);
-        const fetchReihenDetails = axios.get(`/api/reihe/from-termin/${tnr}`);
+        const fetchReihenDetails = axios.get(`/api/reihe/getreihen-withallitstermineandfilms-fromtermin/${tnr}`);
 
         Promise.all([fetchScreeningDetails, fetchReihenDetails])
             .then(([screeningRes, reihenRes]) => {

@@ -10,6 +10,8 @@ import AdminNav from "../AdminNav.tsx";
 import {FilmDTOSelection} from "../../types/FilmDTOSelection.ts";
 import styles from "../contact/Forms.module.css";
 import {trimAllStringsInObjectShallow} from "../../utils/trimAllStringsInObjectShallow.ts";
+import {renderHtmlText} from "../../utils/renderHtmlText.tsx";
+import ReiheDTOSelection from "../../types/ReiheDTOSelection.ts";
 
 const baseURL = "/api/termine";
 
@@ -24,7 +26,7 @@ const getCurrentDate = () => {
 };
 
 const emptyTerminForForm = {
-    tnr: 0,
+    tnr: undefined,
     vorstellungsbeginn: `${getCurrentDate()}T20:15`,
     titel: '',
     text: '',
@@ -35,7 +37,7 @@ const emptyTerminForForm = {
     linkReservierung: '',
     sonderfarbeTitel: undefined,
     sonderfarbe: '',
-    veroeffentlichen: 0,
+    veroeffentlichen: undefined,
     patenschaft: '',
 }
 
@@ -45,6 +47,7 @@ export default function TerminForm() {
     const [selectedTermin, setSelectedTermin] = useState<Termin>(emptyTerminForForm); // Termin data for the form
 
     const [filmsOfSelectedTerminId, setFilmsOfSelectedTerminId] = useState<FilmDTOSelection[]>([]); // list of the corresponding films of selectedTerminId
+    const [reihenOfSelectedTerminId, setReihenOfSelectedTerminId] = useState<ReiheDTOSelection[]>([]); // list of the corresponding reihen of selectedTerminId
 
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>(""); // for POST, PUT, DELETE requests
@@ -86,41 +89,31 @@ export default function TerminForm() {
         }
 
         if (selectedTerminId) {
+
+            setIsGetLoading(true);
+            setErrorMessage("");
+
             // GET single termin (details)
-            const getSingleTermin = () => {
-
-                setIsGetLoading(true);
-                setErrorMessage("");
-
-                axios.get(`${baseURL}/${selectedTerminId}`)
-                    .then((response) => setSelectedTermin(response.data))
-                    .catch((error) => {
-                        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-                        setErrorMessage(errorMessage);
-                    })
-                    .finally(() => setIsGetLoading(false));
-            };
-            getSingleTermin();
-
-            // *****************************************************************************
+            const getSingleTermin = axios.get(`${baseURL}/${selectedTerminId}`);
             // GET corresponding films (as FilmDTOSelection[]) of the selected single termin
-            const getFilmsOfSingleTermin = () => {
+            const getFilmsOfSingleTermin = axios.get(`/api/terminverknuepfung/film/fromtermin/${selectedTerminId}`);
+            // GET corresponding reihen (as ReiheDTOSelection[]) of the selected single film
+            const getReihen = axios.get(`/api/reihe/fromtermin/${selectedTerminId}`);
 
-                setIsGetLoading(true);
-                setErrorMessage("");
-
-                axios.get(`/api/terminverknuepfung/getfilme/${selectedTerminId}`)
-                    .then((response) => setFilmsOfSelectedTerminId(response.data))
-                    .catch((error) => {
-                        const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-                        setErrorMessage(errorMessage);
-                    })
-                    .finally(() => setIsGetLoading(false));
-            };
-            getFilmsOfSingleTermin();
+            Promise.all([getSingleTermin, getFilmsOfSingleTermin, getReihen])
+                .then(([terminResponse, filmsResponse, reihenResponse]) => {
+                    setSelectedTermin(terminResponse.data);
+                    setFilmsOfSelectedTerminId(filmsResponse.data);
+                    setReihenOfSelectedTerminId(reihenResponse.data)
+                })
+                .catch((error) => {
+                    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+                    setErrorMessage(errorMessage);
+                })
+                .finally(() => setIsGetLoading(false));
 
         } else {
-            // Reset the form for adding a new termin, including the default time for vorstellungsbeginn
+            // Reset the form for further adding/editing/deleting, including the default time for vorstellungsbeginn
             setSelectedTermin(emptyTerminForForm);
         }
     }, [selectedTerminId]);
@@ -147,7 +140,7 @@ export default function TerminForm() {
 
                         getAllSortedTermine();
                         setSelectedTerminId(undefined); // Reset the selection
-                        setSelectedTermin(emptyTerminForForm); // Reset the form
+                        setSelectedTermin(emptyTerminForForm); // Reset the form for further adding/editing/deleting
                     })
                     .catch((error) => {
                         const errorMessage = error instanceof Error ? error.message : "Update failed";
@@ -168,7 +161,7 @@ export default function TerminForm() {
 
                         getAllSortedTermine();
                         // setSelectedTerminId(undefined); // Reset the selection, not required for POST because selection is unchanged
-                        setSelectedTermin(emptyTerminForForm); // Reset the form
+                        setSelectedTermin(emptyTerminForForm); // Reset the form for further adding/editing/deleting
                     })
                     .catch((error) => {
                         const errorMessage = error instanceof Error ? error.message : "Saving failed";
@@ -205,7 +198,7 @@ export default function TerminForm() {
                     // => I need to set it to remove the delete button from display after deletion!!
                     setSelectedTerminId(undefined);
 
-                    setSelectedTermin(emptyTerminForForm); // Reset the form
+                    setSelectedTermin(emptyTerminForForm); // Reset the form for further adding/editing/deleting
                 })
                 .catch((error) => {
                     const errorMessage = error instanceof Error ? error.message : "Deletion failed";
@@ -238,40 +231,68 @@ export default function TerminForm() {
     };
 
     return (
-        <div data-bs-theme="dark">
+        <main data-bs-theme="dark">
             <AdminNav />
 
             <h3 className="mt-3">{selectedTerminId ? "Edit or delete " : "Add new "} Termin</h3>
 
             <TerminSelection
-                termine={allTermine}
+                allTermine={allTermine}
                 selectedTnr={selectedTerminId}
                 onSelectTermin={handleSelectionChange}
                 textForDefaultOption={undefined}
             />
 
             <div style={{ minHeight: '30px' }}>
-                {isGetLoading && <div className="text-warning mb-3">&#x1f504; Loading Termin details... Please wait!</div>}
+                {isGetLoading && <div className="text-warning mb-3" role="status">&#x1f504; Loading Termin details... Please wait!</div>}
             </div>
 
+            {/*display corresponding Filme*/}
+            {/*****************************/}
             {selectedTerminId && (
-                <Form.Group controlId="filmsDisplay"
-                            className="mt-3"
-                            style={{
-                                opacity: 0.4,
-                            }}
-                >
-                    <Form.Label>{filmsOfSelectedTerminId.length > 1 ? "Filme" : "Film"} zum ausgewählten Termin:</Form.Label>
-                    <Form.Control
-                        as="textarea"
-                        rows={filmsOfSelectedTerminId.length}
-                        value={
-                            filmsOfSelectedTerminId.map(f => f.titel + " | #" + f.fnr).join("\n")
+                <div className={styles.correspondingItems}>
+                    <p>
+                        {
+                            filmsOfSelectedTerminId.length === 1 ?
+                                "Film zum ausgewählten Termin:" :
+                                filmsOfSelectedTerminId.length > 1 ?
+                                    "Filme zum ausgewählten Termin:" :
+                                    "keine Filme zugeordnet"
                         }
-                        readOnly
+                    </p>
 
-                    />
-                </Form.Group>
+                    <ul>
+                        {filmsOfSelectedTerminId.map(f => (
+                            <li key={f.fnr}>
+                                {renderHtmlText(f.titel)} | #{f.fnr}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            {/*display corresponding Reihen*/}
+            {/******************************/}
+            {selectedTerminId && (
+                <div className={styles.correspondingItems}>
+                    <p>
+                        {
+                            reihenOfSelectedTerminId.length === 1 ?
+                                "Reihe zum ausgewählten Termin:" :
+                                reihenOfSelectedTerminId.length > 1 ?
+                                    "Reihen zum ausgewählten Termin:" :
+                                    "keine Reihe zugeordnet"
+                        }
+                    </p>
+
+                    <ul>
+                        {reihenOfSelectedTerminId.map(r => (
+                            <li key={r.rnr}>
+                                {renderHtmlText(r.titel)} | #{r.rnr}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             )}
 
             <Form onSubmit={handleSubmit}>
@@ -296,7 +317,7 @@ export default function TerminForm() {
                         name="patenschaft"
                         value={selectedTermin.patenschaft || ""}
                         onChange={handleFormChange}
-                        required
+                        // required
                     />
                     <Form.Text className="text-muted">
                         Höchstens 1 Email-Adresse eintragen!
@@ -373,9 +394,11 @@ export default function TerminForm() {
                         onChange={handleFormChange}
                     />
                     <Form.Text className="text-muted">
+                        <span className="text-danger">Wichtig:</span> Dieses Feld muss befüllt, wenn oben ein Titel angegeben wurde, sonst leer lassen.
+                        <br/>
                         Bilddatei muss unter https://pupille.org/bilder/filmbilder/ abgelegt sein.
                         <br/>
-                        <span className="text-danger">Wichtig:</span> Dieses Feld nur befüllen, wenn oben ein Titel angegeben wurde.
+                        Bilder für Überraschungsfilme: surprise_film1.jpg, ... , surprise_film3.jpg
                     </Form.Text>
                 </Form.Group>
 
@@ -472,9 +495,17 @@ export default function TerminForm() {
                 </div>
             )}
 
-            {isLoading && <div className="text-warning mb-3">&#x1f504; Perform {selectedTerminId ? "updating " : "saving "} termin entry... Please wait!</div>}
-            {errorMessage && <div className="text-danger mb-3">{errorMessage}</div>}
-            {successMessage && <div className="text-success mb-3">&#x2705; {successMessage}</div>}
-        </div>
+            {( (selectedTerminId && !confirmDeleteOpen) || confirmDeleteOpen ) && (
+                <div>
+                    <sub className={styles.formSubtext}>
+                        When deleting a specific Termin entry, also the <u>connections</u> (Terminverknuepfungen) to its Film entities are removed as well as the <u>connections</u> (Reiheverknuepfungen) to its Reihe entities are erased. The associated Film and Reihe entities themselves remain untouched.
+                    </sub>
+                </div>
+            )}
+
+            {isLoading && <div className="text-warning mb-3" role="status">&#x1f504; Perform {selectedTerminId ? "updating " : "saving "} termin entry... Please wait!</div>}
+            {errorMessage && <div className="text-danger mb-3" role="alert">{errorMessage}</div>}
+            {successMessage && <div className="text-success mb-3" role="status">&#x2705; {successMessage}</div>}
+        </main>
     );
 }

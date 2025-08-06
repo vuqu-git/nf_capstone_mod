@@ -7,9 +7,9 @@ export default function Impressum() {
 
     return (
         <section className="normal-content-container">
-            <h2>Impressum</h2>
+            <h2 className="header2NormalContainer">Impressum</h2>
 
-            <h3>Adresse</h3>
+            <h3 className="header3NormalContainer">Adresse</h3>
             <p>
                 Pupille e.V.<br/>
                 Studierendenhaus an der Goethe-Universität<br/>
@@ -17,7 +17,7 @@ export default function Impressum() {
                 60325 Frankfurt am Main
             </p>
 
-            <h3>Kontakt</h3>
+            <h3 className="header3NormalContainer">Kontakt</h3>
             <p>
                 fernmündlich unter der Telefonnummer 069 7982 8976
             </p>
@@ -25,7 +25,7 @@ export default function Impressum() {
                 schriftlich über das <Link to={`/kontakt`}>Kontaktformular</Link>
             </p>
 
-            <h3>Verein</h3>
+            <h3 className="header3NormalContainer">Verein</h3>
             <p>
                 Verantwortlich im Sinne des § 6 Teledienstegesetzes und des § 10 Mediendienste-Staatsvertrags
             </p>
@@ -40,13 +40,13 @@ export default function Impressum() {
                 Steuernummer: 047 250 93187
             </p>
 
-            <h3>Jugendschutzbeauftragter</h3>
+            <h3 className="header3NormalContainer">Jugendschutzbeauftragter</h3>
             <p>
                 Fabian Schauren<br/>
                 jugendschutz(at)kommunale-kinos.de
             </p>
 
-            <h3>Urheberrechtshinweis</h3>
+            <h3 className="header3NormalContainer">Urheberrechtshinweis</h3>
             <p>
                 Alle Bilder auf diesem Webauftritt wurden von den jeweiligen Filmverleihern zur Verfügung gestellt.
                 Alle Texte wurden, falls nicht anders gekennzeichnet, von der Pupille e.V. verfaßt. Alle Texte,
@@ -58,7 +58,7 @@ export default function Impressum() {
             </p>
 
             <section id="datenschutzerklaerung">
-                <h3>Datenschutzerklärung</h3>
+                <h3 className="header3NormalContainer">Datenschutzerklärung</h3>
 
                 <p>Diese Datenschutzerklärung klärt Sie über die Art, den Umfang und Zweck der Verarbeitung von
                     personenbezogenen Daten (nachfolgend kurz "Daten") innerhalb unseres Onlineangebotes und der mit
@@ -67,7 +67,7 @@ export default function Impressum() {
                     die verwendeten Begrifflichkeiten, wie z.B. "Verarbeitung" oder "Verantwortlicher" verweisen wir
                     auf die Definitionen im Art. 4 der Datenschutzgrundverordnung (DSGVO).</p>
 
-                <h4>Verantwortlicher</h4>
+                <h4 className="header4NormalContainer">Verantwortlicher</h4>
 
                 <p>Pupille e.V.<br/>
                     Mertonstraße 26-28<br/>
@@ -78,7 +78,7 @@ export default function Impressum() {
                     <br/>
                     Vorstände: {aktuelleVorstaende}</p>
 
-                <h4>Arten der verarbeiteten Daten:</h4>
+                <h4 className="header4NormalContainer">Arten der verarbeiteten Daten:</h4>
                 <ul>
                     <li>Bestandsdaten (z.B., Namen, Adressen).</li>
                     <li>Kontaktdaten (z.B., E-Mail, Telefonnummern).</li>
@@ -91,7 +91,7 @@ export default function Impressum() {
                     Besucher und Nutzer des Onlineangebotes (Nachfolgend bezeichnen wir die betroffenen Personen
                     zusammenfassend auch als "Nutzer").</p>
 
-                <h4>Zweck der Verarbeitung:</h4>
+                <h4 className="header4NormalContainer">Zweck der Verarbeitung:</h4>
                 <ul>
                     <li>Zurverfügungstellung des Onlineangebotes, seiner Funktionen und Inhalte.</li>
                     <li>Beantwortung von Kontaktanfragen und Kommunikation mit Nutzern.</li>
@@ -99,7 +99,7 @@ export default function Impressum() {
                     <li>Reichweitenmessung/Marketing</li>
                 </ul>
 
-                <h4>Verwendete Begrifflichkeiten</h4>
+                <h4 className="header4NormalContainer">Verwendete Begrifflichkeiten</h4>
                 <p>"Personenbezogene Daten" sind alle Informationen, die sich auf eine identifizierte oder
                     identifizierbare natürliche Person (im Folgenden "betroffene Person") beziehen; als
                     identifizierbar wird eine natürliche Person angesehen, die direkt oder indirekt, insbesondere
@@ -134,7 +134,7 @@ export default function Impressum() {
                 <p>"Auftragsverarbeiter" eine natürliche oder juristische Person, Behörde, Einrichtung oder andere
                     Stelle, die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet.</p>
 
-                <h4>Maßgebliche Rechtsgrundlagen</h4>
+                <h4 className="header4NormalContainer">Maßgebliche Rechtsgrundlagen</h4>
 
                 <p>Nach Maßgabe des Art. 13 DSGVO teilen wir Ihnen die Rechtsgrundlagen unserer Datenverarbeitungen
                     mit. Sofern die Rechtsgrundlage in der Datenschutzerklärung nicht genannt wird, gilt Folgendes:
@@ -148,7 +148,7 @@ export default function Impressum() {
                     Verarbeitung personenbezogener Daten erforderlich machen, dient Art. 6 Abs. 1 lit. d DSGVO als
                     Rechtsgrundlage.</p>
 
-                <h4>Sicherheitsmaßnahmen</h4>
+                <h4 className="header4NormalContainer">Sicherheitsmaßnahmen</h4>
 
                 <p>Wir treffen nach Maßgabe des Art. 32 DSGVO unter Berücksichtigung des Stands der Technik, der
                     Implementierungskosten und der Art, des Umfangs, der Umstände und der Zwecke der Verarbeitung
@@ -166,7 +166,7 @@ export default function Impressum() {
                     Technikgestaltung und durch datenschutzfreundliche Voreinstellungen (Art. 25 DSGVO).<br/>
                 </p>
 
-                <h4>Zusammenarbeit mit Auftragsverarbeitern und Dritten</h4>
+                <h4 className="header4NormalContainer">Zusammenarbeit mit Auftragsverarbeitern und Dritten</h4>
 
                 <p>Sofern wir im Rahmen unserer Verarbeitung Daten gegenüber anderen Personen und Unternehmen
                     (Auftragsverarbeitern oder Dritten) offenbaren, sie an diese Übermitteln oder ihnen sonst
@@ -180,7 +180,7 @@ export default function Impressum() {
                     "Auftragsverarbeitungsvertrages" beauftragen, geschieht dies auf Grundlage des Art. 28 DSGVO.
                 </p>
 
-                <h4>Übermittlungen in Drittländer</h4>
+                <h4 className="header4NormalContainer">Übermittlungen in Drittländer</h4>
 
                 <p>Sofern wir Daten in einem Drittland (d.h. außerhalb der Europäischen Union (EU) oder des
                     Europäischen Wirtschaftsraums (EWR)) verarbeiten oder dies im Rahmen der Inanspruchnahme von
@@ -195,7 +195,7 @@ export default function Impressum() {
                     anerkannter spezieller vertraglicher Verpflichtungen (so genannte
                     "Standardvertragsklauseln").</p>
 
-                <h4>Rechte der betroffenen Personen</h4>
+                <h4 className="header4NormalContainer">Rechte der betroffenen Personen</h4>
 
                 <p>Sie haben das Recht, eine Bestätigung darüber zu verlangen, ob betreffende Daten verarbeitet
                     werden und auf Auskunft über diese Daten sowie auf weitere Informationen und Kopie der Daten
@@ -216,18 +216,18 @@ export default function Impressum() {
                     Aufsichtsbehörde einzureichen.<br/>
                 </p>
 
-                <h4>Widerrufsrecht</h4>
+                <h4 className="header4NormalContainer">Widerrufsrecht</h4>
 
                 <p>Sie haben das Recht, erteilte Einwilligungen gem. Art. 7 Abs. 3 DSGVO mit Wirkung für die Zukunft
                     zu widerrufen</p>
 
-                <h4>Widerspruchsrecht</h4>
+                <h4 className="header4NormalContainer">Widerspruchsrecht</h4>
 
                 <p>Sie können der künftigen Verarbeitung der Sie betreffenden Daten nach Maßgabe des Art. 21 DSGVO
                     jederzeit widersprechen. Der Widerspruch kann insbesondere gegen die Verarbeitung für Zwecke der
                     Direktwerbung erfolgen.</p>
 
-                <h4>Cookies und Widerspruchsrecht bei Direktwerbung</h4>
+                <h4 className="header4NormalContainer">Cookies und Widerspruchsrecht bei Direktwerbung</h4>
 
                 <p>Als "Cookies" werden kleine Dateien bezeichnet, die auf Rechnern der Nutzer gespeichert werden.
                     Innerhalb der Cookies können unterschiedliche Angaben gespeichert werden. Ein Cookie dient
@@ -259,7 +259,7 @@ export default function Impressum() {
                     mittels deren Abschaltung in den Einstellungen des Browsers erreicht werden. Bitte beachten Sie,
                     dass dann gegebenenfalls nicht alle Funktionen dieses Onlineangebotes genutzt werden können.</p>
 
-                <h4>Löschung von Daten</h4>
+                <h4 className="header4NormalContainer">Löschung von Daten</h4>
 
                 <p>Die von uns verarbeiteten Daten werden nach Maßgabe der Art. 17 und 18 DSGVO gelöscht oder in
                     ihrer Verarbeitung eingeschränkt. Sofern nicht im Rahmen dieser Datenschutzerklärung
@@ -284,7 +284,7 @@ export default function Impressum() {
                     genommen wird.<br/>
                 </p>
 
-                <h4>Geschäftsbezogene Verarbeitung</h4>
+                <h4 className="header4NormalContainer">Geschäftsbezogene Verarbeitung</h4>
 
                 <p>Zusätzlich verarbeiten wir<br/>
                 </p>
@@ -295,7 +295,7 @@ export default function Impressum() {
                 von unseren Kunden, Interessenten und Geschäftspartner zwecks Erbringung vertraglicher Leistungen,
                 Service und Kundenpflege, Marketing, Werbung und Marktforschung.<p></p>
 
-                <h4>Erbringung unserer satzungs- und geschäftsgemäßen Leistungen</h4>
+                <h4 className="header4NormalContainer">Erbringung unserer satzungs- und geschäftsgemäßen Leistungen</h4>
 
                 <p>Wir verarbeiten die Daten unserer Mitglieder, Unterstützer, Interessenten, Kunden oder sonstiger
                     Personen entsprechend Art. 6 Abs. 1 lit. b. DSGVO, sofern wir ihnen gegenüber vertragliche
@@ -320,7 +320,7 @@ export default function Impressum() {
                     Haftungspflichten relevant sein können. Die Erforderlichkeit der Aufbewahrung der Daten wird
                     alle drei Jahre überprüft; im Übrigen gelten die gesetzlichen Aufbewahrungspflichten.</p>
 
-                <h4>Hosting</h4>
+                <h4 className="header4NormalContainer">Hosting</h4>
 
                 <p>Die von uns in Anspruch genommenen Hosting-Leistungen dienen der Zurverfügungstellung der
                     folgenden Leistungen: Infrastruktur- und Plattformdienstleistungen, Rechenkapazität,
@@ -333,7 +333,7 @@ export default function Impressum() {
                     effizienten und sicheren Zurverfügungstellung dieses Onlineangebotes gem. Art. 6 Abs. 1 lit. f
                     DSGVO i.V.m. Art. 28 DSGVO (Abschluss Auftragsverarbeitungsvertrag).</p>
 
-                <h4>Erhebung von Zugriffsdaten und Logfiles</h4>
+                <h4 className="header4NormalContainer">Erhebung von Zugriffsdaten und Logfiles</h4>
 
                 <p>Wir, bzw. unser Hostinganbieter, erhebt auf Grundlage unserer berechtigten Interessen im Sinne
                     des Art. 6 Abs. 1 lit. f. DSGVO Daten über jeden Zugriff auf den Server, auf dem sich dieser
@@ -347,7 +347,7 @@ export default function Impressum() {
                     deren weitere Aufbewahrung zu Beweiszwecken erforderlich ist, sind bis zur endgültigen Klärung
                     des jeweiligen Vorfalls von der Löschung ausgenommen.</p>
 
-                <h4>Onlinepräsenzen in sozialen Medien</h4>
+                <h4 className="header4NormalContainer">Onlinepräsenzen in sozialen Medien</h4>
 
                 <p>Wir unterhalten Onlinepräsenzen innerhalb sozialer Netzwerke und Plattformen, um mit den dort
                     aktiven Kunden, Interessenten und Nutzern kommunizieren und sie dort über unsere Leistungen
@@ -358,7 +358,7 @@ export default function Impressum() {
                     der Nutzer sofern diese mit uns innerhalb der sozialen Netzwerke und Plattformen kommunizieren,
                     z.B. Beiträge auf unseren Onlinepräsenzen verfassen oder uns Nachrichten zusenden.</p>
 
-                <h4>Einbindung von Diensten und Inhalten Dritter</h4>
+                <h4 className="header4NormalContainer">Einbindung von Diensten und Inhalten Dritter</h4>
 
                 <p>Wir setzen innerhalb unseres Onlineangebotes auf Grundlage unserer berechtigten Interessen (d.h.
                     Interesse an der Analyse, Optimierung und wirtschaftlichem Betrieb unseres Onlineangebotes im
@@ -379,7 +379,7 @@ export default function Impressum() {
                     Onlineangebotes enthalten, als auch mit solchen Informationen aus anderen Quellen verbunden
                     werden.</p>
 
-                <h4>Vimeo</h4>
+                <h4 className="header4NormalContainer">Vimeo</h4>
 
                 <p>Wir können die Videos der Plattform "Vimeo" des Anbieters Vimeo Inc., Attention: Legal
                     Department, 555 West 18th Street New York, New York 10011, USA, einbinden. Datenschutzerklärung:
@@ -389,21 +389,21 @@ export default function Impressum() {
                     die Einstellungen von Google für die Datennutzung zu Marketingzwecken
                     (https://adssettings.google.com/.).</p>
 
-                <h4>Youtube</h4>
+                <h4 className="header4NormalContainer">Youtube</h4>
 
                 <p>Wir binden die Videos der Plattform "YouTube" des Anbieters Google LLC, 1600 Amphitheatre
                     Parkway, Mountain View, CA 94043, USA, ein. Datenschutzerklärung:
                     https://www.google.com/policies/privacy/, Opt-Out:
                     https://adssettings.google.com/authenticated.</p>
 
-                <h4>Google Fonts</h4>
+                <h4 className="header4NormalContainer">Google Fonts</h4>
 
                 <p>Wir binden die Schriftarten ("Google Fonts") des Anbieters Google LLC, 1600 Amphitheatre Parkway,
                     Mountain View, CA 94043, USA, ein. Datenschutzerklärung:
                     https://www.google.com/policies/privacy/, Opt-Out:
                     https://adssettings.google.com/authenticated.</p>
 
-                <h4>Instagram</h4>
+                <h4 className="header4NormalContainer">Instagram</h4>
 
                 <p>Innerhalb unseres Onlineangebotes können Funktionen und Inhalte des Dienstes Instagram, angeboten
                     durch die Instagram Inc., 1601 Willow Road, Menlo Park, CA, 94025, USA, eingebunden werden.
