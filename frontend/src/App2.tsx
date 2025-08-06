@@ -48,6 +48,7 @@ import ProgrammheftForm from "./components/programmhefte/ProgrammheftForm.tsx";
 import {Programmheft} from "./types/Programmheft.ts";
 import PdfProgram from "./components/PdfProgram.tsx";
 import {ProgrammheftDTOWithSemesterField} from "./types/ProgrammheftDTOWithSemesterField.ts";
+import Kinogeschichte from "./components/other/Kinogeschichte.tsx";
 
 // ############################################
 // for Gallery.tsx
@@ -382,6 +383,11 @@ const router = createBrowserRouter([
                             {
                                 path: "kinobesuch",
                                 element: <Kinobesuch/>,
+                                handle: {scrollMode: "pathname"},
+                            },
+                            {
+                                path: "kinogeschichte",
+                                element: <Kinogeschichte/>,
                                 handle: {scrollMode: "pathname"},
                             },
                             {
