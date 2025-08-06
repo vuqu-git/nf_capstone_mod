@@ -152,10 +152,8 @@ export default function Kinogeschichte() {
                 1953 mit Beteiligung des Film-Studios markierte die wachsende institutionelle Verankerung.
             </p>
             <p>
-                Zum Winter
-                1954 erschien die Zeitschrift <em>filmstudio</em> als erweitertes Heft und wurde in den folgenden Jahren
-                zu einer
-                zentrale Plattform für Filmkritik in der BRD.
+                Zum Winter 1954 erschien die Zeitschrift <em>filmstudio</em> als erweitertes Heft und wurde in den
+                folgenden Jahren zu einer zentralen Plattform für Filmkritik in der BRD.
             </p>
 
             <RowsPhotoAlbum
@@ -190,26 +188,21 @@ export default function Kinogeschichte() {
                         Anschließend veranstaltete das Film-Studio verstärkt Filmreihen und zeigte im Studierendenhaus
                         Ausstellungen zu Filmtechnik, Filmplakaten und internationaler Filmkunst. Große Aufmerksamkeit
                         erlangte die Ausstellung „Zur Entwicklung der Filmtechnik“ (1961), welche in Zusammenarbeit mit
-                        Paul
-                        Sauerlaenders privatem Archiv für Filmkunde Exponate aus der Frühzeit der Kinematographie
+                        Paul Sauerlaenders privatem Archiv für Filmkunde Exponate aus der Frühzeit der Kinematographie
                         präsentierte.
                     </p>
                     <p>
                         Mit dem CAMERA-Kino in der Gräfstraße erschloss das Film-Studio ab 1960 einen neuen
                         Ort mit modernster Projektionstechnik, der vorübergehend regelmäßig genutzt wurde. Doch 1964
                         kündigte die Universität als diese Nutzung. Nach jahrelangem Drängen wurde die
-                        Cinemascope-Anlage
-                        1967 immerhin vom CAMERA-Kino in das Studierendenhaus überführt.
+                        Cinemascope-Anlage 1967 immerhin vom CAMERA-Kino in das Studierendenhaus überführt.
                     </p>
                     <p>
-                        Mit zunehmender Politisierung
-                        an der Universität gegen Ende der 1960er Jahre zeigte das Film-Studio nur begrenzte Resonanz,
-                        etwa auf
-                        die anti-imperialistische Bewegung. Weil der Filmstudio e.V. seinen satzungsgemäßen Aufgaben
-                        nicht
-                        mehr nachkam, wurde die Nutzung und Verwaltung der Kinotechnik im März 1970 an den als GmbH vom
-                        AStA betriebenen Studentischen Reise- und Informationsdienst übertragen – das Kino wurde
-                        in <em>Pupille</em> umbenannt.
+                        Mit zunehmender Politisierung an der Universität gegen Ende der 1960er Jahre zeigte das
+                        Film-Studio nur begrenzte Resonanz, etwa auf die anti-imperialistische Bewegung. Weil der
+                        Filmstudio e.V. seinen satzungsgemäßen Aufgaben nicht mehr nachkam, wurde die Nutzung und
+                        Verwaltung der Kinotechnik im März 1970 an den als GmbH vom AStA betriebenen Studentischen
+                        Reise- und Informationsdienst übertragen – das Kino wurde in <em>Pupille</em> umbenannt.
                     </p>
                 </div>
 
@@ -260,25 +253,23 @@ export default function Kinogeschichte() {
             </p>
             <p>
                 Mit eigenem Programm und einem Fokus auf politisch konzipierten Filmreihen, z.B. zu
-                Science Fiction, Hexenfilmen oder entwickelte sich die Pupille zur Keimzelle der Frankfurter
+                Science-Fiction, Hexenfilmen oder entwickelte sich die Pupille zur Keimzelle der Frankfurter
                 Programmkinoszene.
             </p>
             <p>
                 Besonders hervorzuheben ist eine Filmreihe aus dem April 1975. Unter dem Titel
                 „Homosexualität & Gesellschaft am Beispiel Film“ zeigte die Gruppe <em>Rote Zelle Schwul
-                (RotZSchwul)</em> einen
-                Monat lang Filme zum Thema, z.B. von Andy Warhol, Rosa von Praunheim und Kenneth Anger.
+                (RotZSchwul)</em> einen Monat lang Filme zum Thema, z.B. von Andy Warhol, Rosa von Praunheim und
+                Kenneth Anger.
             </p>
             <p>
                 Auch die Gruppe <em>Frauenkino FFM</em>, gegründet 1981, setzte mit ihrem Fokus auf Filme von und für
-                Frauen
-                neue Maßstäbe. Der 1983 gegründete Verein <em>Schöne Neue Welt</em> brachte weitere neue Impulse:
-                Ausgiebige
-                thematische Filmreihen mit Podiumsdiskussionen folgten.
+                Frauen neue Maßstäbe. Der 1983 gegründete Verein <em>Schöne Neue Welt</em> brachte weitere neue Impulse:
+                Ausgiebige thematische Filmreihen mit Podiumsdiskussionen folgten.
             </p>
             <p>
                 Gemeinsam mit dem Pupille e.V. und der neu
-                gegründeten Filmprofessur wurde versucht das ehemalige CAMERA-Kino als unabhängiges studentische
+                gegründeten Filmprofessur wurde versucht das ehemalige CAMERA-Kinos als unabhängiges studentische
                 Kino zu etablieren. 1992 wurden beide Gruppen für ihr Engagement mit dem Frankfurter Kinopreis
                 ausgezeichnet. Doch nur ein Jahr später scheiterte der neue Plan für die Nutzung des CAMERA-Kino
                 endgültig und die dazugehörigen persönlichen Strukturen der Kinoarbeit lösten sich auf.
@@ -327,16 +318,15 @@ export default function Kinogeschichte() {
             </p>
             <p>
                 Von 12/2023 bis 2/2024 fand im Schopenhauer Studio in der Zentralbibliothek der Goethe-Universität
-                eine Ausstellung mit dem Titel "Bilder werfen. Grabungsarbeiten zur studentischen Filmkultur in Frankfurt" statt,
-                welche aus einem Seminar am Institut für Theater-, Film- und Medienwissenschaft entstand.
+                eine Ausstellung mit dem Titel "Bilder werfen. Grabungsarbeiten zur studentischen Filmkultur in
+                Frankfurt" statt, welche aus einem Seminar am Institut für Theater-, Film- und Medienwissenschaft
+                entstand.
             </p>
             <p>
-                Die Filmfestivals <em>Remake - Frankfurter
-                Frauenfilmtage</em> (seit 2018) von der Kinothek Asta Nielsen sowie <em>exf.f - tage des experimentellen
-                films
-                frankfurt</em> (seit 2021) als eigene Veranstaltung werden in der Pupille ausgerichtet und
-                unterstreichen den Anspruch
-                des Kinos als einen Ort für vielfältige Filmkultur.
+                Die Filmfestivals <em>Remake - Frankfurter Frauenfilmtage</em> (seit 2018) von der Kinothek Asta Nielsen
+                sowie <em>exf.f - tage des experimentellen films frankfurt</em> (seit 2021) als eigene Veranstaltung
+                werden in der Pupille ausgerichtet und unterstreichen den Anspruch des Kinos als einen Ort für
+                vielfältige Filmkultur.
             </p>
 
             {/*<RowsPhotoAlbum*/}
