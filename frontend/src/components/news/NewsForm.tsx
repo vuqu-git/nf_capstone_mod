@@ -178,7 +178,7 @@ export default function NewsForm({ newsItem, handleSubmit, onChange, formType }:
                 {/*    <img src="/assets/newsDesigns.png" alt="News Color Design Legend" className="mt-3" />*/}
                 {/*</div>*/}
 
-                <Accordion flush style={{ maxWidth: '550px', marginLeft: '0', }}>
+                <Accordion style={{ maxWidth: '550px', }}>
                     <Accordion.Item eventKey="0">
                         <Accordion.Header>Legend color design</Accordion.Header>
                         <Accordion.Body>

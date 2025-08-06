@@ -10,8 +10,34 @@
     color: #cfd6e1;
 }
 
-.normal-content-container h2 {
-    /*margin-top: 0;*/
+/*.normal-content-container h2 {*/
+/*    !*margin-top: 0;*!*/
+/*    margin-bottom: 1.0rem;*/
+/*    font-size: 2rem;*/
+/*    font-weight: 600;*/
+/*    color: #FFD036;*/
+/*    letter-spacing: 0.02em;*/
+/*}*/
+
+/*.normal-content-container h3 {*/
+/*    margin-top: 2rem;*/
+/*    !*margin-bottom: 1.0rem;*!*/
+/*    font-size: 1.5rem;*/
+/*    font-weight: 600;*/
+/*    color: #f4f6fa;*/
+/*    letter-spacing: 0.02em;*/
+/*}*/
+
+/*.normal-content-container h4 {*/
+/*    margin-top: 2rem;*/
+/*    !*margin-bottom: 1.0rem;*!*/
+/*    font-size: 1.1rem;*/
+/*    font-weight: 600;*/
+/*    color: #f4f6fa;*/
+/*    letter-spacing: 0.02em;*/
+/*}*/
+
+.header2NormalContainer {
     margin-bottom: 1.0rem;
     font-size: 2rem;
     font-weight: 600;
@@ -19,18 +45,16 @@
     letter-spacing: 0.02em;
 }
 
-.normal-content-container h3 {
+.header3NormalContainer {
     margin-top: 2rem;
-    /*margin-bottom: 1.0rem;*/
     font-size: 1.5rem;
     font-weight: 600;
     color: #f4f6fa;
     letter-spacing: 0.02em;
 }
 
-.normal-content-container h4 {
+.header4NormalContainer {
     margin-top: 2rem;
-    /*margin-bottom: 1.0rem;*/
     font-size: 1.1rem;
     font-weight: 600;
     color: #f4f6fa;

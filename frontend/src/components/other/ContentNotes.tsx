@@ -4,7 +4,7 @@ export default function ContentNotes() {
 
     return (
         <article className="normal-content-container">
-            <h2>
+            <h2 className="header2NormalContainer">
                 Triggerwarnungen und Content Notes
             </h2>
             <p>
