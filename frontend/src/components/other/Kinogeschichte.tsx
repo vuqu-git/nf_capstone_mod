@@ -269,9 +269,9 @@ export default function Kinogeschichte() {
             </p>
             <p>
                 Gemeinsam mit dem Pupille e.V. und der neu
-                gegründeten Filmprofessur wurde versucht das ehemalige CAMERA-Kinos als unabhängiges studentische
+                gegründeten Filmprofessur wurde versucht das ehemalige CAMERA-Kino als unabhängiges studentische
                 Kino zu etablieren. 1992 wurden beide Gruppen für ihr Engagement mit dem Frankfurter Kinopreis
-                ausgezeichnet. Doch nur ein Jahr später scheiterte der neue Plan für die Nutzung des CAMERA-Kino
+                ausgezeichnet. Doch nur ein Jahr später scheiterte der neue Plan für die Nutzung des CAMERA-Kinos
                 endgültig und die dazugehörigen persönlichen Strukturen der Kinoarbeit lösten sich auf.
             </p>
 
