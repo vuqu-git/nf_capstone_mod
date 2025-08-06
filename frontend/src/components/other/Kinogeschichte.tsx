@@ -351,61 +351,21 @@ export default function Kinogeschichte() {
             {/*    })}*/}
             {/*/>*/}
 
-            <Lightbox
-                slides={photosD}
-                open={indexD >= 0}
-                index={indexD}
-                close={() => setIndexD(-1)}
-                // enable optional lightbox plugins
-                plugins={[Captions, Fullscreen, Slideshow, Zoom, Inline]}
-                captions={{descriptionTextAlign: "center", showToggle: true}}
-                inline={{
-                    style: {width: "100%", maxHeight: "400px", aspectRatio: "3 / 2"},
-                }}
-                slideshow={{autoplay: true,}}
-            />
-            {/*#################################################*/}
+            {/*/!*ordinary only with images, no embedded video*!/*/}
             {/*<Lightbox*/}
-            {/*    open={open}*/}
-            {/*    close={() => setOpen(false)}*/}
-            {/*    slides={[*/}
-            {/*        ...photosD,*/}
-            {/*        {*/}
-            {/*            type: "teaser-vimeo",*/}
-            {/*            description: "Teaser zur Ausstellung"*/}
-            {/*        },*/}
-            {/*    ]}*/}
-            {/*    render={{*/}
-            {/*        slide: ({ slide }) =>*/}
-            {/*            // slide.type === "teaser-vimeo" ? (*/}
-            {/*            isTeaserVimeoSlide(slide) ? (*/}
-            {/*                // <MyCustomSlide slide={slide} />*/}
-            {/*                */}
-            {/*                <div style={{*/}
-            {/*                    display: "flex",*/}
-            {/*                    justifyContent: "center",*/}
-            {/*                    alignItems: "center",*/}
-            {/*                    height: "100vh"*/}
-            {/*                }}>*/}
-            {/*                         <iframe*/}
-            {/*                             src="https://player.vimeo.com/video/899523098?badge=0&autopause=0&player_id=0&app_id=58479"*/}
-            {/*                             frameBorder="0"*/}
-            {/*                             allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"*/}
-            {/*                             referrerPolicy="strict-origin-when-cross-origin"*/}
-            {/*                             style={{position: "absolute", width: "85%", height: "85%"}}*/}
-            {/*                             title='Ausstellungsteaser "Bilder werfen"'*/}
-            {/*                         />*/}
-            {/*                </div>*/}
-
-            {/*            ) : undefined,*/}
-            {/*    }}*/}
-            {/*    plugins={[Captions]}*/}
+            {/*    slides={photosD}*/}
+            {/*    open={indexD >= 0}*/}
+            {/*    index={indexD}*/}
+            {/*    close={() => setIndexD(-1)}*/}
+            {/*    // enable optional lightbox plugins*/}
+            {/*    plugins={[Captions, Fullscreen, Slideshow, Zoom, Inline]}*/}
             {/*    captions={{descriptionTextAlign: "center", showToggle: true}}*/}
+            {/*    inline={{*/}
+            {/*        style: {width: "100%", maxHeight: "400px", aspectRatio: "3 / 2"},*/}
+            {/*    }}*/}
+            {/*    slideshow={{autoplay: true,}}*/}
             {/*/>*/}
-            {/*<div onClick={() => setOpen(true)}>*/}
-            {/*    Watch Teaser*/}
-            {/*</div>*/}
-            {/*#################################################*/}
+
 
             <Lightbox
                 open={open}
