@@ -45,3 +45,29 @@ export default defineConfig({
   }
 })
 
+
+// export default defineConfig({
+//   plugins: [svgr(), react()],
+//   server: {
+//     proxy: {
+//       '/api': {
+//         target: 'http://localhost:8080',
+//         changeOrigin: true,
+//       },
+//       '/static-files': {
+//         target: 'http://localhost:8080',
+//         changeOrigin: true,
+//         // The rewrite function below is important for handling the fallback
+//         rewrite: (path) => path.replace(/^\/static-files/, '/static-files'),
+//       },
+//     },
+//     // The historyApiFallback is an important part of handling these redirects
+//     // for single-page applications. This tells the dev server to serve
+//     // the index.html for any request that doesn't match an existing file.
+//     historyApiFallback: {
+//       rewrites: [
+//         { from: /^\/static-files\/.*$/, to: '/index.html' },
+//       ],
+//     },
+//   },
+// });

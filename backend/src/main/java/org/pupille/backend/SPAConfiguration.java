@@ -1,6 +1,7 @@
 package org.pupille.backend;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -107,13 +108,44 @@ public class SPAConfiguration implements WebMvcConfigurer {
 
         // 1. Specific Handler for the static-files on hard disk, external-static-container acts as a wrapper
         // This handler maps requests starting with "/static-files/" directly to the "static-files" folder inside your static directory.
-        registry.addResourceHandler("/static-files/**")
-                .addResourceLocations("file:C:\\Daten\\dcTest\\external-static-container\\static-files\\");
+//        registry.addResourceHandler("/static-files/**")
+//                .addResourceLocations("file:C:\\Daten\\dcTest\\external-static-container\\static-files\\")
+//                .resourceChain(true)
+//                .addResolver(new PathResourceResolver() {
+//                    @Override
+//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+//                        Resource requestedResource = location.createRelative(resourcePath);
+//                        if (requestedResource.exists() && requestedResource.isReadable()) {
+//                            return requestedResource;
+//                        } else {
+//                            // Fall back to index.html if the file does not exist
+//                            return new ClassPathResource("/static/index.html");
+//                        }
+//                    }
+//                });
+
 
         // 1.5 Specific Handler for the static-files in docker container, which is bind mounted, external-static-container acts as a wrapper
         // This handler maps requests starting with "/static-files/" directly to the "static-files" folder inside your static directory.
         registry.addResourceHandler("/static-files/**")
-                .addResourceLocations("file:/app/external-static-container/static-files/");
+                .addResourceLocations("file:/app/external-static-container/static-files/")
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        Resource requestedResource = location.createRelative(resourcePath);
+                        if (requestedResource.exists() && requestedResource.isReadable()) {
+                            return requestedResource;
+                        } else {
+                            // Fall back to index.html if the file does not exist
+                            return new ClassPathResource("/static/index.html");
+                        }
+                    }
+                });
+
+
+
+
 
         // 2. The main handler for your SPA, which should be placed AFTER specific handlers.
         registry.addResourceHandler("/**")
@@ -122,8 +154,6 @@ public class SPAConfiguration implements WebMvcConfigurer {
                         "classpath:/public/",
                         "classpath:/resources/",
                         "classpath:/META-INF/resources/"
-//                        "file:C:\\Daten\\dcTest\\external_static\\",
-//                        "file:/app/static-files/"
                 )
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
@@ -139,8 +169,6 @@ public class SPAConfiguration implements WebMvcConfigurer {
                     }
                 });
     }
-
-
 
 
 
