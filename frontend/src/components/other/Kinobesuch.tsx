@@ -1,9 +1,17 @@
 import './NomalContent.css';
 import styles from './Kinobesuch.module.css';
 
+// const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+
 export default function Kinobesuch() {
     return (
         <div>
+            <img src="/bilder/surprise_film4.jpg" alt="here a text" style={{maxWidth: "85%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />
+            <img src="/bilder/surprise_film1.jpg" alt="here a text" style={{maxWidth: "85%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />
+
+            {/*<img src={`${backendUrl}/bilder/surprise_film4.jpg`} alt="here a text" style={{maxWidth: "85%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />*/}
+            {/*<img src={`${backendUrl}/bilder/surprise_film1.jpg`} alt="here a text" style={{maxWidth: "85%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />*/}
+
             <section className="normal-content-container">
                 <h2 className="header2NormalContainer">Informationen zum Kinobesuch</h2>
 
