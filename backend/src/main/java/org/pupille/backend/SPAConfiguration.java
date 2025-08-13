@@ -125,6 +125,24 @@ public class SPAConfiguration implements WebMvcConfigurer {
 //                });
 
 
+//        // 1.5 Specific Handler for the static-files in docker container, which is bind mounted, external-static-container acts as a wrapper
+//        // This handler maps requests starting with "/static-files/" directly to the "static-files" folder inside your static directory.
+//        registry.addResourceHandler("/static-files/**")
+//                .addResourceLocations("file:/app/external-static-container/static-files/")
+//                .resourceChain(true)
+//                .addResolver(new PathResourceResolver() {
+//                    @Override
+//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+//                        Resource requestedResource = location.createRelative(resourcePath);
+//                        if (requestedResource.exists() && requestedResource.isReadable()) {
+//                            return requestedResource;
+//                        } else {
+//                            // Fall back to index.html if the file does not exist
+//                            return new ClassPathResource("/static/index.html");
+//                        }
+//                    }
+//                });
+
         // 1.5 Specific Handler for the static-files in docker container, which is bind mounted, external-static-container acts as a wrapper
         // This handler maps requests starting with "/static-files/" directly to the "static-files" folder inside your static directory.
         registry.addResourceHandler("/static-files/**")
@@ -138,14 +156,14 @@ public class SPAConfiguration implements WebMvcConfigurer {
                             return requestedResource;
                         } else {
                             // Fall back to index.html if the file does not exist
-                            return new ClassPathResource("/static/index.html");
+//                            return new ClassPathResource("/static/index.html");
+
+                            // Return null if the resource is not found.
+                            // This allows the request to be handled by the next handler in the chain.
+                            return null;
                         }
                     }
                 });
-
-
-
-
 
         // 2. The main handler for your SPA, which should be placed AFTER specific handlers.
         registry.addResourceHandler("/**")
