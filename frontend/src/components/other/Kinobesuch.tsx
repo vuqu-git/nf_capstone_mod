@@ -6,8 +6,9 @@ import styles from './Kinobesuch.module.css';
 export default function Kinobesuch() {
     return (
         <div>
-            <img src="/bilder/surprise_film4.jpg" alt="here a text" style={{maxWidth: "85%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />
-            <img src="/bilder/surprise_film1.jpg" alt="here a text" style={{maxWidth: "85%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />
+            <img src="/static-files/surprise_film4.jpg" alt="here a text" style={{maxWidth: "40%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />
+            <img src="/static-files/bilder/subimage.jpg" alt="here a text" style={{maxWidth: "40%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />
+            <img src="/surprise_film2.jpg" alt="here a text" style={{maxWidth: "40%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />
 
             {/*<img src={`${backendUrl}/bilder/surprise_film4.jpg`} alt="here a text" style={{maxWidth: "85%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />*/}
             {/*<img src={`${backendUrl}/bilder/surprise_film1.jpg`} alt="here a text" style={{maxWidth: "85%", borderRadius: "5px", boxShadow: "0px 0px 10px rgb(255, 255, 255, 0.2)"}} />*/}
