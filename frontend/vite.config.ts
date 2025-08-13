@@ -14,11 +14,12 @@ export default defineConfig({
       },
 
       // Proxy all requests starting with `/bilder` to your Spring Boot backend.
-      // Example: `/bilder/film1.jpg` → `http://localhost:8080/bilder/film1.jpg`
+      // Example: `/bilder/film1.jpg` → `http://localhost:8080/bilder/surprise_film1.jpg`
       '/bilder': {
         target: 'http://localhost:8080',
         changeOrigin: true,
       },
+
     }
   }
 })
