@@ -181,10 +181,10 @@ public class SPAConfiguration implements WebMvcConfigurer {
         //        GET /missing-file.css    → /static/index.html (fallback)
         registry.addResourceHandler("/**")
                 .addResourceLocations(      // Spring will search for static files in this exact order
-                        "classpath:/static/",
-                        "classpath:/public/",
-                        "classpath:/resources/",
-                        "classpath:/META-INF/resources/"
+                        "classpath:/static/"
+                                                    //                        "classpath:/public/",
+                                                    //                        "classpath:/resources/",
+                                                    //                        "classpath:/META-INF/resources/"
                 )
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
@@ -195,8 +195,9 @@ public class SPAConfiguration implements WebMvcConfigurer {
                             return requestedResource;
                         } else {
                             // If the resource doesn't exist, return index.html for SPA routing
-                            return location.createRelative("index.html"); // Find index.html relative to wherever I'm currently looking (c.f. locations in addResourceLocations method)
-                            // The change to a different location happens when the originally requested file is not found, AND the fallback index.html is also not found in the current location.
+                                        //                            return location.createRelative("index.html"); // Find index.html relative to wherever I'm currently looking (c.f. locations in addResourceLocations method)
+                                                                    // The change to a different location happens when the originally requested file is not found, AND the fallback index.html is also not found in the current location.
+                            return new ClassPathResource("/static/index.html");
                         }
                     }
                 });
