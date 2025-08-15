@@ -8,7 +8,7 @@ import svgr from 'vite-plugin-svgr'
 // * SVG as React components: Import SVGs directly as React components
 // * Hot reloading: React Fast Refresh for instant updates during development
 // => proxy essentially makes Vite dev server act as a middleman, forwarding API requests to your backend server while serving your React app, creating the illusion that everything runs on the same domain
-
+// => i.e. configure Vite's development server to act as a proxy, forwarding specific requests from your frontend to your backend. From the browser's perspective, it's always talking to localhost:5173, so it never sees a cross-origin request, and CORS issues are completely avoided.
 
 // Production vs Development Config
 // typically proxy config is NOT NEEDED in production because:
@@ -30,7 +30,7 @@ import svgr from 'vite-plugin-svgr'
 
 // What happens in production:
 //   Vite builds static files (HTML, CSS, JS)
-//   Proxy config is ignored - it only works in dev mode
+//   Proxy config is ignored - it only works in dev mode!
 //   You handle routing differently:
 //      Reverse proxy (nginx, Apache)
 //      Same-origin deployment
@@ -50,6 +50,10 @@ import svgr from 'vite-plugin-svgr'
 //     }
 
 
+// Is the proxy setting within vite.config.ts build inside jar file?
+// => No, it's not built into the final JAR file. Vite's proxy configuration is primarily meant for development mode. It helps you route requests to different backends (such as an API) during local development, without needing to modify the source code or deal with CORS issues.
+
+
 export default defineConfig({
   // svgr(): Plugin that transforms SVG files into React components
   // react(): Official Vite plugin for React support (JSX transformation, Fast Refresh, etc.)
@@ -57,6 +61,7 @@ export default defineConfig({
   server: {
     proxy: {  // configuration for proxying API requests during development!
       // Proxy all requests starting with `/api` to your Spring Boot backend; example: fetch request for `/api/film` gets proxied to `http://localhost:8080/api/film`
+      // so in forntend code fetch('/api/users') can be written instead of fetch('http://localhost:8080/api/users')
       '/api': {
         target: 'http://localhost:8080',
         // No changeOrigin: Keeps the original Host header
@@ -68,7 +73,109 @@ export default defineConfig({
         changeOrigin: true,
       },
 
-    }
+      // THIS IS ABSOLUTELY REQUIRED because in my SPAConfiguration some handlers return/static/index.html as fallback to serve the SPA client-side routing (leading eventually to NotFound component)
+      // when fetching this index.html, other related build files (e.g. index-Dojkaee9.js, index-DFM0NS6C.css, static assets like images, fonts) from /assets are loaded as well
+      '/assets': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+      },
+
+      // FAILS FAILS FAILS FAILS FAILS FAILS FAILS FAILS FAILS FAILS FAILS
+
+      // -- ADD THIS RULE --
+      //    http://localhost:5173/kinobesuch → was blocked because of a disallowed MIME type (“text/html”).
+      //    http://localhost:5173/static-files/surprise_film44.jpg → NotFound
+      //    http://localhost:5173/assets/index-Dojkaee9.js → code
+      // Proxy requests for bundled assets (JS, CSS, etc.) and root files to Spring Boot.
+      // This regex matches:
+      //   - /favicon.ico, /manifest.json, etc.
+      //   - /index-*.js, /index-*.css and other hashed assets
+      //   - /assets/*
+      // It avoids proxying Vite's own internal requests (like @vite/client).
+
+      // '^/(assets|src|index.*\.js|.*\.css|.*\.ico|.*\.png|.*\.svg|.*\.jpg|manifest\.json)': {
+      //   target: 'http://localhost:8080',
+      //   changeOrigin: true,
+      // }
+
+      // ---------------
+
+      // // Add this to catch asset requests that get misdirected !!!
+      //    http://localhost:5173/kinobesuch → fine
+      //    http://localhost:5173/static-files/surprise_film44.jpg → NS_ERROR_CORRUPTED_CONTENT
+      //    http://localhost:5173/assets/index-Dojkaee9.js → NotFound
+
+      // '/static-files/assets': {
+      //   target: 'http://localhost:5173',  // Route back to Vite
+      //   changeOrigin: true,
+      //   rewrite: (path) => path.replace(/^\/static-files/, ''), // Remove /static-files prefix
+      // },
+
+      // ---------------
+
+      //    http://localhost:5173/kinobesuch → fine
+      //    http://localhost:5173/static-files/surprise_film44.jpg → NS_ERROR_CORRUPTED_CONTENT
+      //    http://localhost:5173/assets/index-Dojkaee9.js → NotFound
+
+      // '/static-files': {
+      //   target: 'http://localhost:8080',
+      //   changeOrigin: true,
+      //   onProxyRes: (proxyRes) => {
+      //     if (proxyRes.statusCode === 404) {
+      //       proxyRes.statusCode = 200;
+      //       proxyRes.headers['content-type'] = 'text/html';
+      //     }
+      //   },
+      // },
+
+      // ---------------
+
+      //    http://localhost:5173/kinobesuch → fine
+      //    http://localhost:5173/static-files/surprise_film44.jpg → NS_ERROR_CORRUPTED_CONTENT
+      //    http://localhost:5173/assets/index-Dojkaee9.js → NotFound
+
+      // proxy: {
+      //   '/api': {
+      //     target: 'http://localhost:8080',
+      //     changeOrigin: true,
+      //   },
+      //   '/static-files': {
+      //     target: 'http://localhost:8080',
+      //     changeOrigin: true,
+      //     // The rewrite function below is important for handling the fallback
+      //     rewrite: (path) => path.replace(/^\/static-files/, '/static-files'),
+      //   },
+      // },
+      // // The historyApiFallback is an important part of handling these redirects
+      // // for single-page applications. This tells the dev server to serve
+      // // the index.html for any request that doesn't match an existing file.
+      // historyApiFallback: {
+      //   rewrites: [
+      //     { from: /^\/static-files\/.*$/, to: '/index.html' },
+      //   ],
+      // },
+
+      // ---------------
+
+      //    http://localhost:5173/kinobesuch → fine
+      //    http://localhost:5173/static-files/surprise_film44.jpg → NS_ERROR_CORRUPTED_CONTENT
+      //    http://localhost:5173/assets/index-Dojkaee9.js → NotFound
+
+      // '/static-files': {
+      //   target: 'http://localhost:8080',
+      //   changeOrigin: true,
+      //   onProxyRes: (proxyRes) => {
+      //     if (proxyRes.statusCode === 404) {
+      //       proxyRes.statusCode = 200;
+      //       proxyRes.headers['content-type'] = 'text/html';
+      //     }
+      //   },
+      // },
+
+      // FAILS FAILS FAILS FAILS FAILS FAILS FAILS FAILS FAILS FAILS FAILS
+
+    },
+
   }
 })
 
@@ -87,54 +194,3 @@ export default defineConfig({
 //       It displays the image with that URL
 //    The browser has no idea that proxying happened - it's completely transparent. The proxy is purely a development convenience to avoid CORS issues.
 // changeOrigin only affects the HTTP headers sent in the background request to the target server
-
-
-
-
-
-// ********************************************************************************
-// --- OPTION B ---
-// in combination with addResourceHandlers from class SPAConfiguration
-// this ensures that in case of requesting non-existing files OR routes (even routes '/static-files' and /static-files/') the <NotFound /> react component is rendered
-
-// export default defineConfig({
-//   plugins: [svgr(), react()],
-//   server: {
-//     proxy: {
-//       '/api': {
-//         target: 'http://localhost:8080',
-//         changeOrigin: true,
-//       },
-//       '/static-files': {
-//         target: 'http://localhost:8080',
-//         changeOrigin: true,
-//         // The rewrite function below is important for handling the fallback
-//         rewrite: (path) => path.replace(/^\/static-files/, '/static-files'),
-//       },
-//     },
-//     // The historyApiFallback is an important part of handling these redirects
-//     // for single-page applications. This tells the dev server to serve
-//     // the index.html for any request that doesn't match an existing file.
-//     historyApiFallback: {
-//       rewrites: [
-//         { from: /^\/static-files\/.*$/, to: '/index.html' },
-//       ],
-//     },
-//   },
-// });
-
-// This configuration tells Vite to:
-//     Proxy all requests to /api and /static-files to your backend.
-//     For any request that starts with /static-files/ and doesn't find a corresponding file, rewrite the request to /index.html instead of attempting to fetch it from the backend, which will then load your SPA correctly.
-//
-// This approach ensures that your existing image files are correctly fetched from the backend, while also allowing the client-side routing to function correctly when a non-existent file is requested.
-
-// The term "doesn't find a corresponding file" in the context of the Vite dev server's historyApiFallback is determined by a specific process.
-// The Vite dev server, by default, tries to serve files from the project's root directory. When a request comes in (e.g., http://localhost:5173/static-files/surprise_film44.jpg), Vite first checks if a physical file with that exact path exists on the filesystem.
-// Here's the breakdown of how the check works:
-//   Vite's Static File Check: The Vite dev server will first look for a file at http://localhost:5173/static-files/surprise_film44.jpg within its configured serving directory (typically the project root or the public folder).
-//   No Proxy Match: Your initial proxy configuration tells Vite to send any request starting with /static-files to your backend. So, Vite doesn't even get to the step of checking for a local file. The proxy takes precedence.
-//   The Proposed Solution's Logic: The historyApiFallback option in the suggested vite.config.js changes this behavior for a specific pattern (/static-files/.*$). It tells Vite: "For any request that matches this pattern, instead of looking for a physical file or proxying it, immediately serve the index.html file."
-
-// So, in the proposed solution, the "doesn't find a corresponding file" check is effectively skipped for requests that match the historyApiFallback rule. The rewrite rule is a directive to the dev server to not even attempt to find the file or forward the request. It simply serves the index.html file directly, allowing the React Router on the client side to handle the routing and display the <NotFound/> component.
-// This approach is different from how a web server would typically handle a missing file. A traditional web server would perform a filesystem check, return a 404 error, and then a fallback mechanism might kick in. However, the Vite dev server with historyApiFallback is specifically designed for Single-Page Applications (SPAs) and acts more like a router, ensuring that the application's entry point (index.html) is always served so the client-side router can take over.

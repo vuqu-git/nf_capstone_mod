@@ -9,235 +9,179 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 import java.io.IOException;
 
-// This Spring Boot configuration class serves static files and handles SPA client-side routing by falling back to index.html for unknown routes.
-// Setup is for production deployment where your Spring Boot server hosts both your API and your frontend application in a single JAR file!
+// This Spring Boot configuration class serves static files and handles SPA client-side routing by falling back to index.html (precisely /static/index.html) for unknown routes.
+// Setup is for production deployment where your Spring Boot server hosts both your API and your frontend application (frontend code is in java/resource/static of backend folder) in a single JAR file!
 // btw: What is index.html in an SPA? → index.html is the single entry point for your entire React application. It's literally the "single page" in "Single Page Application."
+//                                    → return index.html IS the SPA fallback, this allows React Router to handle client-side routing!
+
+
+//-------------------------------------
+// !!! for SOLELY manual testing this Spring configuration always use http://localhost:8080 !!!
+// take note of the following when testing from frontend port (to prepare for production):
+
+//██ ███████ ███████ ██    ██ ███████   ██     ██ ██   ██ ███████ ███    ██   ████████ ███████ ███████ ████████ ██ ███    ██  ██████
+//██ ██      ██      ██    ██ ██        ██     ██ ██   ██ ██      ████   ██      ██    ██      ██         ██    ██ ████   ██ ██
+//██ ███████ ███████ ██    ██ █████     ██  █  ██ ███████ █████   ██ ██  ██      ██    █████   ███████    ██    ██ ██ ██  ██ ██   ███
+//██      ██      ██ ██    ██ ██        ██ ███ ██ ██   ██ ██      ██  ██ ██      ██    ██           ██    ██    ██ ██  ██ ██ ██    ██
+//██ ███████ ███████  ██████  ███████    ███ ███  ██   ██ ███████ ██   ████      ██    ███████ ███████    ██    ██ ██   ████  ██████
+
+// development vs production mismatch
+// * dist/assets/ folder contains built/production assets of the frontend (e.g. index.html, corresponding css and js in the /assets subfolder)
+// * running 'npm run dev' or 'vite dev' is development mode
+// * in development mode, Vite doesn't use the dist/ folder - it serves assets dynamically from memory (with hot module replacement (HMR) and fast refresh)! // In dev mode, Vite uses the index.html file in your root directory as the entry point. The index.html in root references the development build (not production) assets: <script type="module" src="/src/main.jsx"></script>
+// * index.html (specified here in the return statements of the java code below) references build/production assets (like index-Dojkaee9.js)
+//  => these assets are fetched...
+//          * from dist/assets/ when running vite preview mode under port 4173 or
+//          * via /asset vite proxy from the Spring backend when runnung vite dev mode under 5173 i.e. with the /assets proxy in place, those asset requests get properly routed to http://localhost:8080 they exist
+
+// when manual test in vite preview mode under 4173:
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// =>   run in production preview mode with;
+//          npm run build
+//          npm run preview
+//      then test http://localhost:4173/static-files/missing_file.jpg (note the different port - usually 4173 for preview)
+// =>   since this is NOT dev mode, vite.config.ts is NOT used, hence CORS issues occur
+//      to avoid that, create public class WebConfig to define CORS rules (for your Spring Boot application) for vite's preview mode port 4173: allowedOrigins("http://localhost:4173")
+//      test the stuff in vite preview mode under port 4173
+
+
+// when manual test in vite dev mode under 5173:
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// index.html is NOT fetched from dist/ folder (this folder isn't used at all in dev mode) but from index.html in root folder (root = this is where package.json lies)
+// => to have all static images available: make sure that all the vite react build files from dist/ folder are copied in main/java/resources/static (this here is the spring backend!)
+//    to avoid CORS issues: don't forget handling CORS in vite.config.ts (only for vite dev mode) or WebConfig class
+// => !!! this setting should work; sometimes TURN OFF/ON if IntelliJ helps !!!
+//    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+//-------------------------------------
 
 @Configuration
 public class SPAConfiguration implements WebMvcConfigurer {
 
-//    // surprise_film2.jpg & bilder folder in resources/static
-//    // works: http://localhost:5173/kinobesuch
-//
-//    // works: http://localhost:5173/bilder/surprise_film4.jpg
-//    // works: http://localhost:8080/bilder/surprise_film4.jpg
-//
-//    // works: http://localhost:8080/surprise_film2.jpg
-//    // works not: http://localhost:5173/surprise_film2.jpg → <NotFound />
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/**")
-//                .addResourceLocations(      // Spring will search for static files (in these folders and its subfolders) in this exact order
-//                        "classpath:/static/",              // default places for static files
-//                        "classpath:/public/",              // default places for static files
-//                        "classpath:/resources/",           // default places for static files
-//                        "classpath:/META-INF/resources/",  // default places for static files
-//                        "file:/app/static-files/"          // folder on docker container, which bind mounts to static files like filmbilder and programmhefte; don't forget to e.g. -v "C:\Daten\fbTest\filmbilder:/app/static-files" in the docker run command
-//                )
-//                .resourceChain(true)
-//                .addResolver(new PathResourceResolver() {
-//
-//                    // SPA Magic - What this does:
-//                    //      Request for /styles.css → File exists → Return styles.css
-//                    //      Request for /kinobesuch → File doesn't exist → Return index.html (THIS is the SPA fallback)
-//                    //      Request for /some/deep/route → File doesn't exist → Return index.html (THIS is the SPA fallback)
-//                    // This allows React Router to handle client-side routing!
-//
-//                    @Override
-//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-//                        Resource requestedResource = location.createRelative(resourcePath);
-//
-//                        if (requestedResource.exists() && requestedResource.isReadable()) {
-//                            return requestedResource;
-//                        } else {
-//                            // If the resource doesn't exist, return index.html for SPA routing
-//                            return location.createRelative("index.html");
-//                        }
-//                    }
-//                });
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-    // surprise_film2.jpg & bilder folder in C:\Daten\dcTest\external_static
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/**")
-//                .addResourceLocations(      // Spring will search for static files (in these folders and its subfolders) in this exact order
-//                        "classpath:/static/",              // default places for static files
-//                        "classpath:/public/",              // default places for static files
-//                        "classpath:/resources/",           // default places for static files
-//                        "classpath:/META-INF/resources/",  // default places for static files
-//
-//                        "file:C:\\Daten\\dcTest\\external_static",          // on harddisk
-//
-//                        "file:/app/static-files/"          // folder on docker container, which bind mounts to static files like filmbilder and programmhefte; don't forget to e.g. -v "C:\Daten\fbTest\filmbilder:/app/static-files" in the docker run command
-//                )
-//                .resourceChain(true)
-//                .addResolver(new PathResourceResolver() {
-//
-//                    // SPA Magic - What this does:
-//                    //      Request for /styles.css → File exists → Return styles.css
-//                    //      Request for /kinobesuch → File doesn't exist → Return index.html (THIS is the SPA fallback)
-//                    //      Request for /some/deep/route → File doesn't exist → Return index.html (THIS is the SPA fallback)
-//                    // This allows React Router to handle client-side routing!
-//
-//                    @Override
-//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-//                        Resource requestedResource = location.createRelative(resourcePath);
-//
-//                        if (requestedResource.exists() && requestedResource.isReadable()) {
-//                            return requestedResource;
-//                        } else {
-//                            // If the resource doesn't exist, return index.html for SPA routing
-//                            return location.createRelative("index.html");
-//                        }
-//                    }
-//                });
-//    }
-
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-//        // -- 0. Explicitly handle the directory path /static-files and redirect it to the root of your SPA.
-//        // This ensures that the request gets picked up by your main SPA handler (i.e. index.html).
-//        registry.addResourceHandler("/static-files", "/static-files/")
-//                .addResourceLocations("classpath:/static/") // i.e. inside JAR
-//                .resourceChain(true)
-//                .addResolver(new PathResourceResolver() {
-//                    @Override
-//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-//                        System.out.println("=== 0th HANDLER RESOLVER CALLED ===");
-//                        return location.createRelative("index.html"); // Find index.html relative to wherever I'm currently looking (c.f. location in addResourceLocations method)
-//                    }
-//                });
-
-        // -- 0.5. Specific Handler for the static-files on hard disk, external-static-container acts as a wrapper
-        // This handler maps requests starting with "/static-files/" directly to the "static-files" folder inside your static directory.
-//        registry.addResourceHandler("/static-files/**")
-//                .addResourceLocations("file:C:\\Daten\\dcTest\\external-static-container\\static-files\\")
-//                .resourceChain(true)
-//                .addResolver(new PathResourceResolver() {
-//                    @Override
-//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-//                        System.out.println("=== FIRST HANDLER RESOLVER CALLED ===");
-//                        System.out.println("resourcePath: " + resourcePath);
-//                        System.out.println("location: " + location);
-//
-//                        Resource requestedResource = location.createRelative(resourcePath);
-//                        if (requestedResource.exists() && requestedResource.isReadable()) {
-//                            System.out.println("FIRST HANDLER: returning requested resource");
-//                            return requestedResource;
-//                        } else {
-//                            // Fall back to index.html in /static if the file does not exist
-//                            System.out.println("FIRST HANDLER: falling back to ClassPathResource");
-//                            return new ClassPathResource("/static/index.html");
-//                        }
-//                    }
-//                });
-
-        // -- 1. Specific Handler for the static-files in docker container, which is bind mounted, external-static-container acts as a wrapper
-        // This handler maps requests STARTING with "/static-files/" directly to the "static-files" folder inside your static directory.
-        // Handles: /static-files/anything/here.jpg
-        //        GET /static-files/photo.jpg    → /app/external-static-container/static-files/photo.jpg
-        //        GET /static-files/missing.png  → /static/index.html (fallback)
-        //        GET /static-files/docs/file.pdf → /app/external-static-container/static-files/docs/file.pdf
-        registry.addResourceHandler("/static-files/**") // URL: /static-files is NO MATCH; because it requires something after /static-files/
-                .addResourceLocations("file:/app/external-static-container/static-files/")
+        // -- 0. Explicitly handle the directory path /static-files and redirect it to the root of your SPA ---
+        // This ensures that the request gets picked up by your main SPA client side router (i.e. /static/index.html).
+        // !!!!!!!!!!!!!!
+        // !!! ATTENTION: "/static-files" and "/static-files/" are (somehow) NOT caught by ANY of the subsequent handlers !!!
+        // !!!!!!!!!!!!!!
+        registry.addResourceHandler("/static-files", "/static-files/")
+                .addResourceLocations("classpath:/static/") // i.e. inside JAR
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        //System.out.println("=== 0th HANDLER RESOLVER (explicit) CALLED ===");
+                        //System.out.println("    => 0th HANDLER: index.html will be served");
+                        return location.createRelative("index.html"); // by using location.createRelative: Find index.html relative to wherever I'm currently looking (c.f. location in addResourceLocations method)
+                    }
+                });
+
+        // -- 0.5. Specific Handler for the static-files on HARD DISK (for testing purposes); external-static-container acts as a wrapper --
+        // This handler maps requests with "/static-files/[anything]/[anyfile]" directly to the "static-files" folder inside your static directory on the HARD DISK.
+        // Handles: /static-files/anything/here.jpg
+        registry.addResourceHandler("/static-files/**")
+                .addResourceLocations("file:C:\\Daten\\dcTest\\external-static-container\\static-files\\")
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        //System.out.println("=== 'HALF' HANDLER RESOLVER (/static-files/[anything]/[anyfile]; hard disk) CALLED ===");
+                        //System.out.println("    resourcePath: " + resourcePath);
+                        //System.out.println("    location: " + location);
+
                         Resource requestedResource = location.createRelative(resourcePath);
                         if (requestedResource.exists() && requestedResource.isReadable()) {
+                            //System.out.println("    => 'HALF' HANDLER: returning requested resource");
                             return requestedResource;
                         } else {
                             // Fall back to index.html in /static if the file does not exist
-                            return new ClassPathResource("/static/index.html"); // Always get index.html from /static/, ignore where I'm currently looking
+                            //System.out.println("    => 'HALF' HANDLER: falling back to ClassPathResource index.html");
+                            return new ClassPathResource("/static/index.html"); // by using ClassPathResource: Always get index.html from /static/, ignore where I'm currently looking
                         }
                     }
                 });
 
-        // 2. The main handler for your SPA, which should be placed AFTER specific handlers.
+        // -- 1. Specific Handler for the static-files in docker container, which is bind mounted; external-static-container acts as a wrapper --
+        // This handler maps requests with "/static-files/[anything]/[anyfile]" directly to the "static-files" folder inside your static directory in a Docker Container.
+        // Handles: /static-files/anything/here.jpg
+        //        GET /static-files/photo.jpg    → /app/external-static-container/static-files/photo.jpg
+        //        GET /static-files/missing.png  → /static/index.html (fallback)
+        //        GET /static-files/docs/file.pdf → /app/external-static-container/static-files/docs/file.pdf
+//        registry.addResourceHandler("/static-files/**") // URL: /static-files is NO MATCH; because it requires something after /static-files/
+//                .addResourceLocations("file:/app/external-static-container/static-files/")
+//                .resourceChain(true)
+//                .addResolver(new PathResourceResolver() {
+//                    @Override
+//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+//                        Resource requestedResource = location.createRelative(resourcePath);
+//                        if (requestedResource.exists() && requestedResource.isReadable()) {
+//                            return requestedResource;
+//                        } else {
+//                            // Fall back to index.html in /static if the file does not exist
+//                            return new ClassPathResource("/static/index.html"); // by using ClassPathResource: Always get index.html from /static/, ignore where I'm currently looking
+//                        }
+//                    }
+//                });
+
+        // -- 2. The main handler for your SPA, which should be placed AFTER specific handlers --
         // Enables SPA routing - Any unknown route falls back to index.html, allowing client-side routing to work
         // Handles: Everything else (/, /about, /users/123, /app.js, etc.)
         // Serves from: Multiple locations (searches in order)
         // Logic: Serve real files when they exist (in the specified locations), otherwise serve index.html for SPA routing
         //        GET /                    → /static/index.html (SPA)
-        //        GET /about               → /static/index.html (SPA route)
-        //        GET /users/123           → /static/index.html (SPA route)
         //        GET /app.js              → /static/app.js (actual JS file)
         //        GET /favicon.ico         → /static/favicon.ico (actual icon)
-        //        GET /missing-file.css    → /static/index.html (fallback)
+        //        GET /missing-file.css    → File doesn't exist → returns /static/index.html (fallback)
+        //        GET /kinobesuch          → File doesn't exist → returns /static/index.html (THIS is the SPA fallback, This allows React Router to handle client-side routing!)
+        //        GET /some/deep/route     → File doesn't exist → returns /static/index.html (THIS is the SPA fallback, This allows React Router to handle client-side routing!)
         registry.addResourceHandler("/**")
                 .addResourceLocations(      // Spring will search for static files in this exact order
                         "classpath:/static/"
-                                                    //                        "classpath:/public/",
-                                                    //                        "classpath:/resources/",
-                                                    //                        "classpath:/META-INF/resources/"
+                        //"classpath:/public/",
+                        //"classpath:/resources/",
+                        //"classpath:/META-INF/resources/"
                 )
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver() {
                     @Override
                     protected Resource getResource(String resourcePath, Resource location) throws IOException {
+
+//                                    // Don't handle /assets/ requests - let them 404
+//                                    if (resourcePath.startsWith("assets/")) {
+//                                        return null;
+//                                    }
+
+
+                        //System.out.println("=== LAST RESOLVER CALLED ===");
+                        //System.out.println("    resourcePath: " + resourcePath);
+                        //System.out.println("    location: " + location);
                         Resource requestedResource = location.createRelative(resourcePath);
+                        //System.out.println("    requestedResource: " + requestedResource);
+                        //System.out.println("    requestedResource.exists(): " + requestedResource.exists());
+                        //System.out.println("    requestedResource.isReadable(): " + requestedResource.isReadable());
+
                         if (requestedResource.exists() && requestedResource.isReadable()) {
+                            //System.out.println("    => LAST HANDLER: returning requested resource");
                             return requestedResource;
                         } else {
                             // If the resource doesn't exist, return index.html for SPA routing
-                                        //                            return location.createRelative("index.html"); // Find index.html relative to wherever I'm currently looking (c.f. locations in addResourceLocations method)
-                                                                    // The change to a different location happens when the originally requested file is not found, AND the fallback index.html is also not found in the current location.
-                            return new ClassPathResource("/static/index.html");
+                            Resource fallback = location.createRelative("index.html");
+
+                            //System.out.println("    fallback: " + fallback);
+                            //System.out.println("    fallback.exists(): " + fallback.exists());
+                            //System.out.println("    fallback.isReadable(): " + fallback.isReadable());
+                            //System.out.println("    => LAST HANDLER: falling back to location.createRelative index.html (here in /static/index.html)");
+                            return fallback; // Find index.html relative to wherever I'm currently looking (c.f. locations in addResourceLocations method)
+                                // The change to a different location (specified in addResourceLocations) happens when the originally requested file is not found, AND the fallback index.html is also not found in the current location.
                         }
                     }
                 });
 
-//        registry.addResourceHandler("/**")
-//                .addResourceLocations("classpath:/static/")
-//                .resourceChain(true)
-//                .addResolver(new PathResourceResolver() {
-//                    @Override
-//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-//                        System.out.println("=== LAST RESOLVER CALLED ===");
-//                        System.out.println("resourcePath: " + resourcePath);
-//                        System.out.println("location: " + location);
-//
-//                        try {
-//                            Resource requestedResource = location.createRelative(resourcePath);
-//                            System.out.println("requestedResource: " + requestedResource);
-//                            System.out.println("requestedResource.exists(): " + requestedResource.exists());
-//                            System.out.println("requestedResource.isReadable(): " + requestedResource.isReadable());
-//
-//                            if (requestedResource.exists() && requestedResource.isReadable()) {
-//                                System.out.println("RETURNING: requestedResource");
-//                                return requestedResource;
-//                            } else {
-//                                System.out.println("!!! ELSE clause of last Handler !!!");
-//                                Resource fallback = location.createRelative("index.html");
-//                                System.out.println("fallback: " + fallback);
-//                                System.out.println("fallback.exists(): " + fallback.exists());
-//                                System.out.println("fallback.isReadable(): " + fallback.isReadable());
-//                                System.out.println("RETURNING: fallback");
-//                                return fallback;
-//                            }
-//                        } catch (Exception e) {
-//                            System.out.println("EXCEPTION: " + e.getMessage());
-//                            e.printStackTrace();
-//                            return null;
-//                        }
-//                    }
-//                });
-//    }
+
+//                        registry.addResourceHandler("/assets/**")
+//                                .addResourceLocations("classpath:/static/assets/");
 
         //    Production Flow:
         //    User visits: https://myapp.com/dashboard
@@ -255,99 +199,6 @@ public class SPAConfiguration implements WebMvcConfigurer {
         //    /static-files               Handler 1       index.html
         //    /static-files/photo.jpg     Handler 2       photo.jpg ✅
         //    /static-files/missing.jpg   Handler 2       index.html (fallback)
-
-
-// ********************************************************************************
-// --- OPTION B ---
-// // in combination with defineConfig from vite.config.ts
-
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//
-//        // -- 0. Explicitly handle the directory path /static-files and redirect it to the root of your SPA.
-//        // This ensures that the request gets picked up by your main SPA handler (i.e. index.html).
-//        registry.addResourceHandler("/static-files", "/static-files/")
-//                .addResourceLocations("classpath:/static/") // i.e. inside JAR
-//                .resourceChain(true)
-//                .addResolver(new PathResourceResolver() {
-//                    @Override
-//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-//                        return location.createRelative("index.html"); // Find index.html relative to wherever I'm currently looking (c.f. location in addResourceLocations method)
-//                    }
-//                });
-//
-//        // -- 0.5. Specific Handler for the static-files on hard disk, external-static-container acts as a wrapper
-//        // This handler maps requests starting with "/static-files/" directly to the "static-files" folder inside your static directory.
-// //        registry.addResourceHandler("/static-files/**")
-// //                .addResourceLocations("file:C:\\Daten\\dcTest\\external-static-container\\static-files\\")
-// //                .resourceChain(true)
-// //                .addResolver(new PathResourceResolver() {
-// //                    @Override
-// //                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-// //                        Resource requestedResource = location.createRelative(resourcePath);
-// //                        if (requestedResource.exists() && requestedResource.isReadable()) {
-// //                            return requestedResource;
-// //                        } else {
-// //                            // Fall back to index.html in /static if the file does not exist
-// //                            return new ClassPathResource("/static/index.html");
-// //                        }
-// //                    }
-// //                });
-//
-//        // -- 1. Specific Handler for the static-files in docker container, which is bind mounted, external-static-container acts as a wrapper
-//        // This handler maps requests STARTING with "/static-files/" directly to the "static-files" folder inside your static directory.
-//        // Handles: /static-files/anything/here.jpg
-//        //        GET /static-files/photo.jpg    → /app/external-static-container/static-files/photo.jpg
-//        //        GET /static-files/missing.png  → /static/index.html (fallback)
-//        //        GET /static-files/docs/file.pdf → /app/external-static-container/static-files/docs/file.pdf
-//        registry.addResourceHandler("/static-files/**")
-//                .addResourceLocations("file:/app/external-static-container/static-files/")
-//                .resourceChain(true)
-//                .addResolver(new PathResourceResolver() {
-//                    @Override
-//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-//                        Resource requestedResource = location.createRelative(resourcePath);
-//                        if (requestedResource.exists() && requestedResource.isReadable()) {
-//                            return requestedResource;
-//                        } else {
-//                            // Fall back to index.html in /static if the file does not exist
-//                            return new ClassPathResource("/static/index.html"); // Always get index.html from /static/, ignore where I'm currently looking
-//                        }
-//                    }
-//                });
-//
-//        // 2. The main handler for your SPA, which should be placed AFTER specific handlers.
-//        // Enables SPA routing - Any unknown route falls back to index.html, allowing client-side routing to work
-//        // Handles: Everything else (/, /about, /users/123, /app.js, etc.)
-//        // Serves from: Multiple locations (searches in order)
-//        // Logic: Serve real files when they exist (in the specified locations), otherwise serve index.html for SPA routing
-//        //        GET /                    → /static/index.html (SPA)
-//        //        GET /about               → /static/index.html (SPA route)
-//        //        GET /users/123           → /static/index.html (SPA route)
-//        //        GET /app.js              → /static/app.js (actual JS file)
-//        //        GET /favicon.ico         → /static/favicon.ico (actual icon)
-//        //        GET /missing-file.css    → /static/index.html (fallback)
-//        registry.addResourceHandler("/**")
-//                .addResourceLocations(      // Spring will search for static files in this exact order
-//                        "classpath:/static/",
-//                        "classpath:/public/",
-//                        "classpath:/resources/",
-//                        "classpath:/META-INF/resources/"
-//                )
-//                .resourceChain(true)
-//                .addResolver(new PathResourceResolver() {
-//                    @Override
-//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-//                        Resource requestedResource = location.createRelative(resourcePath);
-//                        if (requestedResource.exists() && requestedResource.isReadable()) {
-//                            return requestedResource;
-//                        } else {
-//                            // If the resource doesn't exist, return index.html for SPA routing
-//                            return location.createRelative("index.html"); // Find index.html relative to wherever I'm currently looking (c.f. locations in addResourceLocations method)
-//                            // The change to a different location happens when the originally requested file is not found, AND the fallback index.html is also not found in the current location.
-//                        }
-//                    }
-//                });
 
     }
 
