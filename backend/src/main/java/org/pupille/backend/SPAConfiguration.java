@@ -81,27 +81,27 @@ public class SPAConfiguration implements WebMvcConfigurer {
         // -- 0.5. Specific Handler for the static-files on HARD DISK (for testing purposes); external-static-container acts as a wrapper --
         // This handler maps requests with "/static-files/[anything]/[anyfile]" directly to the "static-files" folder inside your static directory on the HARD DISK.
         // Handles: /static-files/anything/here.jpg
-        registry.addResourceHandler("/static-files/**")
-                .addResourceLocations("file:C:\\Daten\\dcTest\\external-static-container\\static-files\\")
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver() {
-                    @Override
-                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-                        //System.out.println("=== 'HALF' HANDLER RESOLVER (/static-files/[anything]/[anyfile]; hard disk) CALLED ===");
-                        //System.out.println("    resourcePath: " + resourcePath);
-                        //System.out.println("    location: " + location);
-
-                        Resource requestedResource = location.createRelative(resourcePath);
-                        if (requestedResource.exists() && requestedResource.isReadable()) {
-                            //System.out.println("    => 'HALF' HANDLER: returning requested resource");
-                            return requestedResource;
-                        } else {
-                            // Fall back to index.html in /static if the file does not exist
-                            //System.out.println("    => 'HALF' HANDLER: falling back to ClassPathResource index.html");
-                            return new ClassPathResource("/static/index.html"); // by using ClassPathResource: Always get index.html from /static/, ignore where I'm currently looking
-                        }
-                    }
-                });
+//        registry.addResourceHandler("/static-files/**")
+//                .addResourceLocations("file:C:\\Daten\\dcTest\\external-static-container\\static-files\\")
+//                .resourceChain(true)
+//                .addResolver(new PathResourceResolver() {
+//                    @Override
+//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+//                        //System.out.println("=== 'HALF' HANDLER RESOLVER (/static-files/[anything]/[anyfile]; hard disk) CALLED ===");
+//                        //System.out.println("    resourcePath: " + resourcePath);
+//                        //System.out.println("    location: " + location);
+//
+//                        Resource requestedResource = location.createRelative(resourcePath);
+//                        if (requestedResource.exists() && requestedResource.isReadable()) {
+//                            //System.out.println("    => 'HALF' HANDLER: returning requested resource");
+//                            return requestedResource;
+//                        } else {
+//                            // Fall back to index.html in /static if the file does not exist
+//                            //System.out.println("    => 'HALF' HANDLER: falling back to ClassPathResource index.html");
+//                            return new ClassPathResource("/static/index.html"); // by using ClassPathResource: Always get index.html from /static/, ignore where I'm currently looking
+//                        }
+//                    }
+//                });
 
         // -- 1. Specific Handler for the static-files in docker container, which is bind mounted; external-static-container acts as a wrapper --
         // This handler maps requests with "/static-files/[anything]/[anyfile]" directly to the "static-files" folder inside your static directory in a Docker Container.
@@ -109,21 +109,21 @@ public class SPAConfiguration implements WebMvcConfigurer {
         //        GET /static-files/photo.jpg    → /app/external-static-container/static-files/photo.jpg
         //        GET /static-files/missing.png  → /static/index.html (fallback)
         //        GET /static-files/docs/file.pdf → /app/external-static-container/static-files/docs/file.pdf
-//        registry.addResourceHandler("/static-files/**") // URL: /static-files is NO MATCH; because it requires something after /static-files/
-//                .addResourceLocations("file:/app/external-static-container/static-files/")
-//                .resourceChain(true)
-//                .addResolver(new PathResourceResolver() {
-//                    @Override
-//                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
-//                        Resource requestedResource = location.createRelative(resourcePath);
-//                        if (requestedResource.exists() && requestedResource.isReadable()) {
-//                            return requestedResource;
-//                        } else {
-//                            // Fall back to index.html in /static if the file does not exist
-//                            return new ClassPathResource("/static/index.html"); // by using ClassPathResource: Always get index.html from /static/, ignore where I'm currently looking
-//                        }
-//                    }
-//                });
+        registry.addResourceHandler("/static-files/**") // URL: /static-files is NO MATCH; because it requires something after /static-files/
+                .addResourceLocations("file:/app/external-static-container/static-files/")
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver() {
+                    @Override
+                    protected Resource getResource(String resourcePath, Resource location) throws IOException {
+                        Resource requestedResource = location.createRelative(resourcePath);
+                        if (requestedResource.exists() && requestedResource.isReadable()) {
+                            return requestedResource;
+                        } else {
+                            // Fall back to index.html in /static if the file does not exist
+                            return new ClassPathResource("/static/index.html"); // by using ClassPathResource: Always get index.html from /static/, ignore where I'm currently looking
+                        }
+                    }
+                });
 
         // -- 2. The main handler for your SPA, which should be placed AFTER specific handlers --
         // Enables SPA routing - Any unknown route falls back to index.html, allowing client-side routing to work
